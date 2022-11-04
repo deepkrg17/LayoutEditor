@@ -1,0 +1,81 @@
+[
+	{
+		"name" : "LinearLayout (H)",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" : 
+		{
+			"android:layout_width" : "match_parent",
+			"android:orientation" : "horizontal",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "LinearLayout (V)",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" : 
+		{
+			"android:layout_height" : "match_parent",
+			"android:orientation" : "vertical",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "FrameLayout",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.FrameLayoutDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "RelativeLayout",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.RelativeLayoutDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "ConstraintLayout",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.ConstraintLayoutDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "RadioGroup",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.RadioGroupDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent",
+			"android:padding" : "8dp"
+		}
+	},
+	
+	{
+		"name" : "CardView",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.CardViewDesign",
+		"iconName" : "ic_button_2",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent",
+			"app:cardCornerRadius" : "8dp",
+			"app:cardElevation" : "4dp"
+		}
+	}
+]

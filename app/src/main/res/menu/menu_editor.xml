@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/undo"
+        android:name="Undo"
+        android:title="Undo"
+        app:contentDescription="Undo"
+        android:icon="@drawable/undo_variant"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/redo"
+        android:name="Redo"
+        android:title="Redo"
+        app:contentDescription="Redo"
+        android:icon="@drawable/redo_variant"
+        app:showAsAction="ifRoom" />
+        
+    <item
+        android:id="@+id/show_structure"
+        android:name="Show structure"
+        android:title="Show structure"
+        app:contentDescription="Show structure"
+        android:icon="@drawable/file_tree"
+        app:showAsAction="ifRoom" />
+        
+    <item
+        android:id="@+id/show_xml"
+        android:name="Show xml"
+        android:title="Show xml"
+        app:contentDescription="Show xml"
+        android:icon="@drawable/xml"
+        app:showAsAction="ifRoom" />
+        
+    <item
+        android:id="@+id/save_xml"
+        android:name="Save"
+        android:title="Save"
+        app:contentDescription="Save xml"
+        android:icon="@drawable/content_save"
+        app:showAsAction="ifRoom" />
+</menu>

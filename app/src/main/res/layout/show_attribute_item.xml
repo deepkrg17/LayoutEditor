@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/selectableItemBackground"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:padding="15dp">
+    
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_name"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Layout width"
+        android:textColor="?attr/colorAccent"
+        android:textSize="16sp"/>
+    
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_value"
+        android:layout_below="@id/text_name"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="match_parent"
+        android:textColor="?attr/colorAccent"
+        android:textSize="12sp"/>
+    
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_delete"
+        style="@style/ToolbarButtonStyle"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/close"
+        app:tint="?attr/colorOnSurface"/>
+    
+
+</RelativeLayout>

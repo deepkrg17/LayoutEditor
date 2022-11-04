@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Layout Editor</string>
+    <string name="app_slogan">Create Awesome UI!</string>
+    <string name="home">HOME</string>
+    <string name="preference">PREFERENCES</string>
+    <string name="github">GITHUB</string>
+    <string name="about">ABOUT</string>
+    <string name="share">SHARE</string>
+    <string name="open_source_licence">OPEN SOURCE LICENCE</string>
+    <string name="projects">Projects</string>
+    <string name="title_preference">Preferences</string>
+    <string name="title_about">About</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="content_description_home">HOME</string>
+    <string name="content_description_preference">PREFERENCES</string>
+    <string name="content_description_github">GITHUB</string>
+    <string name="content_description_about">ABOUT</string>
+    <string name="content_description_share">SHARE</string>
+    <string name="content_description_open_source_licence">OPEN SOURCE LICENCE</string>
+</resources>

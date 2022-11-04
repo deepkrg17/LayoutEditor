@@ -1,0 +1,18 @@
+package com.itsvks.layouteditor.managers;
+
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
+import com.itsvks.layouteditor.LayoutEditor;
+
+public class PreferencesManager {
+
+    public static boolean isEnableVibration() {
+        return getPrefs().getBoolean("vibration", true);
+    }
+
+    public static SharedPreferences getPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());
+    }
+}

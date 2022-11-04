@@ -1,0 +1,444 @@
+{
+    "android.widget.LinearLayout": [
+        {
+            "name": "android:layout_weight",
+            "methodName": "setLayoutWeight",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_weight",
+            "argumentType": "float"
+        },
+
+        {
+            "name": "android:layout_margin",
+            "methodName": "setLayoutMargin",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_margin",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginLeft",
+            "methodName": "setLayoutMarginLeft",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_marginLeft",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginRight",
+            "methodName": "setLayoutMarginRight",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_marginRight",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginTop",
+            "methodName": "setLayoutMarginTop",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_marginTop",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginBottom",
+            "methodName": "setLayoutMarginBottom",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:layout_marginBottom",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        }
+    ],
+
+    "android.widget.FrameLayout": [
+        {
+            "name": "android:layout_gravity",
+            "methodName": "setLayoutGravity",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_gravity",
+            "argumentType": "flag",
+            "arguments": [
+                "left",
+                "right",
+                "top",
+                "bottom",
+                "center",
+                "center_horizontal",
+                "center_vertical"
+            ],
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_margin",
+            "methodName": "setLayoutMargin",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_margin",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginLeft",
+            "methodName": "setLayoutMarginLeft",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_marginLeft",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginRight",
+            "methodName": "setLayoutMarginRight",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_marginRight",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginTop",
+            "methodName": "setLayoutMarginTop",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_marginTop",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginBottom",
+            "methodName": "setLayoutMarginBottom",
+            "className": "FrameLayoutCaller",
+            "attributeName": "android:layout_marginBottom",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        }
+    ],
+
+    "android.widget.RelativeLayout": [
+        {
+            "name": "android:layout_centerHorizontal",
+            "methodName": "setLayoutCenterHorizontal",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_centerHorizontal",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_centerVertical",
+            "methodName": "setLayoutCenterVertical",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_centerVertical",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_centerInParent",
+            "methodName": "setLayoutCenterInParent",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_centerInParent",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_below",
+            "methodName": "setLayoutBelow",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_below",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_above",
+            "methodName": "setLayoutAbove",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_above",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_toLeftOf",
+            "methodName": "setLayoutToLeftOf",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_toLeftOf",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_toRightOf",
+            "methodName": "setLayoutToRightOf",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_toRightOf",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_alignLeft",
+            "methodName": "setLayoutAlignLeft",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignLeft",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_alignRight",
+            "methodName": "setLayoutAlignRight",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignRight",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_alignTop",
+            "methodName": "setLayoutAlignTop",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignTop",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_alignBottom",
+            "methodName": "setLayoutAlignBottom",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignBottom",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_alignParentLeft",
+            "methodName": "setLayoutAlignParentLeft",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignParentLeft",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_alignParentRight",
+            "methodName": "setLayoutAlignParentRight",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignParentRight",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_alignParentTop",
+            "methodName": "setLayoutAlignParentTop",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignParentTop",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_alignParentBottom",
+            "methodName": "setLayoutAlignParentBottom",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignParentBottom",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        },
+
+        {
+            "name": "android:layout_alignBaseline",
+            "methodName": "setLayoutAlignBaseline",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_alignBaseline",
+            "argumentType": "view",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "android:layout_margin",
+            "methodName": "setLayoutMargin",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_margin",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginLeft",
+            "methodName": "setLayoutMarginLeft",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_marginLeft",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginRight",
+            "methodName": "setLayoutMarginRight",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_marginRight",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginTop",
+            "methodName": "setLayoutMarginTop",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_marginTop",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+
+        {
+            "name": "android:layout_marginBottom",
+            "methodName": "setLayoutMarginBottom",
+            "className": "RelativeLayoutCaller",
+            "attributeName": "android:layout_marginBottom",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        }
+    ],
+
+    "androidx.constraintlayout.widget.ConstraintLayout": [
+        {
+            "name": "app:layout_constraintLeft_toLeftOf",
+            "methodName": "setLeftToLeft",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintLeft_toLeftOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintLeft_toRightOf",
+            "methodName": "setLeftToRight",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintLeft_toRightOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintRight_toLeftOf",
+            "methodName": "setRightToLeft",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintRight_toLeftOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintRight_toRightOf",
+            "methodName": "setRightToRight",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintRight_toRightOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintTop_toTopOf",
+            "methodName": "setTopToTop",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintTop_toTopOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintTop_toBottomOf",
+            "methodName": "setTopToBottom",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintTop_toBottomOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintBottom_toTopOf",
+            "methodName": "setBottomToTop",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintBottom_toTopOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintBottom_toBottomOf",
+            "methodName": "setBottomToBottom",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintBottom_toBottomOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintBaseline_toBaselineOf",
+            "methodName": "setBottomToTop",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintBaseline_toBaselineOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintStart_toStartOf",
+            "methodName": "setStartToStart",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintStart_toStartOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintStart_toEndOf",
+            "methodName": "setStartToEnd",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintStart_toEndOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintEnd_toStartOf",
+            "methodName": "setEndToStart",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintEnd_toStartOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        },
+
+        {
+            "name": "app:layout_constraintEnd_toEndOf",
+            "methodName": "setEndToEnd",
+            "className": "ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintEnd_toEndOf",
+            "argumentType": "view",
+            "constant": "parent",
+            "defaultValue": "-1"
+        }
+    ]
+}

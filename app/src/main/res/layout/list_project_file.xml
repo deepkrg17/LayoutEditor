@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/selectableItemBackground"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="15dp">
+    
+    <com.google.android.material.textview.MaterialTextView
+        android:background="@drawable/rounded_rect"
+        android:gravity="center"
+        android:id="@+id/icon"
+        android:layout_height="30dp"
+        android:layout_width="30dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="16sp"
+        android:typeface="sans"/>
+    
+    <com.google.android.material.textview.MaterialTextView
+        android:ellipsize="marquee"
+        android:id="@+id/name"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1.0"
+        android:layout_width="0dp"
+        android:singleLine="true"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"/>
+    
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_options"
+        android:src="@drawable/dots_vertical"
+        style="@style/ToolbarButtonStyle"/>
+    
+</androidx.appcompat.widget.LinearLayoutCompat>
