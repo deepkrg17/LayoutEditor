@@ -15,34 +15,24 @@ jobs:
 
       - name: Unit tests
         run: ./gradlew test
-  ## 4
-  android_tests:
-    runs-on: [ macos-latest ]
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedAndroidTest
+  
   build:
-    needs: [ unit_tests, android_tests ]
+    needs: [ unit_tests ]
     runs-on: ubuntu-latest
     steps:
       # 1
       - name: Checkout code
         uses: actions/checkout@v2
       # 2
-      - name: Generate Release APK
-        run: ./gradlew assembleRelease
+      - name: Generate Debug APK
+        run: ./gradlew assembleDebug
       # 3
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/debug
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -50,10 +40,10 @@ jobs:
       # 4
       - uses: actions/upload-artifact@master
         with:
-          name: release.apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          name: layout_editor_debug.apk
+          path: ${{steps.sign_app.outputs.signedDebugFile}}
       # 5
       - uses: actions/upload-artifact@master
         with:
           name: mapping.txt
-          path: app/build/outputs/mapping/release/mapping.txt
+          path: app/build/outputs/mapping/debug/mapping.txt
