@@ -2,7 +2,7 @@
 	{
 		"name" : "LinearLayout (H)",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-		"iconName" : "ic_linear_vertical",
+		"iconName" : "ic_linear_horizontal",
 		"defaultAttributes" : 
 		{
 			"android:layout_width" : "match_parent",
