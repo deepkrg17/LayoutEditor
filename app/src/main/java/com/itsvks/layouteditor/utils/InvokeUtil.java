@@ -1,6 +1,9 @@
 package com.itsvks.layouteditor.utils;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 
 import com.itsvks.layouteditor.R;
@@ -63,5 +66,18 @@ public class InvokeUtil {
         }
 
         return 0;
+    }
+
+    public static Drawable getRotateDrawable(final Drawable d, final float angle) {
+        final Drawable[] arD = {d};
+        return new LayerDrawable(arD) {
+            @Override
+            public void draw(final Canvas canvas) {
+                canvas.save();
+                canvas.rotate(angle, d.getBounds().width() / 2, d.getBounds().height() / 2);
+                super.draw(canvas);
+                canvas.restore();
+            }
+        };
     }
 }

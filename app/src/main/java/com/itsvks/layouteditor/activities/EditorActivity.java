@@ -3,9 +3,12 @@ package com.itsvks.layouteditor.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableWrapper;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.activities.ShowXMLActivity;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.databinding.WidgetsListBinding;
@@ -46,6 +50,7 @@ import com.itsvks.layouteditor.utils.InvokeUtil;
 
 import es.dmoral.toasty.Toasty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,10 +119,11 @@ public class EditorActivity extends BaseActivity {
         if (undoRedo != null) {
             binding.editorLayout.bindUndoRedoManager(undoRedo);
         }
-        binding.structureView.setOnItemClickListener(v -> {
-            binding.editorLayout.showDefinedAttributes(v);
-            drawerLayout.closeDrawer(GravityCompat.END);
-        });
+        binding.structureView.setOnItemClickListener(
+                v -> {
+                    binding.editorLayout.showDefinedAttributes(v);
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                });
 
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Views"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Layouts"));
@@ -260,7 +266,7 @@ public class EditorActivity extends BaseActivity {
     }
 
     private void saveXml() {
-        
+
         if (project == null) return;
 
         if (binding.editorLayout.getChildCount() == 0) {
@@ -303,6 +309,7 @@ public class EditorActivity extends BaseActivity {
             final float density = getResources().getDisplayMetrics().density;
             final int width = Math.round(20 * density);
             final int height = Math.round(20 * density);
+
             Drawable icon =
                     AppCompatResources.getDrawable(
                             EditorActivity.this,
@@ -315,17 +322,21 @@ public class EditorActivity extends BaseActivity {
 
             icon.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
             bind.name.setCompoundDrawables(icon, null, null, null);
+
             bind.getRoot().setOnLongClickListener(this);
             bind.getRoot().setTag(pos);
             bind.getRoot()
                     .post(
                             () -> {
                                 bind.getRoot().setTranslationX(-bind.getRoot().getWidth());
+                                bind.getRoot().setAlpha(0);
                                 bind.getRoot()
                                         .animate()
+                                        .alpha(255)
+                                        // .translationY(0)
                                         .translationX(0)
-                                        .setStartDelay(pos * 30)
-                                        .setDuration(300)
+                                        .setStartDelay(pos * 50)
+                                        .setDuration(500)
                                         .start();
                             });
 
@@ -366,26 +377,36 @@ public class EditorActivity extends BaseActivity {
     public void updateUndoRedoBtnState() {
         new Handler(Looper.getMainLooper()).postDelayed(updateMenuIconsState, 10);
     }
-    
-    public static void sortListMap(final ArrayList<HashMap<String, Object>> listMap, final String key, final boolean isNumber, final boolean ascending) {
-        Collections.sort(listMap, new Comparator<HashMap<String, Object>>() {
-            public int compare(HashMap<String, Object> _compareMap1, HashMap<String, Object> _compareMap2) {
-                if (isNumber) {
-                    int _count1 = Integer.valueOf(_compareMap1.get(key).toString());
-                    int _count2 = Integer.valueOf(_compareMap2.get(key).toString());
-                    if (ascending) {
-                        return _count1 < _count2 ? -1 : _count1 < _count2 ? 1 : 0;
-                    } else {
-                        return _count1 > _count2 ? -1 : _count1 > _count2 ? 1 : 0;
+
+    public static void sortListMap(
+            final ArrayList<HashMap<String, Object>> listMap,
+            final String key,
+            final boolean isNumber,
+            final boolean ascending) {
+        Collections.sort(
+                listMap,
+                new Comparator<HashMap<String, Object>>() {
+                    public int compare(
+                            HashMap<String, Object> _compareMap1,
+                            HashMap<String, Object> _compareMap2) {
+                        if (isNumber) {
+                            int _count1 = Integer.valueOf(_compareMap1.get(key).toString());
+                            int _count2 = Integer.valueOf(_compareMap2.get(key).toString());
+                            if (ascending) {
+                                return _count1 < _count2 ? -1 : _count1 < _count2 ? 1 : 0;
+                            } else {
+                                return _count1 > _count2 ? -1 : _count1 > _count2 ? 1 : 0;
+                            }
+                        } else {
+                            if (ascending) {
+                                return (_compareMap1.get(key).toString())
+                                        .compareTo(_compareMap2.get(key).toString());
+                            } else {
+                                return (_compareMap2.get(key).toString())
+                                        .compareTo(_compareMap1.get(key).toString());
+                            }
+                        }
                     }
-                } else {
-                    if (ascending) {
-                        return (_compareMap1.get(key).toString()).compareTo(_compareMap2.get(key).toString());
-                    } else {
-                        return (_compareMap2.get(key).toString()).compareTo(_compareMap1.get(key).toString());
-                    }
-                }
-            }
-        });
+                });
     }
 }

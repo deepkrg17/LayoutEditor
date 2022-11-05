@@ -2,7 +2,7 @@
 	{
 		"name" : "LinearLayout (H)",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_linear_vertical",
 		"defaultAttributes" : 
 		{
 			"android:layout_width" : "match_parent",
@@ -14,7 +14,7 @@
 	{
 		"name" : "LinearLayout (V)",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_linear_vertical",
 		"defaultAttributes" : 
 		{
 			"android:layout_height" : "match_parent",
@@ -26,7 +26,7 @@
 	{
 		"name" : "FrameLayout",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.FrameLayoutDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_frame",
 		"defaultAttributes" :
 		{
 			"android:layout_width" : "match_parent",
@@ -37,7 +37,7 @@
 	{
 		"name" : "RelativeLayout",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.RelativeLayoutDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_relative_layout_outline",
 		"defaultAttributes" :
 		{
 			"android:layout_width" : "match_parent",
@@ -48,7 +48,7 @@
 	{
 		"name" : "ConstraintLayout",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.ConstraintLayoutDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_constraint",
 		"defaultAttributes" :
 		{
 			"android:layout_width" : "match_parent",
@@ -59,7 +59,7 @@
 	{
 		"name" : "RadioGroup",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.RadioGroupDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_radiogroup",
 		"defaultAttributes" :
 		{
 			"android:layout_width" : "match_parent",
@@ -70,7 +70,7 @@
 	{
 		"name" : "CardView",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.CardViewDesign",
-		"iconName" : "ic_button_2",
+		"iconName" : "ic_card",
 		"defaultAttributes" :
 		{
 			"android:layout_width" : "match_parent",
