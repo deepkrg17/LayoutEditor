@@ -26,7 +26,7 @@ public class XmlLayoutGenerator {
     }
 
     private String peek(View view, HashMap<View, AttributeMap> attributeMap, int depth) {
-        if (attributeMap == null) return "";
+        if (attributeMap == null || view == null) return "";
         String indent = getIndent(depth);
         int nextDepth = depth;
 

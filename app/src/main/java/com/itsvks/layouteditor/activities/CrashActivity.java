@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.ClipboardUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.activities.CrashActivity;
 import com.itsvks.layouteditor.databinding.ActivityCrashBinding;
 
 public class CrashActivity extends BaseActivity {

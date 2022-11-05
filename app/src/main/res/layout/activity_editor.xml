@@ -32,15 +32,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:scaleX="0.85"
-            android:scaleY="0.85">
-            
-            <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical"/>
-            
-        
-        </com.itsvks.layouteditor.editor.EditorLayout>
+            android:scaleY="0.85"/>
         
     
     </androidx.appcompat.widget.FitWindowsLinearLayout>

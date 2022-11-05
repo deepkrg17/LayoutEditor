@@ -1,5 +1,15 @@
 [
     {
+		"name" : "TextView",
+		"className" : "com.itsvks.layouteditor.editor.widgets.android.TextViewDesign",
+		"iconName" : "ic_textview",
+		"defaultAttributes" : 
+		{
+			"android:text" : "TextView"
+		}
+	},
+	
+    {
         "name" : "Button",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.ButtonDesign",
 		"iconName" : "ic_button",

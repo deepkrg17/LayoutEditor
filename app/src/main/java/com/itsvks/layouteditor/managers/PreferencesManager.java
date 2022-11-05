@@ -9,7 +9,7 @@ import com.itsvks.layouteditor.LayoutEditor;
 public class PreferencesManager {
 
     public static boolean isEnableVibration() {
-        return getPrefs().getBoolean("vibration", true);
+        return getPrefs().getBoolean("vibration", false);
     }
 
     public static SharedPreferences getPrefs() {
