@@ -40,4 +40,13 @@
     <style name="AppTheme.SwitchPreference" parent="Preference.SwitchPreference.Material">
         <item name="android:widgetLayout">@layout/preference_switch_style</item>
     </style>
+    
+    <style name="ToolbarButtonStyle">
+		<item name="android:layout_width">35dp</item>
+		<item name="android:layout_height">35dp</item>
+		<item name="android:padding">5dp</item>
+		<item name="android:tint">?attr/colorOnSurface</item>
+		<item name="android:scaleType">fitCenter</item>
+		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+	</style>
 </resources>

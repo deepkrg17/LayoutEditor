@@ -3,8 +3,8 @@ package com.itsvks.layouteditor.tools;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.itsvks.layouteditor.editor.AttributeMap;
-import com.itsvks.layouteditor.editor.EditorLayout;
+import com.itsvks.layouteditor.editor.initializer.AttributeMap;
+import com.itsvks.layouteditor.editor.layouts.EditorLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;

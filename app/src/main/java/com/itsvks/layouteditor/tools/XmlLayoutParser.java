@@ -8,8 +8,8 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.itsvks.layouteditor.editor.AttributeInitializer;
-import com.itsvks.layouteditor.editor.AttributeMap;
+import com.itsvks.layouteditor.editor.initializer.AttributeInitializer;
+import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;

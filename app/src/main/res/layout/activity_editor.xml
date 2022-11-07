@@ -25,7 +25,7 @@
         
         </com.google.android.material.appbar.AppBarLayout>
         
-        <com.itsvks.layouteditor.editor.EditorLayout
+        <com.itsvks.layouteditor.editor.layouts.EditorLayout
             android:background="@drawable/background_stroke_dash"
             android:id="@+id/editor_layout"
             android:layout_height="match_parent"

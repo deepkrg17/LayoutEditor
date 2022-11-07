@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.editor;
+package com.itsvks.layouteditor.editor.initializer;
 
 import java.util.ArrayList;
 
@@ -68,7 +68,6 @@ public class AttributeMap {
     }
 
     private class Attribute {
-
         private String key, value;
 
         public Attribute(String key, String value) {

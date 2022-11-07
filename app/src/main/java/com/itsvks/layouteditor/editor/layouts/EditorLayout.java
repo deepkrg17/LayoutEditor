@@ -1,18 +1,9 @@
-package com.itsvks.layouteditor.editor;
+package com.itsvks.layouteditor.editor.layouts;
 
 import android.animation.LayoutTransition;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.os.VibratorManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -21,19 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import com.blankj.utilcode.util.VibrateUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.color.MaterialColors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.databinding.ShowAttributeItemBinding;
 import com.itsvks.layouteditor.databinding.ShowAttributesDialogBinding;
 import com.itsvks.layouteditor.editor.dialogs.AttributeDialog;
@@ -47,6 +33,8 @@ import com.itsvks.layouteditor.editor.dialogs.NumberDialog;
 import com.itsvks.layouteditor.editor.dialogs.SizeDialog;
 import com.itsvks.layouteditor.editor.dialogs.StringDialog;
 import com.itsvks.layouteditor.editor.dialogs.ViewDialog;
+import com.itsvks.layouteditor.editor.initializer.AttributeInitializer;
+import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
@@ -55,6 +43,7 @@ import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.tools.XmlLayoutParser;
 import com.itsvks.layouteditor.utils.ArgumentUtil;
 import com.itsvks.layouteditor.utils.Constants;
+import com.itsvks.layouteditor.utils.DialogUtil;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
@@ -64,33 +53,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({"unchecked", "deprecation", "unused"})
 public class EditorLayout extends LinearLayoutCompat {
-    private static final String TAG = "EditorLayout";
+
+    private static final String TAG = EditorLayout.class.getSimpleName();
 
     private LayoutInflater inflater;
-
     private View shadow;
 
     private StructureView structureView;
-
     private AttributeInitializer initializer;
-
-    private UndoRedoManager undoRedo;
+    private UndoRedoManager undoRedoManager;
 
     private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
-
     private HashMap<String, ArrayList<HashMap<String, Object>>> attributes;
     private HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes;
-
-    private Vibrator vibrator;
-    private VibratorManager vibratorManager;
 
     private boolean drawStrokeEnabled = true;
 
     private final OnDragListener onDragListener =
             new OnDragListener() {
 
+                @SuppressWarnings("unchecked")
                 @Override
                 public boolean onDrag(View host, DragEvent event) {
                     ViewGroup parent = (ViewGroup) host;
@@ -104,7 +87,7 @@ public class EditorLayout extends LinearLayoutCompat {
                         case DragEvent.ACTION_DRAG_STARTED:
                             {
                                 if (PreferencesManager.isEnableVibration()) {
-                                    vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                                    VibrateUtils.vibrate(100);
                                 }
                                 if (draggedView != null) {
                                     parent.removeView(draggedView);
@@ -137,11 +120,11 @@ public class EditorLayout extends LinearLayoutCompat {
                                 if (shadow.getParent() == null) {
                                     addWidget(shadow, parent, event);
                                 } else {
-                                    if (parent instanceof LinearLayout) {
+                                    if (parent instanceof LinearLayoutCompat) {
                                         int index = parent.indexOfChild(shadow);
                                         int newIndex =
                                                 getIndexForNewChildOfLinear(
-                                                        (LinearLayout) parent, event);
+                                                        (LinearLayoutCompat) parent, event);
 
                                         if (index != newIndex) {
                                             parent.removeView(shadow);
@@ -167,7 +150,8 @@ public class EditorLayout extends LinearLayoutCompat {
                                     final View newView =
                                             (View)
                                                     InvokeUtil.createView(
-                                                            data.get("className").toString(),
+                                                            data.get(Constants.KEY_CLASS_NAME)
+                                                                    .toString(),
                                                             getContext());
 
                                     newView.setLayoutParams(
@@ -199,16 +183,17 @@ public class EditorLayout extends LinearLayoutCompat {
                                         e.printStackTrace();
                                     }
 
-                                    if (data.containsKey("defaultAttributes")) {
+                                    if (data.containsKey(Constants.KEY_DEFAULT_ATTRS)) {
                                         initializer.applyDefaultAttributes(
-                                                newView, (Map) data.get("defaultAttributes"));
+                                                newView,
+                                                (Map) data.get(Constants.KEY_DEFAULT_ATTRS));
                                     }
                                 } else {
                                     addWidget(draggedView, parent, event);
                                 }
 
                                 updateStructure();
-                                if (undoRedo != null) {
+                                if (undoRedoManager != null) {
                                     updateUndoRedoHistory();
                                 }
                                 return true;
@@ -219,17 +204,14 @@ public class EditorLayout extends LinearLayoutCompat {
                 }
             };
 
-    @SuppressLint("NewApi")
-    @TargetApi(31)
     public EditorLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         inflater = LayoutInflater.from(context);
-        
-
         shadow = new View(context);
-        shadow.setLayoutParams(new ViewGroup.LayoutParams(getDip(30), getDip(25)));
-        shadow.setBackgroundColor(Color.DKGRAY);
+
+        shadow.setBackgroundColor(
+                MaterialColors.getColor(this, com.google.android.material.R.attr.colorOutline));
+        shadow.setLayoutParams(new ViewGroup.LayoutParams(getDip(50), getDip(35)));
 
         setOnDragListener(onDragListener);
         setupViewGroupAnimation(this);
@@ -243,6 +225,7 @@ public class EditorLayout extends LinearLayoutCompat {
                                                 String,
                                                 ArrayList<
                                                         HashMap<String, Object>>>>() {}.getType());
+
         parentAttributes =
                 new Gson()
                         .fromJson(
@@ -255,19 +238,6 @@ public class EditorLayout extends LinearLayoutCompat {
 
         initializer =
                 new AttributeInitializer(context, viewAttributeMap, attributes, parentAttributes);
-
-        vibratorManager =
-                (VibratorManager) context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            vibrator = vibratorManager.getDefaultVibrator();
-        } else {
-            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
     }
 
     public void toggleStroke() {
@@ -275,6 +245,7 @@ public class EditorLayout extends LinearLayoutCompat {
         toggleStrokeWidgets();
     }
 
+    @SuppressWarnings("unchecked")
     private void toggleStrokeWidgets() {
         try {
             for (View view : viewAttributeMap.keySet()) {
@@ -320,16 +291,16 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void undo() {
-        if (undoRedo == null) return;
-        if (undoRedo.isUndoEnabled()) {
-            loadLayoutFromParser(undoRedo.undo());
+        if (undoRedoManager == null) return;
+        if (undoRedoManager.isUndoEnabled()) {
+            loadLayoutFromParser(undoRedoManager.undo());
         }
     }
 
     public void redo() {
-        if (undoRedo == null) return;
-        if (undoRedo.isRedoEnabled()) {
-            loadLayoutFromParser(undoRedo.redo());
+        if (undoRedoManager == null) return;
+        if (undoRedoManager.isRedoEnabled()) {
+            loadLayoutFromParser(undoRedoManager.redo());
         }
     }
 
@@ -344,7 +315,7 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void bindUndoRedoManager(UndoRedoManager manager) {
-        undoRedo = manager;
+        undoRedoManager = manager;
     }
 
     public void updateStructure() {
@@ -356,25 +327,27 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void updateUndoRedoHistory() {
-        if (undoRedo == null) return;
+        if (undoRedoManager == null) return;
         String result = new XmlLayoutGenerator().generate(this, false);
-        undoRedo.addToHistory(result);
-        new EditorActivity().updateUndoRedoBtnState();
+        undoRedoManager.addToHistory(result);
     }
 
     private void rearrangeListeners(final View view) {
         final GestureDetector gestureDetector =
                 new GestureDetector(
+                        getContext(),
                         new GestureDetector.SimpleOnGestureListener() {
 
                             @Override
                             public void onLongPress(MotionEvent event) {
-                                view.startDragAndDrop(null, new DragShadowBuilder(view), view, 0);
+                                view.startDragAndDrop(
+                                        null, new View.DragShadowBuilder(view), view, 0);
                             }
                         });
 
         view.setOnTouchListener(
                 new OnTouchListener() {
+
                     boolean bClick = true;
                     float startX = 0;
                     float startY = 0;
@@ -383,9 +356,8 @@ public class EditorLayout extends LinearLayoutCompat {
                     float diffX = 0;
                     float diffY = 0;
 
-                    @SuppressLint("ClickableViewAccessibility")
                     @Override
-                    public boolean onTouch(final View v, MotionEvent event) {
+                    public boolean onTouch(View v, MotionEvent event) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 startX = event.getX();
@@ -417,13 +389,10 @@ public class EditorLayout extends LinearLayoutCompat {
     private void addWidget(View view, ViewGroup newParent, DragEvent event) {
         removeWidget(view);
 
-        if (newParent instanceof LinearLayout) {
-            int index = getIndexForNewChildOfLinear((LinearLayout) newParent, event);
+        if (newParent instanceof LinearLayoutCompat) {
+            int index = getIndexForNewChildOfLinear((LinearLayoutCompat) newParent, event);
             newParent.addView(view, index);
         } else {
-            /*
-            hack check scrollview parent
-            ****/
             try {
                 newParent.addView(view, newParent.getChildCount());
             } catch (Exception e) {
@@ -438,10 +407,10 @@ public class EditorLayout extends LinearLayoutCompat {
         if (parent != null) parent.removeView(view);
     }
 
-    private int getIndexForNewChildOfLinear(LinearLayout layout, DragEvent event) {
+    private int getIndexForNewChildOfLinear(LinearLayoutCompat layout, DragEvent event) {
         int orientation = layout.getOrientation();
 
-        if (orientation == LinearLayout.HORIZONTAL) {
+        if (orientation == LinearLayoutCompat.HORIZONTAL) {
             int index = 0;
 
             for (int i = 0; i < layout.getChildCount(); i++) {
@@ -455,7 +424,7 @@ public class EditorLayout extends LinearLayoutCompat {
             return index;
         }
 
-        if (orientation == LinearLayout.VERTICAL) {
+        if (orientation == LinearLayoutCompat.VERTICAL) {
             int index = 0;
 
             for (int i = 0; i < layout.getChildCount(); i++) {
@@ -474,7 +443,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
     private void setupViewGroupAnimation(ViewGroup group) {
         LayoutTransition transition = new LayoutTransition();
-        transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
         transition.enableTransitionType(LayoutTransition.CHANGING);
         transition.setDuration(150);
 
@@ -482,11 +451,6 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void showDefinedAttributes(final View target) {
-        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-
-        ShowAttributesDialogBinding dialogBinding = ShowAttributesDialogBinding.inflate(inflater);
-        dialog.setContentView(dialogBinding.getRoot());
-
         final ArrayList<String> keys = viewAttributeMap.get(target).keySet();
         final ArrayList<String> values = viewAttributeMap.get(target).values();
 
@@ -494,9 +458,14 @@ public class EditorLayout extends LinearLayoutCompat {
         final ArrayList<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
 
+        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+        ShowAttributesDialogBinding binding = ShowAttributesDialogBinding.inflate(inflater);
+
+        dialog.setContentView(binding.getRoot());
+
         for (String key : keys) {
             for (HashMap<String, Object> map : allAttrs) {
-                if (map.get("attributeName").toString().equals(key)) {
+                if (map.get(Constants.KEY_ATTRIBUTE_NAME).toString().equals(key)) {
                     attrs.add(map);
                     break;
                 }
@@ -512,30 +481,29 @@ public class EditorLayout extends LinearLayoutCompat {
                     }
 
                     @Override
+                    public java.lang.Object getItem(int pos) {
+                        return null;
+                    }
+
+                    @Override
                     public long getItemId(int arg0) {
                         return 0;
                     }
 
                     @Override
-                    public Object getItem(int pos) {
-                        return null;
-                    }
-                    
-                    @SuppressLint("ViewHolder")
-                    @Override
-                    public View getView(int pos, View buffer, ViewGroup parent) {
+                    public android.view.View getView(int pos, View buffer, ViewGroup parent) {
                         final HashMap<String, Object> item = attrs.get(pos);
 
-                        final ShowAttributeItemBinding itemBinding =
+                        final ShowAttributeItemBinding attributeItemBinding =
                                 ShowAttributeItemBinding.inflate(inflater);
-                        itemBinding.textName.setText(item.get("name").toString());
-                        itemBinding.textValue.setText(values.get(pos));
+                        attributeItemBinding.textName.setText(item.get("name").toString());
+                        attributeItemBinding.textValue.setText(values.get(pos));
 
-                        if (item.containsKey("canDelete")) {
-                            itemBinding.btnDelete.setVisibility(View.GONE);
+                        if (item.containsKey(Constants.KEY_CAN_DELETE)) {
+                            attributeItemBinding.btnDelete.setVisibility(View.GONE);
                         }
 
-                        itemBinding
+                        attributeItemBinding
                                 .getRoot()
                                 .setOnClickListener(
                                         v -> {
@@ -543,7 +511,7 @@ public class EditorLayout extends LinearLayoutCompat {
                                             dialog.dismiss();
                                         });
 
-                        itemBinding.btnDelete.setOnClickListener(
+                        attributeItemBinding.btnDelete.setOnClickListener(
                                 v -> {
                                     dialog.dismiss();
 
@@ -551,48 +519,46 @@ public class EditorLayout extends LinearLayoutCompat {
                                     showDefinedAttributes(view);
                                 });
 
-                        return itemBinding.getRoot();
+                        return attributeItemBinding.getRoot();
                     }
                 };
 
-        dialogBinding.listView.setAdapter(adapter);
-        dialogBinding.widgetName.setText(target.getClass().getSuperclass().getSimpleName());
-        dialogBinding.btnAdd.setOnClickListener(
+        binding.listView.setAdapter(adapter);
+        binding.widgetName.setText(target.getClass().getSuperclass().getSimpleName());
+        binding.btnAdd.setOnClickListener(
                 v -> {
                     showAvailableAttributes(target);
                     dialog.dismiss();
                 });
 
-        dialogBinding.btnDelete.setOnClickListener(
+        binding.btnDelete.setOnClickListener(
                 v -> {
-                    final MaterialAlertDialogBuilder confirm =
-                            new MaterialAlertDialogBuilder(getContext());
-                    confirm.setTitle("Delete view");
-                    confirm.setMessage("Do you want to remove the view?");
-                    confirm.setNegativeButton("No", (di, which) -> {});
-                    confirm.setPositiveButton(
-                            "Yes",
-                            (di, which) -> {
-
-                                // delete widget and id
-                                IdManager.removeId(target, target instanceof ViewGroup);
-                                removeViewAttributes(target);
-                                removeWidget(target);
-                                //	viewAttributeMap.remove(target);
-                                updateStructure();
-                                updateUndoRedoHistory();
-                                dialog.dismiss();
-                            });
-                    confirm.create().show();
+                    new DialogUtil(getContext())
+                            .setTitle("Delete view")
+                            .setMessage("Do you want to remove the view?")
+                            .setNegativeButton(
+                                    "No",
+                                    (d, w) -> {
+                                        d.dismiss();
+                                    })
+                            .setPositiveButton(
+                                    "Yes",
+                                    (d, w) -> {
+                                        IdManager.removeId(target, target instanceof ViewGroup);
+                                        removeViewAttributes(target);
+                                        removeWidget(target);
+                                        //	viewAttributeMap.remove(target);
+                                        updateStructure();
+                                        updateUndoRedoHistory();
+                                        dialog.dismiss();
+                                    })
+                            .show();
                 });
 
         dialog.show();
     }
 
     private void showAvailableAttributes(final View target) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle("Available attributes");
-
         final ArrayList<HashMap<String, Object>> availableAttrs =
                 initializer.getAvailableAttributesForView(target);
         final ArrayList<String> names = new ArrayList<>();
@@ -601,18 +567,20 @@ public class EditorLayout extends LinearLayoutCompat {
             names.add(attr.get("name").toString());
         }
 
-        builder.setAdapter(
-                new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, names),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface di, int which) {
-                        showAttributeEdit(
-                                target, availableAttrs.get(which).get("attributeName").toString());
-                    }
-                });
-
-        builder.create().show();
+        new DialogUtil(getContext())
+                .setTitle("Available attributes")
+                .setAdapter(
+                        new ArrayAdapter<String>(
+                                getContext(), android.R.layout.simple_list_item_1, names),
+                        (d, w) -> {
+                            showAttributeEdit(
+                                    target,
+                                    availableAttrs
+                                            .get(w)
+                                            .get(Constants.KEY_ATTRIBUTE_NAME)
+                                            .toString());
+                        })
+                .show();
     }
 
     private void showAttributeEdit(final View target, final String attributeKey) {
@@ -622,7 +590,8 @@ public class EditorLayout extends LinearLayoutCompat {
                 initializer.getAttributeFromKey(attributeKey, allAttrs);
         final AttributeMap attributeMap = viewAttributeMap.get(target);
 
-        final String[] argumentTypes = currentAttr.get("argumentType").toString().split("\\|");
+        final String[] argumentTypes =
+                currentAttr.get(Constants.KEY_ARGUMENT_TYPE).toString().split("\\|");
 
         if (argumentTypes.length > 1) {
             if (attributeMap.contains(attributeKey)) {
@@ -631,25 +600,25 @@ public class EditorLayout extends LinearLayoutCompat {
                 showAttributeEdit(target, attributeKey, argumentType);
                 return;
             }
+            new DialogUtil(getContext())
+                    .setTitle("Select argument type")
+                    .setAdapter(
+                            new ArrayAdapter<String>(
+                                    getContext(),
+                                    android.R.layout.simple_list_item_1,
+                                    argumentTypes),
+                            (d, w) -> {
+                                showAttributeEdit(target, attributeKey, argumentTypes[w]);
+                            })
+                    .show();
 
-            final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(getContext());
-            dialog.setTitle("Select argument type");
-            dialog.setAdapter(
-                    new ArrayAdapter<String>(
-                            getContext(), android.R.layout.simple_list_item_1, argumentTypes),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface di, int which) {
-                            showAttributeEdit(target, attributeKey, argumentTypes[which]);
-                        }
-                    });
-            dialog.create().show();
             return;
         }
 
         showAttributeEdit(target, attributeKey, argumentTypes[0]);
     }
 
+    @SuppressWarnings("unchecked")
     private void showAttributeEdit(
             final View target, final String attributeKey, final String argumentType) {
         final ArrayList<HashMap<String, Object>> allAttrs =
@@ -661,72 +630,74 @@ public class EditorLayout extends LinearLayoutCompat {
         final String savedValue =
                 attributeMap.contains(attributeKey) ? attributeMap.getValue(attributeKey) : "";
         final String defaultValue =
-                currentAttr.containsKey("defaultValue")
-                        ? currentAttr.get("defaultValue").toString()
+                currentAttr.containsKey(Constants.KEY_DEFAULT_VALUE)
+                        ? currentAttr.get(Constants.KEY_DEFAULT_VALUE).toString()
                         : null;
         final String constant =
-                currentAttr.containsKey("constant") ? currentAttr.get("constant").toString() : null;
+                currentAttr.containsKey(Constants.KEY_CONSTANT)
+                        ? currentAttr.get(Constants.KEY_CONSTANT).toString()
+                        : null;
 
         final Context context = getContext();
 
         AttributeDialog dialog = null;
 
         switch (argumentType) {
-            case "size":
+            case Constants.ARGUMENT_TYPE_SIZE:
                 dialog = new SizeDialog(context, savedValue);
                 break;
 
-            case "dimension":
+            case Constants.ARGUMENT_TYPE_DIMENSION:
                 dialog =
                         new DimensionDialog(
                                 context, savedValue, currentAttr.get("dimensionUnit").toString());
                 break;
 
-            case "id":
+            case Constants.ARGUMENT_TYPE_ID:
                 dialog = new IdDialog(context, savedValue);
                 break;
 
-            case "view":
+            case Constants.ARGUMENT_TYPE_VIEW:
                 dialog = new ViewDialog(context, savedValue, constant);
                 break;
 
-            case "boolean":
+            case Constants.ARGUMENT_TYPE_BOOLEAN:
                 dialog = new BooleanDialog(context, savedValue);
                 break;
 
-            case "drawable":
-            case "string":
+            case Constants.ARGUMENT_TYPE_DRAWABLE:
+                // break;
+
+            case Constants.ARGUMENT_TYPE_STRING:
                 dialog = new StringDialog(context, savedValue);
                 break;
 
-            case "int":
-                dialog = new NumberDialog(context, savedValue, "int");
+            case Constants.ARGUMENT_TYPE_INT:
+                dialog = new NumberDialog(context, savedValue, Constants.ARGUMENT_TYPE_INT);
                 break;
 
-            case "float":
-                dialog = new NumberDialog(context, savedValue, "float");
+            case Constants.ARGUMENT_TYPE_FLOAT:
+                dialog = new NumberDialog(context, savedValue, Constants.ARGUMENT_TYPE_FLOAT);
                 break;
 
-            case "flag":
+            case Constants.ARGUMENT_TYPE_FLAG:
                 dialog =
                         new FlagDialog(
                                 context, savedValue, (ArrayList) currentAttr.get("arguments"));
                 break;
 
-            case "enum":
+            case Constants.ARGUMENT_TYPE_ENUM:
                 dialog =
                         new EnumDialog(
                                 context, savedValue, (ArrayList) currentAttr.get("arguments"));
                 break;
 
-            case "color":
+            case Constants.ARGUMENT_TYPE_COLOR:
                 dialog = new ColorDialog(context, savedValue);
                 break;
         }
 
-        if (dialog == null) {
-            return;
-        }
+        if (dialog == null) return;
 
         dialog.setTitle(currentAttr.get("name").toString());
         dialog.setOnSaveValueListener(
@@ -757,7 +728,8 @@ public class EditorLayout extends LinearLayoutCompat {
         }
     }
 
-    private View removeAttribute(View target, final String attributeKey) {
+    @SuppressWarnings("unchecked")
+    private View removeAttribute(View target, String attributeKey) {
         final ArrayList<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
         final HashMap<String, Object> currentAttr =
@@ -765,14 +737,13 @@ public class EditorLayout extends LinearLayoutCompat {
 
         final AttributeMap attributeMap = viewAttributeMap.get(target);
 
-        if (currentAttr.containsKey("canDelete")) {
+        if (currentAttr.containsKey(Constants.KEY_CAN_DELETE)) {
             return target;
         }
 
         final String name =
                 attributeMap.contains("android:id") ? attributeMap.getValue("android:id") : null;
         final int id = name != null ? IdManager.getViewId(name.replace("@+id/", "")) : -1;
-
         attributeMap.removeValue(attributeKey);
 
         if (attributeKey.equals("android:id")) {
@@ -827,7 +798,6 @@ public class EditorLayout extends LinearLayoutCompat {
         if (target instanceof ViewGroup) {
             target.setMinimumWidth(getDip(20));
             target.setMinimumHeight(getDip(20));
-            target.setOnDragListener(onDragListener);
 
             final ViewGroup group = (ViewGroup) target;
 
@@ -855,7 +825,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
         for (String key : keys) {
             for (HashMap<String, Object> map : allAttrs) {
-                if (map.get("attributeName").toString().equals(key)) {
+                if (map.get(Constants.KEY_ATTRIBUTE_NAME).toString().equals(key)) {
                     attrs.add(map);
                     break;
                 }
@@ -884,26 +854,25 @@ public class EditorLayout extends LinearLayoutCompat {
         return target;
     }
 
-    public HashMap<View, AttributeMap> getViewAttributeMap() {
-        return viewAttributeMap;
-    }
-
-    @Override
-    public void addView(View arg0, int arg1) {
-        if (getChildCount() == 0) {
-            super.addView(arg0, arg1);
-        }
-    }
-
-    private void toast(String text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
     private int getDip(int value) {
         return (int) DimensionUtil.getDip(value, getContext());
     }
 
     private String getString(int id) {
         return getResources().getString(id);
+    }
+
+    @Override
+    public void addView(View view, int arg1) {
+        if (getChildCount() == 0) super.addView(view, arg1);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
+
+    public HashMap<View, AttributeMap> getViewAttributeMap() {
+        return this.viewAttributeMap;
     }
 }
