@@ -1,14 +1,17 @@
 package com.itsvks.layouteditor.editor.widgets.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.widget.RadioButton;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatRadioButton;
+
 import com.itsvks.layouteditor.R;
 
-public class RadioButtonDesign extends AppCompatRadioButton {
+@SuppressLint("AppCompatCustomView")
+public class RadioButtonDesign extends RadioButton {
 
     private Drawable strokeDrawable;
     private boolean drawStrokeEnabled;

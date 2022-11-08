@@ -3,12 +3,13 @@ package com.itsvks.layouteditor.editor.widgets.android;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.widget.Switch;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.SwitchCompat;
+
 import com.itsvks.layouteditor.R;
 
-public class SwitchDesign extends SwitchCompat {
+public class SwitchDesign extends Switch {
 
     private Drawable strokeDrawable;
     private boolean drawStrokeEnabled;

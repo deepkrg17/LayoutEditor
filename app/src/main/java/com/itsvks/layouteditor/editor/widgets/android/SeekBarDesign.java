@@ -3,12 +3,13 @@ package com.itsvks.layouteditor.editor.widgets.android;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.widget.SeekBar;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatSeekBar;
+
 import com.itsvks.layouteditor.R;
 
-public class SeekBarDesign extends AppCompatSeekBar {
+public class SeekBarDesign extends SeekBar {
 
     private Drawable strokeDrawable;
     private boolean drawStrokeEnabled;
