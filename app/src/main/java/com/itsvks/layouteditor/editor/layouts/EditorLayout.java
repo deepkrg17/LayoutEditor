@@ -18,6 +18,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import com.blankj.utilcode.util.VibrateUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.databinding.ShowAttributeItemBinding;
@@ -43,7 +44,6 @@ import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.tools.XmlLayoutParser;
 import com.itsvks.layouteditor.utils.ArgumentUtil;
 import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.DialogUtil;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
@@ -541,7 +541,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
         binding.btnDelete.setOnClickListener(
                 v -> {
-                    new DialogUtil(getContext())
+                    new MaterialAlertDialogBuilder(getContext())
                             .setTitle("Delete view")
                             .setMessage("Do you want to remove the view?")
                             .setNegativeButton(
@@ -575,7 +575,7 @@ public class EditorLayout extends LinearLayoutCompat {
             names.add(attr.get("name").toString());
         }
 
-        new DialogUtil(getContext())
+        new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Available attributes")
                 .setAdapter(
                         new ArrayAdapter<String>(
@@ -608,7 +608,7 @@ public class EditorLayout extends LinearLayoutCompat {
                 showAttributeEdit(target, attributeKey, argumentType);
                 return;
             }
-            new DialogUtil(getContext())
+            new MaterialAlertDialogBuilder(getContext())
                     .setTitle("Select argument type")
                     .setAdapter(
                             new ArrayAdapter<String>(

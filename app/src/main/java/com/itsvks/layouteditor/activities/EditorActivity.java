@@ -23,6 +23,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -37,7 +38,6 @@ import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.DialogUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
 
@@ -270,7 +270,7 @@ public class EditorActivity extends BaseActivity {
                     .setAction(
                             "Why?",
                             v -> {
-                                new DialogUtil(this)
+                                new MaterialAlertDialogBuilder(this)
                                         .setTitle("Cause:")
                                         .setMessage(
                                                 "There is no widget in this layout. So add some widgets.")
