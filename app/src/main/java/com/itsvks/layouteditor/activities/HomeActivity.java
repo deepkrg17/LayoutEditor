@@ -3,6 +3,7 @@ package com.itsvks.layouteditor.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,7 +145,11 @@ public class HomeActivity extends BaseActivity {
                     } else if (id == R.id.nav_licence) {
                         startActivity(new Intent(this, OssLicensesMenuActivity.class));
                         return true;
-                    } else return false;
+                    } else if (id == R.id.nav_github) {
+                        openUrl("https://github.com/itsvks19/LayoutEditor");
+                        return true;
+                    }
+                     else return false;
                 });
         navigationView.setCheckedItem(R.id.nav_home);
 
@@ -246,5 +251,12 @@ public class HomeActivity extends BaseActivity {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.main_fragment, fragment)
                 .commit();
+    }
+    
+    private void openUrl(String url) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 }

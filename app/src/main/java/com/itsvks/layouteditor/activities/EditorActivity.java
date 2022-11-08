@@ -48,7 +48,6 @@ import java.util.HashMap;
 
 public class EditorActivity extends BaseActivity {
 
-    private static final float END_SCALE = 0.7f;
     public static final String EXTRA_KEY_PROJECT = "project";
     public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
 
