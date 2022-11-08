@@ -12,10 +12,4 @@
     <string name="title_about">About</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="content_description_home">HOME</string>
-    <string name="content_description_preference">PREFERENCES</string>
-    <string name="content_description_github">GITHUB</string>
-    <string name="content_description_about">ABOUT</string>
-    <string name="content_description_share">SHARE</string>
-    <string name="content_description_open_source_licence">OPEN SOURCE LICENCE</string>
 </resources>
