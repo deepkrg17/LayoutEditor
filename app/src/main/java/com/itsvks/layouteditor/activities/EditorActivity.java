@@ -255,7 +255,7 @@ public class EditorActivity extends BaseActivity {
 
         if (binding.editorLayout.getChildCount() == 0) {
             project.saveLayout("");
-            SBUtils.make(binding.getRoot(), "Add a view before saving..")
+            SBUtils.make(binding.getRoot(), R.string.project_empty)
                     .setFadeAnimation()
                     .showLongAsError();
             return;
@@ -263,7 +263,7 @@ public class EditorActivity extends BaseActivity {
 
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
         project.saveLayout(result);
-        SBUtils.make(binding.getRoot(), "Saved.").setSlideAnimation().showAsSuccess();
+        SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
     }
 
     private class ListViewAdapter extends BaseAdapter implements View.OnLongClickListener {

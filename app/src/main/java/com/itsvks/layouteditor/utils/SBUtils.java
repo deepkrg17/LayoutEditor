@@ -26,6 +26,10 @@ public class SBUtils {
         return new SBUtils(v, Snackbar.make(v, msg, Snackbar.LENGTH_SHORT));
     }
 
+    public static SBUtils make(View v, int msgResId) {
+        return new SBUtils(v, Snackbar.make(v, msgResId, Snackbar.LENGTH_SHORT));
+    }
+
     public SBUtils setType(SBUtils.Type type) {
         this.type = type;
         return this;
