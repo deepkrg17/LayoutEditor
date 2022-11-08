@@ -19,12 +19,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.FitWindowsLinearLayout;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,11 +36,10 @@ import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.DialogUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
 
-import es.dmoral.toasty.Toasty;
+import com.itsvks.layouteditor.utils.SBUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,11 +78,6 @@ public class EditorActivity extends BaseActivity {
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
-
-        Toasty.Config.getInstance()
-                .supportDarkTheme(true)
-                .setToastTypeface(ResourcesCompat.getFont(this, R.font.ubuntu_regular))
-                .apply();
 
         project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
 
@@ -264,44 +256,15 @@ public class EditorActivity extends BaseActivity {
 
         if (binding.editorLayout.getChildCount() == 0) {
             project.saveLayout("");
-            Snackbar.make(this, binding.getRoot(), "Can't save", Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(
-                            MaterialColors.getColor(
-                                    binding.getRoot(),
-                                    com.google.android.material.R.attr.colorErrorContainer))
-                    .setTextColor(
-                            MaterialColors.getColor(
-                                    binding.getRoot(),
-                                    com.google.android.material.R.attr.colorOnErrorContainer))
-                    .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
-                    .setTextMaxLines(1)
-                    .setAction(
-                            "Why?",
-                            v -> {
-                                new DialogUtil(this)
-                                        .setTitle("Cause:")
-                                        .setMessage(
-                                                "There is no widget in this layout. So add some widgets.")
-                                        .setPositiveButton(
-                                                "Okay",
-                                                (d, w) -> {
-                                                    d.dismiss();
-                                                })
-                                        .show();
-                            })
-                    .setActionTextColor(
-                            MaterialColors.getColor(
-                                    binding.getRoot(),
-                                    com.google.android.material.R.attr.colorOnErrorContainer))
-                    .show();
+            SBUtils.make(binding.getRoot(), "Add a view before saving..")
+                    .setFadeAnimation()
+                    .showLongAsError();
             return;
         }
 
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
         project.saveLayout(result);
-        Snackbar.make(this, binding.getRoot(), "Saved.", Snackbar.LENGTH_SHORT)
-                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                .show();
+        SBUtils.make(binding.getRoot(), "Saved.").setSlideAnimation().showAsSuccess();
     }
 
     private class ListViewAdapter extends BaseAdapter implements View.OnLongClickListener {
