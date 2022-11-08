@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.ClipboardUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.databinding.ActivityShowXMLBinding;
+import com.itsvks.layouteditor.utils.DialogUtil;
 
 public class ShowXMLActivity extends BaseActivity {
 
@@ -28,6 +29,20 @@ public class ShowXMLActivity extends BaseActivity {
                 });
 
         binding.result.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
+
+        if (binding.result.getText().toString().isEmpty()) {
+            binding.fab.hide();
+            new DialogUtil(this)
+                    .setTitle("Nothing...")
+                    .setMessage("Add some widgets")
+                    .setPositiveButton(
+                            "Okay",
+                            (d, w) -> {
+                                super.onBackPressed();
+                            })
+                    .show();
+        }
+
         binding.fab.setOnClickListener(
                 v -> {
                     ClipboardUtils.copyText(binding.result.getText());
