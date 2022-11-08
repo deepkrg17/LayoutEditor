@@ -238,10 +238,19 @@ public class EditorLayout extends LinearLayoutCompat {
 
         initializer =
                 new AttributeInitializer(context, viewAttributeMap, attributes, parentAttributes);
+                
+        if (PreferencesManager.isShowStroke()) {
+            drawStrokeEnabled = true;
+            toggleStroke();
+        }
+        else {
+            drawStrokeEnabled = false;
+            toggleStroke();
+        }
     }
 
     public void toggleStroke() {
-        drawStrokeEnabled = !drawStrokeEnabled;
+        // drawStrokeEnabled = !drawStrokeEnabled;
         toggleStrokeWidgets();
     }
 
