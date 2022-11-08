@@ -2,6 +2,7 @@ name: Test and Build
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   unit_tests:
