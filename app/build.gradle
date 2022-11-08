@@ -48,12 +48,14 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core:1.9.0'
     implementation 'com.google.android.material:material:1.8.0-alpha02'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     implementation 'com.google.code.gson:gson:2.10'
     implementation 'com.blankj:utilcodex:1.31.1'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'androidx.preference:preference:1.2.0'
+    
     def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

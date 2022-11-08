@@ -1,14 +1,17 @@
 package com.itsvks.layouteditor.editor.widgets.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.widget.CheckBox;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatCheckBox;
+
 import com.itsvks.layouteditor.R;
 
-public class CheckBoxDesign extends AppCompatCheckBox {
+@SuppressLint("AppCompatCustomView")
+public class CheckBoxDesign extends CheckBox {
 
     private Drawable strokeDrawable;
     private boolean drawStrokeEnabled;

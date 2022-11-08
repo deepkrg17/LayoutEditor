@@ -11,6 +11,10 @@ public class PreferencesManager {
     public static boolean isEnableVibration() {
         return getPrefs().getBoolean("vibration", false);
     }
+    
+    public static boolean isShowStroke() {
+        return getPrefs().getBoolean("toggle_stroke", true);
+    }
 
     public static SharedPreferences getPrefs() {
         return PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());

@@ -8,14 +8,14 @@
         android:title="Undo"
         app:contentDescription="Undo"
         android:icon="@drawable/undo_variant"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/redo"
         android:name="Redo"
         android:title="Redo"
         app:contentDescription="Redo"
         android:icon="@drawable/redo_variant"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
         
     <item
         android:id="@+id/show_structure"
@@ -23,7 +23,7 @@
         android:title="Show structure"
         app:contentDescription="Show structure"
         android:icon="@drawable/file_tree"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
         
     <item
         android:id="@+id/show_xml"

@@ -24,7 +24,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                         "May consume battery",
                         AppCompatResources.getDrawable(context, R.drawable.vibrate));
         vibrationPreference.setKey("vibration");
+
+        var toggleStrokePreference =
+                PreferenceUtils.switchPreference(
+                        context,
+                        "Show Stroke",
+                        "Show stroke in the editor?",
+                        AppCompatResources.getDrawable(context, R.drawable.dots_square));
+        toggleStrokePreference.setKey("toggle_stroke");
+        toggleStrokePreference.setChecked(true);
+        
         screen.addPreference(vibrationPreference);
+        screen.addPreference(toggleStrokePreference);
         setPreferenceScreen(screen);
     }
 }
