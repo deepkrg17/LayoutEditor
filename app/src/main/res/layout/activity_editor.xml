@@ -5,26 +5,26 @@
     android:id="@+id/drawer"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    
+
     <androidx.appcompat.widget.FitWindowsLinearLayout
         android:background="?android:attr/colorBackground"
         android:id="@+id/content"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical">
-        
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
-            
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"/>
-            
-        
+                android:layout_width="match_parent" />
+
+
         </com.google.android.material.appbar.AppBarLayout>
-        
+
         <com.itsvks.layouteditor.editor.layouts.EditorLayout
             android:background="@drawable/background_stroke_dash"
             android:id="@+id/editor_layout"
@@ -32,33 +32,33 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:scaleX="0.85"
-            android:scaleY="0.85"/>
-        
-    
+            android:scaleY="0.85" />
+
+
     </androidx.appcompat.widget.FitWindowsLinearLayout>
-    
+
     <androidx.appcompat.widget.FitWindowsLinearLayout
         android:background="?attr/colorSurface"
         android:layout_gravity="start"
         android:layout_height="match_parent"
         android:layout_width="220dp"
         android:orientation="vertical">
-        
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            app:tabMode="scrollable"/>
-        
+            app:tabMode="scrollable" />
+
         <ListView
             android:divider="@null"
             android:id="@+id/list_view"
             android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
-        
-    
+            android:layout_width="match_parent" />
+
+
     </androidx.appcompat.widget.FitWindowsLinearLayout>
-    
+
     <ScrollView
         android:background="?attr/colorSurface"
         android:fillViewport="true"
@@ -66,23 +66,23 @@
         android:layout_height="match_parent"
         android:layout_width="220dp"
         android:nestedScrollingEnabled="true">
-        
+
         <HorizontalScrollView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:nestedScrollingEnabled="true">
-            
+
             <com.itsvks.layouteditor.tools.StructureView
                 android:id="@+id/structure_view"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:orientation="vertical"/>
-            
-        
+                android:orientation="vertical" />
+
+
         </HorizontalScrollView>
-        
-    
+
+
     </ScrollView>
-    
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

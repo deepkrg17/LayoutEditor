@@ -19,7 +19,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.FitWindowsLinearLayout;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -41,8 +40,6 @@ import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.DialogUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
-
-import es.dmoral.toasty.Toasty;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,12 +79,8 @@ public class EditorActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
 
-        Toasty.Config.getInstance()
-                .supportDarkTheme(true)
-                .setToastTypeface(ResourcesCompat.getFont(this, R.font.ubuntu_regular))
-                .apply();
-
         project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
+        getSupportActionBar().setTitle(project.getName());
 
         undoRedo = new UndoRedoManager(undo, redo);
         updateUndoRedoBtnState();

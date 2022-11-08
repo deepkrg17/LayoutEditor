@@ -44,8 +44,8 @@
 			"android:padding" : "8dp"
 		}
 	},
-	
-	{
+    
+    {
 		"name" : "ConstraintLayout",
 		"className" : "com.itsvks.layouteditor.editor.widgets.android.ConstraintLayoutDesign",
 		"iconName" : "ic_constraint",
