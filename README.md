@@ -18,7 +18,7 @@ You may face issues when using the app. If you do, please report it in github is
 ### Lisence
 ```
 LayoutEditor - Create awesome layouts
-Copyright (C) 2022  Vivek Kumar Sahani
+Copyright (C) 2022  Vivek Sahani
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
