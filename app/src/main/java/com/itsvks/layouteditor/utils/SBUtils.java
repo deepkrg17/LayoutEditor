@@ -68,7 +68,7 @@ public class SBUtils {
                 setColors(0xff4caf50, 0xffffffff);
                 break;
             case INFO:
-                // ToDo: Implement case Info
+                setColors(0xff17a2b8, 0xffffffff);
         }
         snackbar.show();
     }
