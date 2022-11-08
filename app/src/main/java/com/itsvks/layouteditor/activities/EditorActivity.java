@@ -38,7 +38,6 @@ import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
-
 import com.itsvks.layouteditor.utils.SBUtils;
 
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import java.util.HashMap;
 
 public class EditorActivity extends BaseActivity {
 
-    private static final float END_SCALE = 0.7f;
     public static final String EXTRA_KEY_PROJECT = "project";
     public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
 
@@ -80,6 +78,7 @@ public class EditorActivity extends BaseActivity {
         setSupportActionBar(binding.topAppBar);
 
         project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
+        getSupportActionBar().setTitle(project.getName());
 
         undoRedo = new UndoRedoManager(undo, redo);
         updateUndoRedoBtnState();

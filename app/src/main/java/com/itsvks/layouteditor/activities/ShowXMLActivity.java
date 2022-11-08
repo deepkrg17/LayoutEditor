@@ -2,11 +2,14 @@ package com.itsvks.layouteditor.activities;
 
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.blankj.utilcode.util.ClipboardUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.itsvks.layouteditor.BaseActivity;
+import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.ActivityShowXMLBinding;
-import com.itsvks.layouteditor.utils.DialogUtil;
 
 public class ShowXMLActivity extends BaseActivity {
 
@@ -29,10 +32,11 @@ public class ShowXMLActivity extends BaseActivity {
                 });
 
         binding.result.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
+        binding.result.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular));
 
         if (binding.result.getText().toString().isEmpty()) {
             binding.fab.hide();
-            new DialogUtil(this)
+            new MaterialAlertDialogBuilder(this)
                     .setTitle("Nothing...")
                     .setMessage("Add some widgets")
                     .setPositiveButton(

@@ -1,11 +1,14 @@
 <h1 align="center"> Layout Editor </h1>
 
-![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release)
-![Test and Build](https://github.com/itsvks19/LayoutEditor/actions/workflows/test_and_build.yml/badge.svg)
+[![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/tag/v0.2.0-alpha)
+![Test and Build](https://img.shields.io/github/workflow/status/itsvks19/LayoutEditor/Test%20and%20Build?label=Test%20and%20Build&style=for-the-badge)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/itsvks19/LayoutEditor?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/itsvks19/LayoutEditor?color=blue&style=for-the-badge)
+![Size](https://img.shields.io/github/repo-size/itsvks19/LayoutEditor?style=for-the-badge)
 
 Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.
 
-#### Features:
+#### Features
 - Design layout with Drag & Drop
 - Edit view and layout properties
 - See and Copy the XML code of layout
@@ -13,11 +16,13 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - Save layouts as projects
 
 The app is in alpha.
-You may face issues when using the app. If you do, please report it in github issues.
+You may face issues when using the app. If you do, please report it in github [issues](https://github.com/itsvks19/LayoutEditor/issues).
+
+[![v0.2.0-alpha](https://img.shields.io/badge/Layout-Editor-blue?style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/tag/v0.2.0-alpha)
 
 ### Lisence
 ```
-LayoutEditor - Create awesome layouts
+LayoutEditor - Create Awesome Layouts
 Copyright (C) 2022  Vivek Sahani
 
 This program is free software: you can redistribute it and/or modify
