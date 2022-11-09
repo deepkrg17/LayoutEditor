@@ -1,9 +1,10 @@
 <h1 align="center"> Layout Editor </h1>
 
-[![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/tag/v0.2.0-alpha)
+![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)
 ![Test and Build](https://img.shields.io/github/workflow/status/itsvks19/LayoutEditor/Test%20and%20Build?label=Test%20and%20Build&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/itsvks19/LayoutEditor?color=blue&style=for-the-badge)
-![Size](https://img.shields.io/github/repo-size/itsvks19/LayoutEditor?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/itsvks19/LayoutEditor?style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/itsvks19/LayoutEditor?style=for-the-badge)
 
 Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.
 
@@ -17,7 +18,7 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 The app is in alpha.
 You may face issues when using the app. If you do, please report it in github [issues](https://github.com/itsvks19/LayoutEditor/issues).
 
-[![v0.2.0-alpha](https://img.shields.io/badge/Layout-Editor-blue?style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/tag/v0.2.0-alpha)
+[![LayoutEditor](https://img.shields.io/badge/Layout-Editor-blue?style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/)
 
 ### Lisence
 ```
