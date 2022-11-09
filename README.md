@@ -2,8 +2,6 @@
 
 [![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/tag/v0.2.0-alpha)
 ![Test and Build](https://img.shields.io/github/workflow/status/itsvks19/LayoutEditor/Test%20and%20Build?label=Test%20and%20Build&style=for-the-badge)
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/itsvks19/LayoutEditor?style=for-the-badge&logo=CodeFactor)
-![Codacy grade](https://img.shields.io/codacy/grade/4cf7d8354e8d49098d68de0e9b6066bb?style=for-the-badge&logo=codacy)
 ![GitHub](https://img.shields.io/github/license/itsvks19/LayoutEditor?color=blue&style=for-the-badge)
 ![Size](https://img.shields.io/github/repo-size/itsvks19/LayoutEditor?style=for-the-badge)
 
@@ -24,7 +22,7 @@ You may face issues when using the app. If you do, please report it in github [i
 ### Lisence
 ```
 LayoutEditor - Create Awesome Layouts
-Copyright (C) 2022  Vivek Sahani
+Copyright (C) 2022  Vivek Sahani & Deep Kr. Ghosh
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
