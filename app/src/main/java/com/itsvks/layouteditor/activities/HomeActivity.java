@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.FitWindowsFrameLayout;
+import androidx.core.app.ShareCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -147,6 +148,15 @@ public class HomeActivity extends BaseActivity {
                         return true;
                     } else if (id == R.id.nav_github) {
                         openUrl("https://github.com/itsvks19/LayoutEditor");
+                        return true;
+                    } else if (id == R.id.nav_share) {
+                        var shareIntent = new ShareCompat.IntentBuilder(this);
+                        shareIntent.setType("text/plain");
+                        shareIntent.setChooserTitle(getString(R.string.app_name));
+                        shareIntent.setText(
+                                getString(R.string.share_description)
+                                        + "\n\nDownload from here: https://github.com/itsvks19/LayoutEditor/");
+                        shareIntent.startChooser();
                         return true;
                     } else return false;
                 });
