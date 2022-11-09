@@ -25,6 +25,7 @@ import com.itsvks.layouteditor.databinding.ActivityHomeBinding;
 import com.itsvks.layouteditor.fragments.ui.about.AboutFragment;
 import com.itsvks.layouteditor.fragments.ui.home.HomeFragment;
 import com.itsvks.layouteditor.fragments.ui.preferences.PreferencesFragment;
+import com.itsvks.layouteditor.utils.Constants;
 
 public class HomeActivity extends BaseActivity {
 
@@ -147,7 +148,7 @@ public class HomeActivity extends BaseActivity {
                         startActivity(new Intent(this, OssLicensesMenuActivity.class));
                         return true;
                     } else if (id == R.id.nav_github) {
-                        openUrl("https://github.com/itsvks19/LayoutEditor");
+                        openUrl(Constants.REPO_URL);
                         return true;
                     } else if (id == R.id.nav_share) {
                         var shareIntent = new ShareCompat.IntentBuilder(this);
@@ -155,7 +156,8 @@ public class HomeActivity extends BaseActivity {
                         shareIntent.setChooserTitle(getString(R.string.app_name));
                         shareIntent.setText(
                                 getString(R.string.share_description)
-                                        + "\n\nDownload from here: https://github.com/itsvks19/LayoutEditor/");
+                                        + "\n\nDownload from here: "
+                                        + Constants.REPO_URL);
                         shareIntent.startChooser();
                         return true;
                     } else return false;
