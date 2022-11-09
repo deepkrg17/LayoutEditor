@@ -82,7 +82,6 @@ public class HomeFragment extends Fragment {
         }
 
         @SuppressLint("ViewHolder")
-        @SuppressWarnings("unused")
         @Override
         public View getView(int pos, View buffer, ViewGroup p3) {
             ProjectFile project = getItem(pos);
@@ -131,8 +130,7 @@ public class HomeFragment extends Fragment {
         final TextInputEditText editText = bind.textinputEdittext;
         final TextInputLayout inputLayout = bind.textinputLayout;
 
-        builder.setView(bind.getRoot());
-        bind.getRoot().setPadding(10, 10, 10, 10);
+        builder.setView(bind.getRoot(), 10, 10 ,10 ,10);
         builder.setNegativeButton("Cancel", (di, which) -> {});
         builder.setPositiveButton(
                 "Create",

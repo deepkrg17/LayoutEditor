@@ -16,6 +16,8 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - See the layout structure
 - Save layouts as projects
 
+Note: `ConstraintLayout` is not usable right now.
+
 The app is in alpha.
 You may face issues when using the app. If you do, please report it in github [issues](https://github.com/itsvks19/LayoutEditor/issues).
 
