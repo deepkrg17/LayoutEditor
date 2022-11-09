@@ -53,36 +53,30 @@ public class HomeActivity extends BaseActivity {
 
         contentView = binding.content;
 
-        try {
-            switch (prefs.getString("fragment", "home")) {
-                case "home":
-                    {
-                        replaceFragment((Fragment) HomeFragment.class.newInstance());
-                        getSupportActionBar().setTitle(R.string.projects);
-                        break;
-                    }
-                case "preferences":
-                    {
-                        replaceFragment((Fragment) PreferencesFragment.class.newInstance());
-                        getSupportActionBar().setTitle(R.string.preference);
-                        break;
-                    }
-                case "about":
-                    {
-                        replaceFragment((Fragment) AboutFragment.class.newInstance());
-                        getSupportActionBar().setTitle(R.string.about);
-                        break;
-                    }
-                default:
-                    {
-                        replaceFragment((Fragment) HomeFragment.class.newInstance());
-                        getSupportActionBar().setTitle(R.string.projects);
-                    }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+        switch (prefs.getString("fragment", "home")) {
+            case "home":
+                {
+                    replaceFragment((Fragment) new HomeFragment());
+                    getSupportActionBar().setTitle(R.string.projects);
+                    break;
+                }
+            case "preferences":
+                {
+                    replaceFragment((Fragment) new PreferencesFragment());
+                    getSupportActionBar().setTitle(R.string.preference);
+                    break;
+                }
+            case "about":
+                {
+                    replaceFragment((Fragment) new AboutFragment());
+                    getSupportActionBar().setTitle(R.string.about);
+                    break;
+                }
+            default:
+                {
+                    replaceFragment((Fragment) new HomeFragment());
+                    getSupportActionBar().setTitle(R.string.projects);
+                }
         }
 
         drawerLayout = binding.drawer;
@@ -109,40 +103,26 @@ public class HomeActivity extends BaseActivity {
                     var id = item.getItemId();
 
                     if (id == R.id.nav_home) {
-                        try {
-                            replaceFragment((Fragment) HomeFragment.class.newInstance());
-                            getSupportActionBar().setTitle(R.string.projects);
-                            prefs.edit().putString("fragment", "home").apply();
-                            drawerLayout.closeDrawer(GravityCompat.START);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        }
+
+                        replaceFragment((Fragment) new HomeFragment());
+                        getSupportActionBar().setTitle(R.string.projects);
+                        prefs.edit().putString("fragment", "home").apply();
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     } else if (id == R.id.nav_preference) {
-                        try {
-                            replaceFragment((Fragment) PreferencesFragment.class.newInstance());
-                            getSupportActionBar().setTitle(R.string.title_preference);
-                            prefs.edit().putString("fragment", "preferences").apply();
-                            drawerLayout.closeDrawer(GravityCompat.START);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        }
+
+                        replaceFragment((Fragment) new PreferencesFragment());
+                        getSupportActionBar().setTitle(R.string.title_preference);
+                        prefs.edit().putString("fragment", "preferences").apply();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+
                         return true;
                     } else if (id == R.id.nav_about) {
-                        try {
-                            replaceFragment((Fragment) AboutFragment.class.newInstance());
-                            getSupportActionBar().setTitle(R.string.title_about);
-                            prefs.edit().putString("fragment", "about").apply();
-                            drawerLayout.closeDrawer(GravityCompat.START);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        }
+
+                        replaceFragment((Fragment) new AboutFragment());
+                        getSupportActionBar().setTitle(R.string.title_about);
+                        prefs.edit().putString("fragment", "about").apply();
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     } else if (id == R.id.nav_licence) {
                         startActivity(new Intent(this, OssLicensesMenuActivity.class));
@@ -190,42 +170,38 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (!drawerLayout.isDrawerVisible(GravityCompat.START)) {
-            try {
-                switch (prefs.getString("fragment", "home")) {
-                    case "preferences":
-                        {
-                            replaceFragment((Fragment) HomeFragment.class.newInstance());
-                            prefs.edit().putString("fragment", "home").apply();
-                            getSupportActionBar().setTitle(R.string.projects);
-                            navigationView.setCheckedItem(R.id.nav_home);
-                            break;
-                        }
-                    case "about":
-                        {
-                            replaceFragment((Fragment) HomeFragment.class.newInstance());
-                            prefs.edit().putString("fragment", "home").apply();
-                            getSupportActionBar().setTitle(R.string.projects);
-                            navigationView.setCheckedItem(R.id.nav_home);
-                            break;
-                        }
-                    case "home":
-                        {
-                            finishAffinity();
-                            break;
-                        }
-                    default:
-                        {
-                            replaceFragment((Fragment) HomeFragment.class.newInstance());
-                            prefs.edit().putString("fragment", "home").apply();
-                            getSupportActionBar().setTitle(R.string.projects);
-                            navigationView.setCheckedItem(R.id.nav_home);
-                        }
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
+
+            switch (prefs.getString("fragment", "home")) {
+                case "preferences":
+                    {
+                        replaceFragment((Fragment) new HomeFragment());
+                        prefs.edit().putString("fragment", "home").apply();
+                        getSupportActionBar().setTitle(R.string.projects);
+                        navigationView.setCheckedItem(R.id.nav_home);
+                        break;
+                    }
+                case "about":
+                    {
+                        replaceFragment((Fragment) new HomeFragment());
+                        prefs.edit().putString("fragment", "home").apply();
+                        getSupportActionBar().setTitle(R.string.projects);
+                        navigationView.setCheckedItem(R.id.nav_home);
+                        break;
+                    }
+                case "home":
+                    {
+                        finishAffinity();
+                        break;
+                    }
+                default:
+                    {
+                        replaceFragment((Fragment) new HomeFragment());
+                        prefs.edit().putString("fragment", "home").apply();
+                        getSupportActionBar().setTitle(R.string.projects);
+                        navigationView.setCheckedItem(R.id.nav_home);
+                    }
             }
+
         } else if (drawerLayout.isDrawerVisible(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
         else super.onBackPressed();
