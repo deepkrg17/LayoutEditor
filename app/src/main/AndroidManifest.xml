@@ -41,6 +41,10 @@
         <activity
             android:name="com.itsvks.layouteditor.activities.CrashActivity"
             android:exported="true"/>
+        <activity
+            android:name="com.itsvks.layouteditor.activities.DrawableManagerActivity"
+            android:exported="true"
+            android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity"/>
     </application>
 
 </manifest>

@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment {
         final String projectDir = FileUtil.getPackageDataDir(getContext()) + "/projects/" + name;
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
-        // FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
+        FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
 
         ProjectFile project = new ProjectFile(projectDir);
         project.saveLayout("");

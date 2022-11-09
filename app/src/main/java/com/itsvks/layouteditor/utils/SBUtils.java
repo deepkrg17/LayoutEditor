@@ -1,9 +1,10 @@
 package com.itsvks.layouteditor.utils;
 
 import android.view.View;
+
+import com.google.android.material.R;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.R;
 
 public class SBUtils {
 
@@ -54,6 +55,11 @@ public class SBUtils {
 
     public SBUtils setSlideAnimation() {
         snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
+        return this;
+    }
+    
+    public SBUtils setAnchorView(View anchorView) {
+        snackbar.setAnchorView(anchorView);
         return this;
     }
 

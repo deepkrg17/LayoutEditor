@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.activities.DrawableManagerActivity;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.databinding.WidgetsListBinding;
 import com.itsvks.layouteditor.managers.DrawableManager;
@@ -219,6 +220,13 @@ public class EditorActivity extends BaseActivity {
                     new Intent(this, ShowXMLActivity.class)
                             .putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
             return true;
+        } else if (id == R.id.resources_manager) {
+            saveXml();
+            startActivity(
+                    new Intent(this, DrawableManagerActivity.class)
+                            .putExtra(DrawableManagerActivity.EXTRA_KEY_PROJECT, project));
+
+            return true;
         } else return false;
     }
 
@@ -239,7 +247,7 @@ public class EditorActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // DrawableManager.loadFromFiles(project.getDrawables());
+        DrawableManager.loadFromFiles(project.getDrawables());
         setupMenuIcons();
     }
 
@@ -256,7 +264,7 @@ public class EditorActivity extends BaseActivity {
         if (binding.editorLayout.getChildCount() == 0) {
             project.saveLayout("");
             SBUtils.make(binding.getRoot(), R.string.project_empty)
-                    .setFadeAnimation()
+                    .setSlideAnimation()
                     .showLongAsError();
             return;
         }

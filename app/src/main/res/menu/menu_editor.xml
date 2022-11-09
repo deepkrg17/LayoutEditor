@@ -34,6 +34,14 @@
         app:showAsAction="ifRoom" />
         
     <item
+        android:id="@+id/resources_manager"
+        android:name="@string/drawable_manager"
+        android:title="@string/drawable_manager"
+        app:contentDescription="@string/drawable_manager"
+        android:icon="@drawable/ic_image_outline"
+        app:showAsAction="ifRoom" />
+        
+    <item
         android:id="@+id/save_xml"
         android:name="Save"
         android:title="Save"
