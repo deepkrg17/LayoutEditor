@@ -12,8 +12,10 @@ public class StringDialog extends AttributeDialog {
 
     private TextInputLayout textInputLayout;
     private TextInputEditText textInputEditText;
+    
+    boolean isDrawable;
 
-    public StringDialog(Context context, String savedValue) {
+    public StringDialog(Context context, String savedValue, boolean isDrawable) {
         super(context);
 
         binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());

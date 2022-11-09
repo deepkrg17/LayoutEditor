@@ -55,28 +55,23 @@ public class HomeActivity extends BaseActivity {
 
         switch (prefs.getString("fragment", "home")) {
             case "home":
-                {
-                    replaceFragment((Fragment) new HomeFragment());
-                    getSupportActionBar().setTitle(R.string.projects);
-                    break;
-                }
+                replaceFragment((Fragment) new HomeFragment());
+                getSupportActionBar().setTitle(R.string.projects);
+                break;
+
             case "preferences":
-                {
-                    replaceFragment((Fragment) new PreferencesFragment());
-                    getSupportActionBar().setTitle(R.string.preference);
-                    break;
-                }
+                replaceFragment((Fragment) new PreferencesFragment());
+                getSupportActionBar().setTitle(R.string.preference);
+                break;
+
             case "about":
-                {
-                    replaceFragment((Fragment) new AboutFragment());
-                    getSupportActionBar().setTitle(R.string.about);
-                    break;
-                }
+                replaceFragment((Fragment) new AboutFragment());
+                getSupportActionBar().setTitle(R.string.about);
+                break;
+
             default:
-                {
-                    replaceFragment((Fragment) new HomeFragment());
-                    getSupportActionBar().setTitle(R.string.projects);
-                }
+                replaceFragment((Fragment) new HomeFragment());
+                getSupportActionBar().setTitle(R.string.projects);
         }
 
         drawerLayout = binding.drawer;
@@ -173,33 +168,28 @@ public class HomeActivity extends BaseActivity {
 
             switch (prefs.getString("fragment", "home")) {
                 case "preferences":
-                    {
-                        replaceFragment((Fragment) new HomeFragment());
-                        prefs.edit().putString("fragment", "home").apply();
-                        getSupportActionBar().setTitle(R.string.projects);
-                        navigationView.setCheckedItem(R.id.nav_home);
-                        break;
-                    }
+                    replaceFragment((Fragment) new HomeFragment());
+                    prefs.edit().putString("fragment", "home").apply();
+                    getSupportActionBar().setTitle(R.string.projects);
+                    navigationView.setCheckedItem(R.id.nav_home);
+                    break;
+
                 case "about":
-                    {
-                        replaceFragment((Fragment) new HomeFragment());
-                        prefs.edit().putString("fragment", "home").apply();
-                        getSupportActionBar().setTitle(R.string.projects);
-                        navigationView.setCheckedItem(R.id.nav_home);
-                        break;
-                    }
+                    replaceFragment((Fragment) new HomeFragment());
+                    prefs.edit().putString("fragment", "home").apply();
+                    getSupportActionBar().setTitle(R.string.projects);
+                    navigationView.setCheckedItem(R.id.nav_home);
+                    break;
+
                 case "home":
-                    {
-                        finishAffinity();
-                        break;
-                    }
+                    finishAffinity();
+                    break;
+
                 default:
-                    {
-                        replaceFragment((Fragment) new HomeFragment());
-                        prefs.edit().putString("fragment", "home").apply();
-                        getSupportActionBar().setTitle(R.string.projects);
-                        navigationView.setCheckedItem(R.id.nav_home);
-                    }
+                    replaceFragment((Fragment) new HomeFragment());
+                    prefs.edit().putString("fragment", "home").apply();
+                    getSupportActionBar().setTitle(R.string.projects);
+                    navigationView.setCheckedItem(R.id.nav_home);
             }
 
         } else if (drawerLayout.isDrawerVisible(GravityCompat.START))

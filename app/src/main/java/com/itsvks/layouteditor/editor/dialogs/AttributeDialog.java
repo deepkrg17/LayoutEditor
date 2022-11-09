@@ -3,13 +3,13 @@ package com.itsvks.layouteditor.editor.dialogs;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
-
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-
 
 public class AttributeDialog {
 
@@ -57,8 +57,7 @@ public class AttributeDialog {
     }
 
     protected void showKeyboardWhenOpen() {
-        dialog.getWindow()
-                .setSoftInputMode(dialog.getWindow().getAttributes().SOFT_INPUT_STATE_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     protected void requestEditText(TextInputEditText editText) {

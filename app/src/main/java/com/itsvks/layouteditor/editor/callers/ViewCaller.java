@@ -31,7 +31,7 @@ public class ViewCaller {
             target.setBackgroundColor(Color.parseColor(value));
         } else {
             String name = value.replace("@drawable/", "");
-            target.setBackgroundDrawable(DrawableManager.getDrawable(name));
+            target.setBackground(DrawableManager.getDrawable(name));
         }
     }
 

@@ -674,10 +674,11 @@ public class EditorLayout extends LinearLayoutCompat {
                 break;
 
             case Constants.ARGUMENT_TYPE_DRAWABLE:
-                // break;
+                dialog = new StringDialog(context, savedValue, true);
+                break;
 
             case Constants.ARGUMENT_TYPE_STRING:
-                dialog = new StringDialog(context, savedValue);
+                dialog = new StringDialog(context, savedValue, false);
                 break;
 
             case Constants.ARGUMENT_TYPE_INT:
