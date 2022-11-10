@@ -13,7 +13,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="project_saved">Project saved.</string>
-    <string name="project_empty">Project empty! Add a view before saving...</string>
+    <string name="project_empty">Project empty! Add a view before saving&#8230;</string>
     <string name="add_new">Add new</string>
     <string name="delete">Delete</string>
     <string name="copy">Copy</string>

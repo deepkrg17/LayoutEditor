@@ -25,6 +25,9 @@ You may face issues when using the app. If you do, please report it in github [i
 
 [![LayoutEditor](https://img.shields.io/badge/Layout-Editor-blue?style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/)
 
+### Thanks to
+- [Kerismaker](https://www.flaticon.com/authors/kerismaker) for the nice [icon](https://www.flaticon.com/free-icon/template_6863985)
+
 ### Lisence
 ```
 LayoutEditor - Create Awesome UI!
