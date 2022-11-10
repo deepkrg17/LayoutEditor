@@ -1,8 +1,5 @@
 package com.itsvks.layouteditor.activities;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -17,7 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -28,12 +24,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.activities.DrawableManagerActivity;
 import com.itsvks.layouteditor.databinding.ActivityDrawableManagerBinding;
 import com.itsvks.layouteditor.databinding.LayoutDrawableGridItemBinding;
+import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
-
 import com.itsvks.layouteditor.utils.SBUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -45,6 +41,7 @@ public class DrawableManagerActivity extends BaseActivity {
     private ActivityDrawableManagerBinding binding;
 
     private ProjectFile project;
+    private FilePicker filepicker;
 
     private ArrayList<DrawableItem> drawables = new ArrayList<>();
     private GridAdapter gridAdapter;
@@ -81,6 +78,13 @@ public class DrawableManagerActivity extends BaseActivity {
         binding.gridView.setAdapter(gridAdapter);
 
         loadDrawables();
+        filepicker =
+                new FilePicker(this) {
+                    @Override
+                    public void onResult(String path) {
+                        addDrawable(path);
+                    }
+                };
 
         binding.topAppBar.setNavigationOnClickListener(
                 v -> {
@@ -119,24 +123,7 @@ public class DrawableManagerActivity extends BaseActivity {
                         return;
                     }
 
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                    == PackageManager.PERMISSION_DENIED
-                            || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                    == PackageManager.PERMISSION_DENIED) {
-                        requestPermissions(
-                                new String[] {
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                },
-                                10);
-                        return;
-                    }
-
-                    Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                    chooseFile.setType("image/*");
-                    chooseFile.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-
-                    startActivityForResult(chooseFile, 20);
+                    filepicker.launch("image/*");
                 });
     }
 
@@ -293,7 +280,7 @@ public class DrawableManagerActivity extends BaseActivity {
                     LayoutDrawableGridItemBinding.inflate(getLayoutInflater());
             bind.name.setText(item.name);
             bind.image.setImageDrawable(item.drawable);
-            
+
             // if (item.selected) bind.imgCheck.setImageDrawable(ic_check);
 
             bind.imgCheck.setImageDrawable(item.selected ? ic_check : ic_delete);
@@ -369,16 +356,5 @@ public class DrawableManagerActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (data != null) {
-                addDrawable(FileUtil.convertUriToFilePath(data.getData()));
-            }
-        }
     }
 }
