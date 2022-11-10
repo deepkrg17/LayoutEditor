@@ -1,5 +1,7 @@
 <h1 align="center"> Layout Editor </h1>
 
+![Banner](https://github.com/itsvks19/LayoutEditor/blob/main/app/src/main/app_banner.png "app_banner")
+
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/latest)
 ![Downloads](https://img.shields.io/github/downloads/itsvks19/LayoutEditor/total?style=for-the-badge)
 ![Test and Build](https://img.shields.io/github/workflow/status/itsvks19/LayoutEditor/Test%20and%20Build?label=Test%20and%20Build&style=for-the-badge)
