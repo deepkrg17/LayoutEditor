@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.editor.widgets.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.itsvks.layouteditor.R;
 
+@SuppressLint("UseSwitchCompatOrMaterialCode")
 public class SwitchDesign extends Switch {
 
     private Drawable strokeDrawable;
