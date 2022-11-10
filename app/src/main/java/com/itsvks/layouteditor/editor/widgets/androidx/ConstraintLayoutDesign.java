@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.editor.widgets.android;
+package com.itsvks.layouteditor.editor.widgets.androidx;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,23 +10,25 @@ import android.view.View;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import androidx.constraintlayout.widget.ConstraintSet;
+
 import com.itsvks.layouteditor.R;
 
 public class ConstraintLayoutDesign extends ConstraintLayout {
 
     private Drawable strokeDrawable;
     private boolean drawStrokeEnabled;
-    
+
     private Paint linePaint;
     private Paint fillPaint;
+
+    private final int PARENT_ID = ConstraintLayout.LayoutParams.PARENT_ID;
 
     public ConstraintLayoutDesign(Context context) {
         super(context);
 
         strokeDrawable = AppCompatResources.getDrawable(context, R.drawable.background_stroke_dash);
-        
+
         linePaint = new Paint();
         linePaint.setColor(Color.LTGRAY);
         linePaint.setStrokeWidth(2);
@@ -49,26 +51,26 @@ public class ConstraintLayoutDesign extends ConstraintLayout {
         if (drawStrokeEnabled) {
             drawBindings(canvas);
         }
-        
+
         super.dispatchDraw(canvas);
 
         if (drawStrokeEnabled) strokeDrawable.draw(canvas);
-
     }
 
     public void setStrokeEnabled(boolean enabled) {
         drawStrokeEnabled = enabled;
         invalidate();
     }
-    
+
     // Work in progress
     private void drawBindings(Canvas canvas) {
         for (int i = 0; i < getChildCount(); i++) {
             View view = getChildAt(i);
-            
-            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-            
-            if (params.leftToLeft == params.PARENT_ID) {
+
+            ConstraintLayout.LayoutParams params =
+                    (ConstraintLayout.LayoutParams) view.getLayoutParams();
+
+            if (params.leftToLeft == PARENT_ID) {
                 drawHorizontalArrow(
                         canvas,
                         0,
@@ -84,7 +86,7 @@ public class ConstraintLayoutDesign extends ConstraintLayout {
             }
         }
     }
-    
+
     private void drawHorizontalArrow(Canvas canvas, int x, int y, int x2, int y2) {
         int width = x2 - x;
         int step = 10;

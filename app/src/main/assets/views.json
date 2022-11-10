@@ -79,11 +79,5 @@
 			"android:layout_height" : "wrap_content",
 			"android:src" : "@drawable/default_image"
 		}
-	},
-	
-	{
-		"name" : "FAB",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.FloatingActionButtonDesign",
-		"iconName" : "ic_fab"
 	}
 ]

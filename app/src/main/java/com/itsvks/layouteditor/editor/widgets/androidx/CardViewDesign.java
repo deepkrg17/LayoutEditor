@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.editor.widgets.android;
+package com.itsvks.layouteditor.editor.widgets.androidx;
 
 import android.content.Context;
 import android.graphics.Canvas;

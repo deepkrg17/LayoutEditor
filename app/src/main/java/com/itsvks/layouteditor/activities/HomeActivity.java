@@ -74,21 +74,21 @@ public class HomeActivity extends BaseActivity {
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(
                 item -> {
-                    drawerLayout.closeDrawer(GravityCompat.START);
+                    
                     var id = item.getItemId();
 
                     if (id == R.id.nav_home) {
-
+                        closeDrawer();
                         goToHome();
                         return true;
                     } else if (id == R.id.nav_preference) {
-
+                        closeDrawer();
                         replaceFragment((Fragment) new PreferencesFragment());
                         getSupportActionBar().setTitle(R.string.title_preference);
                         prefs.edit().putString("fragment", "preferences").apply();
                         return true;
                     } else if (id == R.id.nav_about) {
-
+                        closeDrawer();
                         replaceFragment((Fragment) new AboutFragment());
                         getSupportActionBar().setTitle(R.string.title_about);
                         prefs.edit().putString("fragment", "about").apply();
@@ -169,7 +169,7 @@ public class HomeActivity extends BaseActivity {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
@@ -196,5 +196,9 @@ public class HomeActivity extends BaseActivity {
         replaceFragment((Fragment) new HomeFragment());
         getSupportActionBar().setTitle(R.string.projects);
         prefs.edit().putString("fragment", "home").apply();
+    }
+    
+    private void closeDrawer() {
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 }
