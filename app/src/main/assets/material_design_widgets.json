@@ -1,0 +1,7 @@
+[
+    {
+		"name" : "FAB",
+		"className" : "com.itsvks.layouteditor.editor.widgets.mdc.FloatingActionButtonDesign",
+		"iconName" : "ic_fab"
+	}
+]

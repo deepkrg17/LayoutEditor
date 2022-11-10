@@ -59,6 +59,8 @@ public class EditorActivity extends BaseActivity {
 
     private ArrayList<HashMap<String, Object>> views;
     private ArrayList<HashMap<String, Object>> layouts;
+    private ArrayList<HashMap<String, Object>> androidxWidgets;
+    private ArrayList<HashMap<String, Object>> materialDesignWidgets;
 
     private ProjectFile project;
 
@@ -110,8 +112,10 @@ public class EditorActivity extends BaseActivity {
                     drawerLayout.closeDrawer(GravityCompat.END);
                 });
 
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Views"));
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Layouts"));
+        addDrawerTab(Constants.TAB_VIEWS_TITLE);
+        addDrawerTab(Constants.TAB_LAYOUTS_TITLE);
+        addDrawerTab(Constants.TAB_ANDROIDX_TITLE);
+        addDrawerTab(Constants.TAB_MATERIAL_TITLE);
         binding.tabLayout.addOnTabSelectedListener(
                 new TabLayout.OnTabSelectedListener() {
 
@@ -119,8 +123,12 @@ public class EditorActivity extends BaseActivity {
                     public void onTabSelected(TabLayout.Tab tab) {
                         if (tab.getPosition() == 0) {
                             binding.listView.setAdapter(new ListViewAdapter(views));
-                        } else {
+                        } else if (tab.getPosition() == 1) {
                             binding.listView.setAdapter(new ListViewAdapter(layouts));
+                        } else if (tab.getPosition() == 2) {
+                            binding.listView.setAdapter(new ListViewAdapter(androidxWidgets));
+                        } else if (tab.getPosition() == 3) {
+                            binding.listView.setAdapter(new ListViewAdapter(materialDesignWidgets));
                         }
                     }
 
@@ -140,6 +148,17 @@ public class EditorActivity extends BaseActivity {
                 new Gson()
                         .fromJson(
                                 FileUtil.readFromAsset(Constants.LAYOUTS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+
+        materialDesignWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        androidxWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
                                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
         // sortListMap(views, "view", false, true);
         binding.listView.setAdapter(new ListViewAdapter(views));
@@ -404,5 +423,9 @@ public class EditorActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    private void addDrawerTab(CharSequence title) {
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
     }
 }
