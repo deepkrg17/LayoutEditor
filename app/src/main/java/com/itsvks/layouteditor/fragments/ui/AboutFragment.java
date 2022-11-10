@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.fragments.ui.about;
+package com.itsvks.layouteditor.fragments.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.itsvks.layouteditor.databinding.FragmentAboutBinding;
-import com.itsvks.layouteditor.fragments.ui.about.AboutViewModel;
+import com.itsvks.layouteditor.fragments.ui.AboutViewModel;
 
 public class AboutFragment extends Fragment {
 

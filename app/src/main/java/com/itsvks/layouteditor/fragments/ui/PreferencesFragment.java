@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.fragments.ui.preferences;
+package com.itsvks.layouteditor.fragments.ui;
 
 import android.os.Bundle;
 

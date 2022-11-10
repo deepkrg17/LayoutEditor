@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.fragments.ui.about;
+package com.itsvks.layouteditor.fragments.ui;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
