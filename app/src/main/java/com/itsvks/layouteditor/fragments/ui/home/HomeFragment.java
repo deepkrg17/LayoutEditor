@@ -54,7 +54,18 @@ public class HomeFragment extends Fragment {
         binding.fab.setOnClickListener(v -> showCreateProjectDialog());
 
         adapter = new ProjectListAdapter();
+        
         binding.listProjects.setAdapter(adapter);
+        binding.tv1.setText(String.valueOf(adapter.getCount()));
+        
+        if (adapter.getCount() == 0) {
+            binding.noProjectsView.setVisibility(View.VISIBLE);
+            binding.listProjects.setVisibility(View.GONE);
+        }
+        else {
+            binding.noProjectsView.setVisibility(View.GONE);
+            binding.listProjects.setVisibility(View.VISIBLE);
+        }
         return root;
     }
 
@@ -190,6 +201,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void createProject(String name) {
+        
         final String projectDir = FileUtil.getPackageDataDir(getContext()) + "/projects/" + name;
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
@@ -197,6 +209,8 @@ public class HomeFragment extends Fragment {
 
         ProjectFile project = new ProjectFile(projectDir);
         project.saveLayout("");
+        projects.add(project);
+        adapter.notifyDataSetChanged();
 
         final Intent intent = new Intent(getContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);

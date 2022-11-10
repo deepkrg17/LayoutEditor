@@ -123,16 +123,14 @@ public class HomeActivity extends BaseActivity {
                         startActivity(new Intent(this, OssLicensesMenuActivity.class));
                         return true;
                     } else if (id == R.id.nav_github) {
-                        openUrl(Constants.REPO_URL);
+                        openUrl(Constants.GITHUB_URL);
                         return true;
                     } else if (id == R.id.nav_share) {
                         var shareIntent = new ShareCompat.IntentBuilder(this);
                         shareIntent.setType("text/plain");
                         shareIntent.setChooserTitle(getString(R.string.app_name));
                         shareIntent.setText(
-                                getString(R.string.share_description)
-                                        + "\n\nDownload from here: "
-                                        + Constants.REPO_URL);
+                                getString(R.string.share_description, Constants.GITHUB_URL));
                         shareIntent.startChooser();
                         return true;
                     } else return false;
