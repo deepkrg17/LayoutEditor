@@ -56,16 +56,11 @@ public class HomeFragment extends Fragment {
         adapter = new ProjectListAdapter();
         
         binding.listProjects.setAdapter(adapter);
-        binding.tv1.setText(String.valueOf(adapter.getCount()));
-        
-        if (adapter.getCount() == 0) {
-            binding.noProjectsView.setVisibility(View.VISIBLE);
-            binding.listProjects.setVisibility(View.GONE);
-        }
-        else {
-            binding.noProjectsView.setVisibility(View.GONE);
-            binding.listProjects.setVisibility(View.VISIBLE);
-        }
+        // binding.tv1.setText(String.valueOf(adapter.getCount()));
+
+        binding.noProjectsView.setVisibility(adapter.getCount() != 0 ? View.VISIBLE : View.GONE);
+        binding.listProjects.setVisibility(
+                binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         return root;
     }
 

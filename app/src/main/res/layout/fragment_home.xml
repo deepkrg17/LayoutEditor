@@ -49,8 +49,7 @@
                 android:layout_above="@id/tv1"
                 android:layout_centerHorizontal="true"
                 android:padding="8dp"
-                android:textSize="28sp"
-                android:textColor="#FFFFFFFF" />
+                android:textSize="28sp" />
 
         </RelativeLayout>
     </androidx.appcompat.widget.FitWindowsLinearLayout>
