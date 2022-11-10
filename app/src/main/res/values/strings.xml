@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:override="true">
     <string name="app_name">Layout Editor</string>
     <string name="app_slogan">Create Awesome UI!</string>
     <string name="home">HOME</string>
@@ -18,5 +19,9 @@
     <string name="delete">Delete</string>
     <string name="copy">Copy</string>
     <string name="drawable_manager">Drawable Manager</string>
+
+    <string name="msg_no_projects">You don\'t have any projects.</string>
+    <string name="msg_create_new">Click + icon to create a new project.</string>
+
     <string name="share_description">Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.\n\n### Features\n- Design layout with Drag &amp; Drop\n- Edit view and layout properties\n- See and Copy the XML code of layout\n- More : %1$s#features\n\nDownload from here: %1$s/releases/latest</string>
 </resources>

@@ -328,7 +328,7 @@ public class EditorActivity extends BaseActivity {
                                 bind.getRoot().setAlpha(0);
                                 bind.getRoot()
                                         .animate()
-                                        .alpha(255)
+                                        .alpha(1)
                                         // .translationY(0)
                                         .translationX(0)
                                         .setStartDelay(pos * 50)

@@ -5,20 +5,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    
-    <ListView
-        android:divider="@null"
-        android:id="@+id/list_projects"
+
+    <androidx.appcompat.widget.FitWindowsLinearLayout
+        android:background="?android:attr/colorBackground"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
-    
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <ListView
+            android:divider="@null"
+            android:id="@+id/list_projects"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:id="@+id/no_projects_view">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_no_projects"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:id="@+id/tv1"
+                android:textSize="24sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_create_new"
+                android:layout_below="@id/tv1"
+                android:layout_centerHorizontal="true"
+                android:padding="8dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¯⁠\⁠_⁠(⁠ツ⁠)⁠_⁠/⁠¯"
+                android:layout_above="@id/tv1"
+                android:layout_centerHorizontal="true"
+                android:padding="8dp"
+                android:textSize="28sp" />
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.FitWindowsLinearLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_gravity="end|bottom"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
-        android:src="@drawable/plus"/>
-    
+        android:src="@drawable/plus" />
+
 
 </androidx.appcompat.widget.FitWindowsFrameLayout>
