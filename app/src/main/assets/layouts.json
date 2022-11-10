@@ -44,17 +44,6 @@
 			"android:padding" : "8dp"
 		}
 	},
-    
-    {
-		"name" : "ConstraintLayout",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.ConstraintLayoutDesign",
-		"iconName" : "ic_constraint",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent",
-			"android:padding" : "8dp"
-		}
-	},
 	
 	{
 		"name" : "RadioGroup",
@@ -64,18 +53,6 @@
 		{
 			"android:layout_width" : "match_parent",
 			"android:padding" : "8dp"
-		}
-	},
-	
-	{
-		"name" : "CardView",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.CardViewDesign",
-		"iconName" : "ic_card",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent",
-			"app:cardCornerRadius" : "8dp",
-			"app:cardElevation" : "4dp"
 		}
 	}
 ]
