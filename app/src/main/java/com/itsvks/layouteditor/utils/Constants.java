@@ -33,7 +33,7 @@ public class Constants {
     public static final String ARGUMENT_TYPE_ENUM = "enum";
     public static final String ARGUMENT_TYPE_COLOR = "color";
     
-    public static final String REPO_URL = "https://github.com/itsvks19/LayoutEditor/";
+    public static final String GITHUB_URL = "https://github.com/itsvks19/LayoutEditor";
     
     static {
         gravityMap.put("left", Gravity.START);

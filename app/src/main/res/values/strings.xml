@@ -18,5 +18,5 @@
     <string name="delete">Delete</string>
     <string name="copy">Copy</string>
     <string name="drawable_manager">Drawable Manager</string>
-    <string name="share_description">Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.\n\n### Features\n- Design layout with Drag &amp; Drop\n- Edit view and layout properties\n- See and Copy the XML code of layout\n- See the layout structure\n- Save layouts as projects</string>
+    <string name="share_description">Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.\n\n### Features\n- Design layout with Drag &amp; Drop\n- Edit view and layout properties\n- See and Copy the XML code of layout\n- More : %1$s#features\n\nDownload from here: %1$s/releases/latest</string>
 </resources>
