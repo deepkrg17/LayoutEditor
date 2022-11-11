@@ -19,11 +19,10 @@ import android.widget.BaseAdapter;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
-
 import androidx.core.content.ContextCompat;
+
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,12 +30,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.activities.DrawableManagerActivity;
 import com.itsvks.layouteditor.databinding.ActivityDrawableManagerBinding;
 import com.itsvks.layouteditor.databinding.LayoutDrawableGridItemBinding;
 import com.itsvks.layouteditor.utils.FileUtil;
-
 import com.itsvks.layouteditor.utils.SBUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -291,7 +289,7 @@ public class DrawableManagerActivity extends BaseActivity {
                     LayoutDrawableGridItemBinding.inflate(getLayoutInflater());
             bind.name.setText(item.name);
             bind.image.setImageDrawable(item.drawable);
-            
+
             // if (item.selected) bind.imgCheck.setImageDrawable(ic_check);
 
             bind.imgCheck.setImageDrawable(item.selected ? ic_check : ic_delete);
