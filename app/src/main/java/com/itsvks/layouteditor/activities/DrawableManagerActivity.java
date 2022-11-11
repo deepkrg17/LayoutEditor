@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -123,11 +125,7 @@ public class DrawableManagerActivity extends BaseActivity {
                     if (ContextCompat.checkSelfPermission(
                                     this, Manifest.permission.READ_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED) {
-                        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                        chooseFile.setType("image/*");
-                        chooseFile.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-
-                        startActivityForResult(chooseFile, 20);
+                            mGetContent.launch("image/*");
                     } else {
                         // You can directly ask for the permission.
                         // The registered ActivityResultCallback gets the result of this request.
@@ -366,17 +364,24 @@ public class DrawableManagerActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (data != null) {
-                addDrawable(FileUtil.convertUriToFilePath(data.getData()));
-            }
-        }
-    }
+    
+    ActivityResultLauncher<String> mGetContent =
+            registerForActivityResult(
+                    new ActivityResultContracts.GetContent(),
+                    new ActivityResultCallback<Uri>() {
+                        @Override
+                        public void onActivityResult(Uri uri) {
+                            // Handle the returned Uri
+                            if (uri != null) {
+                                addDrawable(FileUtil.convertUriToFilePath(uri));
+                            } else {
+                                SBUtils.make(binding.getRoot(), "Please choose an image...")
+                                    .setAnchorView(binding.fab)
+                                    .setSlideAnimation()
+                                    .showLongAsError();
+                            }
+                        }
+                    });
 
     // Register the permissions callback, which handles the user's response to the
     // system permissions dialog. Save the return value, an instance of
