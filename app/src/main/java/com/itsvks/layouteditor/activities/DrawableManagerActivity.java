@@ -364,7 +364,7 @@ public class DrawableManagerActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
-    
+
     ActivityResultLauncher<String> mGetContent =
             registerForActivityResult(
                     new ActivityResultContracts.GetContent(),
@@ -372,14 +372,12 @@ public class DrawableManagerActivity extends BaseActivity {
                         @Override
                         public void onActivityResult(Uri uri) {
                             // Handle the returned Uri
-                            if (uri != null) {
-                                addDrawable(FileUtil.convertUriToFilePath(uri));
-                            } else {
+                            if (uri != null) addDrawable(FileUtil.convertUriToFilePath(uri));
+                            else
                                 SBUtils.make(binding.getRoot(), "Please choose an image...")
-                                    .setAnchorView(binding.fab)
-                                    .setSlideAnimation()
-                                    .showLongAsError();
-                            }
+                                        .setAnchorView(binding.fab)
+                                        .setSlideAnimation()
+                                        .showLongAsError();
                         }
                     });
 
@@ -390,16 +388,15 @@ public class DrawableManagerActivity extends BaseActivity {
             registerForActivityResult(
                     new ActivityResultContracts.RequestPermission(),
                     isGranted -> {
-                        if (isGranted) {
-                            SBUtils.make(binding.getRoot(), "Permission granted...")
+                        if (isGranted)
+                            SBUtils.make(binding.getRoot(), getString(R.string.permission_granted))
                                     .setAnchorView(binding.fab)
                                     .setSlideAnimation()
                                     .showAsSuccess();
-                        } else {
-                            SBUtils.make(binding.getRoot(), "Permission denied...")
+                        else
+                            SBUtils.make(binding.getRoot(), getString(R.string.permission_denied))
                                     .setAnchorView(binding.fab)
                                     .setSlideAnimation()
                                     .showLongAsError();
-                        }
                     });
 }

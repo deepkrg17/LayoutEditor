@@ -14,14 +14,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="project_saved">Project saved.</string>
+    <string name="new_project">New project</string>
     <string name="project_empty">Project empty! Add a view before saving&#8230;</string>
     <string name="add_new">Add new</string>
     <string name="delete">Delete</string>
     <string name="copy">Copy</string>
     <string name="drawable_manager">Drawable Manager</string>
-
     <string name="msg_no_projects">You don\'t have any projects.</string>
     <string name="msg_create_new">Click + icon to create a new project.</string>
-
     <string name="share_description">Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.\n\n### Features\n- Design layout with Drag &amp; Drop\n- Edit view and layout properties\n- See and Copy the XML code of layout\n- More : %1$s#features\n\nDownload from here: %1$s/releases/latest</string>
+    <string name="permission_granted">Permission granted&#8230;</string>
+    <string name="permission_denied">Permission denied&#8230;</string>
 </resources>

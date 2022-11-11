@@ -50,11 +50,11 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        
+
         binding.fab.setOnClickListener(v -> showCreateProjectDialog());
 
         adapter = new ProjectListAdapter();
-        
+
         binding.listProjects.setAdapter(adapter);
         // binding.tv1.setText(String.valueOf(adapter.getCount()));
 
@@ -128,6 +128,7 @@ public class HomeFragment extends Fragment {
     }
 
     @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
+    @SuppressWarnings("deprecation")
     private void showCreateProjectDialog() {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Create project");
@@ -136,7 +137,7 @@ public class HomeFragment extends Fragment {
         final TextInputEditText editText = bind.textinputEdittext;
         final TextInputLayout inputLayout = bind.textinputLayout;
 
-        builder.setView(bind.getRoot(), 10, 10 ,10 ,10);
+        builder.setView(bind.getRoot(), 10, 10, 10, 10);
         builder.setNegativeButton("Cancel", (di, which) -> {});
         builder.setPositiveButton(
                 "Create",
@@ -196,7 +197,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void createProject(String name) {
-        
+
         final String projectDir = FileUtil.getPackageDataDir(getContext()) + "/projects/" + name;
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");

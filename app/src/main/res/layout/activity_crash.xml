@@ -51,12 +51,13 @@
     
     </androidx.appcompat.widget.FitWindowsLinearLayout>
     
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_gravity="end|bottom"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
-        android:src="@drawable/content_copy"/>
+        app:icon="@drawable/content_copy"
+        android:text="@string/copy"/>
 
 </androidx.appcompat.widget.FitWindowsFrameLayout>
