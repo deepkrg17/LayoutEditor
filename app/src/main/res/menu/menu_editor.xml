@@ -42,6 +42,14 @@
         app:showAsAction="ifRoom" />
         
     <item
+        android:id="@+id/preview"
+        android:name="@string/preview_layout"
+        android:title="@string/preview_layout"
+        app:contentDescription="@string/preview_layout"
+        android:icon="@drawable/cellphone_play"
+        app:showAsAction="ifRoom" />
+        
+    <item
         android:id="@+id/save_xml"
         android:name="Save"
         android:title="Save"

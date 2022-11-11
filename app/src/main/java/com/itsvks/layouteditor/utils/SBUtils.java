@@ -64,17 +64,19 @@ public class SBUtils {
     }
 
     public void show() {
-        switch (type) {
-            case ERROR:
-                setColors(
-                        MaterialColors.getColor(view, R.attr.colorError),
-                        MaterialColors.getColor(view, R.attr.colorOnError));
-                break;
-            case SUCCESS:
-                setColors(0xff4caf50, 0xffffffff);
-                break;
-            case INFO:
-                setColors(0xff17a2b8, 0xffffffff);
+        if (type != null) {
+            switch (type) {
+                case ERROR:
+                    setColors(
+                            MaterialColors.getColor(view, R.attr.colorError),
+                            MaterialColors.getColor(view, R.attr.colorOnError));
+                    break;
+                case SUCCESS:
+                    setColors(0xff4caf50, 0xffffffff);
+                    break;
+                case INFO:
+                    setColors(0xff17a2b8, 0xffffffff);
+            }
         }
         snackbar.show();
     }

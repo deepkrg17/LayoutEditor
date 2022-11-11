@@ -30,6 +30,7 @@ import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.DrawableManagerActivity;
+import com.itsvks.layouteditor.activities.PreviewLayoutActivity;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.databinding.WidgetsListBinding;
 import com.itsvks.layouteditor.managers.DrawableManager;
@@ -244,6 +245,19 @@ public class EditorActivity extends BaseActivity {
             startActivity(
                     new Intent(this, DrawableManagerActivity.class)
                             .putExtra(DrawableManagerActivity.EXTRA_KEY_PROJECT, project));
+
+            return true;
+        } else if (id == R.id.preview) {
+            String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
+            SBUtils.make(
+                            binding.getRoot(),
+                            "This feature is not available yet. Will be available soon.")
+                    .setFadeAnimation()
+                    .show();
+            //            saveXml();
+            //            startActivity(
+            //                    new Intent(this, PreviewLayoutActivity.class)
+            //                            .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
 
             return true;
         } else return false;

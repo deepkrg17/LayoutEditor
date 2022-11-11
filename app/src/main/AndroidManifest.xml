@@ -43,6 +43,10 @@
             android:name="com.itsvks.layouteditor.activities.DrawableManagerActivity"
             android:exported="true"
             android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity"/>
+        <activity
+            android:name="com.itsvks.layouteditor.activities.PreviewLayoutActivity"
+            android:exported="true"
+            android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity"/>
     </application>
 
 </manifest>
