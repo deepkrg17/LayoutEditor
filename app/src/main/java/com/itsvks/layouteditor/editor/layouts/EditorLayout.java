@@ -635,7 +635,7 @@ public class EditorLayout extends LinearLayoutCompat {
                 initializer.getAttributeFromKey(attributeKey, allAttrs);
         final AttributeMap attributeMap = viewAttributeMap.get(target);
 
-        final String savedValue =
+        String savedValue =
                 attributeMap.contains(attributeKey) ? attributeMap.getValue(attributeKey) : "";
         final String defaultValue =
                 currentAttr.containsKey(Constants.KEY_DEFAULT_VALUE)
@@ -674,6 +674,9 @@ public class EditorLayout extends LinearLayoutCompat {
                 break;
 
             case Constants.ARGUMENT_TYPE_DRAWABLE:
+                if (savedValue.toString().contains("@drawable/")) {
+                    savedValue = savedValue.replace("@drawable/", "");
+                }
                 dialog = new StringDialog(context, savedValue, true);
                 break;
 
