@@ -1,12 +1,8 @@
 package com.itsvks.layouteditor.activities;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,13 +13,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,6 +26,7 @@ import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.ActivityDrawableManagerBinding;
 import com.itsvks.layouteditor.databinding.LayoutDrawableGridItemBinding;
+import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 
@@ -48,6 +41,7 @@ public class DrawableManagerActivity extends BaseActivity {
     private ActivityDrawableManagerBinding binding;
 
     private ProjectFile project;
+    private FilePicker filepicker;
 
     private ArrayList<DrawableItem> drawables = new ArrayList<>();
     private GridAdapter gridAdapter;
@@ -84,6 +78,13 @@ public class DrawableManagerActivity extends BaseActivity {
         binding.gridView.setAdapter(gridAdapter);
 
         loadDrawables();
+        filepicker =
+                new FilePicker(this) {
+                    @Override
+                    public void onResult(String path) {
+                        addDrawable(path);
+                    }
+                };
 
         binding.topAppBar.setNavigationOnClickListener(
                 v -> {
@@ -122,15 +123,7 @@ public class DrawableManagerActivity extends BaseActivity {
                         return;
                     }
 
-                    if (ContextCompat.checkSelfPermission(
-                                    this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED) {
-                            mGetContent.launch("image/*");
-                    } else {
-                        // You can directly ask for the permission.
-                        // The registered ActivityResultCallback gets the result of this request.
-                        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-                    }
+                    filepicker.launch("image/*");
                 });
     }
 
@@ -364,39 +357,4 @@ public class DrawableManagerActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
-
-    ActivityResultLauncher<String> mGetContent =
-            registerForActivityResult(
-                    new ActivityResultContracts.GetContent(),
-                    new ActivityResultCallback<Uri>() {
-                        @Override
-                        public void onActivityResult(Uri uri) {
-                            // Handle the returned Uri
-                            if (uri != null) addDrawable(FileUtil.convertUriToFilePath(uri));
-                            else
-                                SBUtils.make(binding.getRoot(), "Please choose an image...")
-                                        .setAnchorView(binding.fab)
-                                        .setSlideAnimation()
-                                        .showLongAsError();
-                        }
-                    });
-
-    // Register the permissions callback, which handles the user's response to the
-    // system permissions dialog. Save the return value, an instance of
-    // ActivityResultLauncher, as an instance variable.
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.RequestPermission(),
-                    isGranted -> {
-                        if (isGranted)
-                            SBUtils.make(binding.getRoot(), getString(R.string.permission_granted))
-                                    .setAnchorView(binding.fab)
-                                    .setSlideAnimation()
-                                    .showAsSuccess();
-                        else
-                            SBUtils.make(binding.getRoot(), getString(R.string.permission_denied))
-                                    .setAnchorView(binding.fab)
-                                    .setSlideAnimation()
-                                    .showLongAsError();
-                    });
 }
