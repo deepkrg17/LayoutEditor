@@ -47,9 +47,9 @@ public class DrawableManagerActivity extends BaseActivity {
     private GridAdapter gridAdapter;
 
     private boolean isSelectedMode;
+    private int selectedCount = 0;
 
     Drawable ic_check;
-    Drawable ic_delete;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -67,12 +67,6 @@ public class DrawableManagerActivity extends BaseActivity {
                 AppCompatResources.getDrawable(
                         DrawableManagerActivity.this, R.drawable.ic_progress_check);
         ic_check.setColorFilter(new PorterDuffColorFilter(0xff4caf50, PorterDuff.Mode.SRC_IN));
-
-        ic_delete = AppCompatResources.getDrawable(this, R.drawable.delete);
-        var errorColor =
-                MaterialColors.getColor(
-                        binding.getRoot(), com.google.android.material.R.attr.colorErrorContainer);
-        ic_delete.setColorFilter(new PorterDuffColorFilter(errorColor, PorterDuff.Mode.SRC_IN));
 
         gridAdapter = new GridAdapter();
         binding.gridView.setAdapter(gridAdapter);
@@ -281,9 +275,7 @@ public class DrawableManagerActivity extends BaseActivity {
             bind.name.setText(item.name);
             bind.image.setImageDrawable(item.drawable);
 
-            // if (item.selected) bind.imgCheck.setImageDrawable(ic_check);
-
-            bind.imgCheck.setImageDrawable(item.selected ? ic_check : ic_delete);
+            bind.imgCheck.setImageDrawable(item.selected ? ic_check : null);
 
             if (isSelectedMode && !item.name.equals("default_image")) {
                 bind.imgCheck.animate().alpha(1).setDuration(100).start();
@@ -314,7 +306,17 @@ public class DrawableManagerActivity extends BaseActivity {
                 item.selected = !item.selected;
 
                 AppCompatImageView check = v.findViewById(R.id.img_check);
-                check.setImageDrawable(item.selected ? ic_check : ic_delete);
+                if (item.selected) {
+                    check.setImageDrawable(ic_check);
+                    selectedCount++;
+                } else {
+                    check.setImageDrawable(null);
+                    selectedCount--;
+                }
+
+                if (selectedCount == 0) {
+                    stopSelection();
+                }
             }
         }
 
@@ -329,6 +331,7 @@ public class DrawableManagerActivity extends BaseActivity {
             if (!isSelectedMode) {
                 item.selected = true;
                 startSelection();
+                selectedCount++;
             }
 
             return true;
