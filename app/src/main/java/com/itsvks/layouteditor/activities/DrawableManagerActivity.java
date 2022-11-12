@@ -79,7 +79,7 @@ public class DrawableManagerActivity extends BaseActivity {
 
         loadDrawables();
         filepicker =
-                new FilePicker(this) {
+                new FilePicker(this, binding.fab) {
                     @Override
                     public void onResult(String path) {
                         addDrawable(path);
