@@ -1,5 +1,87 @@
 [
     {
+		"name" : "AppCompatTextView",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatTextViewDesign",
+		"iconName" : "ic_textview",
+		"defaultAttributes" : 
+		{
+			"android:text" : "AppCompatTextView"
+		}
+	},
+	
+    {
+        "name" : "AppCompatButton",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatButtonDesign",
+		"iconName" : "ic_button",
+		"defaultAttributes" : 
+		{
+			"android:text" : "AppCompatButton"
+		}
+    },
+    
+    {
+		"name" : "AppCompatEditText",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatEditTextDesign",
+		"iconName" : "ic_edittext",
+		"defaultAttributes" : 
+		{
+			"android:hint" : "AppCompatEditText"
+		}
+	},
+	
+	{
+		"name" : "AppCompatRadioButton",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatRadioButtonDesign",
+		"iconName" : "ic_radiobox_marked",
+		"defaultAttributes" :
+		{
+			"android:text" : "AppCompatRadioButton"
+		}
+	},
+	
+	{
+		"name" : "AppCompatCheckBox",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatCheckBoxDesign",
+		"iconName" : "ic_checkbox_marked",
+		"defaultAttributes" :
+		{
+			"android:text" : "AppCompatCheckBox"
+		}
+	},
+	
+	{
+		"name" : "SwitchCompat",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.SwitchCompatDesign",
+		"iconName" : "ic_toggle_switch",
+		"defaultAttributes" :
+		{
+			"android:text" : "SwitchCompat"
+		}
+	},
+	
+	{
+		"name" : "AppCompatSeekBar",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatSeekBarDesign",
+		"iconName" : "ic_seekbar",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "match_parent"
+		}
+	},
+	
+	{
+		"name" : "AppCompatImageView",
+		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatImageViewDesign",
+		"iconName" : "ic_image_outline",
+		"defaultAttributes" :
+		{
+			"android:layout_width" : "wrap_content",
+			"android:layout_height" : "wrap_content",
+			"app:srcCompat" : "@drawable/default_image"
+		}
+	},
+	
+    {
 		"name" : "ConstraintLayout",
 		"className" : "com.itsvks.layouteditor.editor.widgets.androidx.ConstraintLayoutDesign",
 		"iconName" : "ic_constraint",

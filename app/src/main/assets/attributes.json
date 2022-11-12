@@ -340,6 +340,52 @@
 		}
 	],
 	
+	"androidx.appcompat.widget.AppCompatImageView" :
+	[
+		{
+			"name" : "android:src",
+			"methodName" : "setImage",
+			"className" : "ImageViewCaller",
+			"attributeName" : "android:src",
+			"argumentType" : "drawable"
+		},
+		
+		{
+			"name" : "app:srcCompat",
+			"methodName" : "setImage",
+			"className" : "ImageViewCaller",
+			"attributeName" : "app:srcCompat",
+			"argumentType" : "drawable"
+		},
+		
+		{
+			"name" : "android:scaleType",
+			"methodName" : "setScaleType",
+			"className" : "ImageViewCaller",
+			"attributeName" : "android:scaleType",
+			"argumentType" : "enum",
+			"arguments" :
+			[
+				"fitXY",
+				"fitStart",
+				"fitCenter",
+				"fitEnd",
+				"center",
+				"centerCrop",
+				"centerInside"
+			],
+			"defaultValue" : "-1"
+		},
+		
+		{
+			"name" : "android:tint",
+			"methodName" : "setTint",
+			"className" : "ImageViewCaller",
+			"attributeName" : "android:tint",
+			"argumentType" : "color"
+		}
+	],
+	
 	"com.google.android.material.floatingactionbutton.FloatingActionButton" :
 	[
 		{
