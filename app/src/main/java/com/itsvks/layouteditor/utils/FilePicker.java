@@ -16,7 +16,7 @@ public abstract class FilePicker {
     private AppCompatActivity actvty;
     private View rootView;
 
-    public FilePicker(AppCompatActivity actvty) {
+    public FilePicker(AppCompatActivity actvty, View anchor) {
         this.actvty = actvty;
         this.rootView = actvty.getWindow().getDecorView().getRootView();
 
@@ -34,10 +34,12 @@ public abstract class FilePicker {
                         isGranted -> {
                             if (isGranted)
                                 SBUtils.make(rootView, string.permission_granted)
+                                        .setAnchorView(anchor)
                                         .setSlideAnimation()
                                         .showAsSuccess();
                             else
                                 SBUtils.make(rootView, string.permission_denied)
+                                        .setAnchorView(anchor)
                                         .setSlideAnimation()
                                         .showAsError();
                         });
