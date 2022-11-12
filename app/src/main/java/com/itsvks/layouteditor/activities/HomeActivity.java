@@ -74,40 +74,42 @@ public class HomeActivity extends BaseActivity {
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(
                 item -> {
-                    
                     var id = item.getItemId();
 
-                    if (id == R.id.nav_home) {
-                        closeDrawer();
-                        goToHome();
-                        return true;
-                    } else if (id == R.id.nav_preference) {
-                        closeDrawer();
-                        replaceFragment((Fragment) new PreferencesFragment());
-                        getSupportActionBar().setTitle(R.string.title_preference);
-                        prefs.edit().putString("fragment", "preferences").apply();
-                        return true;
-                    } else if (id == R.id.nav_about) {
-                        closeDrawer();
-                        replaceFragment((Fragment) new AboutFragment());
-                        getSupportActionBar().setTitle(R.string.title_about);
-                        prefs.edit().putString("fragment", "about").apply();
-                        return true;
-                    } else if (id == R.id.nav_licence) {
-                        startActivity(new Intent(this, OssLicensesMenuActivity.class));
-                        return true;
-                    } else if (id == R.id.nav_github) {
-                        openUrl(Constants.GITHUB_URL);
-                        return true;
-                    } else if (id == R.id.nav_share) {
-                        var shareIntent = new ShareCompat.IntentBuilder(this);
-                        shareIntent.setType("text/plain");
-                        shareIntent.setChooserTitle(getString(R.string.app_name));
-                        shareIntent.setText(
-                                getString(R.string.share_description, Constants.GITHUB_URL));
-                        shareIntent.startChooser();
-                        return true;
-                    } else return false;
+                    switch (id) {
+                        case R.id.nav_home:
+                            drawerLayout.closeDrawer(GravityCompat.START);
+                            goToHome();
+                            return true;
+                        case R.id.nav_preference:
+                            drawerLayout.closeDrawer(GravityCompat.START);
+                            replaceFragment((Fragment) new PreferencesFragment());
+                            getSupportActionBar().setTitle(R.string.title_preference);
+                            prefs.edit().putString("fragment", "preferences").apply();
+                            return true;
+                        case R.id.nav_about:
+                            drawerLayout.closeDrawer(GravityCompat.START);
+                            replaceFragment((Fragment) new AboutFragment());
+                            getSupportActionBar().setTitle(R.string.title_about);
+                            prefs.edit().putString("fragment", "about").apply();
+                            return true;
+                        case R.id.nav_licence:
+                            startActivity(new Intent(this, OssLicensesMenuActivity.class));
+                            return true;
+                        case R.id.nav_github:
+                            openUrl(Constants.GITHUB_URL);
+                            return true;
+                        case R.id.nav_share:
+                            var shareIntent = new ShareCompat.IntentBuilder(this);
+                            shareIntent.setType("text/plain");
+                            shareIntent.setChooserTitle(getString(R.string.app_name));
+                            shareIntent.setText(
+                                    getString(R.string.share_description, Constants.GITHUB_URL));
+                            shareIntent.startChooser();
+                            return true;
+                        default:
+                            return false;
+                    }
                 });
         navigationView.setCheckedItem(R.id.nav_home);
 
@@ -196,9 +198,5 @@ public class HomeActivity extends BaseActivity {
         replaceFragment((Fragment) new HomeFragment());
         getSupportActionBar().setTitle(R.string.projects);
         prefs.edit().putString("fragment", "home").apply();
-    }
-    
-    private void closeDrawer() {
-        drawerLayout.closeDrawer(GravityCompat.START);
     }
 }

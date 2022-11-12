@@ -297,7 +297,7 @@ public class DrawableManagerActivity extends BaseActivity {
             if (isSelectedMode) {
                 if (item.name.equals("default_image")) {
                     SBUtils.make(binding.getRoot(), "You cannot select the default image..")
-                            .setType(SBUtils.Type.ERROR)
+                            .setType(SBUtils.Type.INFO)
                             .setSlideAnimation()
                             .setAnchorView(binding.fab)
                             .show();
