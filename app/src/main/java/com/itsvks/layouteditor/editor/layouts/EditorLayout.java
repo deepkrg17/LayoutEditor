@@ -79,125 +79,105 @@ public class EditorLayout extends LinearLayoutCompat {
                     ViewGroup parent = (ViewGroup) host;
                     View draggedView = null;
 
-                    if (event.getLocalState() instanceof View) {
+                    if (event.getLocalState() instanceof View)
                         draggedView = (View) event.getLocalState();
-                    }
 
                     switch (event.getAction()) {
                         case DragEvent.ACTION_DRAG_STARTED:
-                            {
-                                if (PreferencesManager.isEnableVibration()) {
-                                    VibrateUtils.vibrate(100);
-                                }
-                                if (draggedView != null) {
-                                    parent.removeView(draggedView);
-                                }
-                                return true;
-                            }
+                            if (PreferencesManager.isEnableVibration()) VibrateUtils.vibrate(100);
+
+                            if (draggedView != null) parent.removeView(draggedView);
+
+                            return true;
 
                         case DragEvent.ACTION_DRAG_EXITED:
-                            {
-                                removeWidget(shadow);
-                                return true;
-                            }
+                            removeWidget(shadow);
+                            return true;
 
                         case DragEvent.ACTION_DRAG_ENDED:
-                            {
-                                if (!event.getResult() && draggedView != null) {
-                                    IdManager.removeId(
-                                            draggedView, draggedView instanceof ViewGroup);
-                                    removeViewAttributes(draggedView);
-                                    viewAttributeMap.remove(draggedView);
-                                    updateStructure();
-                                }
-
-                                return true;
+                            if (!event.getResult() && draggedView != null) {
+                                IdManager.removeId(draggedView, draggedView instanceof ViewGroup);
+                                removeViewAttributes(draggedView);
+                                viewAttributeMap.remove(draggedView);
+                                updateStructure();
                             }
+
+                            return true;
 
                         case DragEvent.ACTION_DRAG_LOCATION:
                         case DragEvent.ACTION_DRAG_ENTERED:
-                            {
-                                if (shadow.getParent() == null) {
-                                    addWidget(shadow, parent, event);
-                                } else {
-                                    if (parent instanceof LinearLayoutCompat) {
-                                        int index = parent.indexOfChild(shadow);
-                                        int newIndex =
-                                                getIndexForNewChildOfLinear(
-                                                        (LinearLayoutCompat) parent, event);
+                            if (shadow.getParent() == null) addWidget(shadow, parent, event);
+                            else {
+                                if (parent instanceof LinearLayoutCompat) {
+                                    int index = parent.indexOfChild(shadow);
+                                    int newIndex =
+                                            getIndexForNewChildOfLinear(
+                                                    (LinearLayoutCompat) parent, event);
 
-                                        if (index != newIndex) {
-                                            parent.removeView(shadow);
-                                            parent.addView(shadow, newIndex);
-                                        }
-                                    } else {
-                                        if (shadow.getParent() != parent) {
-                                            addWidget(shadow, parent, event);
-                                        }
+                                    if (index != newIndex) {
+                                        parent.removeView(shadow);
+                                        parent.addView(shadow, newIndex);
                                     }
+                                } else {
+                                    if (shadow.getParent() != parent)
+                                        addWidget(shadow, parent, event);
                                 }
-
-                                return true;
                             }
+
+                            return true;
 
                         case DragEvent.ACTION_DROP:
-                            {
-                                removeWidget(shadow);
+                            removeWidget(shadow);
 
-                                if (draggedView == null) {
-                                    final HashMap<String, Object> data =
-                                            (HashMap) event.getLocalState();
-                                    final View newView =
-                                            (View)
-                                                    InvokeUtil.createView(
-                                                            data.get(Constants.KEY_CLASS_NAME)
-                                                                    .toString(),
-                                                            getContext());
+                            if (draggedView == null) {
+                                final HashMap<String, Object> data =
+                                        (HashMap) event.getLocalState();
+                                final View newView =
+                                        (View)
+                                                InvokeUtil.createView(
+                                                        data.get(Constants.KEY_CLASS_NAME)
+                                                                .toString(),
+                                                        getContext());
 
-                                    newView.setLayoutParams(
-                                            new ViewGroup.LayoutParams(
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    rearrangeListeners(newView);
+                                newView.setLayoutParams(
+                                        new ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rearrangeListeners(newView);
 
-                                    if (newView instanceof ViewGroup) {
-                                        newView.setOnDragListener(onDragListener);
-                                        newView.setMinimumWidth(getDip(20));
-                                        newView.setMinimumHeight(getDip(20));
-                                        setupViewGroupAnimation((ViewGroup) newView);
-                                    }
-
-                                    AttributeMap map = new AttributeMap();
-                                    map.putValue("android:layout_width", "wrap_content");
-                                    map.putValue("android:layout_height", "wrap_content");
-                                    viewAttributeMap.put(newView, map);
-
-                                    addWidget(newView, parent, event);
-
-                                    try {
-                                        Class cls = newView.getClass();
-                                        Method method =
-                                                cls.getMethod("setStrokeEnabled", boolean.class);
-                                        method.invoke(newView, drawStrokeEnabled);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    if (data.containsKey(Constants.KEY_DEFAULT_ATTRS)) {
-                                        initializer.applyDefaultAttributes(
-                                                newView,
-                                                (Map) data.get(Constants.KEY_DEFAULT_ATTRS));
-                                    }
-                                } else {
-                                    addWidget(draggedView, parent, event);
+                                if (newView instanceof ViewGroup) {
+                                    newView.setOnDragListener(onDragListener);
+                                    newView.setMinimumWidth(getDip(20));
+                                    newView.setMinimumHeight(getDip(20));
+                                    setupViewGroupAnimation((ViewGroup) newView);
                                 }
 
-                                updateStructure();
-                                if (undoRedoManager != null) {
-                                    updateUndoRedoHistory();
+                                AttributeMap map = new AttributeMap();
+                                map.putValue("android:layout_width", "wrap_content");
+                                map.putValue("android:layout_height", "wrap_content");
+                                viewAttributeMap.put(newView, map);
+
+                                addWidget(newView, parent, event);
+
+                                try {
+                                    Class cls = newView.getClass();
+                                    Method method =
+                                            cls.getMethod("setStrokeEnabled", boolean.class);
+                                    method.invoke(newView, drawStrokeEnabled);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                return true;
-                            }
+
+                                if (data.containsKey(Constants.KEY_DEFAULT_ATTRS)) {
+                                    initializer.applyDefaultAttributes(
+                                            newView, (Map) data.get(Constants.KEY_DEFAULT_ATTRS));
+                                }
+                            } else addWidget(draggedView, parent, event);
+
+                            updateStructure();
+                            if (undoRedoManager != null) updateUndoRedoHistory();
+
+                            return true;
                     }
 
                     return false;
@@ -269,9 +249,7 @@ public class EditorLayout extends LinearLayoutCompat {
     public void loadLayoutFromParser(String xml) {
         clearAll();
 
-        if (xml.equals("")) {
-            return;
-        }
+        if (xml.equals("")) return;
 
         XmlLayoutParser parser = new XmlLayoutParser(getContext());
         parser.parseFromXml(xml);

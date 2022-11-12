@@ -168,9 +168,8 @@ public class HomeActivity extends BaseActivity {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
+
         return false;
     }
 

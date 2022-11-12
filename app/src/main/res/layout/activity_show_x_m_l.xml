@@ -61,6 +61,6 @@
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
         app:icon="@drawable/content_copy"
-        android:text="Copy"/>
+        android:text="@string/copy"/>
 
 </androidx.appcompat.widget.FitWindowsFrameLayout>

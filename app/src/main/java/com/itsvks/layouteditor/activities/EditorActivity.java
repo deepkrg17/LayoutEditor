@@ -104,9 +104,8 @@ public class EditorActivity extends BaseActivity {
         actionBarDrawerToggle.syncState();
 
         binding.editorLayout.setStructureView(binding.structureView);
-        if (undoRedo != null) {
-            binding.editorLayout.bindUndoRedoManager(undoRedo);
-        }
+        if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
+
         binding.structureView.setOnItemClickListener(
                 v -> {
                     binding.editorLayout.showDefinedAttributes(v);
@@ -122,15 +121,14 @@ public class EditorActivity extends BaseActivity {
 
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
-                        if (tab.getPosition() == 0) {
+                        if (tab.getPosition() == 0)
                             binding.listView.setAdapter(new ListViewAdapter(views));
-                        } else if (tab.getPosition() == 1) {
+                        else if (tab.getPosition() == 1)
                             binding.listView.setAdapter(new ListViewAdapter(layouts));
-                        } else if (tab.getPosition() == 2) {
+                        else if (tab.getPosition() == 2)
                             binding.listView.setAdapter(new ListViewAdapter(androidxWidgets));
-                        } else if (tab.getPosition() == 3) {
+                        else if (tab.getPosition() == 3)
                             binding.listView.setAdapter(new ListViewAdapter(materialDesignWidgets));
-                        }
                     }
 
                     @Override
@@ -161,7 +159,7 @@ public class EditorActivity extends BaseActivity {
                         .fromJson(
                                 FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
                                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-        // sortListMap(views, "view", false, true);
+        
         binding.listView.setAdapter(new ListViewAdapter(views));
 
         IdManager.clear();
@@ -216,9 +214,7 @@ public class EditorActivity extends BaseActivity {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
 
         if (id == R.id.undo) {
             binding.editorLayout.undo();
@@ -231,7 +227,6 @@ public class EditorActivity extends BaseActivity {
             return true;
         } else if (id == R.id.save_xml) {
             saveXml();
-
             return true;
         } else if (id == R.id.show_xml) {
             String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
@@ -362,7 +357,6 @@ public class EditorActivity extends BaseActivity {
                                 bind.getRoot()
                                         .animate()
                                         .alpha(1)
-                                        // .translationY(0)
                                         .translationX(0)
                                         .setStartDelay(pos * 50)
                                         .setDuration(500)
@@ -383,9 +377,8 @@ public class EditorActivity extends BaseActivity {
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (menu instanceof MenuBuilder) {
-            ((MenuBuilder) menu).setOptionalIconsVisible(true);
-        }
+        if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
+
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         undo = menu.findItem(R.id.undo);
         redo = menu.findItem(R.id.redo);
@@ -394,9 +387,8 @@ public class EditorActivity extends BaseActivity {
     }
 
     public void setupMenuIcons() {
-        if (undo == null || redo == null) {
-            return;
-        }
+        if (undo == null || redo == null) return;
+
         undo.getIcon().setAlpha(undoRedo.isUndoEnabled() ? 255 : 130);
         undo.setEnabled(undo.getIcon().getAlpha() == 130 ? false : true);
         redo.getIcon().setAlpha(undoRedo.isRedoEnabled() ? 255 : 130);
@@ -405,38 +397,6 @@ public class EditorActivity extends BaseActivity {
 
     public void updateUndoRedoBtnState() {
         new Handler(Looper.getMainLooper()).postDelayed(updateMenuIconsState, 10);
-    }
-
-    public static void sortListMap(
-            final ArrayList<HashMap<String, Object>> listMap,
-            final String key,
-            final boolean isNumber,
-            final boolean ascending) {
-        Collections.sort(
-                listMap,
-                new Comparator<HashMap<String, Object>>() {
-                    public int compare(
-                            HashMap<String, Object> _compareMap1,
-                            HashMap<String, Object> _compareMap2) {
-                        if (isNumber) {
-                            int _count1 = Integer.valueOf(_compareMap1.get(key).toString());
-                            int _count2 = Integer.valueOf(_compareMap2.get(key).toString());
-                            if (ascending) {
-                                return _count1 < _count2 ? -1 : _count1 < _count2 ? 1 : 0;
-                            } else {
-                                return _count1 > _count2 ? -1 : _count1 > _count2 ? 1 : 0;
-                            }
-                        } else {
-                            if (ascending) {
-                                return (_compareMap1.get(key).toString())
-                                        .compareTo(_compareMap2.get(key).toString());
-                            } else {
-                                return (_compareMap2.get(key).toString())
-                                        .compareTo(_compareMap1.get(key).toString());
-                            }
-                        }
-                    }
-                });
     }
 
     private void addDrawerTab(CharSequence title) {
