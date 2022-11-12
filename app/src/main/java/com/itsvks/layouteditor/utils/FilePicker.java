@@ -24,9 +24,7 @@ public abstract class FilePicker {
                 actvty.registerForActivityResult(
                         new ActivityResultContracts.GetContent(),
                         uri -> {
-                            if (uri != null) {
-                                onResult(FileUtil.convertUriToFilePath(uri));
-                            }
+                            if (uri != null) onResult(FileUtil.convertUriToFilePath(uri));
                         });
         this.reqPermission =
                 actvty.registerForActivityResult(

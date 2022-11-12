@@ -37,15 +37,11 @@ public class BooleanDialog extends AttributeDialog {
 		group.addView(rbFalse);
 		
 		setView(group, 10, 20, 10, 0);
-		
-		if(!savedValue.equals("")) {
-			if(savedValue.equals("true")) {
-				rbTrue.setChecked(true);
-			}
-			else {
-				rbFalse.setChecked(true);
-			}
-		}
+
+        if (!savedValue.equals("")) {
+            if (savedValue.equals("true")) rbTrue.setChecked(true);
+            else rbFalse.setChecked(true);
+        }
 	}
 	
     @SuppressLint("ResourceType")

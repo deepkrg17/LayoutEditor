@@ -24,11 +24,9 @@ public class DimensionUtil {
     private static final Pattern pattern = Pattern.compile("dp|sp");
 
     public static float parse(String input, Context contxt) {
-        if (input.equals("match_parent")) {
-            return ViewGroup.LayoutParams.MATCH_PARENT;
-        } else if (input.equals("wrap_content")) {
-            return ViewGroup.LayoutParams.WRAP_CONTENT;
-        } else {
+        if (input.equals("match_parent")) return ViewGroup.LayoutParams.MATCH_PARENT;
+        else if (input.equals("wrap_content")) return ViewGroup.LayoutParams.WRAP_CONTENT;
+        else {
             Matcher matcher = pattern.matcher(input);
             String dimen = DP;
 
@@ -38,9 +36,7 @@ public class DimensionUtil {
 
             float number = Float.valueOf(input.substring(0, input.lastIndexOf(dimen)));
             return TypedValue.applyDimension(
-                    dimensMap.get(dimen),
-                    number,
-                    contxt.getResources().getDisplayMetrics());
+                    dimensMap.get(dimen), number, contxt.getResources().getDisplayMetrics());
         }
     }
 
@@ -57,8 +53,6 @@ public class DimensionUtil {
 
     public static float getDip(float value, Context ctx) {
         return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                value,
-                ctx.getResources().getDisplayMetrics());
+                TypedValue.COMPLEX_UNIT_DIP, value, ctx.getResources().getDisplayMetrics());
     }
 }

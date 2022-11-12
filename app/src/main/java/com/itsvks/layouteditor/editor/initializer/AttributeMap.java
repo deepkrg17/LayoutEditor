@@ -9,9 +9,7 @@ public class AttributeMap {
         if (contains(key)) {
             int index = getAttributeIndexFromKey(key);
             attrs.get(index).value = value;
-        } else {
-            attrs.add(new Attribute(key, value));
-        }
+        } else attrs.add(new Attribute(key, value));
     }
 
     public void removeValue(String key) {
@@ -45,9 +43,7 @@ public class AttributeMap {
 
     public boolean contains(String key) {
         for (Attribute attr : attrs) {
-            if (attr.key.equals(key)) {
-                return true;
-            }
+            if (attr.key.equals(key)) return true;
         }
 
         return false;
@@ -57,10 +53,7 @@ public class AttributeMap {
         int index = 0;
 
         for (Attribute attr : attrs) {
-            if (attr.key.equals(key)) {
-                return index;
-            }
-
+            if (attr.key.equals(key)) return index;
             index++;
         }
 

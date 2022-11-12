@@ -16,11 +16,8 @@ public class ArgumentUtil {
 
     public static String parseType(String value, String[] variants) {
         for (String variant : variants) {
-            if (patterns.containsKey(variant)) {
-                if (Pattern.matches(patterns.get(variant).toString(), value)) {
-                    return variant;
-                }
-            }
+            if (patterns.containsKey(variant))
+                if (Pattern.matches(patterns.get(variant).toString(), value)) return variant;
         }
 
         return "string";

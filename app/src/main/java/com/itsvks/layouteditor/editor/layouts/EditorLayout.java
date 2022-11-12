@@ -278,16 +278,12 @@ public class EditorLayout extends LinearLayoutCompat {
 
     public void undo() {
         if (undoRedoManager == null) return;
-        if (undoRedoManager.isUndoEnabled()) {
-            loadLayoutFromParser(undoRedoManager.undo());
-        }
+        if (undoRedoManager.isUndoEnabled()) loadLayoutFromParser(undoRedoManager.undo());
     }
 
     public void redo() {
         if (undoRedoManager == null) return;
-        if (undoRedoManager.isRedoEnabled()) {
-            loadLayoutFromParser(undoRedoManager.redo());
-        }
+        if (undoRedoManager.isRedoEnabled()) loadLayoutFromParser(undoRedoManager.redo());
     }
 
     public void clearAll() {
@@ -305,11 +301,8 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void updateStructure() {
-        if (getChildCount() == 0) {
-            structureView.clear();
-        } else {
-            structureView.setView(getChildAt(0));
-        }
+        if (getChildCount() == 0) structureView.clear();
+        else structureView.setView(getChildAt(0));
     }
 
     public void updateUndoRedoHistory() {
@@ -357,9 +350,8 @@ public class EditorLayout extends LinearLayoutCompat {
                                 diffX = Math.abs(startX - endX);
                                 diffY = Math.abs(startY - endY);
 
-                                if (diffX <= 5 && diffY <= 5 && bClick == true) {
+                                if (diffX <= 5 && diffY <= 5 && bClick == true)
                                     showDefinedAttributes(v);
-                                }
 
                                 bClick = false;
                                 break;
@@ -485,9 +477,8 @@ public class EditorLayout extends LinearLayoutCompat {
                         attributeItemBinding.textName.setText(item.get("name").toString());
                         attributeItemBinding.textValue.setText(values.get(pos));
 
-                        if (item.containsKey(Constants.KEY_CAN_DELETE)) {
+                        if (item.containsKey(Constants.KEY_CAN_DELETE))
                             attributeItemBinding.btnDelete.setVisibility(View.GONE);
-                        }
 
                         attributeItemBinding
                                 .getRoot()
@@ -693,9 +684,9 @@ public class EditorLayout extends LinearLayoutCompat {
         dialog.setOnSaveValueListener(
                 value -> {
                     if (defaultValue != null && defaultValue.equals(value)) {
-                        if (attributeMap.contains(attributeKey)) {
+                        if (attributeMap.contains(attributeKey))
                             removeAttribute(target, attributeKey);
-                        }
+
                     } else {
                         initializer.applyAttribute(target, value, currentAttr);
                         showDefinedAttributes(target);
@@ -727,9 +718,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
         final AttributeMap attributeMap = viewAttributeMap.get(target);
 
-        if (currentAttr.containsKey(Constants.KEY_CAN_DELETE)) {
-            return target;
-        }
+        if (currentAttr.containsKey(Constants.KEY_CAN_DELETE)) return target;
 
         final String name =
                 attributeMap.contains("android:id") ? attributeMap.getValue("android:id") : null;
@@ -748,9 +737,8 @@ public class EditorLayout extends LinearLayoutCompat {
                 for (String key : map.keySet()) {
                     String value = map.getValue(key);
 
-                    if (value.startsWith("@id/") && value.equals(name.replace("+", ""))) {
+                    if (value.startsWith("@id/") && value.equals(name.replace("+", "")))
                         map.removeValue(key);
-                    }
                 }
             }
 
@@ -778,9 +766,7 @@ public class EditorLayout extends LinearLayoutCompat {
             group.removeAllViews();
         }
 
-        if (name != null) {
-            IdManager.removeId(target, false);
-        }
+        if (name != null) IdManager.removeId(target, false);
 
         target = (View) InvokeUtil.createView(target.getClass().getName(), getContext());
         rearrangeListeners(target);

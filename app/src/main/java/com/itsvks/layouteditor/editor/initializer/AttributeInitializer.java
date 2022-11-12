@@ -115,9 +115,8 @@ public class AttributeInitializer {
         Class viewParentCls = View.class.getSuperclass();
 
         while (cls != viewParentCls) {
-            if (attributes.containsKey(cls.getName())) {
+            if (attributes.containsKey(cls.getName()))
                 allAttrs.addAll(0, attributes.get(cls.getName()));
-            }
 
             cls = cls.getSuperclass();
         }
@@ -126,9 +125,8 @@ public class AttributeInitializer {
             cls = target.getParent().getClass();
 
             while (cls != viewParentCls) {
-                if (parentAttributes.containsKey(cls.getName())) {
+                if (parentAttributes.containsKey(cls.getName()))
                     allAttrs.addAll(parentAttributes.get(cls.getName()));
-                }
 
                 cls = cls.getSuperclass();
             }
@@ -140,9 +138,7 @@ public class AttributeInitializer {
     public HashMap<String, Object> getAttributeFromKey(
             String key, ArrayList<HashMap<String, Object>> list) {
         for (HashMap<String, Object> map : list) {
-            if (map.get(Constants.KEY_ATTRIBUTE_NAME).equals(key)) {
-                return map;
-            }
+            if (map.get(Constants.KEY_ATTRIBUTE_NAME).equals(key)) return map;
         }
 
         return null;
