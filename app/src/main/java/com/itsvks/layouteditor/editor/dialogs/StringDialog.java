@@ -89,7 +89,7 @@ public class StringDialog extends AttributeDialog {
     public void show() {
         super.show();
         requestEditText(textInputEditText);
-        checkErrors();
+        if (isDrawable) checkErrors();
     }
 
     @Override
