@@ -183,6 +183,37 @@
             "defaultValue": "-1"
         }
     ],
+    "androidx.appcompat.widget.LinearLayoutCompat": [
+        {
+            "name": "android:gravity",
+            "methodName": "setGravity",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:gravity",
+            "argumentType": "flag",
+            "arguments": [
+                "left",
+                "right",
+                "top",
+                "bottom",
+                "center",
+                "center_horizontal",
+                "center_vertical"
+            ],
+            "defaultValue": "-1"
+        },
+        {
+            "name": "android:orientation",
+            "methodName": "setOrientation",
+            "className": "LinearLayoutCaller",
+            "attributeName": "android:orientation",
+            "argumentType": "enum",
+            "arguments": [
+                "horizontal",
+                "vertical"
+            ],
+            "defaultValue": "-1"
+        }
+    ],
     "androidx.cardview.widget.CardView": [
         {
             "name": "app:cardElevation",

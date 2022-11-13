@@ -66,6 +66,26 @@
         }
     },
     {
+        "name": "LinearLayoutCompat (H)",
+        "className": "com.itsvks.layouteditor.editor.widgets.androidx.LinearLayoutCompatDesign",
+        "iconName": "ic_linear_horizontal",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:orientation": "horizontal",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "LinearLayoutCompat (V)",
+        "className": "com.itsvks.layouteditor.editor.widgets.androidx.LinearLayoutCompatDesign",
+        "iconName": "ic_linear_vertical",
+        "defaultAttributes": {
+            "android:layout_height": "match_parent",
+            "android:orientation": "vertical",
+            "android:padding": "8dp"
+        }
+    },
+    {
         "name": "ConstraintLayout",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.ConstraintLayoutDesign",
         "iconName": "ic_constraint",
