@@ -2,48 +2,39 @@ package com.itsvks.layouteditor.utils;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.view.View;
+import android.net.Uri;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.itsvks.layouteditor.R.string;
 
 public abstract class FilePicker {
     private ActivityResultLauncher<String> getFile;
     private ActivityResultLauncher<String> reqPermission;
     private AppCompatActivity actvty;
-    private View rootView;
 
-    public FilePicker(AppCompatActivity actvty, View anchor) {
+    public FilePicker(AppCompatActivity actvty) {
         this.actvty = actvty;
-        this.rootView = actvty.getWindow().getDecorView().getRootView();
 
         this.getFile =
                 actvty.registerForActivityResult(
                         new ActivityResultContracts.GetContent(),
                         uri -> {
-                            if (uri != null) onResult(FileUtil.convertUriToFilePath(uri));
+                            if (uri != null) onPickFile(uri);
                         });
         this.reqPermission =
                 actvty.registerForActivityResult(
                         new ActivityResultContracts.RequestPermission(),
                         isGranted -> {
-                            if (isGranted)
-                                SBUtils.make(rootView, string.permission_granted)
-                                        .setAnchorView(anchor)
-                                        .setSlideAnimation()
-                                        .showAsSuccess();
-                            else
-                                SBUtils.make(rootView, string.permission_denied)
-                                        .setAnchorView(anchor)
-                                        .setSlideAnimation()
-                                        .showAsError();
+                            onRequestPermission(isGranted);
                         });
     }
 
-    public abstract void onResult(String path);
+    public abstract void onRequestPermission(boolean isGranted);
+
+    public abstract void onPickFile(@NonNull Uri uri);
 
     public void launch(String type) {
         if (actvty.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)

@@ -176,6 +176,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+        goToHome();
         actionBarDrawerToggle.onConfigurationChanged(config);
     }
 

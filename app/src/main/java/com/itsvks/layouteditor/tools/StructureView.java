@@ -24,7 +24,12 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     private HashMap<TextView, View> textViewMap = new HashMap<>();
     private HashMap<View, TextView> viewTextMap = new HashMap<>();
 
-    private OnItemClickListener listener = view -> {};
+    private OnItemClickListener listener =
+            new OnItemClickListener() {
+
+                @Override
+                public void onItemClick(View view) {}
+            };
 
     public StructureView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -138,7 +143,7 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
         this.listener = listener;
     }
 
-    public abstract static interface OnItemClickListener {
-        public void onItemClick(View view);
+    public abstract static class OnItemClickListener {
+        public abstract void onItemClick(View view);
     }
 }

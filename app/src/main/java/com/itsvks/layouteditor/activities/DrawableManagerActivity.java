@@ -3,6 +3,7 @@ package com.itsvks.layouteditor.activities;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -73,10 +74,25 @@ public class DrawableManagerActivity extends BaseActivity {
 
         loadDrawables();
         filepicker =
-                new FilePicker(this, binding.fab) {
+                new FilePicker(this) {
+
                     @Override
-                    public void onResult(String path) {
-                        addDrawable(path);
+                    public void onRequestPermission(boolean isGranted) {
+                        if (isGranted)
+                            SBUtils.make(binding.getRoot(), R.string.permission_granted)
+                                    .setAnchorView(binding.fab)
+                                    .setSlideAnimation()
+                                    .showAsSuccess();
+                        else
+                            SBUtils.make(binding.getRoot(), R.string.permission_denied)
+                                    .setAnchorView(binding.fab)
+                                    .setSlideAnimation()
+                                    .showAsError();
+                    }
+
+                    @Override
+                    public void onPickFile(Uri uri) {
+                        addDrawable(FileUtil.convertUriToFilePath(uri));
                     }
                 };
 
@@ -247,7 +263,7 @@ public class DrawableManagerActivity extends BaseActivity {
 
         gridAdapter.notifyDataSetChanged();
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

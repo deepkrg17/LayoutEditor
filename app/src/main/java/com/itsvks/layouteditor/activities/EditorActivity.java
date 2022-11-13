@@ -37,6 +37,7 @@ import com.itsvks.layouteditor.databinding.WidgetsListBinding;
 import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
+import com.itsvks.layouteditor.tools.StructureView;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
@@ -108,15 +109,20 @@ public class EditorActivity extends BaseActivity {
         if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
 
         binding.structureView.setOnItemClickListener(
-                v -> {
-                    binding.editorLayout.showDefinedAttributes(v);
-                    drawerLayout.closeDrawer(GravityCompat.END);
+                new StructureView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(View view) {
+                        binding.editorLayout.showDefinedAttributes(view);
+                        drawerLayout.closeDrawer(GravityCompat.END);
+                    }
                 });
 
-        addDrawerTab(Constants.TAB_VIEWS_TITLE);
-        addDrawerTab(Constants.TAB_LAYOUTS_TITLE);
-        addDrawerTab(Constants.TAB_ANDROIDX_TITLE);
-        addDrawerTab(Constants.TAB_MATERIAL_TITLE);
+        initializeWidgetLists();
+        addDrawerTab(Constants.TAB_TITLE_VIEWS);
+        addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
+        addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
+        addDrawerTab(Constants.TAB_TITLE_MATERIAL);
         binding.tabLayout.addOnTabSelectedListener(
                 new TabLayout.OnTabSelectedListener() {
 
@@ -139,28 +145,6 @@ public class EditorActivity extends BaseActivity {
                     public void onTabReselected(TabLayout.Tab tab) {}
                 });
 
-        views =
-                new Gson()
-                        .fromJson(
-                                FileUtil.readFromAsset(Constants.VIEWS, this),
-                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-        layouts =
-                new Gson()
-                        .fromJson(
-                                FileUtil.readFromAsset(Constants.LAYOUTS, this),
-                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-
-        materialDesignWidgets =
-                new Gson()
-                        .fromJson(
-                                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
-                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-        androidxWidgets =
-                new Gson()
-                        .fromJson(
-                                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
-                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-        
         binding.listView.setAdapter(new ListViewAdapter(views));
 
         IdManager.clear();
@@ -299,10 +283,10 @@ public class EditorActivity extends BaseActivity {
         project.saveLayout(result);
         SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
     }
-    
-    private void showXml(){
+
+    private void showXml() {
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
-         if (result.isEmpty()) {
+        if (result.isEmpty()) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Nothing...")
                     .setMessage("Add some widgets")
@@ -419,5 +403,29 @@ public class EditorActivity extends BaseActivity {
 
     private void addDrawerTab(CharSequence title) {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
+    }
+    
+    private void initializeWidgetLists() {
+        views =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.VIEWS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        layouts =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.LAYOUTS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+
+        materialDesignWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        androidxWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
     }
 }

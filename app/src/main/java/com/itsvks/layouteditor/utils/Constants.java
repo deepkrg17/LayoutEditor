@@ -13,10 +13,10 @@ public class Constants {
     public static final String ANDROIDX_WIDGETS = "androidx_widgets.json";
     public static final String MATERIAL_DESIGN_WIDGETS = "material_design_widgets.json";
     
-    public static final String TAB_VIEWS_TITLE = "Views";
-    public static final String TAB_LAYOUTS_TITLE = "Layouts";
-    public static final String TAB_ANDROIDX_TITLE = "AndroidX";
-    public static final String TAB_MATERIAL_TITLE = "Material Design";
+    public static final String TAB_TITLE_VIEWS = "Views";
+    public static final String TAB_TITLE_LAYOUTS = "Layouts";
+    public static final String TAB_TITLE_ANDROIDX = "AndroidX";
+    public static final String TAB_TITLE_MATERIAL = "Material Design";
     
     public static final String KEY_ATTRIBUTE_NAME = "attributeName";
     public static final String KEY_CLASS_NAME = "className";
