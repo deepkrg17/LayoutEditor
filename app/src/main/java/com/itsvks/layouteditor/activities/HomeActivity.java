@@ -198,4 +198,10 @@ public class HomeActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.projects);
         prefs.edit().putString("fragment", "home").apply();
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

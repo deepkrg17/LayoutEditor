@@ -9,6 +9,7 @@ import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.InvokeUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,13 +17,13 @@ public class AttributeInitializer {
     private Context context;
 
     private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
-    private HashMap<String, ArrayList<HashMap<String, Object>>> attributes;
-    private HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes;
+    private HashMap<String, List<HashMap<String, Object>>> attributes;
+    private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
 
     public AttributeInitializer(
             Context context,
-            HashMap<String, ArrayList<HashMap<String, Object>>> attributes,
-            HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes) {
+            HashMap<String, List<HashMap<String, Object>>> attributes,
+            HashMap<String, List<HashMap<String, Object>>> parentAttributes) {
         this.context = context;
         this.attributes = attributes;
         this.parentAttributes = parentAttributes;
@@ -31,8 +32,8 @@ public class AttributeInitializer {
     public AttributeInitializer(
             Context context,
             HashMap<View, AttributeMap> viewAttributeMap,
-            HashMap<String, ArrayList<HashMap<String, Object>>> attributes,
-            HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes) {
+            HashMap<String, List<HashMap<String, Object>>> attributes,
+            HashMap<String, List<HashMap<String, Object>>> parentAttributes) {
         this.viewAttributeMap = viewAttributeMap;
         this.context = context;
         this.attributes = attributes;
@@ -50,7 +51,7 @@ public class AttributeInitializer {
         }
     */
     public void applyDefaultAttributes(final View target, final Map<String, String> defaultAttrs) {
-        ArrayList<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
+        List<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
 
         for (String key : defaultAttrs.keySet()) {
             for (HashMap<String, Object> map : allAttrs) {
@@ -92,9 +93,9 @@ public class AttributeInitializer {
         InvokeUtil.invokeMethod(methodName, className, target, value, context);
     }
 
-    public ArrayList<HashMap<String, Object>> getAvailableAttributesForView(final View target) {
-        final ArrayList<String> keys = viewAttributeMap.get(target).keySet();
-        final ArrayList<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
+    public List<HashMap<String, Object>> getAvailableAttributesForView(final View target) {
+        final List<String> keys = viewAttributeMap.get(target).keySet();
+        final List<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
 
         for (int i = allAttrs.size() - 1; i >= 0; i--) {
             for (String key : keys) {
@@ -108,8 +109,8 @@ public class AttributeInitializer {
         return allAttrs;
     }
 
-    public ArrayList<HashMap<String, Object>> getAllAttributesForView(final View target) {
-        ArrayList<HashMap<String, Object>> allAttrs = new ArrayList<>();
+    public List<HashMap<String, Object>> getAllAttributesForView(final View target) {
+        List<HashMap<String, Object>> allAttrs = new ArrayList<>();
 
         Class cls = target.getClass();
         Class viewParentCls = View.class.getSuperclass();
@@ -136,7 +137,7 @@ public class AttributeInitializer {
     }
 
     public HashMap<String, Object> getAttributeFromKey(
-            String key, ArrayList<HashMap<String, Object>> list) {
+            String key, List<HashMap<String, Object>> list) {
         for (HashMap<String, Object> map : list) {
             if (map.get(Constants.KEY_ATTRIBUTE_NAME).equals(key)) return map;
         }

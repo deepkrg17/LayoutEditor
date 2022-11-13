@@ -6,11 +6,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EnumDialog extends AttributeDialog {
 	
 	private ListView listview;
-	private ArrayList<String> arguments;
+	private List<String> arguments;
 	
 	public EnumDialog(Context context, String savedValue, ArrayList<String> arguments) {
 		super(context);

@@ -14,21 +14,19 @@ public class SBUtils {
         INFO
     }
 
-    private View view;
     private Snackbar snackbar;
     private Type type = null;
 
-    private SBUtils(View v, Snackbar snackbar) {
-        this.view = v;
+    private SBUtils(Snackbar snackbar) {
         this.snackbar = snackbar;
     }
 
     public static SBUtils make(View v, CharSequence msg) {
-        return new SBUtils(v, Snackbar.make(v, msg, Snackbar.LENGTH_SHORT));
+        return new SBUtils(Snackbar.make(v, msg, Snackbar.LENGTH_SHORT));
     }
 
     public static SBUtils make(View v, int msgResId) {
-        return new SBUtils(v, Snackbar.make(v, msgResId, Snackbar.LENGTH_SHORT));
+        return new SBUtils(Snackbar.make(v, msgResId, Snackbar.LENGTH_SHORT));
     }
 
     public SBUtils setType(SBUtils.Type type) {
@@ -68,8 +66,8 @@ public class SBUtils {
             switch (type) {
                 case ERROR:
                     setColors(
-                            MaterialColors.getColor(view, R.attr.colorError),
-                            MaterialColors.getColor(view, R.attr.colorOnError));
+                            MaterialColors.getColor(snackbar.getContext(), R.attr.colorError, ""),
+                            MaterialColors.getColor(snackbar.getContext(), R.attr.colorOnError ,""));
                     break;
                 case SUCCESS:
                     setColors(0xff4caf50, 0xffffffff);

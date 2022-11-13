@@ -18,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -39,18 +40,23 @@ import java.util.Locale;
 @SuppressWarnings("unused")
 public class HomeFragment extends Fragment {
 
-    FragmentHomeBinding binding;
+    private FragmentHomeBinding binding;
 
     private ArrayList<ProjectFile> projects = new ArrayList<>();
     private ProjectListAdapter adapter;
 
     @Override
-    public android.view.View onCreateView(
+    public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
+        return binding.getRoot();
+    }
+    
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
         binding.fab.setOnClickListener(v -> showCreateProjectDialog());
 
         adapter = new ProjectListAdapter();
@@ -61,9 +67,8 @@ public class HomeFragment extends Fragment {
         binding.noProjectsView.setVisibility(adapter.getCount() != 0 ? View.VISIBLE : View.GONE);
         binding.listProjects.setVisibility(
                 binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        return root;
     }
-
+    
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -99,7 +104,7 @@ public class HomeFragment extends Fragment {
 
             bind.btnOptions.setOnClickListener(
                     v -> {
-                        final PopupMenu popupMenu = new PopupMenu(getContext(), v);
+                        final PopupMenu popupMenu = new PopupMenu(requireContext(), v);
                         popupMenu.inflate(R.menu.menu_project_file_options);
                         popupMenu.setOnMenuItemClickListener(
                                 new PopupMenu.OnMenuItemClickListener() {
@@ -130,7 +135,7 @@ public class HomeFragment extends Fragment {
     @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
     @SuppressWarnings("deprecation")
     private void showCreateProjectDialog() {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Create project");
 
         final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
@@ -167,10 +172,10 @@ public class HomeFragment extends Fragment {
         editText.requestFocus();
 
         InputMethodManager inputMethodManager =
-                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
-        if (!editText.getText().toString().equals("")) {
+        if (!editText.getText().toString().isEmpty()) {
             editText.setSelection(0, editText.getText().toString().length());
         }
 
@@ -180,10 +185,10 @@ public class HomeFragment extends Fragment {
     private void loadProjects() {
         projects.clear();
 
-        File root = new File(FileUtil.getPackageDataDir(getContext()) + "/projects/");
+        File root = new File(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
 
         if (!root.exists()) {
-            FileUtil.makeDir(FileUtil.getPackageDataDir(getContext()) + "/projects/");
+            FileUtil.makeDir(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
         }
 
         for (File file : root.listFiles()) {
@@ -198,7 +203,7 @@ public class HomeFragment extends Fragment {
 
     private void createProject(String name) {
 
-        final String projectDir = FileUtil.getPackageDataDir(getContext()) + "/projects/" + name;
+        final String projectDir = FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
@@ -208,13 +213,13 @@ public class HomeFragment extends Fragment {
         projects.add(project);
         adapter.notifyDataSetChanged();
 
-        final Intent intent = new Intent(getContext(), EditorActivity.class);
+        final Intent intent = new Intent(requireContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
         startActivity(intent);
     }
 
     private void renameProject(final ProjectFile project) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Rename project");
 
         final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
@@ -272,7 +277,7 @@ public class HomeFragment extends Fragment {
 
         editText.requestFocus();
         InputMethodManager inputMethodManager =
-                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
         if (!editText.getText().toString().equals("")) {
@@ -281,7 +286,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void deleteProject(final ProjectFile file) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Delete project");
         builder.setMessage("Are you sure you want to remove the project?");
         builder.setNegativeButton("No", (di, which) -> {});
@@ -297,7 +302,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void openProject(final ProjectFile project) {
-        Intent intent = new Intent(getContext(), EditorActivity.class);
+        Intent intent = new Intent(requireContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
         intent.setAction(EditorActivity.ACTION_OPEN);
         startActivity(intent);

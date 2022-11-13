@@ -11,6 +11,7 @@ import com.itsvks.layouteditor.managers.IdManager;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.List;
 
 public class IdDialog extends AttributeDialog {
 
@@ -19,7 +20,7 @@ public class IdDialog extends AttributeDialog {
     private TextInputLayout textInputLayout;
     private TextInputEditText textInputEditText;
 
-    private ArrayList<String> ids;
+    private List<String> ids;
 
     public IdDialog(Context context, String savedValue) {
         super(context);

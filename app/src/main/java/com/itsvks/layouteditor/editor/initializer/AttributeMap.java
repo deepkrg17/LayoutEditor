@@ -1,9 +1,10 @@
 package com.itsvks.layouteditor.editor.initializer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AttributeMap {
-    private ArrayList<Attribute> attrs = new ArrayList<>();
+    private List<Attribute> attrs = new ArrayList<>();
 
     public void putValue(String key, String value) {
         if (contains(key)) {
@@ -21,8 +22,8 @@ public class AttributeMap {
         return attr.value;
     }
 
-    public ArrayList<String> keySet() {
-        ArrayList<String> keys = new ArrayList<>();
+    public List<String> keySet() {
+        List<String> keys = new ArrayList<>();
 
         for (Attribute attr : attrs) {
             keys.add(attr.key);
@@ -31,8 +32,8 @@ public class AttributeMap {
         return keys;
     }
 
-    public ArrayList<String> values() {
-        ArrayList<String> values = new ArrayList<>();
+    public List<String> values() {
+        List<String> values = new ArrayList<>();
 
         for (Attribute attr : attrs) {
             values.add(attr.value);

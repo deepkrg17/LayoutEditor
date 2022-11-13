@@ -13,16 +13,13 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class AttributeDialog {
 
-    private Context context;
-
     private final AlertDialog dialog;
     protected OnSaveValueListener listener;
 
     private InputMethodManager inputMethodManager;
 
     public AttributeDialog(Context context) {
-        this.context = context;
-
+        
         dialog = new MaterialAlertDialogBuilder(context).create();
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", (di, which) -> {});
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save", (di, which) -> onClickSave());
@@ -40,12 +37,12 @@ public class AttributeDialog {
     }
 
     public void setView(View view, int padding) {
-        int pad = getDip(padding);
+        int pad = getDip(view.getContext(), padding);
         dialog.setView(view, pad, pad, pad, pad);
     }
 
     public void setView(View view, int left, int top, int right, int bottom) {
-        dialog.setView(view, getDip(left), getDip(top), getDip(right), getDip(bottom));
+        dialog.setView(view, getDip(view.getContext(), left), getDip(view.getContext(), top), getDip(view.getContext(),right), getDip(view.getContext(), bottom));
     }
 
     public void show() {
@@ -69,7 +66,7 @@ public class AttributeDialog {
         }
     }
 
-    private int getDip(int value) {
+    private int getDip(Context context, int value) {
         return (int)
                 TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
@@ -77,7 +74,7 @@ public class AttributeDialog {
                         context.getResources().getDisplayMetrics());
     }
 
-    protected String getString(int id) {
+    protected String getString(Context context, int id) {
         return context.getString(id);
     }
 

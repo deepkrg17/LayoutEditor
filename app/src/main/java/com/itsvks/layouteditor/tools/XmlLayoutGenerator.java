@@ -8,6 +8,7 @@ import com.itsvks.layouteditor.editor.layouts.EditorLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class XmlLayoutGenerator {
     StringBuilder builder = new StringBuilder();
@@ -48,8 +49,8 @@ public class XmlLayoutGenerator {
             builder.append(TAB + "xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n");
         }
 
-        ArrayList<String> keys = attributeMap.get(view).keySet();
-        ArrayList<String> values = attributeMap.get(view).values();
+        List<String> keys = attributeMap.get(view).keySet();
+        List<String> values = attributeMap.get(view).values();
 
         for (String key : keys) {
             builder.append(

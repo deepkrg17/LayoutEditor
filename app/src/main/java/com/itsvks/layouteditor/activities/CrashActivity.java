@@ -69,4 +69,10 @@ public class CrashActivity extends BaseActivity {
         }
         return false;
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }
