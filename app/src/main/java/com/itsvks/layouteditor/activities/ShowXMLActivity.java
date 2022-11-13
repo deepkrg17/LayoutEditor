@@ -34,19 +34,6 @@ public class ShowXMLActivity extends BaseActivity {
         binding.result.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
         binding.result.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular));
 
-        if (binding.result.getText().toString().isEmpty()) {
-            binding.fab.hide();
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle("Nothing...")
-                    .setMessage("Add some widgets")
-                    .setPositiveButton(
-                            "Okay",
-                            (d, w) -> {
-                                super.onBackPressed();
-                            })
-                    .show();
-        }
-
         binding.fab.setOnClickListener(
                 v -> {
                     ClipboardUtils.copyText(binding.result.getText());
@@ -71,5 +58,11 @@ public class ShowXMLActivity extends BaseActivity {
                         binding.fab.extend();
                     }
                 });
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

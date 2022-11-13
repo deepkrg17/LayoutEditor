@@ -23,6 +23,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -229,11 +230,7 @@ public class EditorActivity extends BaseActivity {
             saveXml();
             return true;
         } else if (id == R.id.show_xml) {
-            String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
-            saveXml();
-            startActivity(
-                    new Intent(this, ShowXMLActivity.class)
-                            .putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
+            showXml();
             return true;
         } else if (id == R.id.resources_manager) {
             saveXml();
@@ -283,6 +280,7 @@ public class EditorActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         saveXml();
+        binding = null;
     }
 
     private void saveXml() {
@@ -300,6 +298,26 @@ public class EditorActivity extends BaseActivity {
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
         project.saveLayout(result);
         SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
+    }
+    
+    private void showXml(){
+        String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
+         if (result.isEmpty()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Nothing...")
+                    .setMessage("Add some widgets")
+                    .setPositiveButton(
+                            "Okay",
+                            (d, w) -> {
+                                d.cancel();
+                            })
+                    .show();
+        } else {
+            saveXml();
+            startActivity(
+                    new Intent(this, ShowXMLActivity.class)
+                            .putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
+        }
     }
 
     private class ListViewAdapter extends BaseAdapter implements View.OnLongClickListener {

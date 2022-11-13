@@ -50,6 +50,7 @@ import com.itsvks.layouteditor.utils.InvokeUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,8 +66,8 @@ public class EditorLayout extends LinearLayoutCompat {
     private UndoRedoManager undoRedoManager;
 
     private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
-    private HashMap<String, ArrayList<HashMap<String, Object>>> attributes;
-    private HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes;
+    private HashMap<String, List<HashMap<String, Object>>> attributes;
+    private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
 
     private boolean drawStrokeEnabled = true;
 
@@ -249,10 +250,10 @@ public class EditorLayout extends LinearLayoutCompat {
     public void loadLayoutFromParser(String xml) {
         clearAll();
 
-        if (xml.equals("")) return;
+        if (xml.isEmpty()) return;
 
         XmlLayoutParser parser = new XmlLayoutParser(getContext());
-        parser.parseFromXml(xml);
+        parser.parseFromXml(xml, getContext());
 
         addView(parser.getRoot());
         viewAttributeMap = parser.getViewAttributeMap();
@@ -429,11 +430,11 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     public void showDefinedAttributes(final View target) {
-        final ArrayList<String> keys = viewAttributeMap.get(target).keySet();
-        final ArrayList<String> values = viewAttributeMap.get(target).values();
+        final List<String> keys = viewAttributeMap.get(target).keySet();
+        final List<String> values = viewAttributeMap.get(target).values();
 
-        final ArrayList<HashMap<String, Object>> attrs = new ArrayList<>();
-        final ArrayList<HashMap<String, Object>> allAttrs =
+        final List<HashMap<String, Object>> attrs = new ArrayList<>();
+        final List<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
 
         final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
@@ -459,7 +460,7 @@ public class EditorLayout extends LinearLayoutCompat {
                     }
 
                     @Override
-                    public java.lang.Object getItem(int pos) {
+                    public Object getItem(int pos) {
                         return null;
                     }
 
@@ -536,9 +537,9 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     private void showAvailableAttributes(final View target) {
-        final ArrayList<HashMap<String, Object>> availableAttrs =
+        final List<HashMap<String, Object>> availableAttrs =
                 initializer.getAvailableAttributesForView(target);
-        final ArrayList<String> names = new ArrayList<>();
+        final List<String> names = new ArrayList<>();
 
         for (HashMap<String, Object> attr : availableAttrs) {
             names.add(attr.get("name").toString());
@@ -561,7 +562,7 @@ public class EditorLayout extends LinearLayoutCompat {
     }
 
     private void showAttributeEdit(final View target, final String attributeKey) {
-        final ArrayList<HashMap<String, Object>> allAttrs =
+        final List<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
         final HashMap<String, Object> currentAttr =
                 initializer.getAttributeFromKey(attributeKey, allAttrs);
@@ -598,7 +599,7 @@ public class EditorLayout extends LinearLayoutCompat {
     @SuppressWarnings("unchecked")
     private void showAttributeEdit(
             final View target, final String attributeKey, final String argumentType) {
-        final ArrayList<HashMap<String, Object>> allAttrs =
+        final List<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
         final HashMap<String, Object> currentAttr =
                 initializer.getAttributeFromKey(attributeKey, allAttrs);
@@ -711,7 +712,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
     @SuppressWarnings("unchecked")
     private View removeAttribute(View target, String attributeKey) {
-        final ArrayList<HashMap<String, Object>> allAttrs =
+        final List<HashMap<String, Object>> allAttrs =
                 initializer.getAllAttributesForView(target);
         final HashMap<String, Object> currentAttr =
                 initializer.getAttributeFromKey(attributeKey, allAttrs);
@@ -752,7 +753,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
         parent.removeView(target);
 
-        final ArrayList<View> childs = new ArrayList<>();
+        final List<View> childs = new ArrayList<>();
 
         if (target instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) target;
@@ -794,10 +795,10 @@ public class EditorLayout extends LinearLayoutCompat {
             target.requestLayout();
         }
 
-        final ArrayList<String> keys = attributeMap.keySet();
-        final ArrayList<String> values = attributeMap.values();
+        final List<String> keys = attributeMap.keySet();
+        final List<String> values = attributeMap.values();
 
-        final ArrayList<HashMap<String, Object>> attrs = new ArrayList<>();
+        final List<HashMap<String, Object>> attrs = new ArrayList<>();
 
         for (String key : keys) {
             for (HashMap<String, Object> map : allAttrs) {

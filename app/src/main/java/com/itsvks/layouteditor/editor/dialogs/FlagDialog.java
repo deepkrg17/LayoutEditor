@@ -9,11 +9,12 @@ import android.widget.ListView;
 
 import com.itsvks.layouteditor.editor.dialogs.AttributeDialog;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FlagDialog extends AttributeDialog {
 	
 	private ListView listview;
-	private ArrayList<String> arguments;
+	private List<String> arguments;
 	
 	public FlagDialog(Context context, String savedValue, ArrayList<String> arguments) {
 		super(context);

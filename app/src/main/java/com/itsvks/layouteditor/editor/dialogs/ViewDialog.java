@@ -1,18 +1,18 @@
 package com.itsvks.layouteditor.editor.dialogs;
 
 import android.content.Context;
-
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import com.itsvks.layouteditor.managers.IdManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewDialog extends AttributeDialog {
 	
-	private ArrayList<String> ids = new ArrayList<>();
+	private List<String> ids = new ArrayList<>();
 	private ListView listview;
 	
 	private String constant;

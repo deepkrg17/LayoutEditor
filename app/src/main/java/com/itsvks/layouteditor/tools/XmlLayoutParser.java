@@ -23,12 +23,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class XmlLayoutParser {
-    private Context context;
-
-    private HashMap<String, ArrayList<HashMap<String, Object>>> attributes;
-    private HashMap<String, ArrayList<HashMap<String, Object>>> parentAttributes;
+    
+    private HashMap<String, List<HashMap<String, Object>>> attributes;
+    private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
 
     private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
     private AttributeInitializer initializer;
@@ -36,8 +36,7 @@ public class XmlLayoutParser {
     private LinearLayoutCompat container;
 
     public XmlLayoutParser(Context context) {
-        this.context = context;
-
+        
         attributes =
                 new Gson()
                         .fromJson(
@@ -45,8 +44,7 @@ public class XmlLayoutParser {
                                 new TypeToken<
                                         HashMap<
                                                 String,
-                                                ArrayList<
-                                                        HashMap<String, Object>>>>() {}.getType());
+                                                List<HashMap<String, Object>>>>() {}.getType());
         parentAttributes =
                 new Gson()
                         .fromJson(
@@ -54,8 +52,7 @@ public class XmlLayoutParser {
                                 new TypeToken<
                                         HashMap<
                                                 String,
-                                                ArrayList<
-                                                        HashMap<String, Object>>>>() {}.getType());
+                                                List<HashMap<String, Object>>>>() {}.getType());
 
         initializer = new AttributeInitializer(context, attributes, parentAttributes);
 
@@ -75,8 +72,8 @@ public class XmlLayoutParser {
         return viewAttributeMap;
     }
 
-    public void parseFromXml(final String xml) {
-        ArrayList<View> listViews = new ArrayList<>();
+    public void parseFromXml(final String xml, Context context) {
+        List<View> listViews = new ArrayList<>();
         listViews.add(container);
 
         try {
@@ -141,12 +138,11 @@ public class XmlLayoutParser {
         }
     }
 
-    private void applyAttributes(View target, AttributeMap attributeMap) {
-        final ArrayList<HashMap<String, Object>> allAttrs =
-                initializer.getAllAttributesForView(target);
+    private void applyAttributes( View target, AttributeMap attributeMap) {
+        final List<HashMap<String, Object>> allAttrs = initializer.getAllAttributesForView(target);
 
-        final ArrayList<String> keys = attributeMap.keySet();
-        final ArrayList<String> values = attributeMap.values();
+        final List<String> keys = attributeMap.keySet();
+        final List<String> values = attributeMap.values();
 
         for (int i = keys.size() - 1; i >= 0; i--) {
             String key = keys.get(i);
@@ -160,7 +156,7 @@ public class XmlLayoutParser {
                 continue;
             }
 
-            InvokeUtil.invokeMethod(methodName, className, target, value, context);
+            InvokeUtil.invokeMethod(methodName, className, target, value, target.getContext());
         }
     }
 }

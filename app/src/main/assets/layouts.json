@@ -1,58 +1,49 @@
 [
-	{
-		"name" : "LinearLayout (H)",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-		"iconName" : "ic_linear_horizontal",
-		"defaultAttributes" : 
-		{
-			"android:layout_width" : "match_parent",
-			"android:orientation" : "horizontal",
-			"android:padding" : "8dp"
-		}
-	},
-	
-	{
-		"name" : "LinearLayout (V)",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-		"iconName" : "ic_linear_vertical",
-		"defaultAttributes" : 
-		{
-			"android:layout_height" : "match_parent",
-			"android:orientation" : "vertical",
-			"android:padding" : "8dp"
-		}
-	},
-	
-	{
-		"name" : "FrameLayout",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.FrameLayoutDesign",
-		"iconName" : "ic_frame",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent",
-			"android:padding" : "8dp"
-		}
-	},
-	
-	{
-		"name" : "RelativeLayout",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.RelativeLayoutDesign",
-		"iconName" : "ic_relative_layout_outline",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent",
-			"android:padding" : "8dp"
-		}
-	},
-	
-	{
-		"name" : "RadioGroup",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.RadioGroupDesign",
-		"iconName" : "ic_radiogroup",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent",
-			"android:padding" : "8dp"
-		}
-	}
+    {
+        "name": "LinearLayout (H)",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
+        "iconName": "ic_linear_horizontal",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:orientation": "horizontal",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "LinearLayout (V)",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
+        "iconName": "ic_linear_vertical",
+        "defaultAttributes": {
+            "android:layout_height": "match_parent",
+            "android:orientation": "vertical",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "FrameLayout",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.FrameLayoutDesign",
+        "iconName": "ic_frame",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "RelativeLayout",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.RelativeLayoutDesign",
+        "iconName": "ic_relative_layout_outline",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "RadioGroup",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.RadioGroupDesign",
+        "iconName": "ic_radiogroup",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    }
 ]

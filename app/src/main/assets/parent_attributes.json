@@ -7,7 +7,6 @@
             "attributeName": "android:layout_weight",
             "argumentType": "float"
         },
-
         {
             "name": "android:layout_margin",
             "methodName": "setLayoutMargin",
@@ -16,7 +15,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginLeft",
             "methodName": "setLayoutMarginLeft",
@@ -25,7 +23,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginRight",
             "methodName": "setLayoutMarginRight",
@@ -34,7 +31,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginTop",
             "methodName": "setLayoutMarginTop",
@@ -43,7 +39,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginBottom",
             "methodName": "setLayoutMarginBottom",
@@ -53,7 +48,6 @@
             "dimensionUnit": "dp"
         }
     ],
-
     "android.widget.FrameLayout": [
         {
             "name": "android:layout_gravity",
@@ -72,7 +66,6 @@
             ],
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_margin",
             "methodName": "setLayoutMargin",
@@ -81,7 +74,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginLeft",
             "methodName": "setLayoutMarginLeft",
@@ -90,7 +82,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginRight",
             "methodName": "setLayoutMarginRight",
@@ -99,7 +90,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginTop",
             "methodName": "setLayoutMarginTop",
@@ -108,7 +98,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginBottom",
             "methodName": "setLayoutMarginBottom",
@@ -118,7 +107,6 @@
             "dimensionUnit": "dp"
         }
     ],
-
     "android.widget.RelativeLayout": [
         {
             "name": "android:layout_centerHorizontal",
@@ -128,7 +116,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_centerVertical",
             "methodName": "setLayoutCenterVertical",
@@ -137,7 +124,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_centerInParent",
             "methodName": "setLayoutCenterInParent",
@@ -146,7 +132,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_below",
             "methodName": "setLayoutBelow",
@@ -155,7 +140,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_above",
             "methodName": "setLayoutAbove",
@@ -164,7 +148,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_toLeftOf",
             "methodName": "setLayoutToLeftOf",
@@ -173,7 +156,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_toRightOf",
             "methodName": "setLayoutToRightOf",
@@ -182,7 +164,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_alignLeft",
             "methodName": "setLayoutAlignLeft",
@@ -191,7 +172,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_alignRight",
             "methodName": "setLayoutAlignRight",
@@ -200,7 +180,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_alignTop",
             "methodName": "setLayoutAlignTop",
@@ -209,7 +188,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_alignBottom",
             "methodName": "setLayoutAlignBottom",
@@ -218,7 +196,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_alignParentLeft",
             "methodName": "setLayoutAlignParentLeft",
@@ -227,7 +204,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_alignParentRight",
             "methodName": "setLayoutAlignParentRight",
@@ -236,7 +212,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_alignParentTop",
             "methodName": "setLayoutAlignParentTop",
@@ -245,7 +220,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_alignParentBottom",
             "methodName": "setLayoutAlignParentBottom",
@@ -254,7 +228,6 @@
             "argumentType": "boolean",
             "defaultValue": "false"
         },
-
         {
             "name": "android:layout_alignBaseline",
             "methodName": "setLayoutAlignBaseline",
@@ -263,7 +236,6 @@
             "argumentType": "view",
             "defaultValue": "-1"
         },
-
         {
             "name": "android:layout_margin",
             "methodName": "setLayoutMargin",
@@ -272,7 +244,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginLeft",
             "methodName": "setLayoutMarginLeft",
@@ -281,7 +252,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginRight",
             "methodName": "setLayoutMarginRight",
@@ -290,7 +260,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginTop",
             "methodName": "setLayoutMarginTop",
@@ -299,7 +268,6 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         },
-
         {
             "name": "android:layout_marginBottom",
             "methodName": "setLayoutMarginBottom",
@@ -309,7 +277,6 @@
             "dimensionUnit": "dp"
         }
     ],
-
     "androidx.constraintlayout.widget.ConstraintLayout": [
         {
             "name": "app:layout_constraintLeft_toLeftOf",
@@ -320,7 +287,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintLeft_toRightOf",
             "methodName": "setLeftToRight",
@@ -330,7 +296,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintRight_toLeftOf",
             "methodName": "setRightToLeft",
@@ -340,7 +305,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintRight_toRightOf",
             "methodName": "setRightToRight",
@@ -350,7 +314,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintTop_toTopOf",
             "methodName": "setTopToTop",
@@ -360,7 +323,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintTop_toBottomOf",
             "methodName": "setTopToBottom",
@@ -370,7 +332,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintBottom_toTopOf",
             "methodName": "setBottomToTop",
@@ -380,7 +341,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintBottom_toBottomOf",
             "methodName": "setBottomToBottom",
@@ -390,7 +350,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintBaseline_toBaselineOf",
             "methodName": "setBottomToTop",
@@ -400,7 +359,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintStart_toStartOf",
             "methodName": "setStartToStart",
@@ -410,7 +368,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintStart_toEndOf",
             "methodName": "setStartToEnd",
@@ -420,7 +377,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintEnd_toStartOf",
             "methodName": "setEndToStart",
@@ -430,7 +386,6 @@
             "constant": "parent",
             "defaultValue": "-1"
         },
-
         {
             "name": "app:layout_constraintEnd_toEndOf",
             "methodName": "setEndToEnd",

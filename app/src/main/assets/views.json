@@ -1,83 +1,68 @@
 [
     {
-		"name" : "TextView",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.TextViewDesign",
-		"iconName" : "ic_textview",
-		"defaultAttributes" : 
-		{
-			"android:text" : "TextView"
-		}
-	},
-	
-    {
-        "name" : "Button",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.ButtonDesign",
-		"iconName" : "ic_button",
-		"defaultAttributes" : 
-		{
-			"android:text" : "Button"
-		}
+        "name": "TextView",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.TextViewDesign",
+        "iconName": "ic_textview",
+        "defaultAttributes": {
+            "android:text": "TextView"
+        }
     },
-    
     {
-		"name" : "EditText",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.EditTextDesign",
-		"iconName" : "ic_edittext",
-		"defaultAttributes" : 
-		{
-			"android:hint" : "EditText"
-		}
-	},
-	
-	{
-		"name" : "RadioButton",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.RadioButtonDesign",
-		"iconName" : "ic_radiobox_marked",
-		"defaultAttributes" :
-		{
-			"android:text" : "RadioButton"
-		}
-	},
-	
-	{
-		"name" : "CheckBox",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.CheckBoxDesign",
-		"iconName" : "ic_checkbox_marked",
-		"defaultAttributes" :
-		{
-			"android:text" : "CheckBox"
-		}
-	},
-	
-	{
-		"name" : "Switch",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.SwitchDesign",
-		"iconName" : "ic_toggle_switch",
-		"defaultAttributes" :
-		{
-			"android:text" : "Switch"
-		}
-	},
-	
-	{
-		"name" : "SeekBar",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.SeekBarDesign",
-		"iconName" : "ic_seekbar",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "match_parent"
-		}
-	},
-	
-	{
-		"name" : "ImageView",
-		"className" : "com.itsvks.layouteditor.editor.widgets.android.ImageViewDesign",
-		"iconName" : "ic_image_outline",
-		"defaultAttributes" :
-		{
-			"android:layout_width" : "wrap_content",
-			"android:layout_height" : "wrap_content",
-			"android:src" : "@drawable/default_image"
-		}
-	}
+        "name": "Button",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.ButtonDesign",
+        "iconName": "ic_button",
+        "defaultAttributes": {
+            "android:text": "Button"
+        }
+    },
+    {
+        "name": "EditText",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.EditTextDesign",
+        "iconName": "ic_edittext",
+        "defaultAttributes": {
+            "android:hint": "EditText"
+        }
+    },
+    {
+        "name": "RadioButton",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.RadioButtonDesign",
+        "iconName": "ic_radiobox_marked",
+        "defaultAttributes": {
+            "android:text": "RadioButton"
+        }
+    },
+    {
+        "name": "CheckBox",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.CheckBoxDesign",
+        "iconName": "ic_checkbox_marked",
+        "defaultAttributes": {
+            "android:text": "CheckBox"
+        }
+    },
+    {
+        "name": "Switch",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.SwitchDesign",
+        "iconName": "ic_toggle_switch",
+        "defaultAttributes": {
+            "android:text": "Switch"
+        }
+    },
+    {
+        "name": "SeekBar",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.SeekBarDesign",
+        "iconName": "ic_seekbar",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent"
+        }
+    },
+    {
+        "name": "ImageView",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.ImageViewDesign",
+        "iconName": "ic_image_outline",
+        "defaultAttributes": {
+            "android:layout_width": "wrap_content",
+            "android:layout_height": "wrap_content",
+            "android:src": "@drawable/default_image"
+        }
+    }
 ]

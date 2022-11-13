@@ -247,6 +247,12 @@ public class DrawableManagerActivity extends BaseActivity {
 
         gridAdapter.notifyDataSetChanged();
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 
     private class GridAdapter extends BaseAdapter
             implements View.OnClickListener, View.OnLongClickListener {
