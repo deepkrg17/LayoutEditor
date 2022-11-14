@@ -3,6 +3,7 @@ package com.itsvks.layouteditor.fragments.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,12 +23,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.EditorActivity;
+import com.itsvks.layouteditor.adapters.ProjectListAdapter;
 import com.itsvks.layouteditor.databinding.FragmentHomeBinding;
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
@@ -35,12 +41,14 @@ import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private SharedPreferences projectTimes;
 
     private ArrayList<ProjectFile> projects = new ArrayList<>();
     private ProjectListAdapter adapter;
@@ -50,86 +58,34 @@ public class HomeFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        projectTimes = PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());
         return binding.getRoot();
     }
-    
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        binding.fab.setOnClickListener(v -> showCreateProjectDialog());
 
-        adapter = new ProjectListAdapter();
+        binding.fab.setOnClickListener(v -> showCreateProjectDialog());
+        adapter = new ProjectListAdapter(projects);
+        
+        // RecyclerView Test
+        // projects.add(new ProjectFile(FileUtil.getPackageDataDir(requireContext()) + "/projects/"));
 
         binding.listProjects.setAdapter(adapter);
-        // binding.tv1.setText(String.valueOf(adapter.getCount()));
+        binding.listProjects.setLayoutManager(
+                new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 
-        binding.noProjectsView.setVisibility(adapter.getCount() != 0 ? View.VISIBLE : View.GONE);
+        binding.noProjectsView.setVisibility(
+                adapter.getItemCount() != 0 ? View.VISIBLE : View.GONE);
         binding.listProjects.setVisibility(
                 binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
     }
-    
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private class ProjectListAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return projects.size();
-        }
-
-        @Override
-        public ProjectFile getItem(int pos) {
-            return projects.get(pos);
-        }
-
-        @Override
-        public long getItemId(int p1) {
-            return 0;
-        }
-
-        @SuppressLint("ViewHolder")
-        @Override
-        public View getView(int pos, View buffer, ViewGroup p3) {
-            ProjectFile project = getItem(pos);
-
-            ListProjectFileBinding bind = ListProjectFileBinding.inflate(getLayoutInflater());
-            bind.icon.setText(project.getName().substring(0, 1).toUpperCase(Locale.US));
-            bind.name.setText(project.getName());
-            bind.getRoot().setOnClickListener(v -> openProject(project));
-
-            bind.btnOptions.setOnClickListener(
-                    v -> {
-                        final PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-                        popupMenu.inflate(R.menu.menu_project_file_options);
-                        popupMenu.setOnMenuItemClickListener(
-                                new PopupMenu.OnMenuItemClickListener() {
-
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        if (item.getItemId() == R.id.menu_rename) {
-                                            renameProject(project);
-                                            return true;
-                                        }
-
-                                        if (item.getItemId() == R.id.menu_delete) {
-                                            deleteProject(project);
-                                            return true;
-                                        }
-
-                                        return false;
-                                    }
-                                });
-
-                        popupMenu.show();
-                    });
-
-            return bind.getRoot();
-        }
     }
 
     @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
@@ -172,7 +128,8 @@ public class HomeFragment extends Fragment {
         editText.requestFocus();
 
         InputMethodManager inputMethodManager =
-                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager)
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
         if (!editText.getText().toString().isEmpty()) {
@@ -186,6 +143,7 @@ public class HomeFragment extends Fragment {
         projects.clear();
 
         File root = new File(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
+        
 
         if (!root.exists()) {
             FileUtil.makeDir(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
@@ -193,9 +151,7 @@ public class HomeFragment extends Fragment {
 
         for (File file : root.listFiles()) {
             String path = file.getPath();
-
-            ProjectFile project = new ProjectFile(path);
-            projects.add(project);
+            projects.add(new ProjectFile(path, projectTimes.getString(path, getCurrentTime())));
         }
 
         adapter.notifyDataSetChanged();
@@ -203,21 +159,25 @@ public class HomeFragment extends Fragment {
 
     private void createProject(String name) {
 
-        final String projectDir = FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
+        final String projectDir =
+                FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
+                final String time = Calendar.getInstance().getTime().toString();
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
 
-        ProjectFile project = new ProjectFile(projectDir);
+        ProjectFile project = new ProjectFile(projectDir, time);
         project.saveLayout("");
-        projects.add(project);
+        projects.add(new ProjectFile(projectDir, time));
         adapter.notifyDataSetChanged();
+        
+        projectTimes.edit().putString(projectDir, time).apply();
 
         final Intent intent = new Intent(requireContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
         startActivity(intent);
     }
-
+    
     private void renameProject(final ProjectFile project) {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Rename project");
@@ -277,7 +237,8 @@ public class HomeFragment extends Fragment {
 
         editText.requestFocus();
         InputMethodManager inputMethodManager =
-                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager)
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
         if (!editText.getText().toString().equals("")) {
@@ -295,7 +256,7 @@ public class HomeFragment extends Fragment {
                 (di, which) -> {
                     projects.remove(file);
                     FileUtil.deleteFile(file.getPath());
-                    ((BaseAdapter) binding.listProjects.getAdapter()).notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
                 });
 
         builder.create().show();
@@ -344,5 +305,9 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadProjects();
+    }
+    
+    private String getCurrentTime() {
+        return Calendar.getInstance().getTime().toString();
     }
 }

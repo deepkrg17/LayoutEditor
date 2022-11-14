@@ -8,8 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 // import com.itsaky.androidide.logsender.LogSender;
 
-import com.itsvks.layouteditor.CrashHandler;
-
 public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +26,4 @@ public class BaseActivity extends AppCompatActivity {
             Toast.makeText(this, th.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-    
 }

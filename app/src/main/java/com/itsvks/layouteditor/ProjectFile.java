@@ -6,13 +6,16 @@ import android.os.Parcelable;
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class ProjectFile implements Parcelable {
     private String path;
-    private String name;
+    public String name;
+    public String date;
 
-    public ProjectFile(String path) {
+    public ProjectFile(String path, String date) {
         this.path = path;
+        this.date = date;
         this.name = FileUtil.getLastSegmentFromPath(path);
     }
 
