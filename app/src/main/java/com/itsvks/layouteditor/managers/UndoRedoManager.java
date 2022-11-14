@@ -20,6 +20,8 @@ public class UndoRedoManager {
     }
 
     public void addToHistory(String xml) {
+        if (matchLastHistory(xml)) return;
+
         history.add(xml);
 
         if (history.size() == maxSize) {
@@ -65,5 +67,12 @@ public class UndoRedoManager {
 
     public boolean isRedoEnabled() {
         return index < history.size() - 1;
+    }
+
+    public boolean matchLastHistory(String xml) {
+        int lastIndex = history.size() - 1;
+        if (lastIndex < 0) return false;
+        if (xml == history.get(lastIndex)) return true;
+        return false;
     }
 }

@@ -14,11 +14,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is about us."
             android:padding="8dp"
-            android:textSize="28sp"
+            android:textSize="15sp"
             android:layout_below="@id/line1"
             android:layout_margin="8dp" />
 
