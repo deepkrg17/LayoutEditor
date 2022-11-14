@@ -97,12 +97,8 @@ public class DrawableManagerActivity extends BaseActivity {
                 };
 
         binding.topAppBar.setNavigationOnClickListener(
-                v -> {
-                    if (isSelectedMode) {
-                        stopSelection();
-                        return;
-                    }
-                    super.onBackPressed();
+                __ -> {
+                    onBackPressed();
                 });
         binding.fab.setOnClickListener(
                 v -> {

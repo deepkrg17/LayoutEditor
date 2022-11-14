@@ -27,13 +27,13 @@ public class UndoRedoManager {
         }
 
         index = history.size() - 1;
-        toggleButtons();
+        updateButtons();
     }
 
     public String undo() {
         if (index > 0) {
             index--;
-            toggleButtons();
+            updateButtons();
             return history.get(index);
         }
 
@@ -43,17 +43,16 @@ public class UndoRedoManager {
     public String redo() {
         if (index < history.size() - 1) {
             index++;
-            toggleButtons();
+            updateButtons();
             return history.get(index);
         }
 
         return "";
     }
 
-    private void toggleButtons() {
-        if (btnRedo == null || btnUndo == null) {
-            return;
-        }
+    public void updateButtons() {
+        if (btnRedo == null || btnUndo == null) return;
+
         btnUndo.getIcon().setAlpha(isUndoEnabled() ? 255 : 130);
         btnUndo.setEnabled(isUndoEnabled());
         btnRedo.getIcon().setAlpha(isRedoEnabled() ? 255 : 130);

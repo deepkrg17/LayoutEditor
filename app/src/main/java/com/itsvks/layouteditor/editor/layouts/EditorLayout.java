@@ -93,6 +93,7 @@ public class EditorLayout extends LinearLayoutCompat {
 
                         case DragEvent.ACTION_DRAG_EXITED:
                             removeWidget(shadow);
+                            updateUndoRedoHistory();
                             return true;
 
                         case DragEvent.ACTION_DRAG_ENDED:
@@ -176,7 +177,7 @@ public class EditorLayout extends LinearLayoutCompat {
                             } else addWidget(draggedView, parent, event);
 
                             updateStructure();
-                            if (undoRedoManager != null) updateUndoRedoHistory();
+                            updateUndoRedoHistory();
 
                             return true;
                     }
