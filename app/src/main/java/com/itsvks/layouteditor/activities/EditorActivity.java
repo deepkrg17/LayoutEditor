@@ -71,7 +71,7 @@ public class EditorActivity extends BaseActivity {
     private MenuItem undo = null;
     private MenuItem redo = null;
 
-    final Runnable updateMenuIconsState = () -> setupMenuIcons();
+    final Runnable updateMenuIconsState = () -> undoRedo.updateButtons();
 
     @SuppressWarnings("deprecation")
     @SuppressLint("UnsafeOptInUsageError")
@@ -85,11 +85,6 @@ public class EditorActivity extends BaseActivity {
 
         project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
         getSupportActionBar().setTitle(project.getName());
-
-        undoRedo = new UndoRedoManager(undo, redo);
-        updateUndoRedoBtnState();
-
-        binding.editorLayout.updateUndoRedoHistory();
 
         contentView = binding.content;
         drawerLayout = binding.drawer;
@@ -106,7 +101,6 @@ public class EditorActivity extends BaseActivity {
         actionBarDrawerToggle.syncState();
 
         binding.editorLayout.setStructureView(binding.structureView);
-        if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
 
         binding.structureView.setOnItemClickListener(
                 new StructureView.OnItemClickListener() {
@@ -154,32 +148,31 @@ public class EditorActivity extends BaseActivity {
             binding.editorLayout.loadLayoutFromParser(project.getLayout());
         }
 
-        setupMenuIcons();
         drawerLayout.addDrawerListener(
                 new DrawerLayout.SimpleDrawerListener() {
 
                     @Override
                     public void onDrawerStateChanged(int arg0) {
                         super.onDrawerStateChanged(arg0);
-                        setupMenuIcons();
+                        undoRedo.updateButtons();
                     }
 
                     @Override
                     public void onDrawerSlide(View arg0, float arg1) {
                         super.onDrawerSlide(arg0, arg1);
-                        setupMenuIcons();
+                        undoRedo.updateButtons();
                     }
 
                     @Override
                     public void onDrawerClosed(View arg0) {
                         super.onDrawerClosed(arg0);
-                        setupMenuIcons();
+                        undoRedo.updateButtons();
                     }
 
                     @Override
                     public void onDrawerOpened(View arg0) {
                         super.onDrawerOpened(arg0);
-                        setupMenuIcons();
+                        undoRedo.updateButtons();
                     }
                 });
     }
@@ -194,7 +187,7 @@ public class EditorActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         var id = item.getItemId();
-        setupMenuIcons();
+        undoRedo.updateButtons();
         if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
@@ -243,21 +236,21 @@ public class EditorActivity extends BaseActivity {
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
         actionBarDrawerToggle.onConfigurationChanged(config);
-        setupMenuIcons();
+        undoRedo.updateButtons();
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
-        setupMenuIcons();
+        if (undoRedo != null) undoRedo.updateButtons();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         DrawableManager.loadFromFiles(project.getDrawables());
-        setupMenuIcons();
+        if (undoRedo != null) undoRedo.updateButtons();
     }
 
     @Override
@@ -384,17 +377,11 @@ public class EditorActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         undo = menu.findItem(R.id.undo);
         redo = menu.findItem(R.id.redo);
-        setupMenuIcons();
+        undoRedo = new UndoRedoManager(undo, redo);
+        if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
+        binding.editorLayout.updateUndoRedoHistory();
+        updateUndoRedoBtnState();
         return super.onCreateOptionsMenu(menu);
-    }
-
-    public void setupMenuIcons() {
-        if (undo == null || redo == null) return;
-
-        undo.getIcon().setAlpha(undoRedo.isUndoEnabled() ? 255 : 130);
-        undo.setEnabled(undo.getIcon().getAlpha() == 130 ? false : true);
-        redo.getIcon().setAlpha(undoRedo.isRedoEnabled() ? 255 : 130);
-        redo.setEnabled(redo.getIcon().getAlpha() == 130 ? false : true);
     }
 
     public void updateUndoRedoBtnState() {
@@ -404,7 +391,7 @@ public class EditorActivity extends BaseActivity {
     private void addDrawerTab(CharSequence title) {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
     }
-    
+
     private void initializeWidgetLists() {
         views =
                 new Gson()

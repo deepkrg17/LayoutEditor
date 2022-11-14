@@ -10,7 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.itsvks.layouteditor.BuildConfig;
+import com.itsvks.layouteditor.R.string;
 import com.itsvks.layouteditor.databinding.FragmentAboutBinding;
+import com.itsvks.layouteditor.utils.Constants;
 
 public class AboutFragment extends Fragment {
 
@@ -27,6 +29,7 @@ public class AboutFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.details.setText(getString(string.share_description, Constants.GITHUB_URL));
         binding.version.setText("v" + BuildConfig.VERSION_NAME);
     }
 

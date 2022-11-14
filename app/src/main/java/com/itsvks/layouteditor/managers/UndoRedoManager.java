@@ -20,6 +20,8 @@ public class UndoRedoManager {
     }
 
     public void addToHistory(String xml) {
+        if (matchLastHistory(xml)) return;
+
         history.add(xml);
 
         if (history.size() == maxSize) {
@@ -27,13 +29,13 @@ public class UndoRedoManager {
         }
 
         index = history.size() - 1;
-        toggleButtons();
+        updateButtons();
     }
 
     public String undo() {
         if (index > 0) {
             index--;
-            toggleButtons();
+            updateButtons();
             return history.get(index);
         }
 
@@ -43,17 +45,16 @@ public class UndoRedoManager {
     public String redo() {
         if (index < history.size() - 1) {
             index++;
-            toggleButtons();
+            updateButtons();
             return history.get(index);
         }
 
         return "";
     }
 
-    private void toggleButtons() {
-        if (btnRedo == null || btnUndo == null) {
-            return;
-        }
+    public void updateButtons() {
+        if (btnRedo == null || btnUndo == null) return;
+
         btnUndo.getIcon().setAlpha(isUndoEnabled() ? 255 : 130);
         btnUndo.setEnabled(isUndoEnabled());
         btnRedo.getIcon().setAlpha(isRedoEnabled() ? 255 : 130);
@@ -66,5 +67,12 @@ public class UndoRedoManager {
 
     public boolean isRedoEnabled() {
         return index < history.size() - 1;
+    }
+
+    public boolean matchLastHistory(String xml) {
+        int lastIndex = history.size() - 1;
+        if (lastIndex < 0) return false;
+        if (xml == history.get(lastIndex)) return true;
+        return false;
     }
 }
