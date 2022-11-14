@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
@@ -64,6 +65,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                         LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.projectName.setText(projects.get(position).name.toString());
@@ -78,7 +80,8 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                             intent.setAction(EditorActivity.ACTION_OPEN);
                             v.getContext().startActivity(intent);
                         });
-        holder.projectIcon.setText(projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
+        holder.projectIcon.setText(
+                projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
         holder.menu.setOnClickListener(
                 v -> {
                     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
@@ -98,7 +101,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                                 "Are you sure you want to remove the project?");
                                         builder.setNegativeButton("No", (d, w) -> {});
                                         builder.setPositiveButton(
-                                                // TODO: Bug at line 106
+                                                // TODO: Bug at line 109
                                                 "Yes",
                                                 (d, w) -> {
                                                     projects.remove(projects.get(position));
