@@ -91,7 +91,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
-                                    // TODO: Implement onMenuItemClick
+
                                     var id = item.getItemId();
                                     if (id == R.id.menu_delete) {
                                         final MaterialAlertDialogBuilder builder =
@@ -101,12 +101,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                                 "Are you sure you want to remove the project?");
                                         builder.setNegativeButton("No", (d, w) -> {});
                                         builder.setPositiveButton(
-                                                // TODO: Bug at line 109
                                                 "Yes",
                                                 (d, w) -> {
-                                                    projects.remove(projects.get(position));
                                                     FileUtil.deleteFile(
                                                             projects.get(position).getPath());
+                                                    projects.remove(projects.get(position));
                                                     notifyDataSetChanged();
                                                 });
 

@@ -28,7 +28,7 @@ public class DimensionDialog extends AttributeDialog {
 
         textInputLayout = binding.getRoot();
         textInputLayout.setHint("Enter dimension value");
-        textInputLayout.setSuffixText("dp");
+        textInputLayout.setSuffixText(unit);
         textInputEditText = binding.textinputEdittext;
         textInputEditText.setInputType(
                 InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
