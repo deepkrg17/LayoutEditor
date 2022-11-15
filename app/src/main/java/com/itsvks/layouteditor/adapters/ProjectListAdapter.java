@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -70,6 +71,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.projectName.setText(projects.get(position).name.toString());
         holder.projectDate.setText(projects.get(position).date.toString());
+        TooltipCompat.setTooltipText(holder.menu, "Options");
         holder.binding
                 .getRoot()
                 .setOnClickListener(

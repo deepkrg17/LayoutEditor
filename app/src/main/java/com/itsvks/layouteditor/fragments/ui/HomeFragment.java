@@ -4,45 +4,37 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
-import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.adapters.ProjectListAdapter;
 import com.itsvks.layouteditor.databinding.FragmentHomeBinding;
-import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 
 @SuppressWarnings("unused")
 public class HomeFragment extends Fragment {
@@ -68,9 +60,6 @@ public class HomeFragment extends Fragment {
 
         binding.fab.setOnClickListener(v -> showCreateProjectDialog());
         adapter = new ProjectListAdapter(projects);
-        
-        // RecyclerView Test
-        // projects.add(new ProjectFile(FileUtil.getPackageDataDir(requireContext()) + "/projects/"));
 
         binding.listProjects.setAdapter(adapter);
         binding.listProjects.setLayoutManager(
@@ -143,7 +132,6 @@ public class HomeFragment extends Fragment {
         projects.clear();
 
         File root = new File(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
-        
 
         if (!root.exists()) {
             FileUtil.makeDir(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
@@ -161,111 +149,20 @@ public class HomeFragment extends Fragment {
 
         final String projectDir =
                 FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
-                final String time = Calendar.getInstance().getTime().toString();
+        final String time = Calendar.getInstance().getTime().toString();
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
 
         ProjectFile project = new ProjectFile(projectDir, time);
         project.saveLayout("");
-        projects.add(new ProjectFile(projectDir, time));
+        projects.add(project);
         adapter.notifyDataSetChanged();
-        
+
         projectTimes.edit().putString(projectDir, time).apply();
 
         final Intent intent = new Intent(requireContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
-        startActivity(intent);
-    }
-    
-    private void renameProject(final ProjectFile project) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        builder.setTitle("Rename project");
-
-        final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
-        final TextInputEditText editText = bind.textinputEdittext;
-        final TextInputLayout inputLayout = bind.textinputLayout;
-
-        editText.setText(project.getName());
-        inputLayout.setHint("Enter new project name");
-
-        final int padding =
-                (int)
-                        TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP,
-                                10,
-                                getResources().getDisplayMetrics());
-        builder.setView(bind.getRoot());
-        builder.setNegativeButton("Cancel", (di, which) -> {});
-        builder.setPositiveButton(
-                "Rename",
-                (di, which) -> {
-                    String path = project.getPath();
-                    String newPath =
-                            path.substring(0, path.lastIndexOf("/"))
-                                    + "/"
-                                    + editText.getText().toString();
-                    project.rename(newPath);
-
-                    adapter.notifyDataSetChanged();
-                });
-
-        final AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-
-        editText.addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkNameErrors(
-                                editText.getText().toString(),
-                                project.getName(),
-                                inputLayout,
-                                dialog);
-                    }
-                });
-
-        checkNameErrors(editText.getText().toString(), project.getName(), inputLayout, dialog);
-
-        editText.requestFocus();
-        InputMethodManager inputMethodManager =
-                (InputMethodManager)
-                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-
-        if (!editText.getText().toString().equals("")) {
-            editText.setSelection(0, editText.getText().toString().length());
-        }
-    }
-
-    private void deleteProject(final ProjectFile file) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        builder.setTitle("Delete project");
-        builder.setMessage("Are you sure you want to remove the project?");
-        builder.setNegativeButton("No", (di, which) -> {});
-        builder.setPositiveButton(
-                "Yes",
-                (di, which) -> {
-                    projects.remove(file);
-                    FileUtil.deleteFile(file.getPath());
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                });
-
-        builder.create().show();
-    }
-
-    private void openProject(final ProjectFile project) {
-        Intent intent = new Intent(requireContext(), EditorActivity.class);
-        intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
-        intent.setAction(EditorActivity.ACTION_OPEN);
         startActivity(intent);
     }
 
@@ -294,19 +191,12 @@ public class HomeFragment extends Fragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
     }
 
-    private void openUrl(String url) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         loadProjects();
     }
-    
+
     private String getCurrentTime() {
         return Calendar.getInstance().getTime().toString();
     }
