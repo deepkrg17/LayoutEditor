@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.binding
+                .getRoot()
+                .setAnimation(
+                        AnimationUtils.loadAnimation(
+                                holder.itemView.getContext(), R.anim.project_list_animation));
         holder.projectName.setText(projects.get(position).name.toString());
         holder.projectDate.setText(projects.get(position).date.toString());
         TooltipCompat.setTooltipText(holder.menu, "Options");
