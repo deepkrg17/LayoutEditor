@@ -371,6 +371,7 @@ public class FileUtil {
     }
 
     public static String getLastSegmentFromPath(String path) {
+        if (path == null) return "";
         return path.substring(path.lastIndexOf("/") + 1, path.length());
     }
 }

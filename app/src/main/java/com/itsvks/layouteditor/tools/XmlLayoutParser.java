@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class XmlLayoutParser {
-    
+
     private HashMap<String, List<HashMap<String, Object>>> attributes;
     private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
 
@@ -36,7 +36,7 @@ public class XmlLayoutParser {
     private LinearLayoutCompat container;
 
     public XmlLayoutParser(Context context) {
-        
+
         attributes =
                 new Gson()
                         .fromJson(
@@ -138,7 +138,7 @@ public class XmlLayoutParser {
         }
     }
 
-    private void applyAttributes( View target, AttributeMap attributeMap) {
+    private void applyAttributes(View target, AttributeMap attributeMap) {
         final List<HashMap<String, Object>> allAttrs = initializer.getAllAttributesForView(target);
 
         final List<String> keys = attributeMap.keySet();
@@ -148,6 +148,7 @@ public class XmlLayoutParser {
             String key = keys.get(i);
 
             HashMap<String, Object> attr = initializer.getAttributeFromKey(key, allAttrs);
+            if (attr == null) return;
             String methodName = attr.get("methodName").toString();
             String className = attr.get("className").toString();
             String value = attributeMap.getValue(key);

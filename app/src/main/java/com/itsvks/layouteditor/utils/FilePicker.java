@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 public abstract class FilePicker {
     private ActivityResultLauncher<String> getFile;
     private ActivityResultLauncher<String> reqPermission;
