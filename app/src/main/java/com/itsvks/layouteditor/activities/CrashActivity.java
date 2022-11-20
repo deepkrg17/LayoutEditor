@@ -7,10 +7,11 @@ import android.view.MenuItem;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.blankj.utilcode.util.ClipboardUtils;
+import com.blankj.utilcode.util.DeviceUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.itsvks.layouteditor.BaseActivity;
+import com.itsvks.layouteditor.BuildConfig;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.activities.CrashActivity;
 import com.itsvks.layouteditor.databinding.ActivityCrashBinding;
 
 public class CrashActivity extends BaseActivity {
@@ -28,9 +29,12 @@ public class CrashActivity extends BaseActivity {
 
         var error = new StringBuilder();
 
-        error.append(getIntent().getStringExtra("Error"));
-        error.append("\n\n");
+        error.append("Manufacturer: " + DeviceUtils.getManufacturer());
+        error.append("Device: " + DeviceUtils.getModel());
         error.append(getIntent().getStringExtra("Software"));
+        error.append("App version: " + BuildConfig.VERSION_NAME);
+        error.append("\n\n");
+        error.append(getIntent().getStringExtra("Error"));
         error.append("\n\n");
         error.append(getIntent().getStringExtra("Date"));
 
@@ -69,7 +73,7 @@ public class CrashActivity extends BaseActivity {
         }
         return false;
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
