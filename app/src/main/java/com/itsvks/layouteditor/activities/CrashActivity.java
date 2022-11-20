@@ -29,8 +29,8 @@ public class CrashActivity extends BaseActivity {
 
         var error = new StringBuilder();
 
-        error.append("Manufacturer: " + DeviceUtils.getManufacturer());
-        error.append("Device: " + DeviceUtils.getModel());
+        error.append("Manufacturer: " + DeviceUtils.getManufacturer() + "\n");
+        error.append("Device: " + DeviceUtils.getModel() + "\n");
         error.append(getIntent().getStringExtra("Software"));
         error.append("App version: " + BuildConfig.VERSION_NAME);
         error.append("\n\n");
