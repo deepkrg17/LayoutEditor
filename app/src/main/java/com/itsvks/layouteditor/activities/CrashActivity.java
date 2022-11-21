@@ -43,7 +43,7 @@ public class CrashActivity extends BaseActivity {
         binding.fab.setOnClickListener(
                 v -> {
                     ClipboardUtils.copyText(binding.result.getText());
-                    Snackbar.make(binding.getRoot(), "Copied", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(binding.getRoot(), getString(R.string.copied), Snackbar.LENGTH_SHORT)
                             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                             .setAnchorView(binding.fab)
                             .show();
