@@ -1,5 +1,7 @@
 package com.itsvks.layouteditor.fragments.ui;
 
+import static com.itsvks.layouteditor.R.string;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -81,23 +83,23 @@ public class HomeFragment extends Fragment {
     @SuppressWarnings("deprecation")
     private void showCreateProjectDialog() {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        builder.setTitle("Create project");
+        builder.setTitle(getString(string.create_project));
 
         final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
         final TextInputEditText editText = bind.textinputEdittext;
         final TextInputLayout inputLayout = bind.textinputLayout;
 
         builder.setView(bind.getRoot(), 10, 10, 10, 10);
-        builder.setNegativeButton("Cancel", (di, which) -> {});
+        builder.setNegativeButton(string.cancel, (di, which) -> {});
         builder.setPositiveButton(
-                "Create",
+                string.create,
                 (di, which) -> createProject(bind.textinputEdittext.getText().toString()));
 
         final AlertDialog dialog = builder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
 
-        inputLayout.setHint("Enter new project name");
+        inputLayout.setHint(getString(string.msg_new_project_name));
         editText.setText("NewProject" + System.currentTimeMillis());
         editText.addTextChangedListener(
                 new TextWatcher() {
@@ -170,7 +172,7 @@ public class HomeFragment extends Fragment {
             String name, String currentName, TextInputLayout inputLayout, AlertDialog dialog) {
         if (name.equals("")) {
             inputLayout.setErrorEnabled(true);
-            inputLayout.setError("Field cannot be empty!");
+            inputLayout.setError(getString(string.msg_cannnot_empty));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             return;
         }
@@ -180,7 +182,7 @@ public class HomeFragment extends Fragment {
 
             if (file.getName().equals(name)) {
                 inputLayout.setErrorEnabled(true);
-                inputLayout.setError("Current name is unavailable!");
+                inputLayout.setError(getString(string.msg_current_name_unavailable));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 return;
             }

@@ -16,21 +16,21 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         var screen = getPreferenceManager().createPreferenceScreen(requireContext());
 
         var categoryCommon = new PreferenceCategory(requireContext());
-        categoryCommon.setTitle("Common");
+        categoryCommon.setTitle(getString(R.string.common));
 
         var vibrationPreference =
                 PreferenceUtils.switchPreference(
                         requireContext(),
-                        "Enable Vibration",
-                        "May consume battery",
+                        getString(R.string.enable_vibration),
+                        getString(R.string.summary_enable_vibration),
                         AppCompatResources.getDrawable(requireContext(), R.drawable.vibrate));
         vibrationPreference.setKey("vibration");
 
         var toggleStrokePreference =
                 PreferenceUtils.switchPreference(
                         requireContext(),
-                        "Show Stroke",
-                        "Show stroke in the editor?",
+                        getString(R.string.show_stroke),
+                        getString(R.string.summary_show_stroke),
                         AppCompatResources.getDrawable(requireContext(), R.drawable.dots_square));
         toggleStrokePreference.setKey("toggle_stroke");
         toggleStrokePreference.setChecked(true);

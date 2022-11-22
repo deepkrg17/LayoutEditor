@@ -4,32 +4,32 @@
 
     <item
         android:id="@+id/undo"
-        android:name="Undo"
-        android:title="Undo"
-        app:contentDescription="Undo"
+        android:name="@string/undo"
+        android:title="@string/undo"
+        app:contentDescription="@string/undo"
         android:icon="@drawable/undo_variant"
         app:showAsAction="always" />
     <item
         android:id="@+id/redo"
-        android:name="Redo"
-        android:title="Redo"
-        app:contentDescription="Redo"
+        android:name="@string/redo"
+        android:title="@string/redo"
+        app:contentDescription="@string/redo"
         android:icon="@drawable/redo_variant"
         app:showAsAction="always" />
         
     <item
         android:id="@+id/show_structure"
-        android:name="Show structure"
-        android:title="Show structure"
-        app:contentDescription="Show structure"
+        android:name="@string/show_structure"
+        android:title="@string/show_structure"
+        app:contentDescription="@string/show_structure"
         android:icon="@drawable/file_tree"
         app:showAsAction="always" />
         
     <item
         android:id="@+id/show_xml"
-        android:name="Show xml"
-        android:title="Show xml"
-        app:contentDescription="Show xml"
+        android:name="@string/show_xml"
+        android:title="@string/show_xml"
+        app:contentDescription="@string/show_xml"
         android:icon="@drawable/xml"
         app:showAsAction="ifRoom" />
         
@@ -51,9 +51,9 @@
         
     <item
         android:id="@+id/save_xml"
-        android:name="Save"
-        android:title="Save"
-        app:contentDescription="Save xml"
+        android:name="@string/save"
+        android:title="@string/save"
+        app:contentDescription="@string/save_xml"
         android:icon="@drawable/content_save"
         app:showAsAction="ifRoom" />
 </menu>

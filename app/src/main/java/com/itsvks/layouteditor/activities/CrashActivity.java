@@ -25,7 +25,7 @@ public class CrashActivity extends BaseActivity {
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
-        getSupportActionBar().setTitle("App crashed");
+        getSupportActionBar().setTitle(R.string.app_crashed);
 
         var error = new StringBuilder();
 
@@ -57,17 +57,17 @@ public class CrashActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        var close = menu.add("Close");
+        var close = menu.add(getString(R.string.close));
         close.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         close.setIcon(AppCompatResources.getDrawable(this, R.drawable.close));
-        close.setContentDescription("Close app");
+        close.setContentDescription(getString(R.string.close_app));
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle() == "Close") {
+        if (item.getTitle().equals(getString(R.string.close))) {
             finishAffinity();
             return true;
         }

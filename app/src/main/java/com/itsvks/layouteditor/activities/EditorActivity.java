@@ -219,8 +219,7 @@ public class EditorActivity extends BaseActivity {
         } else if (id == R.id.preview) {
             String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
             SBUtils.make(
-                            binding.getRoot(),
-                            "This feature is not available yet. Will be available soon.")
+                            binding.getRoot(), getString(R.string.msg_feature_not_available))
                     .setFadeAnimation()
                     .show();
             //            saveXml();
@@ -281,10 +280,10 @@ public class EditorActivity extends BaseActivity {
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
         if (result.isEmpty()) {
             new MaterialAlertDialogBuilder(this)
-                    .setTitle("Nothing...")
-                    .setMessage("Add some widgets")
+                    .setTitle(R.string.nothing)
+                    .setMessage(R.string.msg_add_some_widgets)
                     .setPositiveButton(
-                            "Okay",
+                            R.string.okay,
                             (d, w) -> {
                                 d.cancel();
                             })

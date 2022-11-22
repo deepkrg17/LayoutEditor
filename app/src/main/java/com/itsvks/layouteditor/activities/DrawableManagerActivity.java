@@ -105,16 +105,16 @@ public class DrawableManagerActivity extends BaseActivity {
                     if (isSelectedMode) {
 
                         new MaterialAlertDialogBuilder(this)
-                                .setTitle("Remove drawable")
-                                .setMessage("Do you want to remove the drawables?")
+                                .setTitle(R.string.remove_drawable)
+                                .setMessage(R.string.msg_remove_drawable)
                                 .setNegativeButton(
-                                        "No",
+                                        R.string.no,
                                         (d, w) -> {
                                             d.dismiss();
                                             stopSelection();
                                         })
                                 .setPositiveButton(
-                                        "Yes",
+                                        R.string.yes,
                                         (d, w) -> {
                                             for (int i = drawables.size() - 1; i >= 0; i--) {
                                                 if (drawables.get(i).selected) {
@@ -147,7 +147,7 @@ public class DrawableManagerActivity extends BaseActivity {
         final TextInputLayout inputLayout =
                 (TextInputLayout)
                         getLayoutInflater().inflate(R.layout.textinputlayout, null, false);
-        inputLayout.setHint("Enter new name");
+        inputLayout.setHint(R.string.msg_enter_new_name);
 
         final TextInputEditText editText = inputLayout.findViewById(R.id.textinput_edittext);
         editText.setText(fileName);
@@ -161,10 +161,10 @@ public class DrawableManagerActivity extends BaseActivity {
 
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setView(inputLayout);
-        builder.setTitle("Add drawable");
-        builder.setNegativeButton("Cancel", (di, which) -> {});
+        builder.setTitle(R.string.add_drawable);
+        builder.setNegativeButton(R.string.cancel, (di, which) -> {});
         builder.setPositiveButton(
-                "Add",
+                R.string.add,
                 (di, which) -> {
                     String drawablePath = project.getDrawablePath();
 
@@ -211,7 +211,7 @@ public class DrawableManagerActivity extends BaseActivity {
     private void checkNameErrors(String name, TextInputLayout inputLayout, AlertDialog dialog) {
         if (!Pattern.matches("[a-z][a-z0-9_]*", name)) {
             inputLayout.setErrorEnabled(true);
-            inputLayout.setError("Only small letters(a-z) and numbers!");
+            inputLayout.setError(getString(R.string.msg_only_letters_and_numbers));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             return;
         }
@@ -219,7 +219,7 @@ public class DrawableManagerActivity extends BaseActivity {
         for (DrawableItem item : drawables) {
             if (item.name.equals(name)) {
                 inputLayout.setErrorEnabled(true);
-                inputLayout.setError("Current name is unavailable!");
+                inputLayout.setError(getString(R.string.msg_current_name_unavailable));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 return;
             }
@@ -314,7 +314,7 @@ public class DrawableManagerActivity extends BaseActivity {
 
             if (isSelectedMode) {
                 if (item.name.equals("default_image")) {
-                    SBUtils.make(binding.getRoot(), "You cannot select the default image..")
+                    SBUtils.make(binding.getRoot(), getString(R.string.msg_cannot_select_default_image))
                             .setType(SBUtils.Type.INFO)
                             .setSlideAnimation()
                             .setAnchorView(binding.fab)

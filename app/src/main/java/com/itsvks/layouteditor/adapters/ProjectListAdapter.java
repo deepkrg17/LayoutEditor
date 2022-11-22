@@ -1,5 +1,7 @@
 package com.itsvks.layouteditor.adapters;
 
+import static com.itsvks.layouteditor.R.string;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -24,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.EditorActivity;
@@ -70,6 +74,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        var context = holder.binding.getRoot().getContext();
         holder.binding
                 .getRoot()
                 .setAnimation(
@@ -77,7 +82,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                 holder.itemView.getContext(), R.anim.project_list_animation));
         holder.projectName.setText(projects.get(position).name.toString());
         holder.projectDate.setText(projects.get(position).date.toString());
-        TooltipCompat.setTooltipText(holder.menu, "Options");
+        TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
         holder.binding
                 .getRoot()
                 .setOnClickListener(
@@ -101,117 +106,13 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                 public boolean onMenuItemClick(MenuItem item) {
 
                                     var id = item.getItemId();
-                                    if (id == R.id.menu_delete) {
-                                        final MaterialAlertDialogBuilder builder =
-                                                new MaterialAlertDialogBuilder(v.getContext());
-                                        builder.setTitle("Delete project");
-                                        builder.setMessage(
-                                                "Are you sure you want to remove the project?");
-                                        builder.setNegativeButton("No", (d, w) -> {});
-                                        builder.setPositiveButton(
-                                                "Yes",
-                                                (d, w) -> {
-                                                    FileUtil.deleteFile(
-                                                            projects.get(position).getPath());
-                                                    projects.remove(projects.get(position));
-                                                    notifyDataSetChanged();
-                                                });
-
-                                        builder.create().show();
-                                        return true;
-                                    } else if (id == R.id.menu_rename) {
-                                        final MaterialAlertDialogBuilder builder =
-                                                new MaterialAlertDialogBuilder(v.getContext());
-                                        builder.setTitle("Rename project");
-                                        final TextinputlayoutBinding bind =
-                                                TextinputlayoutBinding.inflate(
-                                                        builder.create().getLayoutInflater());
-                                        final TextInputEditText editText = bind.textinputEdittext;
-                                        final TextInputLayout inputLayout = bind.textinputLayout;
-
-                                        editText.setText(projects.get(position).getName());
-                                        inputLayout.setHint("Enter new project name");
-
-                                        final int padding =
-                                                (int)
-                                                        TypedValue.applyDimension(
-                                                                TypedValue.COMPLEX_UNIT_DIP,
-                                                                10,
-                                                                v.getContext()
-                                                                        .getResources()
-                                                                        .getDisplayMetrics());
-                                        builder.setView(bind.getRoot());
-                                        builder.setNegativeButton("Cancel", (di, which) -> {});
-                                        builder.setPositiveButton(
-                                                "Rename",
-                                                (di, which) -> {
-                                                    String path = projects.get(position).getPath();
-                                                    String newPath =
-                                                            path.substring(0, path.lastIndexOf("/"))
-                                                                    + "/"
-                                                                    + editText.getText().toString();
-                                                    projects.get(position).rename(newPath);
-                                                    notifyDataSetChanged();
-                                                });
-
-                                        final AlertDialog dialog = builder.create();
-                                        dialog.getWindow()
-                                                .setSoftInputMode(
-                                                        WindowManager.LayoutParams
-                                                                .SOFT_INPUT_STATE_VISIBLE);
-                                        dialog.show();
-
-                                        editText.addTextChangedListener(
-                                                new TextWatcher() {
-
-                                                    @Override
-                                                    public void beforeTextChanged(
-                                                            CharSequence p1,
-                                                            int p2,
-                                                            int p3,
-                                                            int p4) {}
-
-                                                    @Override
-                                                    public void onTextChanged(
-                                                            CharSequence p1,
-                                                            int p2,
-                                                            int p3,
-                                                            int p4) {}
-
-                                                    @Override
-                                                    public void afterTextChanged(Editable p1) {
-                                                        checkNameErrors(
-                                                                projects,
-                                                                editText.getText().toString(),
-                                                                projects.get(position).getName(),
-                                                                inputLayout,
-                                                                dialog);
-                                                    }
-                                                });
-
-                                        checkNameErrors(
-                                                projects,
-                                                editText.getText().toString(),
-                                                projects.get(position).getName(),
-                                                inputLayout,
-                                                dialog);
-
-                                        editText.requestFocus();
-                                        InputMethodManager inputMethodManager =
-                                                (InputMethodManager)
-                                                        v.getContext()
-                                                                .getSystemService(
-                                                                        Context
-                                                                                .INPUT_METHOD_SERVICE);
-                                        inputMethodManager.showSoftInput(
-                                                editText, InputMethodManager.SHOW_IMPLICIT);
-
-                                        if (!editText.getText().toString().equals("")) {
-                                            editText.setSelection(
-                                                    0, editText.getText().toString().length());
-                                        }
-
-                                        return true;
+                                    switch (id) {
+                                        case R.id.menu_delete:
+                                            deleteProject(v, position);
+                                            return true;
+                                        case R.id.menu_rename:
+                                            renameProject(v, position);
+                                            return true;
                                     }
                                     return false;
                                 }
@@ -234,7 +135,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
             AlertDialog dialog) {
         if (name.equals("")) {
             inputLayout.setErrorEnabled(true);
-            inputLayout.setError("Field cannot be empty!");
+            inputLayout.setError(dialog.getContext().getString(string.msg_cannnot_empty));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             return;
         }
@@ -244,7 +145,8 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
             if (file.getName().equals(name)) {
                 inputLayout.setErrorEnabled(true);
-                inputLayout.setError("Current name is unavailable!");
+                inputLayout.setError(
+                        LayoutEditor.getContext().getString(string.msg_current_name_unavailable));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 return;
             }
@@ -253,5 +155,93 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         inputLayout.setErrorEnabled(false);
         inputLayout.setError("");
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+    }
+
+    private void renameProject(View v, Integer position) {
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
+        builder.setTitle(string.rename_project);
+        final TextinputlayoutBinding bind =
+                TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
+        final TextInputEditText editText = bind.textinputEdittext;
+        final TextInputLayout inputLayout = bind.textinputLayout;
+
+        editText.setText(projects.get(position).getName());
+        inputLayout.setHint(string.msg_new_project_name);
+
+        final int padding =
+                (int)
+                        TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP,
+                                10,
+                                v.getContext().getResources().getDisplayMetrics());
+        builder.setView(bind.getRoot());
+        builder.setNegativeButton(string.cancel, (di, which) -> {});
+        builder.setPositiveButton(
+                string.rename,
+                (di, which) -> {
+                    String path = projects.get(position).getPath();
+                    String newPath =
+                            path.substring(0, path.lastIndexOf("/"))
+                                    + "/"
+                                    + editText.getText().toString();
+                    projects.get(position).rename(newPath);
+                    notifyDataSetChanged();
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+
+        editText.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+                    @Override
+                    public void afterTextChanged(Editable p1) {
+                        checkNameErrors(
+                                projects,
+                                editText.getText().toString(),
+                                projects.get(position).getName(),
+                                inputLayout,
+                                dialog);
+                    }
+                });
+
+        checkNameErrors(
+                projects,
+                editText.getText().toString(),
+                projects.get(position).getName(),
+                inputLayout,
+                dialog);
+
+        editText.requestFocus();
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+
+        if (!editText.getText().toString().equals("")) {
+            editText.setSelection(0, editText.getText().toString().length());
+        }
+    }
+
+    private void deleteProject(View v, Integer position) {
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
+        builder.setTitle(string.delete_project);
+        builder.setMessage(string.msg_delete_project);
+        builder.setNegativeButton(string.no, (d, w) -> d.dismiss());
+        builder.setPositiveButton(
+                string.yes,
+                (d, w) -> {
+                    FileUtil.deleteFile(projects.get(position).getPath());
+                    projects.remove(projects.get(position));
+                    notifyDataSetChanged();
+                });
+
+        builder.create().show();
     }
 }

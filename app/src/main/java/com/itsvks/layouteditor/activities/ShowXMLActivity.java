@@ -24,7 +24,7 @@ public class ShowXMLActivity extends BaseActivity {
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
-        getSupportActionBar().setTitle("XML Preview");
+        getSupportActionBar().setTitle(R.string.xml_preview);
 
         binding.topAppBar.setNavigationOnClickListener(
                 v -> {

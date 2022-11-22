@@ -13,7 +13,7 @@ public class PreferenceUtils {
     }
 
     public static SwitchPreferenceCompat switchPreference(
-            Context context, String title, String summary) {
+            Context context, CharSequence title, CharSequence summary) {
         var preference = new SwitchPreferenceCompat(context);
         preference.setTitle(title);
         preference.setSummary(summary);
@@ -21,7 +21,7 @@ public class PreferenceUtils {
     }
 
     public static SwitchPreferenceCompat switchPreference(
-            Context context, String title, String summary, Drawable icon) {
+            Context context, CharSequence title, CharSequence summary, Drawable icon) {
         var preference = new SwitchPreferenceCompat(context);
         preference.setTitle(title);
         preference.setSummary(summary);
