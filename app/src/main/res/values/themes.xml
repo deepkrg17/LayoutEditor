@@ -30,6 +30,7 @@
         <item name="android:statusBarColor">@color/md_theme_light_surface</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="fontFamily">@font/ubuntu_regular</item>
+        <item name="switchPreferenceCompatStyle">@style/AppTheme.SwitchPreference</item>
     </style>
 
     <style name="AppTheme.Licence" parent="Theme.Material3.Light">
