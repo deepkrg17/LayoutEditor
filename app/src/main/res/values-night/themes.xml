@@ -1,4 +1,3 @@
-
 <resources>
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
@@ -27,17 +26,17 @@
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
-        
+
         <item name="android:statusBarColor">@color/md_theme_dark_surface</item>
-		<item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="fontFamily">@font/ubuntu_regular</item>
     </style>
-    
-    <style name="AppTheme.Licence" parent="Theme.Material3.DayNight">
-        <item name="android:statusBarColor">#2A2931</item>
+
+    <style name="AppTheme.Licence" parent="Theme.Material3.Dark">
+        <item name="android:statusBarColor">@color/md_theme_dark_surface</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
-    
+
     <style name="AppTheme.SwitchPreference" parent="Preference.SwitchPreference.Material">
         <item name="android:widgetLayout">@layout/preference_switch_style</item>
     </style>
