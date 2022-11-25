@@ -133,7 +133,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
             String currentName,
             TextInputLayout inputLayout,
             AlertDialog dialog) {
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             inputLayout.setErrorEnabled(true);
             inputLayout.setError(dialog.getContext().getString(string.msg_cannnot_empty));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -157,6 +157,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
     }
 
+    @SuppressWarnings("deprecation")
     private void renameProject(View v, Integer position) {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
         builder.setTitle(string.rename_project);
@@ -174,7 +175,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                 TypedValue.COMPLEX_UNIT_DIP,
                                 10,
                                 v.getContext().getResources().getDisplayMetrics());
-        builder.setView(bind.getRoot());
+        builder.setView(bind.getRoot(), padding, padding, padding, padding);
         builder.setNegativeButton(string.cancel, (di, which) -> {});
         builder.setPositiveButton(
                 string.rename,

@@ -187,7 +187,7 @@ public class EditorLayout extends LinearLayoutCompat {
             };
 
     public EditorLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, com.google.android.material.R.style.Theme_Material3_DayNight_NoActionBar);
         inflater = LayoutInflater.from(context);
         shadow = new View(context);
 

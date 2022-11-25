@@ -3,5 +3,21 @@
         "name": "FAB",
         "className": "com.itsvks.layouteditor.editor.widgets.mdc.FloatingActionButtonDesign",
         "iconName": "ic_fab"
+    },
+    {
+        "name": "MaterialTextView",
+        "className": "com.itsvks.layouteditor.editor.widgets.mdc.MaterialTextViewDesign",
+        "iconName": "ic_textview",
+        "defaultAttributes": {
+            "android:text": "MaterialTextView"
+        }
+    },
+    {
+        "name": "MaterialSwitch",
+        "className": "com.itsvks.layouteditor.editor.widgets.mdc.MaterialSwitchDesign",
+        "iconName": "ic_toggle_switch",
+        "defaultAttributes": {
+            "android:text": "MaterialSwitch"
+        }
     }
 ]

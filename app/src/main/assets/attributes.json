@@ -407,5 +407,25 @@
             "argumentType": "dimension",
             "dimensionUnit": "dp"
         }
+    ],
+    "android.widget.Switch": [
+        {
+            "name": "android:checked",
+            "methodName": "setChecked",
+            "className": "SwitchCaller",
+            "attributeName": "android:checked",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        }
+    ],
+    "androidx.appcompat.widget.SwitchCompat": [
+        {
+            "name": "android:checked",
+            "methodName": "setChecked",
+            "className": "SwitchCaller",
+            "attributeName": "android:checked",
+            "argumentType": "boolean",
+            "defaultValue": "false"
+        }
     ]
 }
