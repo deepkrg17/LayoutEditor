@@ -158,6 +158,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     }
 
     @SuppressWarnings("deprecation")
+    @SuppressLint("RestrictedApi")
     private void renameProject(View v, Integer position) {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
         builder.setTitle(string.rename_project);
