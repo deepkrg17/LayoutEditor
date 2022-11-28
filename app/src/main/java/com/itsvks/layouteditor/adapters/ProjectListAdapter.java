@@ -83,43 +83,10 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         holder.projectName.setText(projects.get(position).name.toString());
         holder.projectDate.setText(projects.get(position).date.toString());
         TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
-        holder.binding
-                .getRoot()
-                .setOnClickListener(
-                        v -> {
-                            Intent intent = new Intent(v.getContext(), EditorActivity.class);
-                            intent.putExtra(
-                                    EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
-                            intent.setAction(EditorActivity.ACTION_OPEN);
-                            v.getContext().startActivity(intent);
-                        });
+        holder.binding.getRoot().setOnClickListener(v -> openProject(v, position));
         holder.projectIcon.setText(
                 projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
-        holder.menu.setOnClickListener(
-                v -> {
-                    final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                    popupMenu.inflate(R.menu.menu_project_file_options);
-                    popupMenu.setOnMenuItemClickListener(
-                            new PopupMenu.OnMenuItemClickListener() {
-
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-
-                                    var id = item.getItemId();
-                                    switch (id) {
-                                        case R.id.menu_delete:
-                                            deleteProject(v, position);
-                                            return true;
-                                        case R.id.menu_rename:
-                                            renameProject(v, position);
-                                            return true;
-                                    }
-                                    return false;
-                                }
-                            });
-
-                    popupMenu.show();
-                });
+        holder.menu.setOnClickListener(v -> showOptions(v, position));
     }
 
     @Override
@@ -245,5 +212,37 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                 });
 
         builder.create().show();
+    }
+
+    private void showOptions(View v, Integer position) {
+        final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+        popupMenu.inflate(R.menu.menu_project_file_options);
+        popupMenu.setOnMenuItemClickListener(
+                new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        var id = item.getItemId();
+                        switch (id) {
+                            case R.id.menu_delete:
+                                deleteProject(v, position);
+                                return true;
+                            case R.id.menu_rename:
+                                renameProject(v, position);
+                                return true;
+                        }
+                        return false;
+                    }
+                });
+
+        popupMenu.show();
+    }
+
+    private void openProject(View v, Integer position) {
+        Intent intent = new Intent(v.getContext(), EditorActivity.class);
+        intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
+        intent.setAction(EditorActivity.ACTION_OPEN);
+        v.getContext().startActivity(intent);
     }
 }
