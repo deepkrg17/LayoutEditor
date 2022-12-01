@@ -67,4 +67,7 @@
     <string name="show_structure">Show structure</string>
     <string name="show_xml">Show xml</string>
     <string name="save_xml">Save xml</string>
+    <string name="delete_view">Delete view</string>
+    <string name="msg_delete_view">Do you want to remove the view?</string>
+    <string name="select_arg_type">Select argument type</string>
 </resources>

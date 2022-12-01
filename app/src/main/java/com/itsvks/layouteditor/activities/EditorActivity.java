@@ -218,14 +218,14 @@ public class EditorActivity extends BaseActivity {
             return true;
         } else if (id == R.id.preview) {
             String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
-            SBUtils.make(
-                            binding.getRoot(), getString(R.string.msg_feature_not_available))
+            SBUtils.make(binding.getRoot(), getString(R.string.msg_feature_not_available))
                     .setFadeAnimation()
+                    .setType(SBUtils.Type.INFO)
                     .show();
-            //            saveXml();
-            //            startActivity(
-            //                    new Intent(this, PreviewLayoutActivity.class)
-            //                            .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
+            saveXml();
+            startActivity(
+                    new Intent(this, PreviewLayoutActivity.class)
+                            .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
 
             return true;
         } else return false;

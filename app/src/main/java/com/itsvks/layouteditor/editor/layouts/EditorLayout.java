@@ -47,6 +47,7 @@ import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
+import com.itsvks.layouteditor.R;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -513,15 +514,15 @@ public class EditorLayout extends LinearLayoutCompat {
         binding.btnDelete.setOnClickListener(
                 v -> {
                     new MaterialAlertDialogBuilder(getContext())
-                            .setTitle("Delete view")
-                            .setMessage("Do you want to remove the view?")
+                            .setTitle(R.string.delete_view)
+                            .setMessage(R.string.msg_delete_view)
                             .setNegativeButton(
-                                    "No",
+                                    R.string.no,
                                     (d, w) -> {
                                         d.dismiss();
                                     })
                             .setPositiveButton(
-                                    "Yes",
+                                    R.string.yes,
                                     (d, w) -> {
                                         IdManager.removeId(target, target instanceof ViewGroup);
                                         removeViewAttributes(target);
@@ -580,7 +581,7 @@ public class EditorLayout extends LinearLayoutCompat {
                 return;
             }
             new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("Select argument type")
+                    .setTitle(R.string.select_arg_type)
                     .setAdapter(
                             new ArrayAdapter<String>(
                                     getContext(),
