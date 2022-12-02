@@ -50,8 +50,7 @@
             android:layout_width="match_parent"
             app:tabMode="scrollable" />
 
-        <ListView
-            android:divider="@null"
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_view"
             android:layout_height="match_parent"
             android:layout_width="match_parent" />
@@ -72,7 +71,7 @@
             android:layout_width="wrap_content"
             android:nestedScrollingEnabled="true">
 
-            <com.itsvks.layouteditor.tools.StructureView
+            <com.itsvks.layouteditor.views.StructureView
                 android:id="@+id/structure_view"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"

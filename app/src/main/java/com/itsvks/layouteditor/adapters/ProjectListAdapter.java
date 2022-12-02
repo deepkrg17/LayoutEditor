@@ -36,13 +36,14 @@ import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ViewHolder> {
 
-    ArrayList<ProjectFile> projects = new ArrayList<>();
+    private List<ProjectFile> projects;
 
-    public ProjectListAdapter(ArrayList<ProjectFile> projects) {
+    public ProjectListAdapter(List<ProjectFile> projects) {
         this.projects = projects;
     }
 
@@ -95,7 +96,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     }
 
     private void checkNameErrors(
-            ArrayList<ProjectFile> projects,
+            List<ProjectFile> projects,
             String name,
             String currentName,
             TextInputLayout inputLayout,
@@ -126,7 +127,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
     @SuppressWarnings("deprecation")
     @SuppressLint("RestrictedApi")
-    private void renameProject(View v, Integer position) {
+    private void renameProject(View v, int position) {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
         builder.setTitle(string.rename_project);
         final TextinputlayoutBinding bind =
@@ -154,7 +155,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                                     + "/"
                                     + editText.getText().toString();
                     projects.get(position).rename(newPath);
-                    notifyDataSetChanged();
+                    notifyItemChanged(position);
                 });
 
         final AlertDialog dialog = builder.create();
@@ -193,12 +194,12 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                 (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
-        if (!editText.getText().toString().equals("")) {
+        if (!editText.getText().toString().isEmpty()) {
             editText.setSelection(0, editText.getText().toString().length());
         }
     }
 
-    private void deleteProject(View v, Integer position) {
+    private void deleteProject(View v, int position) {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
         builder.setTitle(string.delete_project);
         builder.setMessage(string.msg_delete_project);
@@ -208,13 +209,13 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
                 (d, w) -> {
                     FileUtil.deleteFile(projects.get(position).getPath());
                     projects.remove(projects.get(position));
-                    notifyDataSetChanged();
+                    notifyItemRemoved(position);
                 });
 
         builder.create().show();
     }
 
-    private void showOptions(View v, Integer position) {
+    private void showOptions(View v, int position) {
         final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
         popupMenu.inflate(R.menu.menu_project_file_options);
         popupMenu.setOnMenuItemClickListener(
@@ -239,7 +240,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         popupMenu.show();
     }
 
-    private void openProject(View v, Integer position) {
+    private void openProject(View v, int position) {
         Intent intent = new Intent(v.getContext(), EditorActivity.class);
         intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
         intent.setAction(EditorActivity.ACTION_OPEN);

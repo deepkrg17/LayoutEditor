@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.tools;
+package com.itsvks.layouteditor.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,7 +10,6 @@ import android.view.View;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
-import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.R;
 
 import java.util.Locale;
@@ -26,8 +25,7 @@ public class ColorView extends View {
         super(context, attrs);
 
         transparent =
-                AppCompatResources.getDrawable(
-                        LayoutEditor.getContext(), R.drawable.transparent_background);
+                AppCompatResources.getDrawable(context, R.drawable.transparent_background);
 
         colorPaint = new Paint();
         colorPaint.setARGB(a, r, g, b);

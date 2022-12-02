@@ -18,7 +18,7 @@
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
             
-            <com.itsvks.layouteditor.tools.ColorView
+            <com.itsvks.layouteditor.views.ColorView
                 android:id="@+id/color_preview"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"/>
