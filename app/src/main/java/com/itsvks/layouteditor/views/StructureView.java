@@ -1,4 +1,4 @@
-package com.itsvks.layouteditor.tools;
+package com.itsvks.layouteditor.views;
 
 import android.content.Context;
 import android.graphics.Canvas;

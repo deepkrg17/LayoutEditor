@@ -39,7 +39,7 @@ import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
-import com.itsvks.layouteditor.tools.StructureView;
+import com.itsvks.layouteditor.views.StructureView;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.tools.XmlLayoutParser;
 import com.itsvks.layouteditor.utils.ArgumentUtil;

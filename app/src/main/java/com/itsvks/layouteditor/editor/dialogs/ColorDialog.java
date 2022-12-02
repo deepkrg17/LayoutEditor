@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.LayoutColorDialogBinding;
-import com.itsvks.layouteditor.tools.ColorView;
+import com.itsvks.layouteditor.views.ColorView;
 
 import java.util.regex.Pattern;
 
