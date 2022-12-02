@@ -27,4 +27,8 @@ public class LayoutEditor extends Application {
     public static boolean isAtLeastS() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
+    
+    public static boolean isAtLeastQ() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+    }
 }

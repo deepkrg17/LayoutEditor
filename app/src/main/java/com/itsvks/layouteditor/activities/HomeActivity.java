@@ -50,11 +50,29 @@ public class HomeActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.topAppBar);
 
-        contentView = binding.content;
-        goToHome();
-
         drawerLayout = binding.drawer;
         navigationView = binding.navigationView;
+
+        contentView = binding.content;
+        switch (prefs.getString("fragment", "home")) {
+            case "preferences":
+                goToPreference();
+                navigationView.setCheckedItem(R.id.nav_preference);
+                break;
+            case "about":
+                goToAbout();
+                navigationView.setCheckedItem(R.id.nav_home);
+                break;
+
+            case "home":
+                goToHome();
+                navigationView.setCheckedItem(R.id.nav_home);
+                break;
+
+            default:
+                goToHome();
+                navigationView.setCheckedItem(R.id.nav_home);
+        }
 
         navigationDrawer();
 
@@ -80,18 +98,17 @@ public class HomeActivity extends BaseActivity {
                         case R.id.nav_home:
                             drawerLayout.closeDrawer(GravityCompat.START);
                             goToHome();
+                            navigationView.setCheckedItem(R.id.nav_home);
                             return true;
                         case R.id.nav_preference:
                             drawerLayout.closeDrawer(GravityCompat.START);
-                            replaceFragment((Fragment) new PreferencesFragment());
-                            getSupportActionBar().setTitle(R.string.title_preference);
-                            prefs.edit().putString("fragment", "preferences").apply();
+                            goToPreference();
+                            navigationView.setCheckedItem(R.id.nav_preference);
                             return true;
                         case R.id.nav_about:
                             drawerLayout.closeDrawer(GravityCompat.START);
-                            replaceFragment((Fragment) new AboutFragment());
-                            getSupportActionBar().setTitle(R.string.title_about);
-                            prefs.edit().putString("fragment", "about").apply();
+                            goToAbout();
+                            navigationView.setCheckedItem(R.id.nav_about);
                             return true;
                         case R.id.nav_licence:
                             startActivity(new Intent(this, OssLicensesMenuActivity.class));
@@ -199,7 +216,19 @@ public class HomeActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.projects);
         prefs.edit().putString("fragment", "home").apply();
     }
-    
+
+    private void goToPreference() {
+        replaceFragment((Fragment) new PreferencesFragment());
+        getSupportActionBar().setTitle(R.string.title_preference);
+        prefs.edit().putString("fragment", "preferences").apply();
+    }
+
+    private void goToAbout() {
+        replaceFragment((Fragment) new AboutFragment());
+        getSupportActionBar().setTitle(R.string.title_about);
+        prefs.edit().putString("fragment", "about").apply();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

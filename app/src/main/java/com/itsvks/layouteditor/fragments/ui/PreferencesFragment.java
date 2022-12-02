@@ -2,42 +2,47 @@ package com.itsvks.layouteditor.fragments.ui;
 
 import android.os.Bundle;
 
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.preference.PreferenceCategory;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.utils.PreferenceUtils;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        var screen = getPreferenceManager().createPreferenceScreen(requireContext());
+        setPreferencesFromResource(R.xml.preference, rootKey);
 
-        var categoryCommon = new PreferenceCategory(requireContext());
-        categoryCommon.setTitle(getString(R.string.common));
+        var preferenceTheme = findPreference("app_theme");
+        preferenceTheme.setOnPreferenceChangeListener(
+                new Preference.OnPreferenceChangeListener() {
 
-        var vibrationPreference =
-                PreferenceUtils.switchPreference(
-                        requireContext(),
-                        getString(R.string.enable_vibration),
-                        getString(R.string.summary_enable_vibration),
-                        AppCompatResources.getDrawable(requireContext(), R.drawable.vibrate));
-        vibrationPreference.setKey("vibration");
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        switch ((String) newValue) {
+                            case "2":
+                                updateTheme(AppCompatDelegate.MODE_NIGHT_YES);
+                                return true;
+                            case "1":
+                                updateTheme(AppCompatDelegate.MODE_NIGHT_NO);
+                                return true;
+                            case "3":
+                                if (LayoutEditor.isAtLeastQ()) {
+                                    updateTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                                } else {
+                                    updateTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                                }
+                                return true;
+                        }
+                        return false;
+                    }
+                });
+    }
 
-        var toggleStrokePreference =
-                PreferenceUtils.switchPreference(
-                        requireContext(),
-                        getString(R.string.show_stroke),
-                        getString(R.string.summary_show_stroke),
-                        AppCompatResources.getDrawable(requireContext(), R.drawable.dots_square));
-        toggleStrokePreference.setKey("toggle_stroke");
-        toggleStrokePreference.setChecked(true);
-
-        screen.addPreference(categoryCommon);
-        screen.addPreference(vibrationPreference);
-        screen.addPreference(toggleStrokePreference);
-        setPreferenceScreen(screen);
+    private void updateTheme(int nightMode) {
+        AppCompatDelegate.setDefaultNightMode(nightMode);
+        requireActivity().recreate();
     }
 }
