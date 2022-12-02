@@ -54,305 +54,314 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class EditorActivity extends BaseActivity
-    implements WidgetListAdapter.WidgetListClickListener {
+        implements WidgetListAdapter.WidgetListClickListener {
 
-  public static final String EXTRA_KEY_PROJECT = "project";
-  public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
+    public static final String EXTRA_KEY_PROJECT = "project";
+    public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
 
-  private ActivityEditorBinding binding;
+    private ActivityEditorBinding binding;
 
-  private DrawerLayout drawerLayout;
-  private FitWindowsLinearLayout contentView;
-  private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private FitWindowsLinearLayout contentView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
-  private ArrayList<HashMap<String, Object>> views;
-  private ArrayList<HashMap<String, Object>> layouts;
-  private ArrayList<HashMap<String, Object>> androidxWidgets;
-  private ArrayList<HashMap<String, Object>> materialDesignWidgets;
+    private ArrayList<HashMap<String, Object>> views;
+    private ArrayList<HashMap<String, Object>> layouts;
+    private ArrayList<HashMap<String, Object>> androidxWidgets;
+    private ArrayList<HashMap<String, Object>> materialDesignWidgets;
 
-  private ProjectFile project;
+    private ProjectFile project;
 
-  private UndoRedoManager undoRedo;
-  private MenuItem undo = null;
-  private MenuItem redo = null;
+    private UndoRedoManager undoRedo;
+    private MenuItem undo = null;
+    private MenuItem redo = null;
 
-  final Runnable updateMenuIconsState = () -> undoRedo.updateButtons();
+    final Runnable updateMenuIconsState = () -> undoRedo.updateButtons();
 
-  @SuppressWarnings("deprecation")
-  @SuppressLint("UnsafeOptInUsageError")
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    binding = ActivityEditorBinding.inflate(getLayoutInflater());
+    @SuppressWarnings("deprecation")
+    @SuppressLint("UnsafeOptInUsageError")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityEditorBinding.inflate(getLayoutInflater());
 
-    setContentView(binding.getRoot());
-    setSupportActionBar(binding.topAppBar);
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.topAppBar);
 
-    project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
-    getSupportActionBar().setTitle(project.getName());
+        project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
+        getSupportActionBar().setTitle(project.getName());
 
-    contentView = binding.content;
-    drawerLayout = binding.drawer;
+        contentView = binding.content;
+        drawerLayout = binding.drawer;
 
-    actionBarDrawerToggle =
-        new ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            binding.topAppBar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close);
+        actionBarDrawerToggle =
+                new ActionBarDrawerToggle(
+                        this,
+                        drawerLayout,
+                        binding.topAppBar,
+                        R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close);
 
-    drawerLayout.addDrawerListener(actionBarDrawerToggle);
-    actionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
-    binding.editorLayout.setStructureView(binding.structureView);
+        binding.editorLayout.setStructureView(binding.structureView);
 
-    binding.structureView.setOnItemClickListener(
-        new StructureView.OnItemClickListener() {
+        binding.structureView.setOnItemClickListener(
+                new StructureView.OnItemClickListener() {
 
-          @Override
-          public void onItemClick(View view) {
-            binding.editorLayout.showDefinedAttributes(view);
-            drawerLayout.closeDrawer(GravityCompat.END);
-          }
-        });
+                    @Override
+                    public void onItemClick(View view) {
+                        binding.editorLayout.showDefinedAttributes(view);
+                        drawerLayout.closeDrawer(GravityCompat.END);
+                    }
+                });
 
-    initializeWidgetLists();
-    addDrawerTab(Constants.TAB_TITLE_VIEWS);
-    addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
-    addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
-    addDrawerTab(Constants.TAB_TITLE_MATERIAL);
-    binding.tabLayout.addOnTabSelectedListener(
-        new TabLayout.OnTabSelectedListener() {
+        initializeWidgetLists();
+        addDrawerTab(Constants.TAB_TITLE_VIEWS);
+        addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
+        addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
+        addDrawerTab(Constants.TAB_TITLE_MATERIAL);
+        binding.tabLayout.addOnTabSelectedListener(
+                new TabLayout.OnTabSelectedListener() {
 
-          @Override
-          public void onTabSelected(TabLayout.Tab tab) {
-            if (tab.getPosition() == 0) binding.listView.setAdapter(new WidgetListAdapter(views, EditorActivity.this));
-            else if (tab.getPosition() == 1)
-              binding.listView.setAdapter(new WidgetListAdapter(layouts, EditorActivity.this));
-            else if (tab.getPosition() == 2)
-              binding.listView.setAdapter(new WidgetListAdapter(androidxWidgets, EditorActivity.this));
-            else if (tab.getPosition() == 3)
-              binding.listView.setAdapter(new WidgetListAdapter(materialDesignWidgets, EditorActivity.this));
-          }
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        if (tab.getPosition() == 0)
+                            binding.listView.setAdapter(
+                                    new WidgetListAdapter(views, EditorActivity.this));
+                        else if (tab.getPosition() == 1)
+                            binding.listView.setAdapter(
+                                    new WidgetListAdapter(layouts, EditorActivity.this));
+                        else if (tab.getPosition() == 2)
+                            binding.listView.setAdapter(
+                                    new WidgetListAdapter(androidxWidgets, EditorActivity.this));
+                        else if (tab.getPosition() == 3)
+                            binding.listView.setAdapter(
+                                    new WidgetListAdapter(
+                                            materialDesignWidgets, EditorActivity.this));
+                    }
 
-          @Override
-          public void onTabUnselected(TabLayout.Tab tab) {}
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {}
 
-          @Override
-          public void onTabReselected(TabLayout.Tab tab) {}
-        });
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {}
+                });
 
-    binding.listView.setLayoutManager(
+        binding.listView.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-    binding.listView.setAdapter(new WidgetListAdapter(views, this));
+        binding.listView.setAdapter(new WidgetListAdapter(views, this));
 
-    IdManager.clear();
+        IdManager.clear();
 
-    if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
-      DrawableManager.loadFromFiles(project.getDrawables());
-      binding.editorLayout.loadLayoutFromParser(project.getLayout());
+        if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
+            DrawableManager.loadFromFiles(project.getDrawables());
+            binding.editorLayout.loadLayoutFromParser(project.getLayout());
+        }
+
+        drawerLayout.addDrawerListener(
+                new DrawerLayout.SimpleDrawerListener() {
+
+                    @Override
+                    public void onDrawerStateChanged(int arg0) {
+                        super.onDrawerStateChanged(arg0);
+                        undoRedo.updateButtons();
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View arg0, float arg1) {
+                        super.onDrawerSlide(arg0, arg1);
+                        undoRedo.updateButtons();
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View arg0) {
+                        super.onDrawerClosed(arg0);
+                        undoRedo.updateButtons();
+                    }
+
+                    @Override
+                    public void onDrawerOpened(View arg0) {
+                        super.onDrawerOpened(arg0);
+                        undoRedo.updateButtons();
+                    }
+                });
     }
 
-    drawerLayout.addDrawerListener(
-        new DrawerLayout.SimpleDrawerListener() {
-
-          @Override
-          public void onDrawerStateChanged(int arg0) {
-            super.onDrawerStateChanged(arg0);
-            undoRedo.updateButtons();
-          }
-
-          @Override
-          public void onDrawerSlide(View arg0, float arg1) {
-            super.onDrawerSlide(arg0, arg1);
-            undoRedo.updateButtons();
-          }
-
-          @Override
-          public void onDrawerClosed(View arg0) {
-            super.onDrawerClosed(arg0);
-            undoRedo.updateButtons();
-          }
-
-          @Override
-          public void onDrawerOpened(View arg0) {
-            super.onDrawerOpened(arg0);
-            undoRedo.updateButtons();
-          }
-        });
-  }
-
-  @Override
-  public void onBackPressed() {
-    if (drawerLayout.isDrawerVisible(GravityCompat.START)
-        || drawerLayout.isDrawerVisible(GravityCompat.END)) drawerLayout.closeDrawers();
-    else super.onBackPressed();
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    var id = item.getItemId();
-    undoRedo.updateButtons();
-    if (id == android.R.id.home) {
-      drawerLayout.openDrawer(GravityCompat.START);
-      return true;
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)
+                || drawerLayout.isDrawerVisible(GravityCompat.END)) drawerLayout.closeDrawers();
+        else super.onBackPressed();
     }
-    if (actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
 
-    if (id == R.id.undo) {
-      binding.editorLayout.undo();
-      return true;
-    } else if (id == R.id.redo) {
-      binding.editorLayout.redo();
-      return true;
-    } else if (id == R.id.show_structure) {
-      drawerLayout.openDrawer(GravityCompat.END);
-      return true;
-    } else if (id == R.id.save_xml) {
-      saveXml();
-      return true;
-    } else if (id == R.id.show_xml) {
-      showXml();
-      return true;
-    } else if (id == R.id.resources_manager) {
-      saveXml();
-      startActivity(
-          new Intent(this, DrawableManagerActivity.class)
-              .putExtra(DrawableManagerActivity.EXTRA_KEY_PROJECT, project));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        var id = item.getItemId();
+        undoRedo.updateButtons();
+        if (id == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        }
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
 
-      return true;
-    } else if (id == R.id.preview) {
-      String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
-      if (result.isEmpty()) showNothingDialog();
-      else {
+        if (id == R.id.undo) {
+            binding.editorLayout.undo();
+            return true;
+        } else if (id == R.id.redo) {
+            binding.editorLayout.redo();
+            return true;
+        } else if (id == R.id.show_structure) {
+            drawerLayout.openDrawer(GravityCompat.END);
+            return true;
+        } else if (id == R.id.save_xml) {
+            saveXml();
+            return true;
+        } else if (id == R.id.show_xml) {
+            showXml();
+            return true;
+        } else if (id == R.id.resources_manager) {
+            saveXml();
+            startActivity(
+                    new Intent(this, DrawableManagerActivity.class)
+                            .putExtra(DrawableManagerActivity.EXTRA_KEY_PROJECT, project));
+
+            return true;
+        } else if (id == R.id.preview) {
+            String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
+            if (result.isEmpty()) showNothingDialog();
+            else {
+                saveXml();
+                startActivity(
+                        new Intent(this, PreviewLayoutActivity.class)
+                                .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
+            }
+            return true;
+        } else return false;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        actionBarDrawerToggle.onConfigurationChanged(config);
+        undoRedo.updateButtons();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+        if (undoRedo != null) undoRedo.updateButtons();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DrawableManager.loadFromFiles(project.getDrawables());
+        if (undoRedo != null) undoRedo.updateButtons();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         saveXml();
-        startActivity(
-            new Intent(this, PreviewLayoutActivity.class)
-                .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
-      }
-      return true;
-    } else return false;
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration config) {
-    super.onConfigurationChanged(config);
-    actionBarDrawerToggle.onConfigurationChanged(config);
-    undoRedo.updateButtons();
-  }
-
-  @Override
-  protected void onPostCreate(Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    actionBarDrawerToggle.syncState();
-    if (undoRedo != null) undoRedo.updateButtons();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    DrawableManager.loadFromFiles(project.getDrawables());
-    if (undoRedo != null) undoRedo.updateButtons();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    saveXml();
-    binding = null;
-  }
-
-  private void saveXml() {
-
-    if (project == null) return;
-
-    if (binding.editorLayout.getChildCount() == 0) {
-      project.saveLayout("");
-      SBUtils.make(binding.getRoot(), R.string.project_empty).setSlideAnimation().showLongAsError();
-      return;
+        binding = null;
     }
 
-    String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
-    project.saveLayout(result);
-    SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
-  }
+    private void saveXml() {
 
-  private void showXml() {
-    String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
-    if (result.isEmpty()) {
-      showNothingDialog();
-    } else {
-      saveXml();
-      startActivity(
-          new Intent(this, ShowXMLActivity.class).putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
+        if (project == null) return;
+
+        if (binding.editorLayout.getChildCount() == 0) {
+            project.saveLayout("");
+            SBUtils.make(binding.getRoot(), R.string.project_empty)
+                    .setSlideAnimation()
+                    .showLongAsError();
+            return;
+        }
+
+        String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
+        project.saveLayout(result);
+        SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
     }
-  }
 
-  private void showNothingDialog() {
-    new MaterialAlertDialogBuilder(this)
-        .setTitle(R.string.nothing)
-        .setMessage(R.string.msg_add_some_widgets)
-        .setPositiveButton(
-            R.string.okay,
-            (d, w) -> {
-              d.cancel();
-            })
-        .show();
-  }
+    private void showXml() {
+        String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
+        if (result.isEmpty()) {
+            showNothingDialog();
+        } else {
+            saveXml();
+            startActivity(
+                    new Intent(this, ShowXMLActivity.class)
+                            .putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
+        }
+    }
 
-  @SuppressLint("RestrictedApi")
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
+    private void showNothingDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.nothing)
+                .setMessage(R.string.msg_add_some_widgets)
+                .setPositiveButton(
+                        R.string.okay,
+                        (d, w) -> {
+                            d.cancel();
+                        })
+                .show();
+    }
 
-    getMenuInflater().inflate(R.menu.menu_editor, menu);
-    undo = menu.findItem(R.id.undo);
-    redo = menu.findItem(R.id.redo);
-    undoRedo = new UndoRedoManager(undo, redo);
-    if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
-    binding.editorLayout.updateUndoRedoHistory();
-    updateUndoRedoBtnState();
-    return super.onCreateOptionsMenu(menu);
-  }
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
 
-  public void updateUndoRedoBtnState() {
-    new Handler(Looper.getMainLooper()).postDelayed(updateMenuIconsState, 10);
-  }
+        getMenuInflater().inflate(R.menu.menu_editor, menu);
+        undo = menu.findItem(R.id.undo);
+        redo = menu.findItem(R.id.redo);
+        undoRedo = new UndoRedoManager(undo, redo);
+        if (undoRedo != null) binding.editorLayout.bindUndoRedoManager(undoRedo);
+        binding.editorLayout.updateUndoRedoHistory();
+        updateUndoRedoBtnState();
+        return super.onCreateOptionsMenu(menu);
+    }
 
-  private void addDrawerTab(CharSequence title) {
-    binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
-  }
+    public void updateUndoRedoBtnState() {
+        new Handler(Looper.getMainLooper()).postDelayed(updateMenuIconsState, 10);
+    }
 
-  private void initializeWidgetLists() {
-    views =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.VIEWS, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    layouts =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.LAYOUTS, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+    private void addDrawerTab(CharSequence title) {
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
+    }
 
-    materialDesignWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    androidxWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-  }
+    private void initializeWidgetLists() {
+        views =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.VIEWS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        layouts =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.LAYOUTS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
 
-  @Override
-  public boolean onWidgetLongClicked(View view, HashMap<String, Object> widgetItem) {
-      view.startDragAndDrop(null, new View.DragShadowBuilder(view), widgetItem, 0);
-      binding.drawer.closeDrawer(GravityCompat.START);
-      return true;
-  }
+        materialDesignWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        androidxWidgets =
+                new Gson()
+                        .fromJson(
+                                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
+                                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+    }
+
+    @Override
+    public boolean onWidgetLongClicked(View view, HashMap<String, Object> widgetItem) {
+        view.startDragAndDrop(null, new View.DragShadowBuilder(view), widgetItem, 0);
+        binding.drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
