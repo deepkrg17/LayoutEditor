@@ -217,16 +217,14 @@ public class EditorActivity extends BaseActivity {
 
             return true;
         } else if (id == R.id.preview) {
-            String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
-            SBUtils.make(
-                            binding.getRoot(), getString(R.string.msg_feature_not_available))
-                    .setFadeAnimation()
-                    .show();
-            //            saveXml();
-            //            startActivity(
-            //                    new Intent(this, PreviewLayoutActivity.class)
-            //                            .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
-
+            String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
+            if (result.isEmpty()) showNothingDialog();
+            else {
+                saveXml();
+                startActivity(
+                        new Intent(this, PreviewLayoutActivity.class)
+                                .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
+            }
             return true;
         } else return false;
     }
@@ -279,21 +277,25 @@ public class EditorActivity extends BaseActivity {
     private void showXml() {
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
         if (result.isEmpty()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.nothing)
-                    .setMessage(R.string.msg_add_some_widgets)
-                    .setPositiveButton(
-                            R.string.okay,
-                            (d, w) -> {
-                                d.cancel();
-                            })
-                    .show();
+            showNothingDialog();
         } else {
             saveXml();
             startActivity(
                     new Intent(this, ShowXMLActivity.class)
                             .putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
         }
+    }
+
+    private void showNothingDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.nothing)
+                .setMessage(R.string.msg_add_some_widgets)
+                .setPositiveButton(
+                        R.string.okay,
+                        (d, w) -> {
+                            d.cancel();
+                        })
+                .show();
     }
 
     private class ListViewAdapter extends BaseAdapter implements View.OnLongClickListener {

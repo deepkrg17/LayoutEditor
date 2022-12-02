@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.elevation.SurfaceColors;
 // import com.itsaky.androidide.logsender.LogSender;
 
 public class BaseActivity extends AppCompatActivity {
@@ -14,6 +17,7 @@ public class BaseActivity extends AppCompatActivity {
         // LogSender.startLogging(this);
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(this));
+        getWindow().setStatusBarColor(SurfaceColors.SURFACE_0.getColor(this));
     }
 
     public void openUrl(String url) {
