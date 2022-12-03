@@ -30,6 +30,9 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="fontFamily">@font/ubuntu_regular</item>
         <item name="switchPreferenceCompatStyle">@style/AppTheme.SwitchPreference</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="dialogCornerRadius">28dp</item>
     </style>
 
     <style name="AppTheme.Licence" parent="Theme.Material3.Dark">

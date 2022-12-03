@@ -61,7 +61,7 @@ public class HomeActivity extends BaseActivity {
                 break;
             case "about":
                 goToAbout();
-                navigationView.setCheckedItem(R.id.nav_home);
+                navigationView.setCheckedItem(R.id.nav_about);
                 break;
 
             case "home":
