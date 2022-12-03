@@ -2,6 +2,8 @@ package com.itsvks.layouteditor.utils;
 
 import android.view.View;
 
+import androidx.annotation.StringRes;
+
 import com.google.android.material.R;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +27,7 @@ public class SBUtils {
         return new SBUtils(Snackbar.make(v, msg, Snackbar.LENGTH_SHORT));
     }
 
-    public static SBUtils make(View v, int msgResId) {
+    public static SBUtils make(View v, @StringRes int msgResId) {
         return new SBUtils(Snackbar.make(v, msgResId, Snackbar.LENGTH_SHORT));
     }
 
@@ -55,7 +57,7 @@ public class SBUtils {
         snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
         return this;
     }
-    
+
     public SBUtils setAnchorView(View anchorView) {
         snackbar.setAnchorView(anchorView);
         return this;
@@ -66,14 +68,24 @@ public class SBUtils {
             switch (type) {
                 case ERROR:
                     setColors(
-                            MaterialColors.getColor(snackbar.getContext(), R.attr.colorError, ""),
-                            MaterialColors.getColor(snackbar.getContext(), R.attr.colorOnError ,""));
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorErrorContainer, ""),
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorOnErrorContainer, ""));
                     break;
                 case SUCCESS:
-                    setColors(0xff4caf50, 0xffffffff);
+                    setColors(
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorPrimaryContainer, ""),
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorOnPrimaryContainer, ""));
                     break;
                 case INFO:
-                    setColors(0xff17a2b8, 0xffffffff);
+                    setColors(
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorTertiaryContainer, ""),
+                            MaterialColors.getColor(
+                                    snackbar.getContext(), R.attr.colorOnTertiaryContainer, ""));
             }
         }
         snackbar.show();
