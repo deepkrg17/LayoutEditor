@@ -12,7 +12,7 @@
             app:key="app_theme"
             app:title="@string/theme"
             app:icon="@drawable/brightness_4" />
-
+        
         <SwitchPreferenceCompat
             app:title="@string/enable_vibration"
             app:summary="@string/summary_enable_vibration"

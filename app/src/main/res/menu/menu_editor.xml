@@ -1,59 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/undo"
-        android:name="@string/undo"
-        android:title="@string/undo"
-        app:contentDescription="@string/undo"
-        android:icon="@drawable/undo_variant"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/redo"
-        android:name="@string/redo"
-        android:title="@string/redo"
-        app:contentDescription="@string/redo"
-        android:icon="@drawable/redo_variant"
-        app:showAsAction="always" />
-        
-    <item
-        android:id="@+id/show_structure"
-        android:name="@string/show_structure"
-        android:title="@string/show_structure"
-        app:contentDescription="@string/show_structure"
-        android:icon="@drawable/file_tree"
-        app:showAsAction="always" />
-        
-    <item
-        android:id="@+id/show_xml"
-        android:name="@string/show_xml"
-        android:title="@string/show_xml"
-        app:contentDescription="@string/show_xml"
-        android:icon="@drawable/xml"
-        app:showAsAction="ifRoom" />
-        
-    <item
-        android:id="@+id/resources_manager"
-        android:name="@string/drawable_manager"
-        android:title="@string/drawable_manager"
-        app:contentDescription="@string/drawable_manager"
-        android:icon="@drawable/ic_image_outline"
-        app:showAsAction="ifRoom" />
-        
-    <item
-        android:id="@+id/preview"
-        android:name="@string/preview_layout"
-        android:title="@string/preview_layout"
-        app:contentDescription="@string/preview_layout"
-        android:icon="@drawable/cellphone_play"
-        app:showAsAction="ifRoom" />
-        
-    <item
-        android:id="@+id/save_xml"
-        android:name="@string/save"
-        android:title="@string/save"
-        app:contentDescription="@string/save_xml"
-        android:icon="@drawable/content_save"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/undo"
+    android:name="@string/undo"
+    android:title="@string/undo"
+    android:icon="@drawable/undo_variant"
+    app:contentDescription="@string/undo"
+    app:showAsAction="always" />
+  <item
+    android:id="@+id/redo"
+    android:name="@string/redo"
+    android:title="@string/redo"
+    android:icon="@drawable/redo_variant"
+    app:contentDescription="@string/redo"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/show_structure"
+    android:name="@string/show_structure"
+    android:title="@string/show_structure"
+    android:icon="@drawable/file_tree"
+    app:contentDescription="@string/show_structure"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/show_xml"
+    android:name="@string/show_xml"
+    android:title="@string/show_xml"
+    android:icon="@drawable/xml"
+    app:contentDescription="@string/show_xml"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/resources_manager"
+    android:name="@string/drawable_manager"
+    android:title="@string/drawable_manager"
+    android:icon="@drawable/ic_image_outline"
+    app:contentDescription="@string/drawable_manager"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/preview"
+    android:name="@string/preview_layout"
+    android:title="@string/preview_layout"
+    android:icon="@drawable/cellphone_play"
+    app:contentDescription="@string/preview_layout"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/save_xml"
+    android:name="@string/save"
+    android:title="@string/save"
+    android:icon="@drawable/content_save"
+    app:contentDescription="@string/save_xml"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/export_xml"
+    android:name="@string/export_layout"
+    android:title="@string/export_layout"
+    android:icon="@drawable/file_export"
+    app:contentDescription="@string/export_layout"
+    app:showAsAction="ifRoom" />
 </menu>

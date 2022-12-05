@@ -74,9 +74,8 @@
     <string name="theme_light">Light</string>
     <string name="theme_auto">Auto</string>
     <string name="msg_choose_theme">Choose theme</string>
-    <string name="summary_theme">Select a dark or light theme.</string>
     <string name="theme">Theme</string>
-    <string name="pref_night_auto" translatable="false">auto</string>
-    <string name="pref_night_on" translatable="false">on</string>
-    <string name="pref_night_off" translatable="false">off</string>
+    <string name="dynamic_colors">Use Dynamic Colors</string>
+    <string name="summary_dynamic_colors">This feature is only for Android 12+.</string>
+    <string name="export_layout">Export layout</string>
 </resources>

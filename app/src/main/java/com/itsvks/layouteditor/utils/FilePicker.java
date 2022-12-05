@@ -10,38 +10,38 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class FilePicker {
-    private ActivityResultLauncher<String> getFile;
-    private ActivityResultLauncher<String> reqPermission;
-    private AppCompatActivity actvty;
+  private ActivityResultLauncher<String> getFile;
+  private ActivityResultLauncher<String> reqPermission;
+  private AppCompatActivity actvty;
 
-    public FilePicker(AppCompatActivity actvty) {
-        this.actvty = actvty;
+  public FilePicker(AppCompatActivity actvty) {
+    this.actvty = actvty;
 
-        this.getFile =
-                actvty.registerForActivityResult(
-                        new ActivityResultContracts.GetContent(),
-                        uri -> {
-                            if (uri != null) onPickFile(uri);
-                        });
-        this.reqPermission =
-                actvty.registerForActivityResult(
-                        new ActivityResultContracts.RequestPermission(),
-                        isGranted -> {
-                            onRequestPermission(isGranted);
-                        });
+    this.getFile =
+        actvty.registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+              if (uri != null) onPickFile(uri);
+            });
+    this.reqPermission =
+        actvty.registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+              onRequestPermission(isGranted);
+            });
+  }
+
+  public abstract void onRequestPermission(boolean isGranted);
+
+  public abstract void onPickFile(@NonNull Uri uri);
+
+  public void launch(String type) {
+    if (actvty.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_DENIED) {
+      reqPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+      return;
     }
 
-    public abstract void onRequestPermission(boolean isGranted);
-
-    public abstract void onPickFile(@NonNull Uri uri);
-
-    public void launch(String type) {
-        if (actvty.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-            reqPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-            return;
-        }
-
-        getFile.launch(type);
-    }
+    getFile.launch(type);
+  }
 }
