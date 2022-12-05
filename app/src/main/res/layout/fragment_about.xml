@@ -32,7 +32,7 @@
             android:layout_margin="8dp"
             android:id="@+id/version" />
 
-        <androidx.cardview.widget.CardView
+        <android.widget.FrameLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
             app:cardCornerRadius="8dp"
@@ -75,7 +75,7 @@
 
             </RelativeLayout>
 
-        </androidx.cardview.widget.CardView>
+        </android.widget.FrameLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

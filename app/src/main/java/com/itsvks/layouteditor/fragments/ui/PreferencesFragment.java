@@ -16,6 +16,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preference, rootKey);
 
         var preferenceTheme = findPreference("app_theme");
+        var app = LayoutEditor.getInstance();
         preferenceTheme.setOnPreferenceChangeListener(
                 new Preference.OnPreferenceChangeListener() {
 
@@ -23,26 +24,21 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         switch ((String) newValue) {
                             case "2":
-                                updateTheme(AppCompatDelegate.MODE_NIGHT_YES);
+                                app.updateTheme(AppCompatDelegate.MODE_NIGHT_YES, requireActivity());
                                 return true;
                             case "1":
-                                updateTheme(AppCompatDelegate.MODE_NIGHT_NO);
+                                app.updateTheme(AppCompatDelegate.MODE_NIGHT_NO, requireActivity());
                                 return true;
                             case "3":
                                 if (LayoutEditor.isAtLeastQ()) {
-                                    updateTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                                    app.updateTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, requireActivity());
                                 } else {
-                                    updateTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                                    app.updateTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, requireActivity());
                                 }
                                 return true;
                         }
                         return false;
                     }
                 });
-    }
-
-    private void updateTheme(int nightMode) {
-        AppCompatDelegate.setDefaultNightMode(nightMode);
-        requireActivity().recreate();
     }
 }

@@ -50,6 +50,14 @@
     app:showAsAction="ifRoom" />
 
   <item
+    android:id="@+id/export_xml"
+    android:name="@string/export_layout"
+    android:title="@string/export_layout"
+    android:icon="@drawable/file_export"
+    app:contentDescription="@string/export_layout"
+    app:showAsAction="ifRoom" />
+
+  <item
     android:id="@+id/save_xml"
     android:name="@string/save"
     android:title="@string/save"
@@ -57,11 +65,4 @@
     app:contentDescription="@string/save_xml"
     app:showAsAction="ifRoom" />
 
-  <item
-    android:id="@+id/export_xml"
-    android:name="@string/export_layout"
-    android:title="@string/export_layout"
-    android:icon="@drawable/file_export"
-    app:contentDescription="@string/export_layout"
-    app:showAsAction="ifRoom" />
 </menu>
