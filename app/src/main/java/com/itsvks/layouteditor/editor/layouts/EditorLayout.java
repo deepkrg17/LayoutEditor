@@ -119,7 +119,11 @@ public class EditorLayout extends LinearLayoutCompat {
 
                                     if (index != newIndex) {
                                         parent.removeView(shadow);
-                                        parent.addView(shadow, newIndex);
+                                        try {
+                                            parent.addView(shadow, newIndex);
+                                        } catch (IllegalStateException e) {
+                                            
+                                        }
                                     }
                                 } else {
                                     if (shadow.getParent() != parent)

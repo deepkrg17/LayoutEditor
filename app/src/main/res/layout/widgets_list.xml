@@ -12,7 +12,7 @@
     android:padding="10dp">
     
     <TextView
-        app:drawableLeftCompat="@mipmap/ic_button_2"
+        app:drawableLeftCompat="@mipmap/ic_button"
         android:drawablePadding="10dp"
         app:drawableTintMode="?attr/colorOnSurface"
         android:id="@+id/name"
