@@ -7,11 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.appcompat.app.AppCompatDelegate;
-import com.google.android.material.color.MaterialColors;
 import com.google.android.material.elevation.SurfaceColors;
-import com.itsvks.layouteditor.LayoutEditor;
-import com.itsvks.layouteditor.managers.PreferencesManager;
 // import com.itsaky.androidide.logsender.LogSender;
 
 public class BaseActivity extends AppCompatActivity {
@@ -25,23 +21,6 @@ public class BaseActivity extends AppCompatActivity {
     Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(this));
     app = LayoutEditor.getInstance();
     getWindow().setStatusBarColor(SurfaceColors.SURFACE_0.getColor(this));
-    /*
-        switch (PreferencesManager.getAppTheme()) {
-          case "1":
-            app.updateTheme(AppCompatDelegate.MODE_NIGHT_NO, this);
-            break;
-          case "2":
-            app.updateTheme(AppCompatDelegate.MODE_NIGHT_YES, this);
-            break;
-          case "3":
-            if (LayoutEditor.isAtLeastQ()) {
-              app.updateTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, this);
-            } else {
-              app.updateTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, this);
-            }
-            break;
-        }
-    */
   }
 
   public void openUrl(String url) {
