@@ -130,6 +130,7 @@ public class HomeFragment extends Fragment {
         checkNameErrors(editText.getText().toString(), "", inputLayout, dialog);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadProjects() {
         projects.clear();
 
@@ -147,6 +148,7 @@ public class HomeFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void createProject(String name) {
 
         final String projectDir =

@@ -221,6 +221,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         popupMenu.setOnMenuItemClickListener(
                 new PopupMenu.OnMenuItemClickListener() {
 
+                    
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 

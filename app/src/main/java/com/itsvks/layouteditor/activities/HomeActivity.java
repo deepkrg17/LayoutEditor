@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -88,6 +89,7 @@ public class HomeActivity extends BaseActivity {
         actionBarDrawerToggle.syncState();
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void navigationDrawer() {
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(

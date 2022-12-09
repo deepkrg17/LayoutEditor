@@ -219,6 +219,7 @@ public class EditorActivity extends BaseActivity
     else super.onBackPressed();
   }
 
+  @SuppressLint("NonConstantResourceId")
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     var id = item.getItemId();
