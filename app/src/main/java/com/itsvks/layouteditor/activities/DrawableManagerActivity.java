@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
@@ -92,6 +93,11 @@ public class DrawableManagerActivity extends BaseActivity {
 
                     @Override
                     public void onPickFile(Uri uri) {
+                        if (FileUtil.isDownloadsDocument(uri)) {
+                            SBUtils.make(binding.getRoot(), R.string.select_from_storage)
+                                    .showAsError();
+                            return;
+                        }
                         addDrawable(FileUtil.convertUriToFilePath(uri));
                     }
                 };
@@ -134,6 +140,10 @@ public class DrawableManagerActivity extends BaseActivity {
     }
 
     private void addDrawable(final String path) {
+        if (TextUtils.isEmpty(path)) {
+            SBUtils.make(binding.getRoot(), R.string.invalid_data_intent).showAsError();
+            return;
+        }
         // File name with extension
         final String lastSegment = FileUtil.getLastSegmentFromPath(path);
 
@@ -314,7 +324,9 @@ public class DrawableManagerActivity extends BaseActivity {
 
             if (isSelectedMode) {
                 if (item.name.equals("default_image")) {
-                    SBUtils.make(binding.getRoot(), getString(R.string.msg_cannot_select_default_image))
+                    SBUtils.make(
+                                    binding.getRoot(),
+                                    getString(R.string.msg_cannot_select_default_image))
                             .setType(SBUtils.Type.INFO)
                             .setSlideAnimation()
                             .setAnchorView(binding.fab)

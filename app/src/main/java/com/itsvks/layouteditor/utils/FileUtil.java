@@ -272,11 +272,6 @@ public class FileUtil {
           }
         }
 
-        final Uri contentUri =
-            ContentUris.withAppendedId(
-                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-        path = getDataColumn(contentUri, null, null);
       } else if (isMediaDocument(uri)) {
         final String docId = DocumentsContract.getDocumentId(uri);
         final String[] split = docId.split(":");
@@ -332,15 +327,15 @@ public class FileUtil {
     return null;
   }
 
-  private static boolean isExternalStorageDocument(Uri uri) {
+  public static boolean isExternalStorageDocument(Uri uri) {
     return "com.android.externalstorage.documents".equals(uri.getAuthority());
   }
 
-  private static boolean isDownloadsDocument(Uri uri) {
+  public static boolean isDownloadsDocument(Uri uri) {
     return "com.android.providers.downloads.documents".equals(uri.getAuthority());
   }
 
-  private static boolean isMediaDocument(Uri uri) {
+  public static boolean isMediaDocument(Uri uri) {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
   }
 

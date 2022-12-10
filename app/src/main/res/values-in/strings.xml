@@ -1,4 +1,4 @@
-<resources xmlns:tools="https://schemas.android.com/tools"
+<resources xmlns:tools="http://schemas.android.com/tools"
     tools:override="true"
     tools:ignore="MissingTranslation,PrivateResource">
     <string name="app_name">Layout Editor</string>
