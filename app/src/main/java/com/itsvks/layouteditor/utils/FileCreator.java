@@ -9,20 +9,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class FileCreator {
-    private ActivityResultLauncher<String> createFile;
-    private AppCompatActivity actvty;
+  private ActivityResultLauncher<String> createFile;
+  private AppCompatActivity actvty;
+  private String mimeType;
 
-    public FileCreator(AppCompatActivity actvty) {
-        this.actvty = actvty;
+  public FileCreator(AppCompatActivity actvty) {
+    this.actvty = actvty;
+    this.mimeType = "*/*";
 
-        this.createFile =
-                actvty.registerForActivityResult(
-                        new ActivityResultContracts.CreateDocument("text/xml"), this::onCreateFile);
-    }
+    this.createFile =
+        actvty.registerForActivityResult(
+            new ActivityResultContracts.CreateDocument(mimeType), this::onCreateFile);
+  }
 
-    public abstract void onCreateFile(@Nullable Uri uri);
+  public abstract void onCreateFile(@Nullable Uri uri);
 
-    public void createXML(@NonNull String fileName) {
-        createFile.launch(fileName);
-    }
+  public void create(@NonNull String fileName, String mimeType) {
+    this.mimeType = mimeType;
+    createFile.launch(fileName);
+  }
 }

@@ -262,7 +262,7 @@ public class EditorActivity extends BaseActivity
         }
         return true;
       case R.id.export_xml:
-        fileCreator.createXML("awesome_layout.xml");
+        fileCreator.create("awesome_layout.xml", "text/xml");
         return true;
       default:
         return false;

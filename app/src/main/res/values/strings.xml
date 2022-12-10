@@ -80,4 +80,6 @@
     <string name="export_layout">Export layout</string>
     <string name="invalid_data_intent">Invalid Data returned by Intent.</string>
     <string name="select_from_storage">Select file from Primary Storage.</string>
+    <string name="msg_first_letter_not_number">The first letter must not be a number!</string>
+    <string name="msg_space_not_allowed">The name must not contain spaces.</string>
 </resources>
