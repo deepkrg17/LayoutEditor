@@ -362,23 +362,23 @@ public class EditorActivity extends BaseActivity
     views =
         new Gson()
             .fromJson(
-                FileUtil.readFromAsset(Constants.VIEWS, this),
+                FileUtil.readFromAsset(Constants.VIEWS_FILE, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
     layouts =
         new Gson()
             .fromJson(
-                FileUtil.readFromAsset(Constants.LAYOUTS, this),
+                FileUtil.readFromAsset(Constants.LAYOUTS_FILE, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
 
     materialDesignWidgets =
         new Gson()
             .fromJson(
-                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS, this),
+                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS_FILE, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
     androidxWidgets =
         new Gson()
             .fromJson(
-                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS, this),
+                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS_FILE, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 

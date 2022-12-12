@@ -63,4 +63,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     implementation 'com.google.code.gson:gson:2.10'
     implementation 'com.blankj:utilcodex:1.31.1'
+    implementation 'io.github.amrdeveloper:treeview:1.1.1'
 }

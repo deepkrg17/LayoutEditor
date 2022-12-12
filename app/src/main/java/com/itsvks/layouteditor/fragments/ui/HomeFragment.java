@@ -67,8 +67,8 @@ public class HomeFragment extends Fragment {
         binding.listProjects.setLayoutManager(
                 new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 
-        binding.noProjectsView.setVisibility(
-                adapter.getItemCount() != 0 ? View.VISIBLE : View.GONE);
+        // binding.noProjectsView.setVisibility(
+        //         adapter.getItemCount() != 0 ? View.VISIBLE : View.GONE);
         binding.listProjects.setVisibility(
                 binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
     }

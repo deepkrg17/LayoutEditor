@@ -44,16 +44,13 @@ public class ShowXMLActivity extends BaseActivity {
 
     binding.nestedScrollView.setOnScrollChangeListener(
         (v, x, y, oldX, oldY) -> {
-          if (y > oldY + 6 && binding.fab.isExtended()) {
+          if (y > oldY + 20 && binding.fab.isExtended()) {
             binding.fab.shrink();
-            binding.fab.hide();
           }
-          if (y < oldY - 6 && !binding.fab.isExtended()) {
-            binding.fab.show();
+          if (y < oldY - 20 && !binding.fab.isExtended()) {
             binding.fab.extend();
           }
           if (y == 0) {
-            binding.fab.show();
             binding.fab.extend();
           }
         });

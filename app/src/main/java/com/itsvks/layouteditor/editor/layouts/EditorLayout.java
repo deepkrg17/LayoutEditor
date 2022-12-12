@@ -206,7 +206,7 @@ public class EditorLayout extends LinearLayoutCompat {
         attributes =
                 new Gson()
                         .fromJson(
-                                FileUtil.readFromAsset(Constants.ATTRIBUTES, getContext()),
+                                FileUtil.readFromAsset(Constants.ATTRIBUTES_FILE, getContext()),
                                 new TypeToken<
                                         HashMap<
                                                 String,
@@ -216,7 +216,7 @@ public class EditorLayout extends LinearLayoutCompat {
         parentAttributes =
                 new Gson()
                         .fromJson(
-                                FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES, getContext()),
+                                FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES_FILE, getContext()),
                                 new TypeToken<
                                         HashMap<
                                                 String,

@@ -47,8 +47,6 @@
             
         
         </ScrollView>
-        
-    
     </androidx.appcompat.widget.FitWindowsLinearLayout>
     
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

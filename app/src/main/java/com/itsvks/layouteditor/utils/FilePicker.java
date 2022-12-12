@@ -25,10 +25,7 @@ public abstract class FilePicker {
             });
     this.reqPermission =
         actvty.registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            isGranted -> {
-              onRequestPermission(isGranted);
-            });
+            new ActivityResultContracts.RequestPermission(), this::onRequestPermission);
   }
 
   public abstract void onRequestPermission(boolean isGranted);

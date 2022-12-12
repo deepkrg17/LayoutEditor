@@ -40,7 +40,7 @@ public class XmlLayoutParser {
         attributes =
                 new Gson()
                         .fromJson(
-                                FileUtil.readFromAsset(Constants.ATTRIBUTES, context),
+                                FileUtil.readFromAsset(Constants.ATTRIBUTES_FILE, context),
                                 new TypeToken<
                                         HashMap<
                                                 String,
@@ -48,7 +48,7 @@ public class XmlLayoutParser {
         parentAttributes =
                 new Gson()
                         .fromJson(
-                                FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES, context),
+                                FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES_FILE, context),
                                 new TypeToken<
                                         HashMap<
                                                 String,

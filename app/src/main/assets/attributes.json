@@ -150,6 +150,26 @@
             "className": "ViewCaller",
             "attributeName": "android:scaleY",
             "argumentType": "float"
+        },
+        {
+            "name": "android:enabled",
+            "methodName": "setEnabled",
+            "className": "ViewCaller",
+            "attributeName": "android:enabled",
+            "argumentType": "boolean"
+        },
+        {
+            "name": "android:visibility",
+            "methodName": "setVisibility",
+            "className": "ViewCaller",
+            "attributeName": "android:visibility",
+            "argumentType": "enum",
+            "arguments": [
+                "visible",
+                "invisible",
+                "gone"
+            ],
+            "defaultValue": "-1"
         }
     ],
     "android.widget.LinearLayout": [
@@ -291,10 +311,67 @@
     "android.widget.EditText": [
         {
             "name": "android:hint",
-            "methodName": "setTextHint",
-            "className": "TextViewCaller",
+            "methodName": "setHint",
+            "className": "EditTextCaller",
             "attributeName": "android:hint",
             "argumentType": "string"
+        },
+        {
+            "name": "android:inputType",
+            "methodName": "setInputType",
+            "className": "EditTextCaller",
+            "attributeName": "android:inputType",
+            "argumentType": "flag",
+            "arguments": [
+                "date",
+                "datetime",
+                "none",
+                "number",
+                "numberDecimal",
+                "numberSigned",
+                "numberPassword",
+                "phone",
+                "text",
+                "textAutoComplete",
+                "textAutoCorrect",
+                "textCapCharacters",
+                "textCapSentences",
+                "textCapWords",
+                "textEmailAddress",
+                "textEmailSubject",
+                "textEnableTextConversionSuggestions",
+                "textFilter",
+                "textImeMultiLine",
+                "textLongMessage",
+                "textMultiLine",
+                "textNoSuggestions",
+                "textPassword",
+                "textPersonName",
+                "textPhonetic",
+                "textPostalAddress",
+                "textShortMessage",
+                "textUri",
+                "textVisiblePassword",
+                "textWebEditText",
+                "textWebEmailAddress",
+                "textWebPassword",
+                "time"
+            ],
+            "defaultValue": "-1"
+        },
+        {
+            "name": "android:textColorHint",
+            "methodName": "setHintTextColor",
+            "className": "EditTextCaller",
+            "attributeName": "android:textColorHint",
+            "argumentType": "color"
+        },
+        {
+            "name": "android:singleLine",
+            "methodName": "setSingleLine",
+            "className": "EditTextCaller",
+            "attributeName": "android:singleLine",
+            "argumentType": "boolean"
         }
     ],
     "android.widget.ImageView": [
@@ -414,8 +491,7 @@
             "methodName": "setChecked",
             "className": "SwitchCaller",
             "attributeName": "android:checked",
-            "argumentType": "boolean",
-            "defaultValue": "false"
+            "argumentType": "boolean"
         }
     ],
     "androidx.appcompat.widget.SwitchCompat": [
@@ -424,8 +500,7 @@
             "methodName": "setChecked",
             "className": "SwitchCaller",
             "attributeName": "android:checked",
-            "argumentType": "boolean",
-            "defaultValue": "false"
+            "argumentType": "boolean"
         }
     ]
 }
