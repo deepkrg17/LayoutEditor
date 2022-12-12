@@ -6,14 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.color.MaterialColors;
-
+import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.WidgetsListBinding;
 import com.itsvks.layouteditor.utils.InvokeUtil;
 import java.util.HashMap;
@@ -73,20 +72,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Vi
     holder
         .binding
         .getRoot()
-        .post(
-            () -> {
-              holder.binding.getRoot().setTranslationX(-holder.binding.getRoot().getWidth());
-              holder.binding.getRoot().setAlpha(0);
-              holder
-                  .binding
-                  .getRoot()
-                  .animate()
-                  .alpha(1)
-                  .translationX(0)
-                  .setStartDelay(position * 50)
-                  .setDuration(500)
-                  .start();
-            });
+        .setAnimation(
+            AnimationUtils.loadAnimation(
+                holder.itemView.getContext(), R.anim.project_list_animation));
   }
 
   @Override

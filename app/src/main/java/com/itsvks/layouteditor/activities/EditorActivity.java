@@ -10,12 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.FitWindowsLinearLayout;
@@ -216,7 +219,25 @@ public class EditorActivity extends BaseActivity
   public void onBackPressed() {
     if (drawerLayout.isDrawerVisible(GravityCompat.START)
         || drawerLayout.isDrawerVisible(GravityCompat.END)) drawerLayout.closeDrawers();
-    else super.onBackPressed();
+    else {
+      String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
+      if (!result.isEmpty()) {
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(R.string.confirmation);
+        builder.setMessage(R.string.msg_confirmation);
+        builder.setNegativeButton(R.string.do_not_save, (d, w) -> super.onBackPressed());
+        builder.setPositiveButton(
+            R.string.save,
+            (d, w) -> {
+              saveXml();
+              super.onBackPressed();
+              Toast.makeText(this, R.string.project_saved, Toast.LENGTH_SHORT).show();
+            });
+        builder.setNeutralButton(R.string.cancel, (d, w) -> d.dismiss());
+        builder.setCancelable(false);
+        builder.create().show();
+      } else super.onBackPressed();
+    }
   }
 
   @SuppressLint("NonConstantResourceId")
@@ -293,7 +314,6 @@ public class EditorActivity extends BaseActivity
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    saveXml();
     binding = null;
   }
 
@@ -327,11 +347,7 @@ public class EditorActivity extends BaseActivity
     new MaterialAlertDialogBuilder(this)
         .setTitle(R.string.nothing)
         .setMessage(R.string.msg_add_some_widgets)
-        .setPositiveButton(
-            R.string.okay,
-            (d, w) -> {
-              d.cancel();
-            })
+        .setPositiveButton(R.string.okay, (d, w) -> d.cancel())
         .show();
   }
 
