@@ -502,5 +502,28 @@
             "attributeName": "android:checked",
             "argumentType": "boolean"
         }
+    ],
+    "android.widget.ProgressBar": [
+        {
+            "name": "android:progress",
+            "methodName": "setProgress",
+            "className": "ProgressBarCaller",
+            "attributeName": "android:progress",
+            "argumentType": "int"
+        },
+        {
+            "name": "android:max",
+            "methodName": "setMax",
+            "className": "ProgressBarCaller",
+            "attributeName": "android:max",
+            "argumentType": "int"
+        },
+        {
+            "name": "android:indeterminate",
+            "methodName": "setIndeterminate",
+            "className": "ProgressBarCaller",
+            "attributeName": "android:indeterminate",
+            "argumentType": "boolean"
+        }
     ]
 }

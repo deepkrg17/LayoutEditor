@@ -56,6 +56,11 @@
         }
     },
     {
+        "name": "ProgressBar",
+        "className": "com.itsvks.layouteditor.editor.widgets.android.ProgressBarDesign",
+        "iconName": "ic_seekbar"
+    },
+    {
         "name": "ImageView",
         "className": "com.itsvks.layouteditor.editor.widgets.android.ImageViewDesign",
         "iconName": "ic_image_outline",
