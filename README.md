@@ -5,7 +5,7 @@
 [![Latest release](https://img.shields.io/github/v/release/itsvks19/LayoutEditor?include_prereleases&label=latest%20release&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/releases/latest)
 ![Downloads](https://img.shields.io/github/downloads/itsvks19/LayoutEditor/total?style=for-the-badge)
 ![GitHub repo size](https://img.shields.io/github/repo-size/itsvks19/LayoutEditor?style=for-the-badge)
-![Test and Build](https://img.shields.io/github/workflow/status/itsvks19/LayoutEditor/Test%20and%20Build?label=Test%20and%20Build&style=for-the-badge&logo=github)
+![Test and Build](https://img.shields.io/github/actions/workflow/status/itsvks19/LayoutEditor/test_and_build.yml?label=Test%20and%20Build&style=for-the-badge&logo=github)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/blob/main/CODE_OF_CONDUCT.md)
 [![LICENSE](https://img.shields.io/github/license/itsvks19/LayoutEditor?color=blue&style=for-the-badge)](https://github.com/itsvks19/LayoutEditor/blob/main/LICENSE)
 </div>
