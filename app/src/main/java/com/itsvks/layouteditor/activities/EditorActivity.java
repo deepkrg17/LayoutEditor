@@ -94,7 +94,8 @@ public class EditorActivity extends BaseActivity
     setSupportActionBar(binding.topAppBar);
 
     project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
-    getSupportActionBar().setTitle(project.getName());
+    getSupportActionBar().setTitle(getString(R.string.app_name));
+    getSupportActionBar().setSubtitle(project.getName());
 
     contentView = binding.content;
     drawerLayout = binding.drawer;
