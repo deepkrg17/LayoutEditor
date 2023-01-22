@@ -18,7 +18,7 @@ public class DimensionUtil {
 
     static {
         dimensMap.put(DP, TypedValue.COMPLEX_UNIT_DIP);
-        dimensMap.put(SP, TypedValue.COMPLEX_UNIT_PX);
+        dimensMap.put(SP, TypedValue.COMPLEX_UNIT_SP);
     }
 
     private static final Pattern pattern = Pattern.compile("dp|sp");

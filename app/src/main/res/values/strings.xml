@@ -85,4 +85,14 @@
     <string name="confirmation">Confirmation</string>
     <string name="msg_confirmation">Do you want to save this project?</string>
     <string name="do_not_save">Don\'t Save</string>
+    <string name="res_manager">Resources Manager</string>
+    <string name="font">Font</string>
+    <string name="string">String</string>
+    <string name="drawable">Drawable</string>
+    <string name="color">Color</string>
+    <string name="edit_xml">Edit XML</string>
+    <string name="drawable_preview">Drawable Preview</string>
+    <string name="rename_drawable">Rename Drawable</string>
+    <string name="copy_name">Copy Name</string>
+    <string name="import_resource">Import</string>
 </resources>
