@@ -1,0 +1,46 @@
+<androidx.cardview.widget.CardView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="75dp"
+  android:padding="8dp"
+  android:layout_margin="5dp"
+  android:background="?attr/selectableItemBackground"
+  app:cardCornerRadius="8dp"
+  app:cardElevation="4dp"
+  app:cardBackgroundColor="?attr/colorSecondaryContainer">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+      android:layout_width="75dp"
+      android:layout_height="match_parent"
+      app:srcCompat="@mipmap/ic_launcher"
+      android:id="@+id/image"
+      android:padding="15dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="ic_launcher"
+      android:layout_toRightOf="@id/image"
+      android:layout_toLeftOf="@id/menu"
+      android:textSize="20sp"
+      android:textColor="?attr/colorOnSecondaryContainer"
+      android:layout_marginLeft="15dp"
+      android:id="@+id/drawable_name"
+      android:layout_centerVertical="true" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+      style="@style/ToolbarButtonStyle"
+      app:srcCompat="@drawable/dots_vertical"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="15dp"
+      android:tint="?attr/colorOnSecondaryContainer"
+      android:id="@+id/menu" />
+
+  </RelativeLayout>
+</androidx.cardview.widget.CardView>
