@@ -27,10 +27,6 @@ public class EnumDialog extends AttributeDialog {
     this.arguments = arguments;
 
     listview = new ListView(context);
-    // Use LayoutInflater to inflate the view
-    LayoutInflater inflater =
-        (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    listview = (ListView) inflater.inflate(android.R.layout.simple_list_item_single_choice, null);
     // Set the view layout parameters
     listview.setLayoutParams(
         new ViewGroup.LayoutParams(
