@@ -21,169 +21,209 @@ import com.itsvks.layouteditor.views.ColorView;
 import java.util.regex.Pattern;
 
 public class ColorDialog extends AttributeDialog
-        implements AppCompatSeekBar.OnSeekBarChangeListener {
+    implements AppCompatSeekBar.OnSeekBarChangeListener {
 
-    private ColorView colorPreview;
-    private MaterialTextView textColorPreview;
-    private LayoutColorDialogBinding binding;
+  // Declaring Views
+  private ColorView colorPreview;
+  private MaterialTextView textColorPreview;
+  private LayoutColorDialogBinding binding;
+  private AppCompatSeekBar seekAlpha;
+  private AppCompatSeekBar seekRed;
+  private AppCompatSeekBar seekGreen;
+  private AppCompatSeekBar seekBlue;
+  private TextInputLayout inputLayout;
+  private TextInputEditText editText;
 
-    private AppCompatSeekBar seekAlpha;
-    private AppCompatSeekBar seekRed;
-    private AppCompatSeekBar seekGreen;
-    private AppCompatSeekBar seekBlue;
+  /**
+   * Constructor of ColorDialog
+   *
+   * @param context Application Context
+   * @param savedValue Saved Color Value
+   */
+  public ColorDialog(Context context, String savedValue) {
+    super(context);
 
-    private TextInputLayout inputLayout;
-    private TextInputEditText editText;
+    // Inflate Layout Binding
+    binding = LayoutColorDialogBinding.inflate(getDialog().getLayoutInflater());
 
-    public ColorDialog(Context context, String savedValue) {
-        super(context);
+    // Getting View from binding
+    final View dialogView = binding.getRoot();
 
-        binding = LayoutColorDialogBinding.inflate(getDialog().getLayoutInflater());
+    // Initializing Views
+    colorPreview = binding.colorPreview;
+    textColorPreview = binding.textColorPreview;
+    seekAlpha = binding.seekAlpha;
+    seekRed = binding.seekRed;
+    seekGreen = binding.seekGreen;
+    seekBlue = binding.seekBlue;
+    inputLayout = dialogView.findViewById(R.id.textinput_layout);
+    editText = dialogView.findViewById(R.id.textinput_edittext);
 
-        final View dialogView = binding.getRoot();
+    // Setting Seekbar Progress and Listener
+    setSeekbarProgressAndListener(seekAlpha, 255);
+    setSeekbarProgressAndListener(seekRed, 255);
+    setSeekbarProgressAndListener(seekGreen, 255);
+    setSeekbarProgressAndListener(seekBlue, 255);
 
-        colorPreview = binding.colorPreview;
-        textColorPreview = binding.textColorPreview;
-        
+    // Setting UI Values
+    setUIValues(savedValue);
 
-        seekAlpha = binding.seekAlpha;
-        seekAlpha.setOnSeekBarChangeListener(this);
-        seekAlpha.setMax(255);
-        seekAlpha.setProgress(255);
+    // Setting TextWatcher on EditText
+    setTextWatcherOnEditText();
 
-        seekRed = binding.seekRed;
-        seekRed.setOnSeekBarChangeListener(this);
-        seekRed.setMax(255);
-        seekRed.setProgress(255);
+    setView(dialogView, 10);
+  }
 
-        seekGreen = binding.seekGreen;
-        seekGreen.setOnSeekBarChangeListener(this);
-        seekGreen.setMax(255);
-        seekGreen.setProgress(255);
+  /**
+   * Sets Seekbar Progress and Listener
+   *
+   * @param seekBar SeekBar to set
+   * @param progress Initial Progress
+   */
+  private void setSeekbarProgressAndListener(AppCompatSeekBar seekBar, int progress) {
+    seekBar.setOnSeekBarChangeListener(this);
+    seekBar.setMax(255);
+    seekBar.setProgress(progress);
+  }
 
-        seekBlue = binding.seekBlue;
-        seekBlue.setOnSeekBarChangeListener(this);
-        seekBlue.setMax(255);
-        seekBlue.setProgress(255);
-
-        inputLayout = dialogView.findViewById(R.id.textinput_layout);
-        inputLayout.setHint("Enter custom HEX code");
-        inputLayout.setPrefixText("#");
-
-        editText = dialogView.findViewById(R.id.textinput_edittext);
-        updateEditText();
-
-        if (!savedValue.equals("")) {
-            colorPreview.setColor(Color.parseColor(savedValue));
-            updateText(colorPreview.getColor());
-            updateSeekbars(colorPreview.getColor());
-            updateEditText();
-        }
-        
-        // editText.setText("FFFFFFFF");
-        editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(8)});
-
-        editText.addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkHexErrors(editText.getText().toString());
-                    }
-                });
-
-        setView(dialogView, 10);
+  /**
+   * Sets UI Values
+   *
+   * @param savedValue Saved Color Value
+   */
+  private void setUIValues(String savedValue) {
+    inputLayout.setHint("Enter custom HEX code");
+    inputLayout.setPrefixText("#");
+    editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(8)});
+    if (!savedValue.equals("")) {
+      colorPreview.setColor(Color.parseColor(savedValue));
+      updateText(colorPreview.getColor());
+      updateSeekbars(colorPreview.getColor());
+      updateEditText();
     }
+  }
 
-    @Override
-    public void onClickSave() {
-        listener.onSave("#" + colorPreview.getHexColor());
+  /** Sets TextWatcher on EditText */
+  private void setTextWatcherOnEditText() {
+    editText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void afterTextChanged(Editable p1) {
+            checkHexErrors(editText.getText().toString());
+          }
+        });
+  }
+
+  /** Called when Save button is clicked */
+  @Override
+  public void onClickSave() {
+    listener.onSave("#" + colorPreview.getHexColor());
+  }
+
+  /**
+   * Checks for Hex Errors
+   *
+   * @param hex user entered HEX value
+   */
+  private void checkHexErrors(String hex) {
+    if (Pattern.matches("[a-fA-F0-9]{6}", hex) || Pattern.matches("[a-fA-F0-9]{8}", hex)) {
+      colorPreview.setColor(Color.parseColor("#" + hex));
+      updateSeekbars(colorPreview.getColor());
+      updateText(colorPreview.getColor());
+      inputLayout.setErrorEnabled(false);
+      inputLayout.setError("");
+      setEnabled(true);
+      return;
     }
+    inputLayout.setErrorEnabled(true);
+    inputLayout.setError("Invalid HEX value");
+    setEnabled(false);
+  }
 
-    private void checkHexErrors(String hex) {
-        if (Pattern.matches("[a-fA-F0-9]{6}", hex) || Pattern.matches("[a-fA-F0-9]{8}", hex)) {
-            colorPreview.setColor(Color.parseColor("#" + hex));
-            updateSeekbars(colorPreview.getColor());
-            updateText(colorPreview.getColor());
+  /**
+   * Updates TextView with Color Values
+   *
+   * @param color Color to be set
+   */
+  private void updateText(int color) {
+    int a = Color.alpha(color);
+    int r = Color.red(color);
+    int g = Color.green(color);
+    int b = Color.blue(color);
+    textColorPreview.setText(a + ", " + r + ", " + g + ", " + b);
+    textColorPreview.setTextColor(Color.luminance(color) < 0.5f ? Color.WHITE : Color.DKGRAY);
+  }
 
-            inputLayout.setErrorEnabled(false);
-            inputLayout.setError("");
-            setEnabled(true);
-            return;
-        }
+  /**
+   * Updates Seekbars with Color Values
+   *
+   * @param color Color to be set
+   */
+  private void updateSeekbars(int color) {
+    int a = Color.alpha(color);
+    int r = Color.red(color);
+    int g = Color.green(color);
+    int b = Color.blue(color);
+    seekAlpha.setProgress(a);
+    seekRed.setProgress(r);
+    seekGreen.setProgress(g);
+    seekBlue.setProgress(b);
+  }
 
-        inputLayout.setErrorEnabled(true);
-        inputLayout.setError("Invalid HEX value");
-        setEnabled(false);
+  /** Updates EditText with Color Values */
+  private void updateEditText() {
+    editText.setText(colorPreview.getHexColor());
+  }
+
+  /**
+   * Called when Seekbar progress is changed
+   *
+   * @param seek Seekbar which is changed
+   * @param progress Progress of Seekbar
+   * @param fromUser True if changed by user
+   */
+  @SuppressLint("NonConstantResourceId")
+  @Override
+  public void onProgressChanged(SeekBar seek, int progress, boolean fromUser) {
+    if (fromUser) {
+      switch (seek.getId()) {
+        case R.id.seek_alpha:
+          colorPreview.setAlpha(progress);
+          updateText(colorPreview.getColor());
+          updateEditText();
+          break;
+
+        case R.id.seek_red:
+          colorPreview.setRed(progress);
+          updateText(colorPreview.getColor());
+          updateEditText();
+          break;
+
+        case R.id.seek_green:
+          colorPreview.setGreen(progress);
+          updateText(colorPreview.getColor());
+          updateEditText();
+          break;
+
+        case R.id.seek_blue:
+          colorPreview.setBlue(progress);
+          updateText(colorPreview.getColor());
+          updateEditText();
+          break;
+      }
     }
+  }
 
-    private void updateText(int color) {
-        int a = Color.alpha(color);
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
+  @Override
+  public void onStartTrackingTouch(SeekBar p1) {}
 
-        textColorPreview.setText(a + ", " + r + ", " + g + ", " + b);
-        textColorPreview.setTextColor(Color.luminance(color) < 0.5f ? Color.WHITE : Color.DKGRAY);
-    }
-
-    private void updateSeekbars(int color) {
-        int a = Color.alpha(color);
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-
-        seekAlpha.setProgress(a);
-        seekRed.setProgress(r);
-        seekGreen.setProgress(g);
-        seekBlue.setProgress(b);
-    }
-
-    private void updateEditText() {
-        editText.setText(colorPreview.getHexColor());
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public void onProgressChanged(SeekBar seek, int progress, boolean fromUser) {
-        if (fromUser) {
-            switch (seek.getId()) {
-                case R.id.seek_alpha:
-                    colorPreview.setAlpha(progress);
-                    updateText(colorPreview.getColor());
-                    updateEditText();
-                    break;
-
-                case R.id.seek_red:
-                    colorPreview.setRed(progress);
-                    updateText(colorPreview.getColor());
-                    updateEditText();
-                    break;
-
-                case R.id.seek_green:
-                    colorPreview.setGreen(progress);
-                    updateText(colorPreview.getColor());
-                    updateEditText();
-                    break;
-
-                case R.id.seek_blue:
-                    colorPreview.setBlue(progress);
-                    updateText(colorPreview.getColor());
-                    updateEditText();
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar p1) {}
-
-    @Override
-    public void onStopTrackingTouch(SeekBar p1) {}
+  @Override
+  public void onStopTrackingTouch(SeekBar p1) {}
 }

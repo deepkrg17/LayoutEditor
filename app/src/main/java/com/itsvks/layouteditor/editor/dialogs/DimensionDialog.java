@@ -12,71 +12,95 @@ import com.itsvks.layouteditor.utils.DimensionUtil;
 
 public class DimensionDialog extends AttributeDialog {
 
-    private TextinputlayoutBinding binding;
+  private TextinputlayoutBinding binding;
 
-    private TextInputLayout textInputLayout;
-    private TextInputEditText textInputEditText;
+  private TextInputLayout textInputLayout;
+  private TextInputEditText textInputEditText;
 
-    private String unit;
+  private String unit;
 
-    public DimensionDialog(Context context, String savedValue, String unit) {
-        super(context);
+  // Constructor to create a new instance of DimensionDialog
+  public DimensionDialog(Context context, String savedValue, String unit) {
+    super(context);
 
-        this.unit = unit;
+    this.unit = unit;
 
-        binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+    // Inflate the textinputlayout layout
+    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
-        textInputLayout = binding.getRoot();
-        textInputLayout.setHint("Enter dimension value");
-        textInputLayout.setSuffixText(unit);
-        textInputEditText = binding.textinputEdittext;
-        textInputEditText.setInputType(
-                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        textInputEditText.setText(
-                savedValue.equals("") ? "0" : DimensionUtil.getDimenWithoutSuffix(savedValue));
+    // Get the root view of the textinputlayout
+    textInputLayout = binding.getRoot();
 
-        textInputEditText.addTextChangedListener(
-                new TextWatcher() {
+    // Set the hint of the textInputLayout
+    textInputLayout.setHint("Enter dimension value");
 
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+    // Set the suffix text of the textInputLayout
+    textInputLayout.setSuffixText(unit);
 
-                    @Override
-                    public void onTextChanged(CharSequence text, int p2, int p3, int p4) {}
+    // Get the textInputEditText
+    textInputEditText = binding.textinputEdittext;
 
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkError();
-                    }
-                });
+    // Set the input type of the textInputEditText
+    textInputEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
-        setView(textInputLayout, 10);
-        showKeyboardWhenOpen();
+    // Set the saved value or default value 0
+    textInputEditText.setText(
+        savedValue.equals("") ? "0" : DimensionUtil.getDimenWithoutSuffix(savedValue));
+
+    // Add TextWatcher to the textInputEditText to check the error
+    textInputEditText.addTextChangedListener(
+        new TextWatcher() {
+
+          // Before text changed
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          // On text changed
+          @Override
+          public void onTextChanged(CharSequence text, int p2, int p3, int p4) {}
+
+          // After text changed
+          @Override
+          public void afterTextChanged(Editable p1) {
+            checkError();
+          }
+        });
+
+    // Set the view and margin to the dialog
+    setView(textInputLayout, 10);
+
+    // Show the keyboard when the dialog open
+    showKeyboardWhenOpen();
+  }
+
+  @Override
+  public void show() {
+    super.show();
+    // Request the focus on the textInputEditText
+    requestEditText(textInputEditText);
+  }
+
+  @Override
+  protected void onClickSave() {
+    super.onClickSave();
+    // Call the listener on save and append the unit
+    listener.onSave(textInputEditText.getText().toString() + unit);
+  }
+
+  // Method to check the error
+  private void checkError() {
+    String text = textInputEditText.getText().toString();
+
+    // If the text is empty set the error and disable the save button
+    if (text.equals("")) {
+      setEnabled(false);
+      textInputLayout.setErrorEnabled(true);
+      textInputLayout.setError("Field cannot be empty!");
+    } else {
+      // Else enable the save button and remove the error
+      setEnabled(true);
+      textInputLayout.setErrorEnabled(false);
+      textInputLayout.setError("");
     }
-
-    @Override
-    public void show() {
-        super.show();
-        requestEditText(textInputEditText);
-    }
-
-    @Override
-    protected void onClickSave() {
-        super.onClickSave();
-        listener.onSave(textInputEditText.getText().toString() + unit);
-    }
-
-    private void checkError() {
-        String text = textInputEditText.getText().toString();
-
-        if (text.equals("")) {
-            setEnabled(false);
-            textInputLayout.setErrorEnabled(true);
-            textInputLayout.setError("Field cannot be empty!");
-        } else {
-            setEnabled(true);
-            textInputLayout.setErrorEnabled(false);
-            textInputLayout.setError("");
-        }
-    }
+  }
 }

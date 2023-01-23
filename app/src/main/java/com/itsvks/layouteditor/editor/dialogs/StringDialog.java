@@ -13,91 +13,125 @@ import java.util.regex.Pattern;
 
 public class StringDialog extends AttributeDialog {
 
-    private TextinputlayoutBinding binding;
+  /** Binding object for textInputLayout layout */
+  private TextinputlayoutBinding binding;
 
-    private TextInputLayout textInputLayout;
-    private TextInputEditText textInputEditText;
+  /** TextInputLayout object */
+  private TextInputLayout textInputLayout;
 
-    boolean isDrawable;
+  /** TextInputEditText object */
+  private TextInputEditText textInputEditText;
 
-    public StringDialog(Context context, String savedValue, boolean isDrawable) {
-        super(context);
-        this.isDrawable = isDrawable;
-        binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+  /** Boolean flag to check if the dialog is for drawable */
+  boolean isDrawable;
 
-        textInputLayout = binding.getRoot();
-        textInputLayout.setHint("Enter string value");
+  /**
+   * Constructor for StringDialog class
+   *
+   * @param context     The Activity context
+   * @param savedValue  The saved value
+   * @param isDrawable  Boolean flag to check for drawable
+   */
+  public StringDialog(Context context, String savedValue, boolean isDrawable) {
+    super(context);
+    this.isDrawable = isDrawable;
+    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
-        textInputEditText = binding.textinputEdittext;
-        textInputEditText.setText(savedValue);
+    textInputLayout = binding.getRoot();
+    textInputLayout.setHint("Enter string value");
 
-        if (isDrawable) {
-            textInputLayout.setHint("Enter drawable name");
-            textInputLayout.setPrefixText("@drawable/");
-            textInputEditText.addTextChangedListener(
-                    new TextWatcher() {
+    textInputEditText = binding.textinputEdittext;
+    textInputEditText.setText(savedValue);
 
-                        @Override
-                        public void beforeTextChanged(
-                                CharSequence arg0, int arg1, int arg2, int arg3) {}
+    if (isDrawable) {
+      textInputLayout.setHint("Enter drawable name");
+      textInputLayout.setPrefixText("@drawable/");
+      textInputEditText.addTextChangedListener(
+          new TextWatcher() {
 
-                        @Override
-                        public void onTextChanged(
-                                CharSequence arg0, int arg1, int arg2, int arg3) {}
+            /**
+             * Invoked before text is changed
+             *
+             * @param arg0 CharSequence
+             * @param arg1 int
+             * @param arg2 int
+             * @param arg3 int
+             */
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
-                        @Override
-                        public void afterTextChanged(Editable arg0) {
-                            checkErrors();
-                        }
-                    });
-        }
+            /**
+             * Invoked when the text is changed
+             *
+             * @param arg0 CharSequence
+             * @param arg1 int
+             * @param arg2 int
+             * @param arg3 int
+             */
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
-        setView(textInputLayout, 10);
-        showKeyboardWhenOpen();
+            /**
+             * Invoked after text is changed
+             *
+             * @param arg0 Editable
+             */
+            @Override
+            public void afterTextChanged(Editable arg0) {
+              checkErrors();
+            }
+          });
     }
 
-    private void checkErrors() {
-        String text = textInputEditText.getText().toString();
+    setView(textInputLayout, 10);
+    showKeyboardWhenOpen();
+  }
 
-        if (text.equals("")) {
-            textInputLayout.setErrorEnabled(true);
-            textInputLayout.setError("Field cannot be empty!");
-            setEnabled(false);
-            return;
-        }
+  /** Method to check for errors */
+  private void checkErrors() {
+    String text = textInputEditText.getText().toString();
 
-        if (!Pattern.matches("[a-z_][a-z0-9_]*", text)) {
-            textInputLayout.setErrorEnabled(true);
-            textInputLayout.setError("Only small letters(a-z) and numbers!");
-            setEnabled(false);
-            return;
-        }
-
-        if (!DrawableManager.contains(textInputEditText.getText().toString())) {
-            textInputLayout.setErrorEnabled(true);
-            textInputLayout.setError("No Drawable found");
-            setEnabled(false);
-            return;
-        }
-
-        textInputLayout.setErrorEnabled(false);
-        textInputLayout.setError("");
-        setEnabled(true);
+    if (text.equals("")) {
+      textInputLayout.setErrorEnabled(true);
+      textInputLayout.setError("Field cannot be empty!");
+      setEnabled(false);
+      return;
     }
 
-    @Override
-    public void show() {
-        super.show();
-        requestEditText(textInputEditText);
-        if (isDrawable) checkErrors();
+    if (!Pattern.matches("[a-z_][a-z0-9_]*", text)) {
+      textInputLayout.setErrorEnabled(true);
+      textInputLayout.setError("Only small letters(a-z) and numbers!");
+      setEnabled(false);
+      return;
     }
 
-    @Override
-    protected void onClickSave() {
-        super.onClickSave();
-        listener.onSave(
-                isDrawable
-                        ? "@drawable/" + textInputEditText.getText().toString()
-                        : textInputEditText.getText().toString());
+    if (isDrawable && !DrawableManager.contains(textInputEditText.getText().toString())) {
+      textInputLayout.setErrorEnabled(true);
+      textInputLayout.setError("No Drawable found");
+      setEnabled(false);
+      return;
     }
+
+    textInputLayout.setErrorEnabled(false);
+    textInputLayout.setError("");
+    setEnabled(true);
+  }
+
+  /** Method to show the dialog */
+  @Override
+  public void show() {
+    super.show();
+    requestEditText(textInputEditText);
+    if (isDrawable) checkErrors();
+  }
+
+  /** Method to be invoked when the save button is clicked */
+  @Override
+  protected void onClickSave() {
+    super.onClickSave();
+    listener.onSave(
+        isDrawable
+            ? "@drawable/" + textInputEditText.getText().toString()
+            : textInputEditText.getText().toString());
+  }
 }

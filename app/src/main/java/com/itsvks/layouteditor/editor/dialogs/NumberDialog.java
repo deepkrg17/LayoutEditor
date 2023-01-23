@@ -11,73 +11,87 @@ import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 
 public class NumberDialog extends AttributeDialog {
 
-    private TextinputlayoutBinding binding;
+  private TextinputlayoutBinding binding;
 
-    private TextInputLayout textInputLayout;
-    private TextInputEditText textInputEditText;
+  private TextInputLayout textInputLayout;
+  private TextInputEditText textInputEditText;
 
-    public NumberDialog(Context context, String savedValue, String type) {
-        super(context);
+  /**
+   * Constructor for creating a NumberDialog
+   *
+   * @param context the context of the activity
+   * @param savedValue the saved value
+   * @param type the type of number input
+   */
+  public NumberDialog(Context context, String savedValue, String type) {
+    super(context);
 
-        binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
-        textInputLayout = binding.getRoot();
-        textInputLayout.setHint("Enter " + type + " value");
+    textInputLayout = binding.getRoot();
+    textInputLayout.setHint("Enter " + type + " value");
 
-        textInputEditText = binding.textinputEdittext;
+    textInputEditText = binding.textinputEdittext;
 
-        if (type.equals("float")) {
-            textInputEditText.setInputType(
-                    InputType.TYPE_CLASS_NUMBER
-                            | InputType.TYPE_NUMBER_FLAG_SIGNED
-                            | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        } else {
-            textInputEditText.setInputType(
-                    InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        }
-
-        textInputEditText.setText(savedValue.equals("") ? "0" : savedValue);
-        textInputEditText.addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence text, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkError();
-                    }
-                });
-
-        setView(textInputLayout, 10);
-        showKeyboardWhenOpen();
+    if (type.equals("float")) {
+      // Set input type to signed float
+      textInputEditText.setInputType(
+          InputType.TYPE_CLASS_NUMBER
+              | InputType.TYPE_NUMBER_FLAG_SIGNED
+              | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+    } else {
+      // Set input type to signed integer
+      textInputEditText.setInputType(
+          InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
     }
 
-    @Override
-    public void show() {
-        super.show();
-        requestEditText(textInputEditText);
-    }
+    // If no saved value, set to 0
+    textInputEditText.setText(savedValue.equals("") ? "0" : savedValue);
+    textInputEditText.addTextChangedListener(
+        new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
 
-    @Override
-    protected void onClickSave() {
-        listener.onSave(textInputEditText.getText().toString());
-    }
+          @Override
+          public void onTextChanged(CharSequence text, int p2, int p3, int p4) {}
 
-    private void checkError() {
-        String text = textInputEditText.getText().toString();
+          // Check for error on text change
+          @Override
+          public void afterTextChanged(Editable p1) {
+            checkError();
+          }
+        });
 
-        if (text.equals("")) {
-            setEnabled(false);
-            textInputLayout.setErrorEnabled(true);
-            textInputLayout.setError("Field cannot be empty!");
-        } else {
-            setEnabled(true);
-            textInputLayout.setErrorEnabled(false);
-            textInputLayout.setError("");
-        }
+    // Set padding of the view
+    setView(textInputLayout, 10);
+    showKeyboardWhenOpen();
+  }
+
+  /** Show the dialog, and request focus in edit text */
+  @Override
+  public void show() {
+    super.show();
+    requestEditText(textInputEditText);
+  }
+
+  /** On clicking save, invoke listener's onSave method */
+  @Override
+  protected void onClickSave() {
+    listener.onSave(textInputEditText.getText().toString());
+  }
+
+  /** Check for error. Set enabled to false if empty and set error message */
+  private void checkError() {
+    String text = textInputEditText.getText().toString();
+
+    if (text.equals("")) {
+      setEnabled(false);
+      textInputLayout.setErrorEnabled(true);
+      textInputLayout.setError("Field cannot be empty!");
+    } else {
+      setEnabled(true);
+      textInputLayout.setErrorEnabled(false);
+      textInputLayout.setError("");
     }
+  }
 }
