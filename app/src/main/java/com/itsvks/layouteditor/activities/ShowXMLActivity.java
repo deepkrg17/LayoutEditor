@@ -33,6 +33,7 @@ public class ShowXMLActivity extends BaseActivity {
     binding.result.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
     binding.result.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular));
 
+    binding.result.setTextIsSelectable(true);    
     binding.fab.setOnClickListener(
         v -> {
           ClipboardUtils.copyText(binding.result.getText());
