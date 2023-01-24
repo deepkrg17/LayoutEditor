@@ -1,44 +1,27 @@
 package com.itsvks.layouteditor.activities;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.Menu;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-import com.blankj.utilcode.util.ToastUtils;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.adapters.DrawableResourceAdapter;
 import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.fragments.resources.ColorFragment;
 import com.itsvks.layouteditor.fragments.resources.DrawableFragment;
 import com.itsvks.layouteditor.fragments.resources.FontFragment;
 import com.itsvks.layouteditor.fragments.resources.StringFragment;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
-import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +32,6 @@ public class ResourceManagerActivity extends BaseActivity {
   private ProjectFile project;
   private List<DrawableFile> drawableList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
-  private DrawableResourceAdapter drawableAdapter;
   private FilePicker filepicker;
 
   @Override
@@ -67,7 +49,12 @@ public class ResourceManagerActivity extends BaseActivity {
 
     project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
     // loadDrawables();
-    drawableAdapter = new DrawableResourceAdapter(drawableList, project);
+    adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
+
+    adapter.addFragment(new DrawableFragment(project, drawableList));
+    adapter.addFragment(new ColorFragment());
+    adapter.addFragment(new StringFragment());
+    adapter.addFragment(new FontFragment());
     filepicker =
         new FilePicker(this) {
 
@@ -90,23 +77,12 @@ public class ResourceManagerActivity extends BaseActivity {
               return;
             }
             Fragment fragment =
-                getSupportFragmentManager()
-                    .findFragmentByTag(
-                        "android:switcher:" + R.id.pager + ":" + binding.pager.getCurrentItem());
+                getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
             if (fragment != null && fragment instanceof DrawableFragment) {
-              ((DrawableFragment) fragment).addDrawable(uri);
+              ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
             }
-            // drawableAdapter.addDrawable(FileUtil.convertUriToFilePath(uri),
-            // ResourceManagerActivity.this);
           }
         };
-    adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
-    
-
-    adapter.addFragment(new DrawableFragment(project, drawableList));
-    adapter.addFragment(new ColorFragment());
-    adapter.addFragment(new StringFragment());
-    adapter.addFragment(new FontFragment());
 
     binding.pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
     binding.pager.setAdapter(adapter);
@@ -135,22 +111,6 @@ public class ResourceManagerActivity extends BaseActivity {
               }
             });
     mediator.attach();
-  }
-
-  public void loadDrawables() {
-    File[] files = project.getDrawables();
-
-    if (files == null) {
-      ToastUtils.showLong("Null");
-    } else {
-
-      for (File file : files) {
-        Drawable drawable = Drawable.createFromPath(file.getPath());
-        String name = file.getName();
-        // name = name.substring(0, name.lastIndexOf("."));
-        drawableList.add(new DrawableFile(name, drawable, file.getPath()));
-      }
-    }
   }
 
   @Override
@@ -185,23 +145,25 @@ public class ResourceManagerActivity extends BaseActivity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     var id = item.getItemId();
+    Fragment fragment =
+        getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
     switch (id) {
       case R.id.menu_add:
-        new MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.add)
-            .setAdapter(
-                new ArrayAdapter<String>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    new String[] {"Drawable", "Color", "String", "Font"}),
-                (d, w) -> {
-                  switch (w) {
-                    case 0:
-                      filepicker.launch("image/*");
-                      break;
-                  }
-                })
-            .show();
+        if (fragment != null) {
+          if (fragment instanceof DrawableFragment) {
+            filepicker.launch("image/*");
+          } else if (fragment instanceof ColorFragment) {
+            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+          } else if (fragment instanceof StringFragment) {
+            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+          } else if (fragment instanceof FontFragment) {
+            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+          }
+        } else {
+          SBUtils.make(binding.getRoot(), "Something went wrong..")
+              .setSlideAnimation()
+              .showAsError();
+        }
         break;
     }
     return super.onOptionsItemSelected(item);

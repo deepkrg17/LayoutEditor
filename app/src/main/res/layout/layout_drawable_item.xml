@@ -5,14 +5,14 @@
   android:layout_height="75dp"
   android:padding="8dp"
   android:layout_margin="5dp"
-  android:background="?attr/selectableItemBackground"
   app:cardCornerRadius="8dp"
   app:cardElevation="4dp"
   app:cardBackgroundColor="?attr/colorSecondaryContainer">
 
   <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatImageView
       android:layout_width="75dp"

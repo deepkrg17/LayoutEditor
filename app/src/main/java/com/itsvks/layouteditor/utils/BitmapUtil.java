@@ -12,8 +12,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
 /** Utility class for manipulating bitmaps */
@@ -26,23 +28,28 @@ public class BitmapUtil {
    * @param background the view whose background color will be used to determine the tint
    */
   public static void setImageTintAccordingToBackground(ImageView imageView, View background) {
-    // Get the background color
-    int backgroundColor = Color.TRANSPARENT;
-    if (background.getBackground() instanceof ColorDrawable) {
-      // Get the color from the ColorDrawable
-      backgroundColor = ((ColorDrawable) background.getBackground()).getColor();
-    } else if (background instanceof CardView) {
+    int backgroundColor = Color.WHITE;
+    // Check if the background View is a CardView
+    if (background instanceof CardView) {
       // Get the color from the CardView
       CardView cardView = (CardView) background;
       backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
-    } else if (background instanceof View) {
-      // Get the color from the view
-      backgroundColor = background.getSolidColor();
+    // Check if the background View is a ColorDrawable
+    } else if (background.getBackground() instanceof ColorDrawable) {
+      backgroundColor = ((ColorDrawable) background.getBackground()).getColor();
+    } else {
+      // Throw an exception if the background View is not a ColorDrawable
+      throw new IllegalArgumentException("Background must be a ColorDrawable");
     }
-    // Create a new color filter
-    ColorFilter filter = new LightingColorFilter(backgroundColor, 1);
-    // Apply the color filter to the image view
-    imageView.setColorFilter(filter);
+
+    // Calculate the luminance from the background color
+    double luminance = ColorUtils.calculateLuminance(backgroundColor);
+    // Set the image color to black or white depending on the luminance
+    if (luminance >= 0.5) {
+      imageView.setColorFilter(Color.BLACK);
+    } else {
+      imageView.setColorFilter(Color.WHITE);
+    }
   }
 
   /**
@@ -68,6 +75,37 @@ public class BitmapUtil {
     int g = Color.green(color);
     int b = Color.blue(color);
     return Color.rgb(255 - r, 255 - g, 255 - b);
+  }
+
+  /**
+   * Sets the text color of the TextView according to the background color provided.
+   *
+   * @param background The background color to use to determine the text color.
+   * @param textView The TextView whose text color needs to be set.
+   */
+  public static void setTextColorAccordingToBackground(View background, TextView textView) {
+    int backgroundColor = Color.WHITE;
+    if (background instanceof CardView) {
+      // Get the color from the CardView
+      CardView cardView = (CardView) background;
+      backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
+    }
+    // Check if the background View is a ColorDrawable
+    else if (background.getBackground() instanceof ColorDrawable) {
+      backgroundColor = ((ColorDrawable) background.getBackground()).getColor();
+    } else {
+      // Throw an exception if the background View is not a ColorDrawable
+      throw new IllegalArgumentException("Background must be a ColorDrawable");
+    }
+
+    // Calculate the luminance from the background color
+    double luminance = ColorUtils.calculateLuminance(backgroundColor);
+    // Set the text color to black or white depending on the luminance
+    if (luminance >= 0.5) {
+      textView.setTextColor(Color.BLACK);
+    } else {
+      textView.setTextColor(Color.WHITE);
+    }
   }
 
   /**

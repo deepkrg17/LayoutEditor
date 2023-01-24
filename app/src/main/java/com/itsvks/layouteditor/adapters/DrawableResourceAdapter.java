@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.SnackbarUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -39,6 +41,7 @@ import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.LayoutDrawableItemBinding;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.databinding.LayoutPreviewDrawableBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
@@ -89,8 +92,12 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                 holder.itemView.getContext(), R.anim.project_list_animation));
     holder.drawableName.setText(name.substring(0, name.lastIndexOf(".")));
 
-    BitmapUtil.setBackgroundAccordingToImage(holder.itemView.getContext(), holder.binding.getRoot(), drawableList.get(position).drawable);
+    BitmapUtil.setBackgroundAccordingToImage(
+        holder.itemView.getContext(),
+        holder.binding.getRoot(),
+        drawableList.get(position).drawable);
     BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
+    BitmapUtil.setTextColorAccordingToBackground(holder.itemView, holder.binding.drawableName);
 
     if (name.endsWith(".xml") || name.endsWith(".svg")) {
       // TODO: Set vector drawable to ImageView
@@ -98,6 +105,13 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
       holder.drawable.setImageDrawable(icon);
     } else holder.drawable.setImageDrawable(drawableList.get(position).drawable);
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position, holder));
+    holder
+        .binding
+        .getRoot()
+        .setOnClickListener(
+            v ->
+                showBottomSheetDialog(
+                    holder.itemView.getContext(), drawableList.get(position).drawable));
   }
 
   @Override
@@ -122,11 +136,21 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                         .get(position)
                         .name
                         .substring(0, drawableList.get(position).name.lastIndexOf(".")));
+                ToastUtils.showShort(v.getContext().getString(R.string.copied));
                 return true;
               case R.id.menu_delete:
-                FileUtil.deleteFile(drawableList.get(position).path);
-                drawableList.remove(position);
-                notifyDataSetChanged();
+                new MaterialAlertDialogBuilder(v.getContext())
+                    .setTitle(R.string.remove_drawable)
+                    .setMessage(R.string.msg_remove_drawable)
+                    .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
+                    .setPositiveButton(
+                        R.string.yes,
+                        (d, w) -> {
+                          FileUtil.deleteFile(drawableList.get(position).path);
+                          drawableList.remove(position);
+                          notifyDataSetChanged();
+                        })
+                    .show();
                 return true;
               case R.id.menu_rename:
                 rename(v, position, holder);
@@ -151,7 +175,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     // Extension
     final String extension =
         lastSegment.substring(lastSegment.lastIndexOf("."), lastSegment.length());
-    
+
     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
     final TextinputlayoutBinding bind =
         TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
@@ -217,77 +241,23 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
       editText.setSelection(0, editText.getText().toString().length());
     }
   }
-  
-  public void addDrawable(final String path, Context context) {
-    if (TextUtils.isEmpty(path)) {
-      ToastUtils.showLong(R.string.invalid_data_intent);
-      return;
-    }
-    // File name with extension
-    final String lastSegment = FileUtil.getLastSegmentFromPath(path);
 
-    // File name without extension
-    final String fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."));
+  public void showBottomSheetDialog(Context context, Drawable drawable) {
+    // Create a new BottomSheetDialog instance with the context of the ImageView
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
 
-    // Extension
-    final String extension =
-        lastSegment.substring(lastSegment.lastIndexOf("."), lastSegment.length());
-    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-    final TextinputlayoutBinding bind =
-        TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
-    final TextInputEditText editText = bind.textinputEdittext;
-    final TextInputLayout inputLayout = bind.textinputLayout;
-    inputLayout.setHint(R.string.msg_enter_new_name);
-    editText.setText(fileName);
+    // inflate the layoutPreviewDrawableBinding and get the root view
+    LayoutPreviewDrawableBinding binding =
+        LayoutPreviewDrawableBinding.inflate(bottomSheetDialog.getLayoutInflater(), null, false);
+    View view = binding.getRoot();
 
-    builder.setView(bind.getRoot());
-    builder.setTitle(R.string.add_drawable);
-    builder.setNegativeButton(R.string.cancel, (di, which) -> {});
-    builder.setPositiveButton(
-        R.string.add,
-        (di, which) -> {
-          String drawablePath = project.getDrawablePath();
+    // Set the drawable of the ImageView in the layoutPreviewDrawableBinding to the drawable of the
+    // passed ImageView
+    ImageView imageView = binding.image;
+    imageView.setImageDrawable(drawable);
 
-          String toPath = drawablePath + editText.getText().toString() + extension;
-          FileUtil.copyFile(path, toPath);
-
-          Drawable drawable = Drawable.createFromPath(toPath);
-          String name = editText.getText().toString();
-          drawableList.add(new DrawableFile(name + extension, drawable, toPath));
-          // holder.drawableName.setText(name);
-          // holder.drawable.setImageDrawable(drawable);
-          notifyDataSetChanged();
-        });
-
-    final AlertDialog dialog = builder.create();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    dialog.show();
-
-    editText.addTextChangedListener(
-        new TextWatcher() {
-
-          @Override
-          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-          @Override
-          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-          @Override
-          public void afterTextChanged(Editable p1) {
-            NameErrorChecker.checkForDrawable(
-                editText.getText().toString(), inputLayout, dialog, drawableList);
-          }
-        });
-
-    NameErrorChecker.checkForDrawable(fileName, inputLayout, dialog, drawableList);
-
-    editText.requestFocus();
-    InputMethodManager inputMethodManager =
-        (InputMethodManager) bind.getRoot().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-
-    if (!editText.getText().toString().equals("")) {
-      editText.setSelection(0, editText.getText().toString().length());
-    }
+    // Set the view of the BottomSheetDialog and show it
+    bottomSheetDialog.setContentView(view);
+    bottomSheetDialog.show();
   }
 }
