@@ -1,66 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.FitWindowsFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
+<android.widget.FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:fitsSystemWindows="true">
+
+  <androidx.appcompat.widget.LinearLayoutCompat
+    android:background="?android:attr/colorBackground"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    
-    <androidx.appcompat.widget.FitWindowsLinearLayout
-        android:background="?android:attr/colorBackground"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:fitsSystemWindows="true"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent">
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        app:navigationIcon="@drawable/arrow_left" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+      android:id="@+id/root_layout"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
+      android:orientation="vertical">
+
+      <io.github.rosemoe.sora.widget.CodeEditor
+        android:id="@+id/editor"
         android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        android:layout_width="match_parent" />
+
+      <LinearLayout
+        android:id="@+id/symbol"
+        android:layout_height="40dp"
+        android:layout_marginTop="-40dp"
         android:layout_width="match_parent"
         android:orientation="vertical">
-        
-        <com.google.android.material.appbar.AppBarLayout
-            android:fitsSystemWindows="true"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-            
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"
-                app:navigationIcon="@drawable/arrow_left"/>
-            
-        
-        </com.google.android.material.appbar.AppBarLayout>
-        
-        <ScrollView
-            android:id="@+id/nested_scroll_view"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent">
-            
-            <HorizontalScrollView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
-                
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/result"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
-                
-            
-            </HorizontalScrollView>
-            
-        
-        </ScrollView>
-        
-    
-    </androidx.appcompat.widget.FitWindowsLinearLayout>
-    
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_gravity="end|bottom"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_width="wrap_content"
-        app:icon="@drawable/content_copy"
-        android:text="@string/copy"/>
 
-</androidx.appcompat.widget.FitWindowsFrameLayout>
+        <HorizontalScrollView
+          android:layout_height="40dp"
+          android:layout_width="match_parent">
+
+          <io.github.rosemoe.sora.widget.SymbolInputView
+            android:id="@+id/symbol_input"
+            android:layout_height="40dp"
+            android:layout_width="wrap_content" />
+
+
+        </HorizontalScrollView>
+
+
+      </LinearLayout>
+
+
+    </LinearLayout>
+
+
+  </androidx.appcompat.widget.LinearLayoutCompat>
+
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    android:id="@+id/fab"
+    android:layout_gravity="end|bottom"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="60dp"
+    android:layout_width="wrap_content"
+    app:icon="@drawable/content_copy"
+    android:text="@string/copy" />
+
+</android.widget.FrameLayout>

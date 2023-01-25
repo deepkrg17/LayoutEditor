@@ -6,12 +6,13 @@
   android:layout_height="match_parent"
   android:layout_width="match_parent">
 
-  <androidx.appcompat.widget.FitWindowsLinearLayout
+  <androidx.appcompat.widget.LinearLayoutCompat
     android:background="?android:attr/colorBackground"
     android:id="@+id/content"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
       android:scaleY="0.85" />
 
 
-  </androidx.appcompat.widget.FitWindowsLinearLayout>
+  </androidx.appcompat.widget.LinearLayoutCompat>
 
   <androidx.appcompat.widget.LinearLayoutCompat
     android:background="?attr/colorSurface"
@@ -82,7 +83,8 @@
         android:id="@+id/structure_view"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:background="?attr/selectableItemBackgroundBorderless" />
 
 
     </HorizontalScrollView>

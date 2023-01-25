@@ -1,6 +1,6 @@
 package com.itsvks.layouteditor.adapters;
 
-import static com.itsvks.layouteditor.R.string;
+import com.itsvks.layouteditor.R.string;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
