@@ -14,13 +14,4 @@ public class DrawableFile {
     this.drawable = drawable;
     this.path = path;
   }
-
-  public void rename(String newPath, String extension) {
-    File newFile = new File(newPath);
-    File oldFile = new File(path);
-    oldFile.renameTo(newFile);
-
-    path = newPath;
-    name = FileUtil.getLastSegmentFromPath(path);
-  }
 }

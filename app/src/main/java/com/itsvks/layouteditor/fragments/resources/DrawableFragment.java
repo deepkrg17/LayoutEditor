@@ -2,7 +2,6 @@ package com.itsvks.layouteditor.fragments.resources;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,7 +22,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.activities.ResourceManagerActivity;
 import com.itsvks.layouteditor.adapters.DrawableResourceAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.FragmentResourcesBinding;
