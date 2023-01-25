@@ -3,16 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         app:title="@string/common">
-        <ListPreference
-            android:defaultValue="3"
-            android:dialogTitle="@string/msg_choose_theme"
-            android:entries="@array/theme"
-            android:entryValues="@array/theme_value"
-            app:useSimpleSummaryProvider="true"
-            app:key="app_theme"
-            app:title="@string/theme"
-            app:icon="@drawable/brightness_4" />
-        
         <SwitchPreferenceCompat
             app:title="@string/enable_vibration"
             app:summary="@string/summary_enable_vibration"

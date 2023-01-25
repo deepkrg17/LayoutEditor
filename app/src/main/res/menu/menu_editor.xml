@@ -26,19 +26,11 @@
     app:showAsAction="always" />
 
   <item
-    android:id="@+id/show_xml"
+    android:id="@+id/edit_xml"
     android:name="@string/show_xml"
     android:title="@string/show_xml"
     android:icon="@drawable/xml"
     app:contentDescription="@string/show_xml"
-    app:showAsAction="ifRoom" />
-
-  <item
-    android:id="@+id/resources_manager"
-    android:name="@string/drawable_manager"
-    android:title="@string/drawable_manager"
-    android:icon="@drawable/ic_image_outline"
-    app:contentDescription="@string/drawable_manager"
     app:showAsAction="ifRoom" />
 
   <item
@@ -47,6 +39,14 @@
     android:title="@string/preview_layout"
     android:icon="@drawable/cellphone_play"
     app:contentDescription="@string/preview_layout"
+    app:showAsAction="ifRoom" />
+  
+  <item
+    android:id="@+id/resources_manager"
+    android:name="@string/res_manager"
+    android:title="@string/res_manager"
+    android:icon="@drawable/shape_outline"
+    app:contentDescription="@string/res_manager"
     app:showAsAction="ifRoom" />
 
   <item

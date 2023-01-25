@@ -16,10 +16,6 @@ public class PreferencesManager {
     return getPrefs().getBoolean("toggle_stroke", true);
   }
 
-  public static String getAppTheme() {
-    return getPrefs().getString("app_theme", "3");
-  }
-
   public static SharedPreferences getPrefs() {
     return PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());
   }

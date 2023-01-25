@@ -22,11 +22,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.FitWindowsLinearLayout;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.FileIOUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.UriUtils;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -39,6 +41,7 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.DrawableManagerActivity;
 import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.activities.PreviewLayoutActivity;
+import com.itsvks.layouteditor.activities.ResourceManagerActivity;
 import com.itsvks.layouteditor.adapters.WidgetListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.databinding.WidgetsListBinding;
@@ -66,7 +69,7 @@ public class EditorActivity extends BaseActivity
   private ActivityEditorBinding binding;
 
   private DrawerLayout drawerLayout;
-  private FitWindowsLinearLayout contentView;
+  private LinearLayoutCompat contentView;
   private ActionBarDrawerToggle actionBarDrawerToggle;
 
   private ArrayList<HashMap<String, Object>> views;
@@ -223,20 +226,8 @@ public class EditorActivity extends BaseActivity
     else {
       String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
       if (!result.isEmpty()) {
-        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle(R.string.confirmation);
-        builder.setMessage(R.string.msg_confirmation);
-        builder.setNegativeButton(R.string.do_not_save, (d, w) -> super.onBackPressed());
-        builder.setPositiveButton(
-            R.string.save,
-            (d, w) -> {
-              saveXml();
-              super.onBackPressed();
-              Toast.makeText(this, R.string.project_saved, Toast.LENGTH_SHORT).show();
-            });
-        builder.setNeutralButton(R.string.cancel, (d, w) -> d.dismiss());
-        builder.setCancelable(false);
-        builder.create().show();
+        saveXml();
+        super.onBackPressed();
       } else super.onBackPressed();
     }
   }
@@ -263,14 +254,14 @@ public class EditorActivity extends BaseActivity
       case R.id.save_xml:
         saveXml();
         return true;
-      case R.id.show_xml:
+      case R.id.edit_xml:
         showXml();
         return true;
       case R.id.resources_manager:
         saveXml();
         startActivity(
-            new Intent(this, DrawableManagerActivity.class)
-                .putExtra(DrawableManagerActivity.EXTRA_KEY_PROJECT, project));
+            new Intent(this, ResourceManagerActivity.class)
+                .putExtra(ResourceManagerActivity.EXTRA_KEY_PROJECT, project));
 
         return true;
       case R.id.preview:
@@ -330,7 +321,7 @@ public class EditorActivity extends BaseActivity
 
     String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
     project.saveLayout(result);
-    SBUtils.make(binding.getRoot(), R.string.project_saved).setSlideAnimation().showAsSuccess();
+    ToastUtils.showShort(getString(R.string.project_saved));
   }
 
   private void showXml() {
