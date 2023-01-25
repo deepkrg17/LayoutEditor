@@ -71,7 +71,6 @@ public class ShowXMLActivity extends BaseActivity {
       e.printStackTrace();
     }
 
-    binding.result.setTextIsSelectable(true);    
     binding.fab.setOnClickListener(
         v -> {
           ClipboardUtils.copyText(binding.editor.getText().toString());
