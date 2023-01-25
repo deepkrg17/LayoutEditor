@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 /** Utility class for manipulating bitmaps */
 public class BitmapUtil {

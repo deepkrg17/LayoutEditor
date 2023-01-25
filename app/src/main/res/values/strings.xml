@@ -95,4 +95,6 @@
     <string name="rename_drawable">Rename Drawable</string>
     <string name="copy_name">Copy Name</string>
     <string name="import_resource">Import</string>
+    <string name="color_scheme">Color Scheme</string>
+    <string name="select">Select</string>
 </resources>

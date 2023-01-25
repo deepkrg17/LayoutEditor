@@ -2,15 +2,9 @@ package com.itsvks.layouteditor.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,19 +14,13 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
-import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.blankj.utilcode.util.ClipboardUtils;
-import com.blankj.utilcode.util.SnackbarUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -111,7 +99,9 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
         .setOnClickListener(
             v ->
                 showBottomSheetDialog(
-                    holder.itemView.getContext(), drawableList.get(position).drawable));
+                    holder.itemView.getContext(),
+                    drawableList.get(position).drawable,
+                    drawableList.get(position).name));
   }
 
   @Override
@@ -136,7 +126,9 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                         .get(position)
                         .name
                         .substring(0, drawableList.get(position).name.lastIndexOf(".")));
-                ToastUtils.showShort(v.getContext().getString(R.string.copied));
+                SBUtils.make(holder.binding.getRoot(), v.getContext().getString(R.string.copied))
+                    .setSlideAnimation()
+                    .showAsSuccess();
                 return true;
               case R.id.menu_delete:
                 new MaterialAlertDialogBuilder(v.getContext())
@@ -242,7 +234,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     }
   }
 
-  public void showBottomSheetDialog(Context context, Drawable drawable) {
+  public void showBottomSheetDialog(Context context, Drawable drawable, String name) {
     // Create a new BottomSheetDialog instance with the context of the ImageView
     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
 
@@ -250,14 +242,37 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     LayoutPreviewDrawableBinding binding =
         LayoutPreviewDrawableBinding.inflate(bottomSheetDialog.getLayoutInflater(), null, false);
     View view = binding.getRoot();
+    bottomSheetDialog.setDismissWithAnimation(true);
+    bottomSheetDialog.setTitle(name);
+    // BitmapUtil.setBackgroundAccordingToImage(context, binding.getRoot(), drawable);
 
     // Set the drawable of the ImageView in the layoutPreviewDrawableBinding to the drawable of the
     // passed ImageView
     ImageView imageView = binding.image;
     imageView.setImageDrawable(drawable);
+    checkAndSetSize(imageView);
 
     // Set the view of the BottomSheetDialog and show it
     bottomSheetDialog.setContentView(view);
     bottomSheetDialog.show();
+  }
+
+  /**
+   * This method checks and, if necessary, sets the size of an ImageView.
+   *
+   * @param imageView the ImageView to check and set
+   */
+  public void checkAndSetSize(ImageView imageView) {
+    // Get the image view's current width and height in pixels
+    float density = imageView.getResources().getDisplayMetrics().density;
+    int widthInPixels = (int) (imageView.getWidth() * density);
+    int heightInPixels = (int) (imageView.getHeight() * density);
+
+    // Check if the size is less than 200dp x 200dp
+    if (widthInPixels == heightInPixels && (widthInPixels < 200 || heightInPixels < 200)) {
+      // Set the size to 200dp x 200dp
+      imageView.getLayoutParams().width = (int) (200 * density);
+      imageView.getLayoutParams().height = (int) (200 * density);
+    }
   }
 }

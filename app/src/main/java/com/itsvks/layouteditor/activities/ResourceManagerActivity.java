@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -97,15 +98,27 @@ public class ResourceManagerActivity extends BaseActivity {
                 switch (position) {
                   case 0:
                     tab.setText(R.string.drawable);
+                    tab.setIcon(
+                        AppCompatResources.getDrawable(
+                            ResourceManagerActivity.this, R.drawable.image_outline));
                     break;
                   case 1:
                     tab.setText(R.string.color);
+                    tab.setIcon(
+                        AppCompatResources.getDrawable(
+                            ResourceManagerActivity.this, R.drawable.palette_outline));
                     break;
                   case 2:
                     tab.setText(R.string.string);
+                    tab.setIcon(
+                        AppCompatResources.getDrawable(
+                            ResourceManagerActivity.this, R.drawable.format_letter_case));
                     break;
                   case 3:
                     tab.setText(R.string.font);
+                    tab.setIcon(
+                        AppCompatResources.getDrawable(
+                            ResourceManagerActivity.this, R.drawable.format_font));
                     break;
                 }
               }
