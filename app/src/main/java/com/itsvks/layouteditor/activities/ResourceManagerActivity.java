@@ -149,7 +149,7 @@ public class ResourceManagerActivity extends BaseActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
+    // if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
 
     getMenuInflater().inflate(R.menu.menu_resource_manager, menu);
     return super.onCreateOptionsMenu(menu);
