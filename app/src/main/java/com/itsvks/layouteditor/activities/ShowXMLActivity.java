@@ -105,7 +105,7 @@ public class ShowXMLActivity extends BaseActivity {
     FileProviderRegistry.getInstance()
         .addFileProvider(new AssetsFileResolver(getApplicationContext().getAssets()));
 
-    String[] themes = new String[] {"darcula", "abyss", "quietlight", "solarized_drak"};
+    String[] themes = new String[] {"default", "darcula", "abyss", "quietlight", "solarized_drak"};
     ThemeRegistry themeRegistry = ThemeRegistry.getInstance();
     for (String name : themes) {
       String path = "editor/textmate/" + name + ".json";
@@ -182,21 +182,24 @@ public class ShowXMLActivity extends BaseActivity {
               new ArrayAdapter<String>(
                   this,
                   android.R.layout.simple_list_item_1,
-                  new String[] {"Abyss", "Darcula", "QuietLight", "Solarized Drak"}),
+                  new String[] {"Default", "Abyss", "Darcula", "Quiet Light", "Solarized (dark)"}),
               (d, w) -> {
                 try {
                   ensureTextmateTheme();
                   switch (w) {
                     case 0:
-                      ThemeRegistry.getInstance().setTheme("abyss");
+                      ThemeRegistry.getInstance().setTheme("default");
                       break;
                     case 1:
-                      ThemeRegistry.getInstance().setTheme("darcula");
+                      ThemeRegistry.getInstance().setTheme("abyss");
                       break;
                     case 2:
-                      ThemeRegistry.getInstance().setTheme("quietlight");
+                      ThemeRegistry.getInstance().setTheme("darcula");
                       break;
                     case 3:
+                      ThemeRegistry.getInstance().setTheme("quietlight");
+                      break;
+                    case 4:
                       ThemeRegistry.getInstance().setTheme("solarized_drak");
                       break;
                   }
