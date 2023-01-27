@@ -1,9 +1,15 @@
 package com.itsvks.layouteditor.activities;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.ext.SdkExtensions;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
@@ -23,6 +29,7 @@ import com.itsvks.layouteditor.fragments.resources.StringFragment;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.tapadoo.alerter.Alerter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +41,7 @@ public class ResourceManagerActivity extends BaseActivity {
   private List<DrawableFile> drawableList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
+  private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +81,45 @@ public class ResourceManagerActivity extends BaseActivity {
 
           @Override
           public void onPickFile(Uri uri) {
-            if (FileUtil.isDownloadsDocument(uri)) {
-              SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
-              return;
-            }
-            Fragment fragment =
-                getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
-            if (fragment != null && fragment instanceof DrawableFragment) {
-              ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
+            if (uri == null) {
+              SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
+            } else {
+              if (FileUtil.isDownloadsDocument(uri)) {
+                SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+                return;
+              }
+              Fragment fragment =
+                  getSupportFragmentManager()
+                      .findFragmentByTag("f" + binding.pager.getCurrentItem());
+              if (fragment != null && fragment instanceof DrawableFragment) {
+                ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
+              }
             }
           }
         };
+    pickMedia =
+        registerForActivityResult(
+            new PickVisualMedia(),
+            uri -> {
+              // Callback is invoked after the user selects a media item or closes the
+              // photo picker.
+              if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                if (FileUtil.isDownloadsDocument(uri)) {
+                  SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+                  return;
+                }
+                Fragment fragment =
+                    getSupportFragmentManager()
+                        .findFragmentByTag("f" + binding.pager.getCurrentItem());
+                if (fragment != null && fragment instanceof DrawableFragment) {
+                  ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
+                }
+              } else {
+                Log.d("PhotoPicker", "No media selected");
+                SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
+              }
+            });
 
     binding.pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
     binding.pager.setAdapter(adapter);
@@ -164,7 +200,7 @@ public class ResourceManagerActivity extends BaseActivity {
       case R.id.menu_add:
         if (fragment != null) {
           if (fragment instanceof DrawableFragment) {
-            filepicker.launch("image/*");
+            launchPhotoPicker();
           } else if (fragment instanceof ColorFragment) {
             SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
           } else if (fragment instanceof StringFragment) {
@@ -180,5 +216,24 @@ public class ResourceManagerActivity extends BaseActivity {
         break;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private boolean isPhotoPickerAvailable() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return true;
+    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+      return SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2;
+    else return false;
+  }
+
+  public void launchPhotoPicker() {
+    if (isPhotoPickerAvailable()) {
+      // Launch the photo picker and allow the user to choose only images.
+      pickMedia.launch(
+          new PickVisualMediaRequest.Builder()
+              .setMediaType(PickVisualMedia.ImageOnly.INSTANCE)
+              .build());
+    } else {
+      filepicker.launch("image/*");
+    }
   }
 }

@@ -35,7 +35,7 @@
         <item name="dialogCornerRadius">28dp</item>
     </style>
 
-    <style name="AppTheme.Licence" parent="Theme.Material3.Dark">
+    <style name="AppTheme.Licence" parent="AppTheme">
         <item name="android:statusBarColor">@color/md_theme_dark_surface</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
