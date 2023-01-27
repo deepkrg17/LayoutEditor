@@ -202,6 +202,7 @@ public class ShowXMLActivity extends BaseActivity {
                     case 4:
                       ThemeRegistry.getInstance().setTheme("solarized_drak");
                       break;
+                    
                   }
                 } catch (Exception e) {
                   e.printStackTrace();

@@ -7,6 +7,7 @@ import android.net.Uri;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -33,7 +34,7 @@ public abstract class FilePicker {
         actvty.registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
-              if (uri != null) onPickFile(uri);
+              onPickFile(uri);
             });
 
     // Create an instance of ActivityResultContracts.RequestPermission and register it with actvty
@@ -51,11 +52,11 @@ public abstract class FilePicker {
   public abstract void onRequestPermission(boolean isGranted);
 
   /**
-   * Abstract method called onPickFile, takes in a NonNull Uri as a parameter
+   * Abstract method called onPickFile, takes in a Nullable Uri as a parameter
    *
-   * @param uri NonNull Uri
+   * @param uri Nullable Uri
    */
-  public abstract void onPickFile(@NonNull Uri uri);
+  public abstract void onPickFile(@Nullable Uri uri);
 
   /**
    * Method launch, takes in a String MIME type as a parameter

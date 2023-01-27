@@ -19,7 +19,68 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - Save and use drawables
 - See the layout structure
 - Save layouts as projects
-- Preview Layout
+- Preview Layout in devices
+- Export layouts as XML
+
+### TODO
+- [ ] Create custom widgets and components
+- [ ] Group and organize views and layouts
+- [ ] Use custom themes and styles
+- [ ] Set constraints on views
+- [ ] Test and debug layouts
+- [ ] Export layouts as images
+- [ ] Add custom fonts
+- [ ] Create multi-screen layouts
+- [ ] Add support for multiple languages
+- [ ] Create custom animations
+- [ ] Share layouts with other users
+- [ ] Automatically generate layouts from code
+- [ ] Reuse existing layouts and elements
+- [ ] Add support for third-party libraries
+- [ ] Create custom layout templates
+- [ ] Add support for device orientation
+- [ ] Create custom layout wizards
+- [ ] Add support for different screen sizes
+- [ ] Create interactive and dynamic layouts
+- [ ] Create custom view groups
+- [ ] Integrate with existing development tools
+- [X] Generate code from layouts
+- [ ] Add support for custom transitions
+- [ ] Generate responsive layouts
+- [ ] Create custom layout attributes
+- [ ] Add support for custom fonts
+- [ ] Create gesture-based interactions
+- [ ] Add support for custom themes
+- [ ] Create complex data-driven layouts
+- [ ] Export layouts as HTML
+- [ ] Import existing layouts
+- [ ] Add support for custom animations
+- [ ] Use version control for layouts
+- [ ] Create and save custom themes
+- [ ] Add support for third-party libraries
+- [ ] Create and use custom fonts
+- [ ] Create custom layouts
+- [ ] Add support for custom view components
+- [X] Create and save custom layouts
+- [ ] Add support for multiple layout designs
+- [ ] Add support for multiple device sizes
+- [X] Add support for testing layouts
+- [ ] Create custom animations
+- [X] Customize view properties
+- [ ] Add support for custom plugins
+- [X] Add support for undo/redo
+- [ ] Add support for creating custom menus
+- [ ] Add support for creating custom dialogs
+- [ ] Add support for creating custom widgets
+- [ ] Add support for creating custom icons
+- [ ] Add support for creating custom fonts
+- [ ] Add support for creating custom themes
+- [ ] Add support for creating custom shapes
+- [ ] Add support for creating custom colors
+- [ ] Add support for creating custom backgrounds
+- [ ] Add support for creating custom text styles
+- [X] Add support for creating custom layouts
+- [ ] Add support for creating custom layout templates
 
 **Known issues**:
 1. `ConstraintLayout` is not usable right now.
@@ -37,7 +98,7 @@ You may face issues when using the app. If you do, please report it in github [i
 ### Lisence
 ```
 LayoutEditor - Create Awesome UI!
-Copyright (C) 2022  Vivek Kumar Sahani & Deep Kr. Ghosh
+Copyright (C) 2022-2023  Vivek Kumar Sahani & Deep Kr. Ghosh
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
