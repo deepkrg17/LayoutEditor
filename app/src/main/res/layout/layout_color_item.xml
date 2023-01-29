@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,33 +7,36 @@
   android:layout_margin="2dp"
   app:cardCornerRadius="8dp"
   app:cardElevation="4dp"
-  app:cardBackgroundColor="?attr/colorSecondaryContainer"
+  app:cardBackgroundColor="#FFFFFFFF"
   app:cardUseCompatPadding="true">
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:padding="8dp"
+    android:padding="10dp"
     android:background="?attr/selectableItemBackground">
-
-    <androidx.appcompat.widget.AppCompatImageView
-      android:layout_width="75dp"
-      android:layout_height="match_parent"
-      app:srcCompat="@mipmap/ic_launcher"
-      android:id="@+id/image"
-      android:padding="15dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="ic_launcher"
-      android:layout_toRightOf="@id/image"
-      android:layout_toLeftOf="@id/menu"
-      android:textSize="20sp"
-      android:textColor="?attr/colorOnSecondaryContainer"
+      android:text="white"
+      android:textSize="18sp"
+      android:id="@+id/color_name"
+      android:layout_centerVertical="true"
+      android:translationY="-10dp"
       android:layout_marginLeft="15dp"
-      android:id="@+id/drawable_name"
-      android:layout_centerVertical="true" />
+      android:textColor="#FF000000" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="#FFFFFFFF"
+      android:layout_below="@id/color_name"
+      android:translationY="-5dp"
+      android:textSize="13sp"
+      android:layout_marginLeft="15dp"
+      android:textColor="#FF848482"
+      android:id="@+id/color_value" />
 
     <androidx.appcompat.widget.AppCompatImageView
       style="@style/ToolbarButtonStyle"
@@ -40,8 +44,8 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="15dp"
-      android:tint="?attr/colorOnSecondaryContainer"
       android:id="@+id/menu" />
 
   </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

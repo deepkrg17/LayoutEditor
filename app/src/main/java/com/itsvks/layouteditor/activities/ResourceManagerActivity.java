@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
+import com.itsvks.layouteditor.adapters.models.ColorItem;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.R;
@@ -39,6 +40,7 @@ public class ResourceManagerActivity extends BaseActivity {
   private ActivityResourceManagerBinding binding;
   private ProjectFile project;
   private List<DrawableFile> drawableList = new ArrayList<>();
+  private List<ColorItem> colorList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
@@ -61,7 +63,7 @@ public class ResourceManagerActivity extends BaseActivity {
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
     adapter.addFragment(new DrawableFragment(project, drawableList));
-    adapter.addFragment(new ColorFragment());
+    adapter.addFragment(new ColorFragment(project, colorList));
     adapter.addFragment(new StringFragment());
     adapter.addFragment(new FontFragment());
     filepicker =

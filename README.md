@@ -52,13 +52,10 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - [ ] Create gesture-based interactions
 - [ ] Add support for custom themes
 - [ ] Create complex data-driven layouts
-- [ ] Export layouts as HTML
 - [ ] Import existing layouts
-- [ ] Add support for custom animations
 - [ ] Use version control for layouts
 - [ ] Create and save custom themes
 - [ ] Add support for third-party libraries
-- [ ] Create and use custom fonts
 - [ ] Create custom layouts
 - [ ] Add support for custom view components
 - [X] Create and save custom layouts
@@ -69,16 +66,11 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - [X] Customize view properties
 - [ ] Add support for custom plugins
 - [X] Add support for undo/redo
-- [ ] Add support for creating custom menus
-- [ ] Add support for creating custom dialogs
 - [ ] Add support for creating custom widgets
 - [ ] Add support for creating custom icons
-- [ ] Add support for creating custom fonts
 - [ ] Add support for creating custom themes
 - [ ] Add support for creating custom shapes
 - [ ] Add support for creating custom colors
-- [ ] Add support for creating custom backgrounds
-- [ ] Add support for creating custom text styles
 - [X] Add support for creating custom layouts
 - [ ] Add support for creating custom layout templates
 
@@ -94,6 +86,7 @@ You may face issues when using the app. If you do, please report it in github [i
 
 ### Thanks to
 - [Kerismaker](https://www.flaticon.com/authors/kerismaker) for the nice [icon](https://www.flaticon.com/free-icon/template_6863985)
+- [Rosemoe](https://github.com/Rosemoe) for [sora-editor](https://github.com/Rosemoe/sora-editor)
 
 ### Lisence
 ```

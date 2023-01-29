@@ -156,7 +156,9 @@ public class HomeFragment extends Fragment {
         final String time = Calendar.getInstance().getTime().toString();
         FileUtil.makeDir(projectDir);
         FileUtil.makeDir(projectDir + "/drawable/");
+        FileUtil.makeDir(projectDir + "/values/");
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
+        FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
 
         ProjectFile project = new ProjectFile(projectDir, time);
         project.saveLayout("");

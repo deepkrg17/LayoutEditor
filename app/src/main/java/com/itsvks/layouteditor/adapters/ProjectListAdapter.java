@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.adapters;
 
+import android.content.SharedPreferences;
 import com.itsvks.layouteditor.R.string;
 
 import android.annotation.SuppressLint;
@@ -33,6 +34,7 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
+import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.util.ArrayList;
@@ -41,210 +43,218 @@ import java.util.Locale;
 
 public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ViewHolder> {
 
-    private List<ProjectFile> projects;
+  private List<ProjectFile> projects;
+  private SharedPreferences prefs;
 
-    public ProjectListAdapter(List<ProjectFile> projects) {
-        this.projects = projects;
+  public ProjectListAdapter(List<ProjectFile> projects) {
+    this.projects = projects;
+    prefs = PreferencesManager.getPrefs();
+  }
+
+  public class ViewHolder extends RecyclerView.ViewHolder {
+    ListProjectFileBinding binding;
+    AppCompatTextView projectName;
+    AppCompatTextView projectDate;
+    AppCompatTextView projectIcon;
+    AppCompatImageButton menu;
+
+    public ViewHolder(@NonNull ListProjectFileBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+
+      projectName = binding.projectName;
+      projectDate = binding.projectDate;
+      projectIcon = binding.icon;
+      menu = binding.menu;
+    }
+  }
+
+  @Override
+  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    return new ViewHolder(
+        ListProjectFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+  }
+
+  @SuppressLint("RecyclerView")
+  @Override
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    var context = holder.binding.getRoot().getContext();
+    holder
+        .binding
+        .getRoot()
+        .setAnimation(
+            AnimationUtils.loadAnimation(
+                holder.itemView.getContext(), R.anim.project_list_animation));
+    holder.projectName.setText(projects.get(position).name.toString());
+    holder.projectDate.setText(projects.get(position).date.toString());
+    TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
+    holder.binding.getRoot().setOnClickListener(v -> openProject(v, position));
+    holder.projectIcon.setText(
+        projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
+    holder.menu.setOnClickListener(v -> showOptions(v, position));
+  }
+
+  @Override
+  public int getItemCount() {
+    return projects.size();
+  }
+
+  private void checkNameErrors(
+      List<ProjectFile> projects,
+      String name,
+      String currentName,
+      TextInputLayout inputLayout,
+      AlertDialog dialog) {
+    if (name.isEmpty()) {
+      inputLayout.setErrorEnabled(true);
+      inputLayout.setError(dialog.getContext().getString(string.msg_cannnot_empty));
+      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+      return;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ListProjectFileBinding binding;
-        AppCompatTextView projectName;
-        AppCompatTextView projectDate;
-        AppCompatTextView projectIcon;
-        AppCompatImageButton menu;
+    for (ProjectFile file : projects) {
+      if (name.equals(currentName)) break;
 
-        public ViewHolder(@NonNull ListProjectFileBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-            projectName = binding.projectName;
-            projectDate = binding.projectDate;
-            projectIcon = binding.icon;
-            menu = binding.menu;
-        }
+      if (file.getName().equals(name)) {
+        inputLayout.setErrorEnabled(true);
+        inputLayout.setError(
+            LayoutEditor.getContext().getString(string.msg_current_name_unavailable));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        return;
+      }
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                ListProjectFileBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false));
-    }
+    inputLayout.setErrorEnabled(false);
+    inputLayout.setError("");
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+  }
 
-    @SuppressLint("RecyclerView")
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        var context = holder.binding.getRoot().getContext();
-        holder.binding
-                .getRoot()
-                .setAnimation(
-                        AnimationUtils.loadAnimation(
-                                holder.itemView.getContext(), R.anim.project_list_animation));
-        holder.projectName.setText(projects.get(position).name.toString());
-        holder.projectDate.setText(projects.get(position).date.toString());
-        TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
-        holder.binding.getRoot().setOnClickListener(v -> openProject(v, position));
-        holder.projectIcon.setText(
-                projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
-        holder.menu.setOnClickListener(v -> showOptions(v, position));
-    }
+  @SuppressWarnings("deprecation")
+  @SuppressLint("RestrictedApi")
+  private void renameProject(View v, int position) {
+    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
+    builder.setTitle(string.rename_project);
+    final TextinputlayoutBinding bind =
+        TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
+    final TextInputEditText editText = bind.textinputEdittext;
+    final TextInputLayout inputLayout = bind.textinputLayout;
 
-    @Override
-    public int getItemCount() {
-        return projects.size();
-    }
+    editText.setText(projects.get(position).getName());
+    inputLayout.setHint(string.msg_new_project_name);
 
-    private void checkNameErrors(
-            List<ProjectFile> projects,
-            String name,
-            String currentName,
-            TextInputLayout inputLayout,
-            AlertDialog dialog) {
-        if (name.isEmpty()) {
-            inputLayout.setErrorEnabled(true);
-            inputLayout.setError(dialog.getContext().getString(string.msg_cannnot_empty));
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-            return;
-        }
+    final int padding =
+        (int)
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 10, v.getContext().getResources().getDisplayMetrics());
+    builder.setView(bind.getRoot(), padding, padding, padding, padding);
+    builder.setNegativeButton(string.cancel, (di, which) -> {});
+    builder.setPositiveButton(
+        string.rename,
+        (di, which) -> {
+          String path = projects.get(position).getPath();
+          String newPath =
+              path.substring(0, path.lastIndexOf("/")) + "/" + editText.getText().toString();
+          projects.get(position).rename(newPath);
+          notifyItemChanged(position);
+        });
 
-        for (ProjectFile file : projects) {
-            if (name.equals(currentName)) break;
+    final AlertDialog dialog = builder.create();
+    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    dialog.show();
 
-            if (file.getName().equals(name)) {
-                inputLayout.setErrorEnabled(true);
-                inputLayout.setError(
-                        LayoutEditor.getContext().getString(string.msg_current_name_unavailable));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                return;
-            }
-        }
+    editText.addTextChangedListener(
+        new TextWatcher() {
 
-        inputLayout.setErrorEnabled(false);
-        inputLayout.setError("");
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-    }
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("RestrictedApi")
-    private void renameProject(View v, int position) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-        builder.setTitle(string.rename_project);
-        final TextinputlayoutBinding bind =
-                TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
-        final TextInputEditText editText = bind.textinputEdittext;
-        final TextInputLayout inputLayout = bind.textinputLayout;
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
 
-        editText.setText(projects.get(position).getName());
-        inputLayout.setHint(string.msg_new_project_name);
-
-        final int padding =
-                (int)
-                        TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP,
-                                10,
-                                v.getContext().getResources().getDisplayMetrics());
-        builder.setView(bind.getRoot(), padding, padding, padding, padding);
-        builder.setNegativeButton(string.cancel, (di, which) -> {});
-        builder.setPositiveButton(
-                string.rename,
-                (di, which) -> {
-                    String path = projects.get(position).getPath();
-                    String newPath =
-                            path.substring(0, path.lastIndexOf("/"))
-                                    + "/"
-                                    + editText.getText().toString();
-                    projects.get(position).rename(newPath);
-                    notifyItemChanged(position);
-                });
-
-        final AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-
-        editText.addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkNameErrors(
-                                projects,
-                                editText.getText().toString(),
-                                projects.get(position).getName(),
-                                inputLayout,
-                                dialog);
-                    }
-                });
-
-        checkNameErrors(
+          @Override
+          public void afterTextChanged(Editable p1) {
+            checkNameErrors(
                 projects,
                 editText.getText().toString(),
                 projects.get(position).getName(),
                 inputLayout,
                 dialog);
+          }
+        });
 
-        editText.requestFocus();
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    checkNameErrors(
+        projects,
+        editText.getText().toString(),
+        projects.get(position).getName(),
+        inputLayout,
+        dialog);
 
-        if (!editText.getText().toString().isEmpty()) {
-            editText.setSelection(0, editText.getText().toString().length());
-        }
+    editText.requestFocus();
+    InputMethodManager inputMethodManager =
+        (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+
+    if (!editText.getText().toString().isEmpty()) {
+      editText.setSelection(0, editText.getText().toString().length());
     }
+  }
 
-    private void deleteProject(View v, int position) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-        builder.setTitle(string.delete_project);
-        builder.setMessage(string.msg_delete_project);
-        builder.setNegativeButton(string.no, (d, w) -> d.dismiss());
-        builder.setPositiveButton(
-                string.yes,
-                (d, w) -> {
-                    FileUtil.deleteFile(projects.get(position).getPath());
-                    projects.remove(projects.get(position));
-                    notifyItemRemoved(position);
-                });
+  private void deleteProject(View v, int position) {
+    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
+    builder.setTitle(string.delete_project);
+    builder.setMessage(string.msg_delete_project);
+    builder.setNegativeButton(string.no, (d, w) -> d.dismiss());
+    builder.setPositiveButton(
+        string.yes,
+        (d, w) -> {
+          FileUtil.deleteFile(projects.get(position).getPath());
+          projects.remove(projects.get(position));
+          notifyItemRemoved(position);
+        });
 
-        builder.create().show();
+    builder.create().show();
+  }
+
+  private void showOptions(View v, int position) {
+    final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+    popupMenu.inflate(R.menu.menu_project_file_options);
+    popupMenu.setOnMenuItemClickListener(
+        new PopupMenu.OnMenuItemClickListener() {
+
+          @Override
+          public boolean onMenuItemClick(MenuItem item) {
+
+            var id = item.getItemId();
+            switch (id) {
+              case R.id.menu_delete:
+                deleteProject(v, position);
+                return true;
+              case R.id.menu_rename:
+                renameProject(v, position);
+                return true;
+            }
+            return false;
+          }
+        });
+
+    popupMenu.show();
+  }
+
+  private void openProject(View v, int position) {
+    Intent intent = new Intent(v.getContext(), EditorActivity.class);
+    intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
+    intent.setAction(EditorActivity.ACTION_OPEN);
+    if (!prefs.getBoolean("copyAssets", false)) {
+      final String projectDir =
+          FileUtil.getPackageDataDir(LayoutEditor.getContext())
+              + "/projects/"
+              + projects.get(position).name;
+      FileUtil.makeDir(projectDir + "/values/");
+      // FileUtil.makeDir(projectDir + "/drawable/");
+      // FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
+      FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
+      prefs.edit().putBoolean("copyAssets", true).apply();
     }
-
-    private void showOptions(View v, int position) {
-        final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-        popupMenu.inflate(R.menu.menu_project_file_options);
-        popupMenu.setOnMenuItemClickListener(
-                new PopupMenu.OnMenuItemClickListener() {
-
-                    
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        var id = item.getItemId();
-                        switch (id) {
-                            case R.id.menu_delete:
-                                deleteProject(v, position);
-                                return true;
-                            case R.id.menu_rename:
-                                renameProject(v, position);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-
-        popupMenu.show();
-    }
-
-    private void openProject(View v, int position) {
-        Intent intent = new Intent(v.getContext(), EditorActivity.class);
-        intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
-        intent.setAction(EditorActivity.ACTION_OPEN);
-        v.getContext().startActivity(intent);
-    }
+    v.getContext().startActivity(intent);
+  }
 }

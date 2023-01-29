@@ -56,7 +56,7 @@ public class NameErrorChecker {
 
     // Check if the name already exists in the drawableList
     for (DrawableFile item : drawableList) {
-      if (item.name.equals(name)) {
+      if (item.name.substring(0, item.name.lastIndexOf(".")).equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
