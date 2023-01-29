@@ -22,6 +22,19 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - Preview Layout in devices
 - Export layouts as XML
 
+### Screenshots
+![Screenshot_01](./screenshots/ScreenShot_LayoutEditor_01.jpg "Screenshot_01")
+![Screenshot_02](./screenshots/ScreenShot_LayoutEditor_02.jpg "Screenshot_02")
+![Screenshot_03](./screenshots/ScreenShot_LayoutEditor_03.jpg "Screenshot_03")
+![Screenshot_03](./screenshots/ScreenShot_LayoutEditor_04.jpg "Screenshot_04")
+![Screenshot_05](./screenshots/ScreenShot_LayoutEditor_05.jpg "Screenshot_05")
+![Screenshot_06](./screenshots/ScreenShot_LayoutEditor_06.jpg "Screenshot_06")
+![Screenshot_08](./screenshots/ScreenShot_LayoutEditor_07.jpg "Screenshot_07")
+![Screenshot_08](./screenshots/ScreenShot_LayoutEditor_08.jpg "Screenshot_08")
+![Screenshot_09](./screenshots/ScreenShot_LayoutEditor_09.jpg "Screenshot_09")
+![Screenshot_10](./screenshots/ScreenShot_LayoutEditor_10.jpg "Screenshot_10")
+![Screenshot_11](./screenshots/ScreenShot_LayoutEditor_11.jpg "Screenshot_11")
+
 ### TODO
 - [ ] Create custom widgets and components
 - [ ] Group and organize views and layouts
