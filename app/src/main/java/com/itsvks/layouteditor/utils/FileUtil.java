@@ -99,7 +99,7 @@ public class FileUtil {
       in.close();
       out.flush();
       out.close();
-    } catch (Exception e) {
+    } catch (IOException e) {
       // Print exception stack trace
       e.printStackTrace();
     }
@@ -247,11 +247,19 @@ public class FileUtil {
     }
   }
 
+  public static void copyFile(InputStream in, OutputStream out) throws IOException {
+    byte[] buffer = new byte[1024];
+    int read;
+    while ((read = in.read(buffer)) != -1) {
+      out.write(buffer, 0, read);
+    }
+  }
+
   /**
    * copyDir() Copies a directory from one path to another
    *
-   * @param oldPath  the path of the directory to be copied
-   * @param newPath  the path of the directory to be created
+   * @param oldPath the path of the directory to be copied
+   * @param newPath the path of the directory to be created
    */
   public static void copyDir(String oldPath, String newPath) {
     File oldFile = new File(oldPath);

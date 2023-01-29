@@ -2,17 +2,16 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_margin="2dp"
+  android:layout_height="75dp"
+  android:padding="8dp"
+  android:layout_margin="5dp"
   app:cardCornerRadius="8dp"
   app:cardElevation="4dp"
-  app:cardBackgroundColor="?attr/colorSecondaryContainer"
-  app:cardUseCompatPadding="true">
+  app:cardBackgroundColor="?attr/colorSecondaryContainer">
 
   <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:padding="8dp"
+    android:layout_height="match_parent"
     android:background="?attr/selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatImageView

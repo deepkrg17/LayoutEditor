@@ -108,6 +108,26 @@ public class BitmapUtil {
       textView.setTextColor(Color.WHITE);
     }
   }
+  
+  public static double getLuminance(View view) {
+    int backgroundColor = Color.WHITE;
+    if (view instanceof CardView) {
+      // Get the color from the CardView
+      CardView cardView = (CardView) view;
+      backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
+    }
+    // Check if the background View is a ColorDrawable
+    else if (view.getBackground() instanceof ColorDrawable) {
+      backgroundColor = ((ColorDrawable) view.getBackground()).getColor();
+    } else {
+      // Throw an exception if the background View is not a ColorDrawable
+      throw new IllegalArgumentException("Background must be a ColorDrawable");
+    }
+
+    // Calculate the luminance from the background color
+    double luminance = ColorUtils.calculateLuminance(backgroundColor);
+    return luminance;
+  }
 
   /**
    * Merges two bitmaps into a single bitmap
