@@ -20,9 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 public class ColorFragment extends Fragment {
 
@@ -51,7 +48,10 @@ public class ColorFragment extends Fragment {
     try {
       loadColorsFromXML(project.getColorsPath());
     } catch (FileNotFoundException e) {
-      SBUtils.make(view, "An error occured: " + e.getMessage()).setFadeAnimation().setType(SBUtils.Type.INFO).show();
+      SBUtils.make(view, "An error occured: " + e.getMessage())
+          .setFadeAnimation()
+          .setType(SBUtils.Type.INFO)
+          .show();
     }
     mRecyclerView = binding.recyclerView;
     adapter = new ColorResourceAdapter(colorList);
