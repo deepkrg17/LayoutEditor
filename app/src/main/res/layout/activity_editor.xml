@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<com.itsvks.layouteditor.views.CustomDrawerLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/drawer"
@@ -93,4 +93,4 @@
   </ScrollView>
 
 
-</androidx.drawerlayout.widget.DrawerLayout>
+</com.itsvks.layouteditor.views.CustomDrawerLayout>
