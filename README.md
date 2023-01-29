@@ -23,17 +23,20 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - Export layouts as XML
 
 ### Screenshots
-![Screenshot_01](./screenshots/ScreenShot_LayoutEditor_01.jpg "Screenshot_01")
-![Screenshot_02](./screenshots/ScreenShot_LayoutEditor_02.jpg "Screenshot_02")
-![Screenshot_03](./screenshots/ScreenShot_LayoutEditor_03.jpg "Screenshot_03")
-![Screenshot_03](./screenshots/ScreenShot_LayoutEditor_04.jpg "Screenshot_04")
-![Screenshot_05](./screenshots/ScreenShot_LayoutEditor_05.jpg "Screenshot_05")
-![Screenshot_06](./screenshots/ScreenShot_LayoutEditor_06.jpg "Screenshot_06")
-![Screenshot_08](./screenshots/ScreenShot_LayoutEditor_07.jpg "Screenshot_07")
-![Screenshot_08](./screenshots/ScreenShot_LayoutEditor_08.jpg "Screenshot_08")
-![Screenshot_09](./screenshots/ScreenShot_LayoutEditor_09.jpg "Screenshot_09")
-![Screenshot_10](./screenshots/ScreenShot_LayoutEditor_10.jpg "Screenshot_10")
-![Screenshot_11](./screenshots/ScreenShot_LayoutEditor_11.jpg "Screenshot_11")
+<div align="center">
+
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_01.jpg" alt="Screenshot_01" title="Screenshot_01">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_02.jpg" alt="Screenshot_02" title="Screenshot_02">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_03.jpg" alt="Screenshot_03" title="Screenshot_03">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_04.jpg" alt="Screenshot_04" title="Screenshot_04">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_05.jpg" alt="Screenshot_05" title="Screenshot_05">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_06.jpg" alt="Screenshot_06" title="Screenshot_06">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_07.jpg" alt="Screenshot_07" title="Screenshot_07">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_08.jpg" alt="Screenshot_08" title="Screenshot_08">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_09.jpg" alt="Screenshot_09" title="Screenshot_09">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_10.jpg" alt="Screenshot_10" title="Screenshot_10">
+<img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_11.jpg" alt="Screenshot_11" title="Screenshot_11">
+</div>
 
 ### TODO
 - [ ] Create custom widgets and components
