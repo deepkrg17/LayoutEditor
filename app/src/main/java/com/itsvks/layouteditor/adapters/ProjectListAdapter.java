@@ -37,6 +37,7 @@ import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.utils.FileUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -244,11 +245,12 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     Intent intent = new Intent(v.getContext(), EditorActivity.class);
     intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
     intent.setAction(EditorActivity.ACTION_OPEN);
-    if (!prefs.getBoolean("copyAssets", false)) {
-      final String projectDir =
-          FileUtil.getPackageDataDir(LayoutEditor.getContext())
-              + "/projects/"
-              + projects.get(position).name;
+    final String projectDir =
+        FileUtil.getPackageDataDir(LayoutEditor.getContext())
+            + "/projects/"
+            + projects.get(position).name;
+    if (!prefs.getBoolean("copyAssets", false)
+        && !(new File(projectDir + "/values/colors.xml").exists())) {
       FileUtil.makeDir(projectDir + "/values/");
       // FileUtil.makeDir(projectDir + "/drawable/");
       // FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
