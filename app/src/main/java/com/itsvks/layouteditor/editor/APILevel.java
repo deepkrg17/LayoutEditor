@@ -13,7 +13,7 @@ public class APILevel {
 
   public enum Level {
     LOLLIPOP,          // Android 5.0 & 5.1    }
-    MARSHMALLOW,       // Android 6.0          ) --> They are not usable because this app's minSdkVersion is 26
+    MARSHMALLOW,       // Android 6.0          ) --> These are not usable because this app's minSdkVersion is 26
     NOUGAT,            // Android 7.0 & 7.1    }
     OREO,              // Android 8.0 & 8.1
     PIE,               // Android 9
