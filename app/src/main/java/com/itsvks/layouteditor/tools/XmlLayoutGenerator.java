@@ -58,8 +58,14 @@ public class XmlLayoutGenerator {
     List<String> values = attributeMap.get(view).values();
 
     for (String key : keys) {
-                                          //If the value contains special characters it will be converted
-      builder.append(TAB + indent + key + "=\"" + StringEscapeUtils.escapeXml11(attributeMap.get(view).getValue(key)) + "\"\n");
+      // If the value contains special characters it will be converted
+      builder.append(
+          TAB
+              + indent
+              + key
+              + "=\""
+              + StringEscapeUtils.escapeXml11(attributeMap.get(view).getValue(key))
+              + "\"\n");
     }
 
     builder.deleteCharAt(builder.length() - 1);
@@ -77,10 +83,10 @@ public class XmlLayoutGenerator {
 
         builder.append(indent + "</" + className + ">\n\n");
       } else {
-        builder.append("/>\n\n");
+        builder.append(" />\n\n");
       }
     } else {
-      builder.append("/>\n\n");
+      builder.append(" />\n\n");
     }
 
     return builder.toString().trim();
