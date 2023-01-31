@@ -84,4 +84,6 @@ dependencies {
     implementation("io.github.Rosemoe.sora-editor:editor")
     implementation("io.github.Rosemoe.sora-editor:language-textmate")
     implementation 'com.github.tapadoo:alerter:7.2.4'
+    
+    implementation 'org.apache.commons:commons-text:1.9'
 }
