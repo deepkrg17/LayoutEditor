@@ -9,6 +9,7 @@ import com.itsvks.layouteditor.editor.layouts.EditorLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class XmlLayoutGenerator {
   StringBuilder builder = new StringBuilder();
@@ -57,7 +58,8 @@ public class XmlLayoutGenerator {
     List<String> values = attributeMap.get(view).values();
 
     for (String key : keys) {
-      builder.append(TAB + indent + key + "=\"" + attributeMap.get(view).getValue(key) + "\"\n");
+                                          //If the value contains special characters it will be converted
+      builder.append(TAB + indent + key + "=\"" + StringEscapeUtils.escapeXml11(attributeMap.get(view).getValue(key)) + "\"\n");
     }
 
     builder.deleteCharAt(builder.length() - 1);
