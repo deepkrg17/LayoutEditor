@@ -42,7 +42,7 @@
     android:background="?attr/colorSurface"
     android:layout_gravity="start"
     android:layout_height="match_parent"
-    android:layout_width="300dp"
+    android:layout_width="270dp"
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
