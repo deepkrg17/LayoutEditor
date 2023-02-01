@@ -2,7 +2,7 @@
     {
         "name": "AppCompatTextView",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatTextViewDesign",
-        "iconName": "ic_textview",
+        "iconName": "ic_palette_text_view",
         "defaultAttributes": {
             "android:text": "AppCompatTextView"
         }
@@ -10,7 +10,7 @@
     {
         "name": "AppCompatButton",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatButtonDesign",
-        "iconName": "ic_button",
+        "iconName": "ic_palette_button",
         "defaultAttributes": {
             "android:text": "AppCompatButton"
         }
@@ -18,7 +18,7 @@
     {
         "name": "AppCompatEditText",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatEditTextDesign",
-        "iconName": "ic_edittext",
+        "iconName": "ic_palette_edit_text",
         "defaultAttributes": {
             "android:hint": "AppCompatEditText"
         }
@@ -26,7 +26,7 @@
     {
         "name": "AppCompatRadioButton",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatRadioButtonDesign",
-        "iconName": "ic_radiobox_marked",
+        "iconName": "ic_palette_radio_button",
         "defaultAttributes": {
             "android:text": "AppCompatRadioButton"
         }
@@ -34,7 +34,7 @@
     {
         "name": "AppCompatCheckBox",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatCheckBoxDesign",
-        "iconName": "ic_checkbox_marked",
+        "iconName": "ic_palette_check_box",
         "defaultAttributes": {
             "android:text": "AppCompatCheckBox"
         }
@@ -42,7 +42,7 @@
     {
         "name": "SwitchCompat",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.SwitchCompatDesign",
-        "iconName": "ic_toggle_switch",
+        "iconName": "ic_palette_switch",
         "defaultAttributes": {
             "android:text": "SwitchCompat"
         }
@@ -50,7 +50,7 @@
     {
         "name": "AppCompatSeekBar",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatSeekBarDesign",
-        "iconName": "ic_seekbar",
+        "iconName": "ic_palette_seek_bar",
         "defaultAttributes": {
             "android:layout_width": "match_parent"
         }
@@ -58,7 +58,7 @@
     {
         "name": "AppCompatImageView",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.AppCompatImageViewDesign",
-        "iconName": "ic_image_outline",
+        "iconName": "ic_palette_image_view",
         "defaultAttributes": {
             "android:layout_width": "48dp",
             "android:layout_height": "48dp",
@@ -68,7 +68,7 @@
     {
         "name": "LinearLayoutCompat (H)",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.LinearLayoutCompatDesign",
-        "iconName": "ic_linear_horizontal",
+        "iconName": "ic_palette_linear_layout_horz",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:orientation": "horizontal",
@@ -78,7 +78,7 @@
     {
         "name": "LinearLayoutCompat (V)",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.LinearLayoutCompatDesign",
-        "iconName": "ic_linear_vertical",
+        "iconName": "ic_palette_linear_layout_vert",
         "defaultAttributes": {
             "android:layout_height": "match_parent",
             "android:orientation": "vertical",

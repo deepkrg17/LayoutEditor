@@ -2,7 +2,7 @@
     {
         "name": "LinearLayout (H)",
         "className": "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-        "iconName": "ic_linear_horizontal",
+        "iconName": "ic_palette_linear_layout_horz",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:orientation": "horizontal",
@@ -12,7 +12,7 @@
     {
         "name": "LinearLayout (V)",
         "className": "com.itsvks.layouteditor.editor.widgets.android.LinearLayoutDesign",
-        "iconName": "ic_linear_vertical",
+        "iconName": "ic_palette_linear_layout_vert",
         "defaultAttributes": {
             "android:layout_height": "match_parent",
             "android:orientation": "vertical",
@@ -22,7 +22,7 @@
     {
         "name": "FrameLayout",
         "className": "com.itsvks.layouteditor.editor.widgets.android.FrameLayoutDesign",
-        "iconName": "ic_frame",
+        "iconName": "ic_palette_frame_layout",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:padding": "8dp"
@@ -31,7 +31,7 @@
     {
         "name": "RelativeLayout",
         "className": "com.itsvks.layouteditor.editor.widgets.android.RelativeLayoutDesign",
-        "iconName": "ic_relative_layout_outline",
+        "iconName": "ic_palette_relative_layout",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:padding": "8dp"
@@ -40,7 +40,7 @@
     {
         "name": "RadioGroup",
         "className": "com.itsvks.layouteditor.editor.widgets.android.RadioGroupDesign",
-        "iconName": "ic_radiogroup",
+        "iconName": "ic_palette_radio_group",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:padding": "8dp"

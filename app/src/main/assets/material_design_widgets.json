@@ -7,7 +7,7 @@
     {
         "name": "MaterialTextView",
         "className": "com.itsvks.layouteditor.editor.widgets.mdc.MaterialTextViewDesign",
-        "iconName": "ic_textview",
+        "iconName": "ic_palette_text_view",
         "defaultAttributes": {
             "android:text": "MaterialTextView"
         }
@@ -15,7 +15,7 @@
     {
         "name": "MaterialSwitch",
         "className": "com.itsvks.layouteditor.editor.widgets.mdc.MaterialSwitchDesign",
-        "iconName": "ic_toggle_switch",
+        "iconName": "ic_palette_switch",
         "defaultAttributes": {
             "android:text": "MaterialSwitch"
         }
