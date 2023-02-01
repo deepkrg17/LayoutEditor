@@ -88,7 +88,7 @@
     {
         "name": "ConstraintLayout",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.ConstraintLayoutDesign",
-        "iconName": "ic_constraint",
+        "iconName": "ic_palette_constraint_layout",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:padding": "8dp"
@@ -97,7 +97,7 @@
     {
         "name": "CardView",
         "className": "com.itsvks.layouteditor.editor.widgets.androidx.CardViewDesign",
-        "iconName": "ic_card",
+        "iconName": "ic_palette_card_view",
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "app:cardCornerRadius": "8dp",

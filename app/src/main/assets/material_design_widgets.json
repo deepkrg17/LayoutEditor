@@ -1,8 +1,8 @@
 [
     {
-        "name": "FAB",
+        "name": "FloatingActionButton",
         "className": "com.itsvks.layouteditor.editor.widgets.mdc.FloatingActionButtonDesign",
-        "iconName": "ic_fab"
+        "iconName": "ic_palette_floating_action_button"
     },
     {
         "name": "MaterialTextView",
