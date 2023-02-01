@@ -42,19 +42,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     errorMessage.append(stackTrace.toString());
 
     // Append software information to the software info
-    softwareInfo.append("SDK: ");
-    softwareInfo.append(Build.VERSION.SDK_INT);
-    softwareInfo.append(newLine);
-    softwareInfo.append("Release: ");
-    softwareInfo.append(Build.VERSION.RELEASE);
-    softwareInfo.append(newLine);
-    softwareInfo.append("Incremental: ");
-    softwareInfo.append(Build.VERSION.INCREMENTAL);
-    softwareInfo.append(newLine);
+    softwareInfo
+        .append("SDK: ")
+        .append(Build.VERSION.SDK_INT)
+        .append(newLine)
+        .append("Release: ")
+        .append(Build.VERSION.RELEASE)
+        .append(newLine)
+        .append("Incremental: ")
+        .append(Build.VERSION.INCREMENTAL)
+        .append(newLine);
 
     // Append the date information to the date info
-    dateInfo.append(Calendar.getInstance().getTime());
-    dateInfo.append(newLine);
+    dateInfo.append(Calendar.getInstance().getTime()).append(newLine);
 
     // Log the error message, software info, and date info
     Log.d("Error", errorMessage.toString());

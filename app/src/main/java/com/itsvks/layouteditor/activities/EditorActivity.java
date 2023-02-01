@@ -39,6 +39,7 @@ import com.itsvks.layouteditor.views.StructureView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressLint("UnsafeOptInUsageError")
 public class EditorActivity extends BaseActivity
     implements WidgetListAdapter.WidgetListClickListener {
 
@@ -65,11 +66,14 @@ public class EditorActivity extends BaseActivity
 
   final Runnable updateMenuIconsState = () -> undoRedo.updateButtons();
 
-  @SuppressWarnings("deprecation")
-  @SuppressLint("UnsafeOptInUsageError")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    init();
+  }
+
+  @SuppressWarnings("deprecation")
+  private void init() {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
 
     setContentView(binding.getRoot());
@@ -80,8 +84,19 @@ public class EditorActivity extends BaseActivity
     getSupportActionBar().setSubtitle(project.getName());
 
     contentView = binding.content;
-    drawerLayout = binding.drawer;
 
+    defineFileCreator();
+    setupDrawerLayout();
+    setupStructureView();
+    initializeWidgetLists();
+    setupDrawerTab();
+    if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
+      DrawableManager.loadFromFiles(project.getDrawables());
+      binding.editorLayout.loadLayoutFromParser(project.getLayout());
+    }
+  }
+
+  private void defineFileCreator() {
     fileCreator =
         new FileCreator(this) {
 
@@ -90,22 +105,24 @@ public class EditorActivity extends BaseActivity
             String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
 
             if (uri != null) {
-              if (FileUtil.saveFile(uri, result)) {
+              if (FileUtil.saveFile(uri, result))
                 SBUtils.make(binding.getRoot(), "Success!").setSlideAnimation().showAsSuccess();
-              } else {
+              else {
                 SBUtils.make(binding.getRoot(), "Failed to save!")
                     .setSlideAnimation()
                     .showAsError();
                 FileUtil.deleteFile(FileUtil.convertUriToFilePath(uri));
               }
-            } else {
+            } else
               SBUtils.make(binding.getRoot(), "Failed to export!")
                   .setSlideAnimation()
                   .showAsError();
-            }
           }
         };
+  }
 
+  private void setupDrawerLayout() {
+    drawerLayout = binding.drawer;
     actionBarDrawerToggle =
         new ActionBarDrawerToggle(
             this,
@@ -116,59 +133,6 @@ public class EditorActivity extends BaseActivity
 
     drawerLayout.addDrawerListener(actionBarDrawerToggle);
     actionBarDrawerToggle.syncState();
-
-    binding.editorLayout.setStructureView(binding.structureView);
-
-    binding.structureView.setOnItemClickListener(
-        new StructureView.OnItemClickListener() {
-
-          @Override
-          public void onItemClick(View view) {
-            binding.editorLayout.showDefinedAttributes(view);
-            drawerLayout.closeDrawer(GravityCompat.END);
-          }
-        });
-
-    initializeWidgetLists();
-    addDrawerTab(Constants.TAB_TITLE_VIEWS);
-    addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
-    addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
-    addDrawerTab(Constants.TAB_TITLE_MATERIAL);
-    binding.tabLayout.addOnTabSelectedListener(
-        new TabLayout.OnTabSelectedListener() {
-
-          @Override
-          public void onTabSelected(TabLayout.Tab tab) {
-            if (tab.getPosition() == 0)
-              binding.listView.setAdapter(new WidgetListAdapter(views, EditorActivity.this));
-            else if (tab.getPosition() == 1)
-              binding.listView.setAdapter(new WidgetListAdapter(layouts, EditorActivity.this));
-            else if (tab.getPosition() == 2)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(androidxWidgets, EditorActivity.this));
-            else if (tab.getPosition() == 3)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(materialDesignWidgets, EditorActivity.this));
-          }
-
-          @Override
-          public void onTabUnselected(TabLayout.Tab tab) {}
-
-          @Override
-          public void onTabReselected(TabLayout.Tab tab) {}
-        });
-
-    binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
-    binding.listView.setAdapter(new WidgetListAdapter(views, this));
-
-    IdManager.clear();
-
-    if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
-      DrawableManager.loadFromFiles(project.getDrawables());
-      binding.editorLayout.loadLayoutFromParser(project.getLayout());
-    }
-
     drawerLayout.addDrawerListener(
         new DrawerLayout.SimpleDrawerListener() {
 
@@ -196,6 +160,55 @@ public class EditorActivity extends BaseActivity
             undoRedo.updateButtons();
           }
         });
+  }
+
+  private void setupStructureView() {
+    binding.editorLayout.setStructureView(binding.structureView);
+
+    binding.structureView.setOnItemClickListener(
+        new StructureView.OnItemClickListener() {
+
+          @Override
+          public void onItemClick(View view) {
+            binding.editorLayout.showDefinedAttributes(view);
+            drawerLayout.closeDrawer(GravityCompat.END);
+          }
+        });
+  }
+
+  private void setupDrawerTab() {
+    addDrawerTab(Constants.TAB_TITLE_VIEWS);
+    addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
+    addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
+    addDrawerTab(Constants.TAB_TITLE_MATERIAL);
+    binding.tabLayout.addOnTabSelectedListener(
+        new TabLayout.OnTabSelectedListener() {
+
+          @Override
+          public void onTabSelected(TabLayout.Tab tab) {
+            if (tab.getPosition() == 0)
+              binding.listView.setAdapter(new WidgetListAdapter(views, EditorActivity.this));
+            else if (tab.getPosition() == 1)
+              binding.listView.setAdapter(new WidgetListAdapter(layouts, EditorActivity.this));
+            else if (tab.getPosition() == 2)
+              binding.listView.setAdapter(
+                  new WidgetListAdapter(androidxWidgets, EditorActivity.this));
+            else if (tab.getPosition() == 3)
+              binding.listView.setAdapter(
+                  new WidgetListAdapter(materialDesignWidgets, EditorActivity.this));
+          }
+
+          @Override
+          public void onTabUnselected(TabLayout.Tab tab) {}
+
+          @Override
+          public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
+    binding.listView.setAdapter(new WidgetListAdapter(views, this));
+
+    IdManager.clear();
   }
 
   @Override
