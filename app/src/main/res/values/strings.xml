@@ -42,7 +42,6 @@
     <string name="msg_current_name_unavailable">Current name is unavailable!</string>
     <string name="msg_cannnot_empty">Field cannot be empty!</string>
     <string name="options">Options</string>
-    <string name="common">Common</string>
     <string name="enable_vibration">Enable Vibration</string>
     <string name="summary_enable_vibration">May consume battery</string>
     <string name="show_stroke">Show Stroke</string>
@@ -97,4 +96,13 @@
     <string name="import_resource">Import</string>
     <string name="color_scheme">Color Scheme</string>
     <string name="select">Select</string>
+    <string name="palette">Palette</string>
+    <string name="common">Common</string>
+    <string name="texts">Texts</string>
+    <string name="buttons">Buttons</string>
+    <string name="widgets">Widgets</string>
+    <string name="layouts">Layouts</string>
+    <string name="containers">Containers</string>
+    <string name="google">Google</string>
+    <string name="legacy">Legacy</string>
 </resources>

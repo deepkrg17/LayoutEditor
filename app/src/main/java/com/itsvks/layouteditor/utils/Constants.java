@@ -17,11 +17,27 @@ public class Constants {
   public static final String VIEWS_FILE = "views.json";
   public static final String ANDROIDX_WIDGETS_FILE = "androidx_widgets.json";
   public static final String MATERIAL_DESIGN_WIDGETS_FILE = "material_design_widgets.json";
+  
+  public static final String PALETTE_COMMON     = "palette/common.json";
+  public static final String PALETTE_TEXTS      = "";
+  public static final String PALETTE_BUTTONS    = "";
+  public static final String PALETTE_WIDGETS    = "";
+  public static final String PALETTE_LAYOUTS    = "";
+  public static final String PALETTE_CONTAINERS = "";
+  public static final String PALETTE_GOOGLE     = "";
+  public static final String PALETTE_LEGACY     = "";
 
   public static final String TAB_TITLE_VIEWS = "Views";
-  public static final String TAB_TITLE_LAYOUTS = "Layouts";
   public static final String TAB_TITLE_ANDROIDX = "AndroidX";
   public static final String TAB_TITLE_MATERIAL = "Material Design";
+  public static final String TAB_TITLE_COMMON = "Common";
+  public static final String TAB_TITLE_TEXTS = "Texts";
+  public static final String TAB_TITLE_BUTTONS = "Buttons";
+  public static final String TAB_TITLE_WIDGETS = "Widgets";
+  public static final String TAB_TITLE_LAYOUTS = "Layouts";
+  public static final String TAB_TITLE_CONTAINERS = "Containers";
+  public static final String TAB_TITLE_GOOGLE = "Google";
+  public static final String TAB_TITLE_LEGACY = "Legacy";
 
   public static final String KEY_ATTRIBUTE_NAME = "attributeName";
   public static final String KEY_CLASS_NAME = "className";

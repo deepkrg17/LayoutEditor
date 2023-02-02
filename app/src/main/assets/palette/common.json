@@ -1,0 +1,36 @@
+[
+    {
+        "name": "TextView",
+        "className": "com.itsvks.layouteditor.editor.palette.common.TextViewDesign",
+        "iconName": "ic_palette_text_view",
+        "defaultAttributes": {
+            "android:text": "TextView"
+        }
+    },
+    {
+        "name": "Button",
+        "className": "com.itsvks.layouteditor.editor.palette.common.ButtonDesign",
+        "iconName": "ic_palette_button",
+        "defaultAttributes": {
+            "android:text": "Button"
+        }
+    },
+    {
+        "name": "ImageView",
+        "className": "com.itsvks.layouteditor.editor.palette.common.ImageViewDesign",
+        "iconName": "ic_palette_image_view",
+        "defaultAttributes": {
+            "android:layout_width": "48dp",
+            "android:layout_height": "48dp",
+            "android:src": "@drawable/default_image"
+        }
+    },
+    {
+        "name": "Switch",
+        "className": "com.itsvks.layouteditor.editor.palette.common.SwitchDesign",
+        "iconName": "ic_palette_switch",
+        "defaultAttributes": {
+            "android:text": "Switch"
+        }
+    }
+]
