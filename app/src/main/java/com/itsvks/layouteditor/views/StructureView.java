@@ -2,33 +2,147 @@ package com.itsvks.layouteditor.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.webkit.WebView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.GridView;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.SearchView;
+import android.widget.SeekBar;
+import android.widget.Space;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TabHost;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextClock;
 import android.widget.TextView;
 
+import android.widget.ToggleButton;
+import android.widget.VideoView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.TooltipCompat;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.itsvks.layouteditor.databinding.LayoutStructureViewItemBinding;
+import com.itsvks.layouteditor.managers.IdManager;
 import java.util.HashMap;
 import com.itsvks.layouteditor.R;
+import java.util.Map;
 
-/**
- * StructureView class extends from LinearLayoutCompat and implements View.OnClickListener. It
- * creates two hashmaps for storing TextViews and Views, which are the textViewMap and viewTextMap.
- * This class also contains an abstract OnItemClickListener class.
- */
 public class StructureView extends LinearLayoutCompat implements View.OnClickListener {
   private LayoutInflater inflater;
   private Paint paint;
   private int pointRadius;
-  private HashMap<TextView, View> textViewMap = new HashMap<>();
-  private HashMap<View, TextView> viewTextMap = new HashMap<>();
+  private Map<TextView, View> textViewMap = new HashMap<>();
+  private Map<View, TextView> viewTextMap = new HashMap<>();
   private OnItemClickListener listener;
+  private int onSurfaceColor;
+
+  public static Map<String, Integer> imgMap = new HashMap<>();
+
+  static {
+    imgMap.put("_unknown", R.mipmap.ic_palette_unknown_view);
+    imgMap.put(TextView.class.getSimpleName(), R.mipmap.ic_palette_text_view);
+    imgMap.put(EditText.class.getSimpleName(), R.mipmap.ic_palette_edit_text);
+    imgMap.put(Button.class.getSimpleName(), R.mipmap.ic_palette_button);
+    imgMap.put(ImageButton.class.getSimpleName(), R.mipmap.ic_palette_image_button);
+    imgMap.put(ImageView.class.getSimpleName(), R.mipmap.ic_palette_image_view);
+    imgMap.put(VideoView.class.getSimpleName(), R.mipmap.ic_palette_video_view);
+    imgMap.put(
+        AutoCompleteTextView.class.getSimpleName(), R.mipmap.ic_palette_auto_complete_text_view);
+    imgMap.put(
+        MultiAutoCompleteTextView.class.getSimpleName(),
+        R.mipmap.ic_palette_multi_auto_complete_text_view);
+    imgMap.put(CheckedTextView.class.getSimpleName(), R.mipmap.ic_palette_checked_text_view);
+    imgMap.put(CheckBox.class.getSimpleName(), R.mipmap.ic_palette_check_box);
+    imgMap.put(RadioButton.class.getSimpleName(), R.mipmap.ic_palette_radio_button);
+    imgMap.put(RadioGroup.class.getSimpleName(), R.mipmap.ic_palette_radio_group);
+    imgMap.put(ToggleButton.class.getSimpleName(), R.mipmap.ic_palette_toggle_button);
+    imgMap.put(Switch.class.getSimpleName(), R.mipmap.ic_palette_switch);
+    imgMap.put(View.class.getSimpleName(), R.mipmap.ic_palette_view);
+    imgMap.put(WebView.class.getSimpleName(), R.mipmap.ic_palette_web_view);
+    imgMap.put(CalendarView.class.getSimpleName(), R.mipmap.ic_palette_calendar_view);
+    imgMap.put(ProgressBar.class.getSimpleName(), R.mipmap.ic_palette_progress_bar);
+    imgMap.put(
+        ProgressBar.class.getSimpleName() + "horizontal",
+        R.mipmap.ic_palette_progress_bar_horizontal);
+    imgMap.put(SeekBar.class.getSimpleName(), R.mipmap.ic_palette_seek_bar);
+    imgMap.put(RatingBar.class.getSimpleName(), R.mipmap.ic_palette_rating_bar);
+    imgMap.put(TextureView.class.getSimpleName(), R.mipmap.ic_palette_texture_view);
+    imgMap.put(SurfaceView.class.getSimpleName(), R.mipmap.ic_palette_surface_view);
+    imgMap.put(SearchView.class.getSimpleName(), R.mipmap.ic_palette_search_view);
+    imgMap.put(
+        LinearLayout.class.getSimpleName() + "horizontal", R.mipmap.ic_palette_linear_layout_horz);
+    imgMap.put(
+        LinearLayout.class.getSimpleName() + "vertical", R.mipmap.ic_palette_linear_layout_vert);
+    imgMap.put(FrameLayout.class.getSimpleName(), R.mipmap.ic_palette_frame_layout);
+    imgMap.put(TableLayout.class.getSimpleName(), R.mipmap.ic_palette_table_layout);
+    imgMap.put(TableRow.class.getSimpleName(), R.mipmap.ic_palette_table_row);
+    imgMap.put(Space.class.getSimpleName(), R.mipmap.ic_palette_space);
+    imgMap.put(Spinner.class.getSimpleName(), R.mipmap.ic_palette_spinner);
+    imgMap.put(ScrollView.class.getSimpleName(), R.mipmap.ic_palette_scroll_view);
+    imgMap.put(
+        HorizontalScrollView.class.getSimpleName(), R.mipmap.ic_palette_horizontal_scroll_view);
+    imgMap.put(ViewStub.class.getSimpleName(), R.mipmap.ic_palette_view_stub);
+    imgMap.put("include", R.mipmap.ic_palette_include);
+    imgMap.put(GridLayout.class.getSimpleName(), R.mipmap.ic_palette_grid_layout);
+    imgMap.put(GridView.class.getSimpleName(), R.mipmap.ic_palette_grid_view);
+    imgMap.put(RecyclerView.class.getSimpleName(), R.mipmap.ic_palette_recycler_view);
+    imgMap.put(ListView.class.getSimpleName(), R.mipmap.ic_palette_list_view);
+    imgMap.put(TabHost.class.getSimpleName(), R.mipmap.ic_palette_tab_host);
+    imgMap.put(RelativeLayout.class.getSimpleName(), R.mipmap.ic_palette_relative_layout);
+    imgMap.put(Chip.class.getSimpleName(), R.mipmap.ic_palette_chip);
+    imgMap.put(ChipGroup.class.getSimpleName(), R.mipmap.ic_palette_chip_group);
+    imgMap.put(
+        FloatingActionButton.class.getSimpleName(), R.mipmap.ic_palette_floating_action_button);
+    imgMap.put(NestedScrollView.class.getSimpleName(), R.mipmap.ic_palette_nested_scroll_view);
+    imgMap.put(ViewPager.class.getSimpleName(), R.mipmap.ic_palette_view_pager);
+    imgMap.put(ViewPager2.class.getSimpleName(), R.mipmap.ic_palette_view_pager);
+    imgMap.put(CardView.class.getSimpleName(), R.mipmap.ic_palette_card_view);
+    imgMap.put(TextClock.class.getSimpleName(), R.mipmap.ic_palette_text_clock);
+    imgMap.put(AppBarLayout.class.getSimpleName(), R.mipmap.ic_palette_app_bar_layout);
+    imgMap.put(NavigationView.class.getSimpleName(), R.mipmap.ic_palette_navigation_view);
+    imgMap.put(
+        BottomNavigationView.class.getSimpleName(), R.mipmap.ic_palette_bottom_navigation_view);
+  }
 
   /**
    * This is the constructor of the StructureView class which takes context and attributeSet as
@@ -40,7 +154,9 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     inflater = LayoutInflater.from(context);
 
     paint = new Paint();
-    paint.setColor(Color.DKGRAY);
+    onSurfaceColor =
+        MaterialColors.getColor(this, com.google.android.material.R.attr.colorOnSurface);
+    paint.setColor(onSurfaceColor);
     paint.setAntiAlias(true);
     paint.setStrokeWidth(getDip(1));
 
@@ -78,21 +194,57 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
    */
   private void peek(View view, int depth) {
     int nextDepth = depth;
-    TextView text = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, null, false);
-    text.setTextSize(16);
-    text.setText(view.getClass().getSuperclass().getSimpleName());
-    text.setOnClickListener(this);
+    LayoutStructureViewItemBinding binding =
+        LayoutStructureViewItemBinding.inflate(inflater, null, false);
+    TextView viewName = binding.viewName;
+    TextView viewId = binding.viewId;
+    ImageView icon = binding.icon;
+    viewName.setTextColor(onSurfaceColor);
+    icon.setColorFilter(onSurfaceColor);
+    if (view.getId() == -1 || IdManager.getIdMap().get(view) == null) {
+      viewId.setVisibility(View.GONE);
+      viewName.setTranslationY(0);
+      viewId.setTranslationY(0);
+    } else {
+      viewName.setTranslationY(getDip(-7));
+      viewId.setTranslationY(getDip(-3));
+      viewId.setVisibility(View.VISIBLE);
+      viewId.setText(IdManager.getIdMap().get(view));
+    }
+    //    if (view instanceof ProgressBar) {
+    //      icon.setImageResource(
+    //          ((ProgressBar) view).isHorizontalScrollBarEnabled()
+    //              ? imgMap.get(ProgressBar.class.getSimpleName() + "horizontal")
+    //              : imgMap.get(ProgressBar.class.getSimpleName()));
+    //    }
+    if (view instanceof LinearLayout && !(view instanceof RadioGroup)) {
+      icon.setImageResource(
+          ((LinearLayout) view).getOrientation() == LinearLayout.HORIZONTAL
+              ? imgMap.get(LinearLayout.class.getSimpleName() + "horizontal")
+              : imgMap.get(LinearLayout.class.getSimpleName() + "vertical"));
+      viewName.setText(
+          ((LinearLayout) view).getOrientation() == LinearLayout.HORIZONTAL
+              ? LinearLayout.class.getSimpleName() + " (horizontal)"
+              : LinearLayout.class.getSimpleName() + " (vertical)");
+    } else {
+      icon.setImageResource(
+          imgMap.get(view.getClass().getSuperclass().getSimpleName()) == null
+              ? imgMap.get("_unknown")
+              : imgMap.get(view.getClass().getSuperclass().getSimpleName()));
+      viewName.setText(view.getClass().getSuperclass().getSimpleName());
+    }
 
-    int pad = getDip(8);
-    text.setPadding(getDip(16), pad, pad, pad);
-    addView(text);
+    binding.mainView.setOnClickListener(this);
+    TooltipCompat.setTooltipText(binding.mainView, view.getClass().getSuperclass().getSimpleName());
+
+    addView(binding.getRoot());
 
     LinearLayoutCompat.LayoutParams params =
-        (LinearLayoutCompat.LayoutParams) text.getLayoutParams();
+        (LinearLayoutCompat.LayoutParams) binding.getRoot().getLayoutParams();
     params.leftMargin = depth * getDip(15);
 
-    textViewMap.put(text, view);
-    viewTextMap.put(view, text);
+    textViewMap.put(viewName, view);
+    viewTextMap.put(view, viewName);
 
     if (view instanceof ViewGroup) {
       ViewGroup group = (ViewGroup) view;
@@ -112,31 +264,34 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
 
     for (TextView text : textViewMap.keySet()) {
       View view = textViewMap.get(text);
+      ViewGroup parent = (ViewGroup) text.getParent().getParent();
 
       if (view instanceof ViewGroup && ((ViewGroup) view).getChildCount() > 0) {
-        float x = text.getX();
-        float y = text.getY() + text.getHeight() / 2;
+        float x = parent.getX();
+        float y = parent.getY() + parent.getHeight() / 2;
         canvas.drawRect(x - pointRadius, y - pointRadius, x + pointRadius, y + pointRadius, paint);
 
         ViewGroup group = (ViewGroup) view;
 
         for (int i = 0; i < group.getChildCount(); i++) {
           TextView current = viewTextMap.get(group.getChildAt(i));
+          ViewGroup currentParent = (ViewGroup) current.getParent().getParent();
           canvas.drawLine(
-              text.getX(),
-              text.getY() + text.getHeight() / 2,
-              text.getX(),
-              current.getY() + current.getHeight() / 2,
+              parent.getX(),
+              parent.getY() + parent.getHeight() / 2,
+              parent.getX(),
+              currentParent.getY() + currentParent.getHeight() / 2,
               paint);
           canvas.drawLine(
-              text.getX(),
-              current.getY() + current.getHeight() / 2,
-              current.getX(),
-              current.getY() + current.getHeight() / 2,
+              parent.getX(),
+              currentParent.getY() + currentParent.getHeight() / 2,
+              currentParent.getX(),
+              currentParent.getY() + currentParent.getHeight() / 2,
               paint);
         }
       } else {
-        canvas.drawCircle(text.getX(), text.getY() + text.getHeight() / 2, pointRadius, paint);
+        canvas.drawCircle(
+            parent.getX(), parent.getY() + parent.getHeight() / 2, pointRadius, paint);
       }
     }
   }
@@ -147,8 +302,12 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
    */
   @Override
   public void onClick(View v) {
-    if (listener != null) {
-      listener.onItemClick(textViewMap.get((TextView) v));
+    if (listener != null && v instanceof ViewGroup) {
+      for (int i = 0; i < ((ViewGroup) v).getChildCount(); i++) {
+        View child = ((ViewGroup) v).getChildAt(i);
+        if (child.getId() == R.id.view_name)
+          listener.onItemClick(textViewMap.get((TextView) child));
+      }
     }
   }
 

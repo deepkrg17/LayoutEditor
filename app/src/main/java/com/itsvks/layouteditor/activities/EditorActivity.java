@@ -58,7 +58,7 @@ public class EditorActivity extends BaseActivity
   private ArrayList<HashMap<String, Object>> materialDesignWidgets;
 
   private ArrayList<HashMap<String, Object>> PALETTE_COMMON;
-  private ArrayList<HashMap<String, Object>> PALETTE_TEXTS;
+  private ArrayList<HashMap<String, Object>> PALETTE_TEXT;
   private ArrayList<HashMap<String, Object>> PALETTE_BUTTONS;
   private ArrayList<HashMap<String, Object>> PALETTE_WIDGETS;
   private ArrayList<HashMap<String, Object>> PALETTE_LAYOUTS;
@@ -188,28 +188,49 @@ public class EditorActivity extends BaseActivity
 
   private void setupDrawerTab() {
     addDrawerTab(Constants.TAB_TITLE_COMMON);
-    addDrawerTab(Constants.TAB_TITLE_TEXTS);
+    addDrawerTab(Constants.TAB_TITLE_TEXT);
     addDrawerTab(Constants.TAB_TITLE_BUTTONS);
     addDrawerTab(Constants.TAB_TITLE_WIDGETS);
     addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
     addDrawerTab(Constants.TAB_TITLE_CONTAINERS);
-    addDrawerTab(Constants.TAB_TITLE_GOOGLE);
+    // addDrawerTab(Constants.TAB_TITLE_GOOGLE);
     addDrawerTab(Constants.TAB_TITLE_LEGACY);
     binding.tabLayout.addOnTabSelectedListener(
         new TabLayout.OnTabSelectedListener() {
 
           @Override
           public void onTabSelected(TabLayout.Tab tab) {
-            if (tab.getPosition() == 0)
-              binding.listView.setAdapter(new WidgetListAdapter(PALETTE_COMMON, EditorActivity.this));
-            else if (tab.getPosition() == 1)
-              binding.listView.setAdapter(new WidgetListAdapter(layouts, EditorActivity.this));
-            else if (tab.getPosition() == 2)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(androidxWidgets, EditorActivity.this));
-            else if (tab.getPosition() == 3)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(materialDesignWidgets, EditorActivity.this));
+            switch (tab.getPosition()) {
+              case 0:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_COMMON, EditorActivity.this));
+                break;
+              case 1:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_TEXT, EditorActivity.this));
+                break;
+              case 2:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_BUTTONS, EditorActivity.this));
+                break;
+              case 3:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_WIDGETS, EditorActivity.this));
+                break;
+              case 4:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_LAYOUTS, EditorActivity.this));
+                break;
+              case 5:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_CONTAINERS, EditorActivity.this));
+                break;
+              case 6:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_LEGACY, EditorActivity.this));
+                break;
+              
+            }
           }
 
           @Override
@@ -398,7 +419,7 @@ public class EditorActivity extends BaseActivity
   
   private void initPalette() {
     PALETTE_COMMON = convertJsonToJavaObject(Constants.PALETTE_COMMON);
-    PALETTE_TEXTS = convertJsonToJavaObject(Constants.PALETTE_TEXTS);
+    PALETTE_TEXT = convertJsonToJavaObject(Constants.PALETTE_TEXT);
     PALETTE_BUTTONS = convertJsonToJavaObject(Constants.PALETTE_BUTTONS);
     PALETTE_WIDGETS = convertJsonToJavaObject(Constants.PALETTE_WIDGETS);
     PALETTE_LAYOUTS = convertJsonToJavaObject(Constants.PALETTE_LAYOUTS);

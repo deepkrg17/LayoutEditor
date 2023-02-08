@@ -3,6 +3,7 @@ package com.itsvks.layouteditor.editor.layouts;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.DragEvent;
 import android.view.GestureDetector;
@@ -658,6 +659,7 @@ public class EditorLayout extends LinearLayoutCompat {
             initializer.applyAttribute(target, value, currentAttr);
             showDefinedAttributes(target);
             updateUndoRedoHistory();
+            updateStructure();
           }
         });
 
@@ -706,7 +708,7 @@ public class EditorLayout extends LinearLayoutCompat {
           if (value.startsWith("@id/") && value.equals(name.replace("+", ""))) map.removeValue(key);
         }
       }
-
+      updateStructure();
       return target;
     }
 
@@ -815,5 +817,46 @@ public class EditorLayout extends LinearLayoutCompat {
 
   public HashMap<View, AttributeMap> getViewAttributeMap() {
     return this.viewAttributeMap;
+  }
+
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent ev) {
+    View scrollingChild = findScrollingChild(this, ev.getX(), ev.getY());
+    if (scrollingChild != null) {
+      return false;
+    }
+    return super.onInterceptTouchEvent(ev);
+  }
+  
+  private View findScrollingChild(ViewGroup parent, float x, float y) {
+    Rect rect = new Rect();
+    int n = parent.getChildCount();
+    if (parent == this && n <= 1) {
+      return null;
+    }
+
+    int start = 0;
+    if (parent == this) {
+      start = 1;
+    }
+
+    for (int i = start; i < n; i++) {
+      View child = parent.getChildAt(i);
+      if (child.getVisibility() != View.VISIBLE) {
+        continue;
+      }
+      child.getHitRect(rect);
+      if (rect.contains((int) x, (int) y)) {
+        if (child.canScrollHorizontally(1)) {
+          return child;
+        } else if (child instanceof ViewGroup) {
+          View v = findScrollingChild((ViewGroup) child, x - rect.left, y - rect.top);
+          if (v != null) {
+            return v;
+          }
+        }
+      }
+    }
+    return null;
   }
 }

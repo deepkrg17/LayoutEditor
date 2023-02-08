@@ -71,7 +71,7 @@ public class BitmapUtil {
    * @param color the color to invert
    * @return the inverted color
    */
-  private static int invertColor(int color) {
+  public static int invertColor(int color) {
     int r = Color.red(color);
     int g = Color.green(color);
     int b = Color.blue(color);

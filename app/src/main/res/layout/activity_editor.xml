@@ -35,7 +35,6 @@
       android:scaleX="0.85"
       android:scaleY="0.85" />
 
-
   </androidx.appcompat.widget.LinearLayoutCompat>
 
   <androidx.appcompat.widget.LinearLayoutCompat
