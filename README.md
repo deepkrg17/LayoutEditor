@@ -103,6 +103,7 @@ You may face issues when using the app. If you do, please report it in github [i
 ### Thanks to
 - [Kerismaker](https://www.flaticon.com/authors/kerismaker) for the nice [icon](https://www.flaticon.com/free-icon/template_6863985)
 - [Rosemoe](https://github.com/Rosemoe) for [sora-editor](https://github.com/Rosemoe/sora-editor)
+- [Akash Yadav](https://github.com/itsaky) for the awesome [AndroidIDE](https://github.com/AndroidIDEOfficial/AndroidIDE)
 
 ### Lisence
 ```
