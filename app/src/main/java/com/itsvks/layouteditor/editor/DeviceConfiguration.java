@@ -10,10 +10,8 @@ public class DeviceConfiguration {
   public DeviceSize getSize() {
     return this.size;
   }
-
-  public enum DeviceSize {
-    Small,
-    Medium,
-    Large
+  
+  public void setSize(DeviceSize size) {
+    this.size = size;
   }
 }

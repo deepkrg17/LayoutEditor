@@ -16,6 +16,7 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.ActivityShowXMLBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme;
 import io.github.rosemoe.sora.langs.textmate.TextMateLanguage;
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry;
@@ -45,7 +46,6 @@ public class ShowXMLActivity extends BaseActivity {
     getSupportActionBar().setTitle(R.string.xml_preview);
     binding.symbolInput.bindEditor(binding.editor);
     setupSymbols(binding.symbolInput);
-    // switchThemeIfRequired(this, binding.editor);
 
     binding.topAppBar.setNavigationOnClickListener(
         v -> {
@@ -59,7 +59,7 @@ public class ShowXMLActivity extends BaseActivity {
     // binding.editor.setColorScheme(new SchemeLight());
     try {
       loadDefaultThemes();
-      ThemeRegistry.getInstance().setTheme(prefs.getString("scheme", "darcula"));
+      ThemeRegistry.getInstance().setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
       loadDefaultLanguages();
 
       ensureTextmateTheme();
@@ -116,7 +116,7 @@ public class ShowXMLActivity extends BaseActivity {
               name));
     }
 
-    themeRegistry.setTheme("darcula");
+    themeRegistry.setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
   }
 
   private void loadDefaultLanguages() {

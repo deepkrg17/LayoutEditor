@@ -827,7 +827,7 @@ public class EditorLayout extends LinearLayoutCompat {
     }
     return super.onInterceptTouchEvent(ev);
   }
-  
+
   private View findScrollingChild(ViewGroup parent, float x, float y) {
     Rect rect = new Rect();
     int n = parent.getChildCount();

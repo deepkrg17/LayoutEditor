@@ -292,13 +292,13 @@ public class EditorActivity extends BaseActivity
 
         return true;
       case R.id.preview:
-        String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
+        String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
         if (result.isEmpty()) showNothingDialog();
         else {
           saveXml();
           startActivity(
               new Intent(this, PreviewLayoutActivity.class)
-                  .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
+                  .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, project.getLayout()));
         }
         return true;
       case R.id.export_xml:

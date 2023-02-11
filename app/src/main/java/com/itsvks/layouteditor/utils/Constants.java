@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.utils;
 
+import android.graphics.Color;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -60,6 +61,10 @@ public class Constants {
   public static final String ARGUMENT_TYPE_FLAG      = "flag";
   public static final String ARGUMENT_TYPE_ENUM      = "enum";
   public static final String ARGUMENT_TYPE_COLOR     = "color";
+  
+  public static final int BLUEPRINT_DASH_COLOR = Color.WHITE;
+  public static final int BLUEPRINT_BACKGROUND_COLOR = Color.parseColor("#235C6F");
+  public static final int DESIGN_DASH_COLOR = Color.parseColor("#1689F6");
 
   public static final String GITHUB_URL = "https://github.com/itsvks19/LayoutEditor";
 

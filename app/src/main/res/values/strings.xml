@@ -27,7 +27,7 @@
     <string name="share_description">Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.\n\n### Features\n- Design layout with Drag &amp; Drop\n- Edit view and layout properties\n- See and Copy the XML code of layout\n- More : %1$s#features\n\nDownload from here: %1$s/releases/latest</string>
     <string name="permission_granted">Permission granted&#8230;</string>
     <string name="permission_denied">Permission denied&#8230;</string>
-    <string name="preview_layout">Preview layout</string>
+    <string name="preview_layout">Preview Layout</string>
     <string name="copied">Copied to clipboard</string>
     <string name="msg_delete_project">Are you sure you want to remove the project?</string>
     <string name="delete_project">Delete project</string>
@@ -64,8 +64,8 @@
     <string name="redo">Redo</string>
     <string name="save">Save</string>
     <string name="show_structure">Show structure</string>
-    <string name="show_xml">Show xml</string>
-    <string name="save_xml">Save xml</string>
+    <string name="show_xml">Show XML</string>
+    <string name="save_xml">Save XML</string>
     <string name="delete_view">Delete view</string>
     <string name="msg_delete_view">Do you want to remove the view?</string>
     <string name="select_arg_type">Select argument type</string>
@@ -76,7 +76,7 @@
     <string name="theme">Theme</string>
     <string name="dynamic_colors">Use Dynamic Colors</string>
     <string name="summary_dynamic_colors">This feature is only for Android 12+.</string>
-    <string name="export_layout">Export layout</string>
+    <string name="export_layout">Export Layout</string>
     <string name="invalid_data_intent">Invalid Data returned by Intent.</string>
     <string name="select_from_storage">Select file from Primary Storage.</string>
     <string name="msg_first_letter_not_number">The first letter must not be a number!</string>

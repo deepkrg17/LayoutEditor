@@ -205,11 +205,14 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
       viewId.setVisibility(View.GONE);
       viewName.setTranslationY(0);
       viewId.setTranslationY(0);
+      TooltipCompat.setTooltipText(
+          binding.mainView, view.getClass().getSuperclass().getSimpleName());
     } else {
       viewName.setTranslationY(getDip(-7));
       viewId.setTranslationY(getDip(-3));
       viewId.setVisibility(View.VISIBLE);
       viewId.setText(IdManager.getIdMap().get(view));
+      TooltipCompat.setTooltipText(binding.mainView, IdManager.getIdMap().get(view));
     }
     //    if (view instanceof ProgressBar) {
     //      icon.setImageResource(
@@ -235,7 +238,6 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     }
 
     binding.mainView.setOnClickListener(this);
-    TooltipCompat.setTooltipText(binding.mainView, view.getClass().getSuperclass().getSimpleName());
 
     addView(binding.getRoot());
 

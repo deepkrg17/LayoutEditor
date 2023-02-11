@@ -5,41 +5,29 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.RelativeLayout;
-
-import androidx.appcompat.content.res.AppCompatResources;
-import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.utils.Utils;
 
 public class RelativeLayoutDesign extends RelativeLayout {
 
   private Paint linePaint;
   private Paint fillPaint;
 
-  private Drawable strokeDrawable;
   private boolean drawStrokeEnabled;
 
   public RelativeLayoutDesign(Context context) {
     super(context);
 
-    strokeDrawable = AppCompatResources.getDrawable(context, R.drawable.background_stroke_dash);
-
     linePaint = new Paint();
     linePaint.setColor(Color.LTGRAY);
-    linePaint.setStrokeWidth(2);
+    linePaint.setStrokeWidth(Utils.getDip(getContext(), 2));
     linePaint.setAntiAlias(true);
     linePaint.setStyle(Paint.Style.STROKE);
 
     fillPaint = new Paint();
     fillPaint.setColor(Color.LTGRAY);
     fillPaint.setAntiAlias(true);
-  }
-
-  @Override
-  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    super.onSizeChanged(w, h, oldw, oldh);
-    strokeDrawable.setBounds(0, 0, w, h);
   }
 
   @Override
@@ -51,7 +39,7 @@ public class RelativeLayoutDesign extends RelativeLayout {
     super.dispatchDraw(canvas);
 
     if (drawStrokeEnabled) {
-      strokeDrawable.draw(canvas);
+      Utils.drawDashPathStroke(this, canvas);
     }
   }
 
