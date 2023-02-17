@@ -12,10 +12,10 @@ android {
         applicationId "com.itsvks.layouteditor"
         minSdk 26
         targetSdk 33
-        versionCode 5
-        versionName "0.5.0-alpha"
+        versionCode 6
+        versionName "0.6.0-alpha"
     }
-    
+
     signingConfigs {
         release {
             storeFile file("../key-layout-editor.keystore")
@@ -35,11 +35,11 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    
+
     compileOptions {
-	    	sourceCompatibility JavaVersion.VERSION_11
-	    	targetCompatibility JavaVersion.VERSION_11
-	  }
+            sourceCompatibility JavaVersion.VERSION_11
+            targetCompatibility JavaVersion.VERSION_11
+      }
       
     kotlinOptions {
         jvmTarget = '11'
