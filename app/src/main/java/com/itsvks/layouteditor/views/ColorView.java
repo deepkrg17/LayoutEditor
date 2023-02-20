@@ -12,6 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.itsvks.layouteditor.R;
 
+import com.itsvks.layouteditor.views.AlphaPatternDrawable;
 import java.util.Locale;
 
 /** ColorView extends View class. It is used to draw a colored rectangle. */
@@ -36,7 +37,7 @@ public class ColorView extends View {
   public ColorView(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    transparent = AppCompatResources.getDrawable(context, R.drawable.transparent_background);
+    transparent = new AlphaPatternDrawable(16);
 
     colorPaint = new Paint();
     colorPaint.setARGB(a, r, g, b);

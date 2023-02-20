@@ -57,6 +57,15 @@ public class EditorActivity extends BaseActivity
   private ArrayList<HashMap<String, Object>> androidxWidgets;
   private ArrayList<HashMap<String, Object>> materialDesignWidgets;
 
+  private ArrayList<HashMap<String, Object>> PALETTE_COMMON;
+  private ArrayList<HashMap<String, Object>> PALETTE_TEXT;
+  private ArrayList<HashMap<String, Object>> PALETTE_BUTTONS;
+  private ArrayList<HashMap<String, Object>> PALETTE_WIDGETS;
+  private ArrayList<HashMap<String, Object>> PALETTE_LAYOUTS;
+  private ArrayList<HashMap<String, Object>> PALETTE_CONTAINERS;
+  private ArrayList<HashMap<String, Object>> PALETTE_GOOGLE;
+  private ArrayList<HashMap<String, Object>> PALETTE_LEGACY;
+
   private ProjectFile project;
 
   private UndoRedoManager undoRedo;
@@ -88,6 +97,7 @@ public class EditorActivity extends BaseActivity
     defineFileCreator();
     setupDrawerLayout();
     setupStructureView();
+    initPalette();
     initializeWidgetLists();
     setupDrawerTab();
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
@@ -128,8 +138,8 @@ public class EditorActivity extends BaseActivity
             this,
             drawerLayout,
             binding.topAppBar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close);
+            R.string.palette,
+            R.string.palette);
 
     drawerLayout.addDrawerListener(actionBarDrawerToggle);
     actionBarDrawerToggle.syncState();
@@ -177,25 +187,50 @@ public class EditorActivity extends BaseActivity
   }
 
   private void setupDrawerTab() {
-    addDrawerTab(Constants.TAB_TITLE_VIEWS);
+    addDrawerTab(Constants.TAB_TITLE_COMMON);
+    addDrawerTab(Constants.TAB_TITLE_TEXT);
+    addDrawerTab(Constants.TAB_TITLE_BUTTONS);
+    addDrawerTab(Constants.TAB_TITLE_WIDGETS);
     addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
-    addDrawerTab(Constants.TAB_TITLE_ANDROIDX);
-    addDrawerTab(Constants.TAB_TITLE_MATERIAL);
+    addDrawerTab(Constants.TAB_TITLE_CONTAINERS);
+    // addDrawerTab(Constants.TAB_TITLE_GOOGLE);
+    addDrawerTab(Constants.TAB_TITLE_LEGACY);
     binding.tabLayout.addOnTabSelectedListener(
         new TabLayout.OnTabSelectedListener() {
 
           @Override
           public void onTabSelected(TabLayout.Tab tab) {
-            if (tab.getPosition() == 0)
-              binding.listView.setAdapter(new WidgetListAdapter(views, EditorActivity.this));
-            else if (tab.getPosition() == 1)
-              binding.listView.setAdapter(new WidgetListAdapter(layouts, EditorActivity.this));
-            else if (tab.getPosition() == 2)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(androidxWidgets, EditorActivity.this));
-            else if (tab.getPosition() == 3)
-              binding.listView.setAdapter(
-                  new WidgetListAdapter(materialDesignWidgets, EditorActivity.this));
+            switch (tab.getPosition()) {
+              case 0:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_COMMON, EditorActivity.this));
+                break;
+              case 1:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_TEXT, EditorActivity.this));
+                break;
+              case 2:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_BUTTONS, EditorActivity.this));
+                break;
+              case 3:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_WIDGETS, EditorActivity.this));
+                break;
+              case 4:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_LAYOUTS, EditorActivity.this));
+                break;
+              case 5:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_CONTAINERS, EditorActivity.this));
+                break;
+              case 6:
+                binding.listView.setAdapter(
+                    new WidgetListAdapter(PALETTE_LEGACY, EditorActivity.this));
+                break;
+              
+            }
           }
 
           @Override
@@ -206,7 +241,7 @@ public class EditorActivity extends BaseActivity
         });
     binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-    binding.listView.setAdapter(new WidgetListAdapter(views, this));
+    binding.listView.setAdapter(new WidgetListAdapter(PALETTE_COMMON, this));
 
     IdManager.clear();
   }
@@ -257,13 +292,13 @@ public class EditorActivity extends BaseActivity
 
         return true;
       case R.id.preview:
-        String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
+        String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
         if (result.isEmpty()) showNothingDialog();
         else {
           saveXml();
           startActivity(
               new Intent(this, PreviewLayoutActivity.class)
-                  .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, result));
+                  .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, project.getLayout()));
         }
         return true;
       case R.id.export_xml:
@@ -379,6 +414,24 @@ public class EditorActivity extends BaseActivity
         new Gson()
             .fromJson(
                 FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS_FILE, this),
+                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+  }
+  
+  private void initPalette() {
+    PALETTE_COMMON = convertJsonToJavaObject(Constants.PALETTE_COMMON);
+    PALETTE_TEXT = convertJsonToJavaObject(Constants.PALETTE_TEXT);
+    PALETTE_BUTTONS = convertJsonToJavaObject(Constants.PALETTE_BUTTONS);
+    PALETTE_WIDGETS = convertJsonToJavaObject(Constants.PALETTE_WIDGETS);
+    PALETTE_LAYOUTS = convertJsonToJavaObject(Constants.PALETTE_LAYOUTS);
+    PALETTE_CONTAINERS = convertJsonToJavaObject(Constants.PALETTE_CONTAINERS);
+    PALETTE_GOOGLE = convertJsonToJavaObject(Constants.PALETTE_GOOGLE);
+    PALETTE_LEGACY = convertJsonToJavaObject(Constants.PALETTE_LEGACY);
+  }
+  
+  private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(String filePath) {
+    return new Gson()
+            .fromJson(
+                FileUtil.readFromAsset(filePath, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 

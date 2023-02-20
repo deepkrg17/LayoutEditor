@@ -104,4 +104,8 @@ public class IdManager {
   public static ArrayList<String> getIds() {
     return new ArrayList<String>(ids.values());
   }
+
+  public static HashMap<View, String> getIdMap() {
+    return ids;
+  }
 }

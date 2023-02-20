@@ -46,10 +46,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         .append("SDK: ")
         .append(Build.VERSION.SDK_INT)
         .append(newLine)
-        .append("Release: ")
+        .append("Android: ")
         .append(Build.VERSION.RELEASE)
         .append(newLine)
-        .append("Incremental: ")
+        .append("Model: ")
         .append(Build.VERSION.INCREMENTAL)
         .append(newLine);
 

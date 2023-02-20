@@ -45,43 +45,31 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - [ ] Set constraints on views
 - [ ] Test and debug layouts
 - [ ] Export layouts as images
-- [ ] Add custom fonts
 - [ ] Create multi-screen layouts
 - [ ] Add support for multiple languages
-- [ ] Create custom animations
 - [ ] Share layouts with other users
 - [ ] Automatically generate layouts from code
 - [ ] Reuse existing layouts and elements
 - [ ] Add support for third-party libraries
-- [ ] Create custom layout templates
 - [ ] Add support for device orientation
 - [ ] Create custom layout wizards
-- [ ] Add support for different screen sizes
 - [ ] Create interactive and dynamic layouts
 - [ ] Create custom view groups
 - [ ] Integrate with existing development tools
 - [X] Generate code from layouts
 - [ ] Add support for custom transitions
 - [ ] Generate responsive layouts
-- [ ] Create custom layout attributes
-- [ ] Add support for custom fonts
-- [ ] Create gesture-based interactions
-- [ ] Add support for custom themes
+- [ ] Add gesture-based interactions
 - [ ] Create complex data-driven layouts
 - [ ] Import existing layouts
-- [ ] Use version control for layouts
-- [ ] Create and save custom themes
 - [ ] Add support for third-party libraries
-- [ ] Create custom layouts
 - [ ] Add support for custom view components
-- [X] Create and save custom layouts
-- [ ] Add support for multiple layout designs
-- [ ] Add support for multiple device sizes
 - [X] Add support for testing layouts
 - [ ] Create custom animations
 - [X] Customize view properties
 - [ ] Add support for custom plugins
 - [X] Add support for undo/redo
+- [ ] Add support for custom fonts
 - [ ] Add support for creating custom widgets
 - [ ] Add support for creating custom icons
 - [ ] Add support for creating custom themes
@@ -103,6 +91,7 @@ You may face issues when using the app. If you do, please report it in github [i
 ### Thanks to
 - [Kerismaker](https://www.flaticon.com/authors/kerismaker) for the nice [icon](https://www.flaticon.com/free-icon/template_6863985)
 - [Rosemoe](https://github.com/Rosemoe) for [sora-editor](https://github.com/Rosemoe/sora-editor)
+- [Akash Yadav](https://github.com/itsaky) for the awesome [AndroidIDE](https://github.com/AndroidIDEOfficial/AndroidIDE)
 
 ### Lisence
 ```

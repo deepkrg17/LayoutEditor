@@ -74,7 +74,7 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
         .getRoot()
         .setOnClickListener(
             v -> {
-              ClipboardUtils.copyText(colorList.get(position).colorValue);
+              ClipboardUtils.copyText(colorList.get(position).colorName);
               SBUtils.make(
                       holder.binding.getRoot(),
                       v.getContext().getString(R.string.copied)

@@ -17,7 +17,7 @@ public class LayoutEditor extends Application {
     sIstance = this;
     Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(this));
     if (isAtLeastS() && DynamicColors.isDynamicColorAvailable()) {
-      // DynamicColors.applyToActivitiesIfAvailable(this);
+      DynamicColors.applyToActivitiesIfAvailable(this);
     }
   }
 
@@ -37,7 +37,7 @@ public class LayoutEditor extends Application {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
   }
 
-  public void updateTheme(int nightMode, Activity activity) {
+  public static void updateTheme(int nightMode, Activity activity) {
     AppCompatDelegate.setDefaultNightMode(nightMode);
     activity.recreate();
   }
