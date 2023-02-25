@@ -302,7 +302,7 @@ public class EditorActivity extends BaseActivity
         }
         return true;
       case R.id.export_xml:
-        fileCreator.create(project.getName().concat(".xml"), "text/xml");
+        fileCreator.create(formattedProjectName(), "text/xml");
         return true;
       default:
         return false;
@@ -334,6 +334,18 @@ public class EditorActivity extends BaseActivity
   protected void onDestroy() {
     super.onDestroy();
     binding = null;
+  }
+
+  private String formattedProjectName() {
+    String projectName = project.getName().trim();
+
+    if (projectName.contains(" ")) {
+      projectName = projectName.replaceAll(" ", "_");
+    }
+    if (!projectName.endsWith(".xml")) {
+      projectName = projectName.concat(".xml");
+    }
+    return projectName.toLowerCase();
   }
 
   private void saveXml() {
