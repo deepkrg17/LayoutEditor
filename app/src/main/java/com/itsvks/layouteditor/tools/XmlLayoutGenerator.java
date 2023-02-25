@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class XmlLayoutGenerator {
-  StringBuilder builder = new StringBuilder();
+  final StringBuilder builder = new StringBuilder();
   String TAB = "\t";
 
   boolean useSuperclasses;
