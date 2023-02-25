@@ -2,17 +2,14 @@ package com.itsvks.layouteditor.tools;
 
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.editor.layouts.EditorLayout;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class XmlLayoutGenerator {
-  StringBuilder builder = new StringBuilder();
+  final StringBuilder builder = new StringBuilder();
   String TAB = "\t";
 
   boolean useSuperclasses;
@@ -93,12 +90,6 @@ public class XmlLayoutGenerator {
   }
 
   private String getIndent(int depth) {
-    String s = "";
-
-    for (int i = 0; i < depth; i++) {
-      s += TAB;
-    }
-
-    return s;
+    return TAB.repeat(depth);
   }
 }
