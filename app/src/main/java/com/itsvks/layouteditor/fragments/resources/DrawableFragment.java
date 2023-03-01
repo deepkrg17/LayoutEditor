@@ -22,13 +22,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.adapters.DrawableResourceAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.FragmentResourcesBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
-import com.itsvks.layouteditor.R;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,10 +118,11 @@ public class DrawableFragment extends Fragment {
 
           Drawable drawable = Drawable.createFromPath(toPath);
           String name = editText.getText().toString();
-          drawableList.add(new DrawableFile(name + extension, drawable, toPath));
+          var drawableFile = new DrawableFile(name + extension, drawable, toPath);
+          drawableList.add(drawableFile);
           // holder.drawableName.setText(name);
           // holder.drawable.setImageDrawable(drawable);
-          adapter.notifyDataSetChanged();
+          adapter.notifyItemInserted(drawableList.indexOf(drawableFile));
         });
 
     final AlertDialog dialog = builder.create();

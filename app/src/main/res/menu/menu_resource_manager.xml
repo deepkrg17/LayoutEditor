@@ -11,4 +11,12 @@
     app:contentDescription="@string/add"
     app:showAsAction="always" />
 
+  <item
+    android:id="@+id/menu_viewxml"
+    android:name="@string/show_xml"
+    android:title="@string/show_xml"
+    android:icon="@drawable/xml"
+    app:contentDescription="@string/show_xml"
+    app:showAsAction="always" />
+
 </menu>

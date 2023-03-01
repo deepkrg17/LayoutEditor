@@ -46,6 +46,10 @@ public class ProjectFile implements Parcelable {
     return path + "/values/colors.xml";
   }
 
+  public String getStringsPath() {
+    return path + "/values/strings.xml";
+  }
+
   public File[] getDrawables() {
     File file = new File(path + "/drawable/");
 

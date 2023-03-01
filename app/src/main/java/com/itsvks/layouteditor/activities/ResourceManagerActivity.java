@@ -1,12 +1,13 @@
 package com.itsvks.layouteditor.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ext.SdkExtensions;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.Menu;
+import android.view.MenuItem;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
@@ -17,11 +18,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
-import com.itsvks.layouteditor.adapters.models.ColorItem;
-import com.itsvks.layouteditor.adapters.models.DrawableFile;
-import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.activities.ShowXMLActivity;
+import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
+import com.itsvks.layouteditor.adapters.models.DrawableFile;
+import com.itsvks.layouteditor.adapters.models.ValuesItem;
+import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.fragments.resources.ColorFragment;
 import com.itsvks.layouteditor.fragments.resources.DrawableFragment;
 import com.itsvks.layouteditor.fragments.resources.FontFragment;
@@ -38,7 +40,8 @@ public class ResourceManagerActivity extends BaseActivity {
   private ActivityResourceManagerBinding binding;
   private ProjectFile project;
   private List<DrawableFile> drawableList = new ArrayList<>();
-  private List<ColorItem> colorList = new ArrayList<>();
+  private List<ValuesItem> colorList = new ArrayList<>();
+  private List<ValuesItem> stringList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
@@ -62,7 +65,7 @@ public class ResourceManagerActivity extends BaseActivity {
 
     adapter.addFragment(new DrawableFragment(project, drawableList));
     adapter.addFragment(new ColorFragment(project, colorList));
-    adapter.addFragment(new StringFragment());
+    adapter.addFragment(new StringFragment(project, stringList));
     adapter.addFragment(new FontFragment());
     filepicker =
         new FilePicker(this) {
@@ -202,11 +205,30 @@ public class ResourceManagerActivity extends BaseActivity {
           if (fragment instanceof DrawableFragment) {
             launchPhotoPicker();
           } else if (fragment instanceof ColorFragment) {
-            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+            ((ColorFragment)fragment).addColor();
           } else if (fragment instanceof StringFragment) {
-            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+            ((StringFragment)fragment).addString();
           } else if (fragment instanceof FontFragment) {
             SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+          }
+        } else {
+          SBUtils.make(binding.getRoot(), "Something went wrong..")
+              .setSlideAnimation()
+              .showAsError();
+        }
+        break;
+     case R.id.menu_viewxml:
+        if (fragment != null) {
+          if (fragment instanceof ColorFragment) {
+            Intent it = new Intent().setClass(this, ShowXMLActivity.class);
+            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, FileUtil.readFile(project.getColorsPath()));
+            startActivity(it);
+          } else if (fragment instanceof StringFragment) {
+            Intent it = new Intent().setClass(this, ShowXMLActivity.class);
+            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, FileUtil.readFile(project.getStringsPath()));
+            startActivity(it);
+          } else {
+            SBUtils.make(binding.getRoot(), "Unavailable for this fragment..").setSlideAnimation().showAsSuccess();
           }
         } else {
           SBUtils.make(binding.getRoot(), "Something went wrong..")

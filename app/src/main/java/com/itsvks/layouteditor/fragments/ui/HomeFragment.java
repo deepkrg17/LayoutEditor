@@ -159,6 +159,7 @@ public class HomeFragment extends Fragment {
         FileUtil.makeDir(projectDir + "/values/");
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
         FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
+        FileUtil.copyFileFromAsset("strings.xml", projectDir + "/values");
 
         ProjectFile project = new ProjectFile(projectDir, time);
         project.saveLayout("");

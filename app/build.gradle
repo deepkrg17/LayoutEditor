@@ -44,11 +44,11 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-	
-  	buildFeatures {
+
+    buildFeatures {
         viewBinding true
     }
-    
+
     packagingOptions {
         pickFirst "license/README.dom.txt"
         exclude "license/LICENSE.dom-documentation.txt"
