@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.io.File;
-import java.util.Calendar;
 
 public class ProjectFile implements Parcelable {
   private String path;

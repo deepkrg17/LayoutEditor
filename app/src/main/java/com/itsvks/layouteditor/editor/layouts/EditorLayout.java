@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.TooltipCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.VibrateUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
@@ -21,6 +24,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.adapters.AppliedAttributesAdapter;
 import com.itsvks.layouteditor.databinding.ShowAttributeItemBinding;
 import com.itsvks.layouteditor.databinding.ShowAttributesDialogBinding;
 import com.itsvks.layouteditor.editor.dialogs.AttributeDialog;
@@ -36,6 +40,7 @@ import com.itsvks.layouteditor.editor.dialogs.StringDialog;
 import com.itsvks.layouteditor.editor.dialogs.ViewDialog;
 import com.itsvks.layouteditor.editor.initializer.AttributeInitializer;
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
+import com.itsvks.layouteditor.interfaces.AppliedAttributeClickListener;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
@@ -423,6 +428,8 @@ public class EditorLayout extends LinearLayoutCompat {
     ShowAttributesDialogBinding binding = ShowAttributesDialogBinding.inflate(inflater);
 
     dialog.setContentView(binding.getRoot());
+    TooltipCompat.setTooltipText(binding.btnAdd, "Add attribute");
+    TooltipCompat.setTooltipText(binding.btnDelete, "Delete");
 
     for (String key : keys) {
       for (HashMap<String, Object> map : allAttrs) {
@@ -433,58 +440,31 @@ public class EditorLayout extends LinearLayoutCompat {
       }
     }
 
-    final BaseAdapter adapter =
-        new BaseAdapter() {
+    AppliedAttributeClickListener listener =
+        new AppliedAttributeClickListener() {
 
           @Override
-          public int getCount() {
-            return keys.size();
+          public void onRemoveButtonClick(int position) {
+            dialog.dismiss();
+
+            View view = removeAttribute(target, keys.get(position));
+            showDefinedAttributes(view);
           }
 
           @Override
-          public Object getItem(int pos) {
-            return null;
-          }
-
-          @Override
-          public long getItemId(int arg0) {
-            return 0;
-          }
-
-          @Override
-          public android.view.View getView(int pos, View buffer, ViewGroup parent) {
-            final HashMap<String, Object> item = attrs.get(pos);
-
-            final ShowAttributeItemBinding attributeItemBinding =
-                ShowAttributeItemBinding.inflate(inflater);
-            attributeItemBinding.textName.setText(item.get("name").toString());
-            attributeItemBinding.textValue.setText(values.get(pos));
-
-            if (item.containsKey(Constants.KEY_CAN_DELETE))
-              attributeItemBinding.btnDelete.setVisibility(View.GONE);
-
-            attributeItemBinding
-                .getRoot()
-                .setOnClickListener(
-                    v -> {
-                      showAttributeEdit(target, keys.get(pos));
-                      dialog.dismiss();
-                    });
-
-            attributeItemBinding.btnDelete.setOnClickListener(
-                v -> {
-                  dialog.dismiss();
-
-                  View view = removeAttribute(target, keys.get(pos));
-                  showDefinedAttributes(view);
-                });
-
-            return attributeItemBinding.getRoot();
+          public void onClick(int position) {
+            showAttributeEdit(target, keys.get(position));
+            dialog.dismiss();
           }
         };
+    
+    AppliedAttributesAdapter appliedAttributesAdapter = new AppliedAttributesAdapter(attrs, values, listener);
 
-    binding.listView.setAdapter(adapter);
-    binding.widgetName.setText(target.getClass().getSuperclass().getSimpleName());
+    binding.attributesList.setAdapter(appliedAttributesAdapter);
+    binding.attributesList.setLayoutManager(
+        new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+    binding.viewName.setText(target.getClass().getSuperclass().getSimpleName());
+    binding.viewFullName.setText(target.getClass().getSuperclass().getName());
     binding.btnAdd.setOnClickListener(
         v -> {
           showAvailableAttributes(target);
