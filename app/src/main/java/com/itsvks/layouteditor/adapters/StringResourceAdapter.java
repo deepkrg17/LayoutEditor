@@ -18,39 +18,39 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemBinding;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding;
-import com.itsvks.layouteditor.editor.dialogs.ColorDialog;
 import com.itsvks.layouteditor.utils.BitmapUtil;
-import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 
-public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdapter.VH> {
+public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAdapter.VH> {
 
-  private List<ValuesItem> colorList = new ArrayList<>();
+  private List<ValuesItem> stringList = new ArrayList<>();
   private ProjectFile project;
 
-  public ColorResourceAdapter(ProjectFile project, List<ValuesItem> colorList) {
+  public StringResourceAdapter(ProjectFile project, List<ValuesItem> stringList) {
     this.project = project;
-    this.colorList = colorList;
+    this.stringList = stringList;
   }
 
   public class VH extends RecyclerView.ViewHolder {
     LayoutValuesItemBinding binding;
-    AppCompatTextView colorName;
-    AppCompatTextView colorValue;
+    AppCompatTextView stringName;
+    AppCompatTextView stringValue;
 
     public VH(@NonNull LayoutValuesItemBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
 
-      colorName = binding.name;
-      colorValue = binding.value;
+      stringName = binding.name;
+      stringValue = binding.value;
     }
   }
 
@@ -62,24 +62,21 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
   @Override
   public void onBindViewHolder(VH holder, int position) {
-    holder.colorName.setText(colorList.get(position).name);
-    holder.colorValue.setText(colorList.get(position).value);
+    holder.stringName.setText(stringList.get(position).name);
+    holder.stringValue.setText(stringList.get(position).value);
     holder
         .binding
         .getRoot()
         .setAnimation(
             AnimationUtils.loadAnimation(
                 holder.itemView.getContext(), R.anim.project_list_animation));
-    holder
-        .binding
-        .getRoot()
-        .setCardBackgroundColor(Color.parseColor(colorList.get(position).value));
-    BitmapUtil.setTextColorAccordingToBackground(holder.binding.getRoot(), holder.colorName);
+
+    BitmapUtil.setTextColorAccordingToBackground(holder.binding.getRoot(), holder.stringName);
     BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
     if (BitmapUtil.getLuminance(holder.binding.getRoot()) >= 0.5) {
-      holder.colorValue.setTextColor(Color.parseColor("#FF313131"));
+      holder.stringValue.setTextColor(Color.parseColor("#FF313131"));
     } else {
-      holder.colorValue.setTextColor(Color.parseColor("#FFD9D9D9"));
+      holder.stringValue.setTextColor(Color.parseColor("#FFD9D9D9"));
     }
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position));
     holder
@@ -87,13 +84,12 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
         .getRoot()
         .setOnClickListener(
             v -> {
-              ClipboardUtils.copyText(colorList.get(position).name);
+              ClipboardUtils.copyText(stringList.get(position).name);
               SBUtils.make(
                       holder.binding.getRoot(),
                       v.getContext().getString(R.string.copied)
                           + " "
-
-                          + colorList.get(position).value)
+                          + stringList.get(position).value)
                   .setSlideAnimation()
                   .showAsSuccess();
             });
@@ -101,25 +97,25 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
   @Override
   public int getItemCount() {
-    return colorList.size();
+    return stringList.size();
   }
   
-  public void generateColorsXml() {
-    String colorsPath = project.getColorsPath();
+  public void generateStringsXml() {
+    String stringsPath = project.getStringsPath();
 
     StringBuilder sb = new StringBuilder();
     sb.append("<resources>\n");
-    for (ValuesItem colorItem : colorList) {
-      // Generate color item code
-      sb.append("\t<color name=\"")
-          .append(colorItem.name)
+    for (ValuesItem stringItem : stringList) {
+      // Generate string item code
+      sb.append("\t<string name=\"")
+          .append(stringItem.name)
           .append("\">")
-          .append(colorItem.value)
-          .append("</color>\n");
+          .append(StringEscapeUtils.escapeXml11(stringItem.value))
+          .append("</string>\n");
     }
     sb.append("</resources>");
 
-    FileUtil.writeFile(colorsPath, sb.toString().trim());
+    FileUtil.writeFile(stringsPath, sb.toString().trim());
   }
   
   private void showOptions(View v, int position) {
@@ -135,20 +131,20 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
             switch (id) {
               case R.id.menu_delete:
                 new MaterialAlertDialogBuilder(v.getContext())
-                    .setTitle("Remove Color")
-                    .setMessage("Do you want to remove " + colorList.get(position).name + "?")
+                    .setTitle("Remove String")
+                    .setMessage("Do you want to remove " + stringList.get(position).name + "?")
                     .setNegativeButton(R.string.no, null)
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          colorList.remove(position);
+                          stringList.remove(position);
                           notifyDataSetChanged();
-                          generateColorsXml();
+                          generateStringsXml();
                         })
                     .show();
                 return true;
               case R.id.menu_rename:
-                editColor(v, position);
+                editString(v, position);
                 return true;
             }
             return false;
@@ -158,9 +154,9 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
     popupMenu.show();
   }
   
-  private void editColor(View v, int pos) {
+  private void editString(View v, int pos) {
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    builder.setTitle("New Color");
+    builder.setTitle("New String");
 
     LayoutValuesItemDialogBinding bind = LayoutValuesItemDialogBinding.inflate(builder.create().getLayoutInflater());
     TextInputLayout ilName = bind.textInputLayoutName;
@@ -168,30 +164,18 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
     TextInputEditText etName = bind.textinputName;
     TextInputEditText etValue = bind.textinputValue;
 
-    etName.setText(colorList.get(pos).name);
-    etValue.setText(colorList.get(pos).value);
-    etValue.setFocusable(false);
+    etName.setText(stringList.get(pos).name);
+    etValue.setText(stringList.get(pos).value);
     builder.setView(bind.getRoot());
-    etValue.setOnClickListener(
-        (view) -> {
-          // ColorPicker
-          ColorDialog dialog = new ColorDialog(v.getContext(), etValue.getText().toString());
-          dialog.setOnSaveValueListener(
-              value -> {
-                etValue.setText(value);
-              });
-          dialog.show();
-        });
-
     builder.setPositiveButton(
         R.string.add,
         (dlg, i) -> {
           // Update position
-          colorList.get(pos).name = etName.getText().toString();
-          colorList.get(pos).value = etValue.getText().toString();
+          stringList.get(pos).name = etName.getText().toString();
+          stringList.get(pos).value = etValue.getText().toString();
           notifyDataSetChanged();
-          // Generate code from all colors in list
-          generateColorsXml();
+          // Generate code from all strings in list
+          generateStringsXml();
         });
     builder.setNegativeButton(R.string.cancel, null);
 
@@ -209,9 +193,10 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
           @Override
           public void afterTextChanged(Editable p1) {
-            NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, colorList, pos);
+            NameErrorChecker.checkForValues(
+                etName.getText().toString(), ilName, dialog, stringList, pos);
           }
         });
-    NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, colorList, pos);
+    NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, stringList, pos);
   }
 }
