@@ -11,6 +11,7 @@ import com.itsvks.layouteditor.utils.Constants;
 public class TextViewCaller {
 
   public static void setText(View target, String value, Context context) {
+    
     ((TextView) target).setText(value);
   }
 
