@@ -2,6 +2,7 @@ package com.itsvks.layouteditor.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -23,16 +25,19 @@ import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.blankj.utilcode.util.ClipboardUtils;
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.activities.PreviewDrawableActivity;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.LayoutDrawableItemBinding;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.LayoutPreviewDrawableBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
+import com.itsvks.layouteditor.interfaces.PreviewDrawableListener;
 import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
@@ -91,15 +96,9 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     holder.imageType.setText("Drawable");
     holder.versions.setText("1 version");
     holder.drawableBackground.setImageDrawable(new AlphaPatternDrawable(16));
-    TooltipCompat.setTooltipText(holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
+    TooltipCompat.setTooltipText(
+        holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
     TooltipCompat.setTooltipText(holder.binding.menu, "Options");
-
-//    BitmapUtil.setBackgroundAccordingToImage(
-//        holder.itemView.getContext(),
-//        holder.binding.getRoot(),
-//        drawableList.get(position).drawable);
-//    BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
-//    BitmapUtil.setTextColorAccordingToBackground(holder.itemView, holder.binding.drawableName);
 
     if (name.endsWith(".xml") || name.endsWith(".svg")) {
       // TODO: Set vector drawable to ImageView
@@ -107,15 +106,32 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
       holder.drawable.setImageDrawable(icon);
     } else holder.drawable.setImageDrawable(drawableList.get(position).drawable);
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position, holder));
+
+    PreviewDrawableListener listener =
+        new PreviewDrawableListener() {
+
+          @Override
+          public void showInImage(ImageView imageView) {
+            Glide.with(holder.itemView.getContext())
+                .load(drawableList.get(position).drawable)
+                .placeholder(R.drawable.image_broken)
+                .into(imageView);
+          }
+
+          @Override
+          public void setSubtitle(ActionBar actionBar) {
+            actionBar.setSubtitle(name);
+          }
+        };
     holder
         .binding
         .getRoot()
         .setOnClickListener(
-            v ->
-                showBottomSheetDialog(
-                    holder.itemView.getContext(),
-                    drawableList.get(position).drawable,
-                    drawableList.get(position).name));
+            v -> {
+              PreviewDrawableActivity.setListener(listener);
+              v.getContext()
+                  .startActivity(new Intent(v.getContext(), PreviewDrawableActivity.class));
+            });
   }
 
   @Override
@@ -245,48 +261,6 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
     if (!editText.getText().toString().equals("")) {
       editText.setSelection(0, editText.getText().toString().length());
-    }
-  }
-
-  public void showBottomSheetDialog(Context context, Drawable drawable, String name) {
-    // Create a new BottomSheetDialog instance with the context of the ImageView
-    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-
-    // inflate the layoutPreviewDrawableBinding and get the root view
-    LayoutPreviewDrawableBinding binding =
-        LayoutPreviewDrawableBinding.inflate(bottomSheetDialog.getLayoutInflater(), null, false);
-    View view = binding.getRoot();
-    bottomSheetDialog.setDismissWithAnimation(true);
-    bottomSheetDialog.setTitle(name);
-    // BitmapUtil.setBackgroundAccordingToImage(context, binding.getRoot(), drawable);
-
-    // Set the drawable of the ImageView in the layoutPreviewDrawableBinding to the drawable of the
-    // passed ImageView
-    ImageView imageView = binding.image;
-    imageView.setImageDrawable(drawable);
-    checkAndSetSize(imageView);
-
-    // Set the view of the BottomSheetDialog and show it
-    bottomSheetDialog.setContentView(view);
-    bottomSheetDialog.show();
-  }
-
-  /**
-   * This method checks and, if necessary, sets the size of an ImageView.
-   *
-   * @param imageView the ImageView to check and set
-   */
-  public void checkAndSetSize(ImageView imageView) {
-    // Get the image view's current width and height in pixels
-    float density = imageView.getResources().getDisplayMetrics().density;
-    int widthInPixels = (int) (imageView.getWidth() * density);
-    int heightInPixels = (int) (imageView.getHeight() * density);
-
-    // Check if the size is less than 200dp x 200dp
-    if (widthInPixels == heightInPixels && (widthInPixels < 200 || heightInPixels < 200)) {
-      // Set the size to 200dp x 200dp
-      imageView.getLayoutParams().width = (int) (200 * density);
-      imageView.getLayoutParams().height = (int) (200 * density);
     }
   }
 }
