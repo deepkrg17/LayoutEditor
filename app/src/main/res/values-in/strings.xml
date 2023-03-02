@@ -42,7 +42,6 @@
     <string name="msg_current_name_unavailable">Nama saat ini tidak tersedia!</string>
     <string name="msg_cannnot_empty">Kolom tidak boleh kosong!</string>
     <string name="options">Pilihan</string>
-    <string name="common">Umum</string>
     <string name="enable_vibration">Aktifkan Getaran</string>
     <string name="summary_enable_vibration">Dapat mengkonsumsi baterai</string>
     <string name="show_stroke">Tampilkan Stroke</string>
@@ -85,4 +84,25 @@
     <string name="confirmation">Konfirmasi</string>
     <string name="msg_confirmation">Apakah Anda ingin menyimpan proyek ini?</string>
     <string name="do_not_save">Jangan Simpan</string>
+    <string name="res_manager">Resources Manager</string>
+    <string name="font">Font</string>
+    <string name="string">String</string>
+    <string name="drawable">Drawable</string>
+    <string name="color">Warna</string>
+    <string name="edit_xml">Edit XML</string>
+    <string name="drawable_preview">Pratinjau Drawable</string>
+    <string name="rename_drawable">Ganti Nama Drawable</string>
+    <string name="copy_name">Salin Nama</string>
+    <string name="import_resource">Import</string>
+    <string name="color_scheme">Skema Warna</string>
+    <string name="select">Pilih</string>
+    <string name="palette">Palet</string>
+    <string name="common">Umum</string>
+    <string name="texts">Texts</string>
+    <string name="buttons">Buttons</string>
+    <string name="widgets">Widgets</string>
+    <string name="layouts">Layouts</string>
+    <string name="containers">Containers</string>
+    <string name="google">Google</string>
+    <string name="legacy">Legacy</string>
 </resources>
