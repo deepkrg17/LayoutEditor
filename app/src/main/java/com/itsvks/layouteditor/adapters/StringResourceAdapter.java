@@ -128,7 +128,7 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
                         v,
                         v.getContext().getString(R.string.copied)
                             + " "
-                            + stringList.get(position).value)
+                            + stringList.get(position).name)
                     .setSlideAnimation()
                     .showAsSuccess();
                 return true;

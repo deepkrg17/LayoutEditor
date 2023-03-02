@@ -14,10 +14,12 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import com.blankj.utilcode.util.ClipboardUtils;
@@ -35,6 +37,7 @@ import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.views.AlphaPatternDrawable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +54,21 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
   public class VH extends RecyclerView.ViewHolder {
     LayoutDrawableItemBinding binding;
-    AppCompatTextView drawableName;
-    AppCompatImageView drawable;
+    TextView drawableName;
+    TextView imageType;
+    TextView versions;
+    ImageView drawable;
+    ImageView drawableBackground;
 
     public VH(@NonNull LayoutDrawableItemBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
 
       drawableName = binding.drawableName;
-      drawable = binding.image;
+      drawableBackground = binding.background;
+      drawable = binding.drawable;
+      imageType = binding.imageType;
+      versions = binding.versions;
     }
   }
 
@@ -79,13 +88,18 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
             AnimationUtils.loadAnimation(
                 holder.itemView.getContext(), R.anim.project_list_animation));
     holder.drawableName.setText(name.substring(0, name.lastIndexOf(".")));
+    holder.imageType.setText("Drawable");
+    holder.versions.setText("1 version");
+    holder.drawableBackground.setImageDrawable(new AlphaPatternDrawable(16));
+    TooltipCompat.setTooltipText(holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
+    TooltipCompat.setTooltipText(holder.binding.menu, "Options");
 
-    BitmapUtil.setBackgroundAccordingToImage(
-        holder.itemView.getContext(),
-        holder.binding.getRoot(),
-        drawableList.get(position).drawable);
-    BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
-    BitmapUtil.setTextColorAccordingToBackground(holder.itemView, holder.binding.drawableName);
+//    BitmapUtil.setBackgroundAccordingToImage(
+//        holder.itemView.getContext(),
+//        holder.binding.getRoot(),
+//        drawableList.get(position).drawable);
+//    BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
+//    BitmapUtil.setTextColorAccordingToBackground(holder.itemView, holder.binding.drawableName);
 
     if (name.endsWith(".xml") || name.endsWith(".svg")) {
       // TODO: Set vector drawable to ImageView

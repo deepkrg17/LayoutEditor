@@ -131,7 +131,7 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
                         v,
                         v.getContext().getString(R.string.copied)
                             + " "
-                            + colorList.get(position).value)
+                            + colorList.get(position).name)
                     .setSlideAnimation()
                     .showAsSuccess();
                 return true;

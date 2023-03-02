@@ -33,8 +33,8 @@ public class AlphaPatternDrawable extends Drawable {
 
   public AlphaPatternDrawable(int rectangleSize) {
     this.rectangleSize = rectangleSize;
-    paintWhite.setColor(0xFFF1F1F1);
-    paintGray.setColor(0xFFCDCDCD);
+    paintWhite.setColor(0xFF424242);
+    paintGray.setColor(0xFF212121);
   }
 
   @Override
