@@ -84,14 +84,7 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
         .getRoot()
         .setOnClickListener(
             v -> {
-              ClipboardUtils.copyText(stringList.get(position).name);
-              SBUtils.make(
-                      holder.binding.getRoot(),
-                      v.getContext().getString(R.string.copied)
-                          + " "
-                          + stringList.get(position).value)
-                  .setSlideAnimation()
-                  .showAsSuccess();
+              editString(v, position);
             });
   }
 
@@ -99,7 +92,7 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
   public int getItemCount() {
     return stringList.size();
   }
-  
+
   public void generateStringsXml() {
     String stringsPath = project.getStringsPath();
 
@@ -117,10 +110,10 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
 
     FileUtil.writeFile(stringsPath, sb.toString().trim());
   }
-  
+
   private void showOptions(View v, int position) {
     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-    popupMenu.inflate(R.menu.menu_project_file_options);
+    popupMenu.inflate(R.menu.menu_values);
     popupMenu.setOnMenuItemClickListener(
         new PopupMenu.OnMenuItemClickListener() {
 
@@ -129,6 +122,16 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
 
             var id = item.getItemId();
             switch (id) {
+              case R.id.menu_copy_name:
+                ClipboardUtils.copyText(stringList.get(position).name);
+                SBUtils.make(
+                        v,
+                        v.getContext().getString(R.string.copied)
+                            + " "
+                            + stringList.get(position).name)
+                    .setSlideAnimation()
+                    .showAsSuccess();
+                return true;
               case R.id.menu_delete:
                 new MaterialAlertDialogBuilder(v.getContext())
                     .setTitle("Remove String")
@@ -143,9 +146,6 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
                         })
                     .show();
                 return true;
-              case R.id.menu_rename:
-                editString(v, position);
-                return true;
             }
             return false;
           }
@@ -153,12 +153,13 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
 
     popupMenu.show();
   }
-  
+
   private void editString(View v, int pos) {
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    builder.setTitle("New String");
+    builder.setTitle("Edit String");
 
-    LayoutValuesItemDialogBinding bind = LayoutValuesItemDialogBinding.inflate(builder.create().getLayoutInflater());
+    LayoutValuesItemDialogBinding bind =
+        LayoutValuesItemDialogBinding.inflate(builder.create().getLayoutInflater());
     TextInputLayout ilName = bind.textInputLayoutName;
     TextInputLayout ilValue = bind.textInputLayoutValue;
     TextInputEditText etName = bind.textinputName;

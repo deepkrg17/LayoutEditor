@@ -87,15 +87,7 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
         .getRoot()
         .setOnClickListener(
             v -> {
-              ClipboardUtils.copyText(colorList.get(position).name);
-              SBUtils.make(
-                      holder.binding.getRoot(),
-                      v.getContext().getString(R.string.copied)
-                          + " "
-
-                          + colorList.get(position).value)
-                  .setSlideAnimation()
-                  .showAsSuccess();
+              editColor(v, position);
             });
   }
 
@@ -103,7 +95,7 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
   public int getItemCount() {
     return colorList.size();
   }
-  
+
   public void generateColorsXml() {
     String colorsPath = project.getColorsPath();
 
@@ -121,10 +113,10 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
     FileUtil.writeFile(colorsPath, sb.toString().trim());
   }
-  
+
   private void showOptions(View v, int position) {
     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-    popupMenu.inflate(R.menu.menu_project_file_options);
+    popupMenu.inflate(R.menu.menu_values);
     popupMenu.setOnMenuItemClickListener(
         new PopupMenu.OnMenuItemClickListener() {
 
@@ -133,6 +125,16 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
             var id = item.getItemId();
             switch (id) {
+              case R.id.menu_copy_name:
+                ClipboardUtils.copyText(colorList.get(position).name);
+                SBUtils.make(
+                        v,
+                        v.getContext().getString(R.string.copied)
+                            + " "
+                            + colorList.get(position).name)
+                    .setSlideAnimation()
+                    .showAsSuccess();
+                return true;
               case R.id.menu_delete:
                 new MaterialAlertDialogBuilder(v.getContext())
                     .setTitle("Remove Color")
@@ -147,9 +149,6 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
                         })
                     .show();
                 return true;
-              case R.id.menu_rename:
-                editColor(v, position);
-                return true;
             }
             return false;
           }
@@ -157,12 +156,13 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
     popupMenu.show();
   }
-  
+
   private void editColor(View v, int pos) {
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    builder.setTitle("New Color");
+    builder.setTitle("Edit Color");
 
-    LayoutValuesItemDialogBinding bind = LayoutValuesItemDialogBinding.inflate(builder.create().getLayoutInflater());
+    LayoutValuesItemDialogBinding bind =
+        LayoutValuesItemDialogBinding.inflate(builder.create().getLayoutInflater());
     TextInputLayout ilName = bind.textInputLayoutName;
     TextInputLayout ilValue = bind.textInputLayoutValue;
     TextInputEditText etName = bind.textinputName;
@@ -209,7 +209,8 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
           @Override
           public void afterTextChanged(Editable p1) {
-            NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, colorList, pos);
+            NameErrorChecker.checkForValues(
+                etName.getText().toString(), ilName, dialog, colorList, pos);
           }
         });
     NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, colorList, pos);

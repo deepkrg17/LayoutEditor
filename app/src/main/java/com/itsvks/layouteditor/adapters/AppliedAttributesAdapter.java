@@ -45,7 +45,7 @@ public class AppliedAttributesAdapter extends RecyclerView.Adapter<AppliedAttrib
   }
 
   @Override
-  public VH onCreateViewHolder(ViewGroup parent, int position) {
+  public VH onCreateViewHolder(ViewGroup parent, int viewType) {
     return new VH(
         ShowAttributeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
   }

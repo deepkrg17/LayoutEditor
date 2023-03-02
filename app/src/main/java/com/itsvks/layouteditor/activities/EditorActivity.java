@@ -298,7 +298,7 @@ public class EditorActivity extends BaseActivity
           saveXml();
           startActivity(
               new Intent(this, PreviewLayoutActivity.class)
-                  .putExtra(PreviewLayoutActivity.EXTRA_KEY_XML, project.getLayout()));
+                  .putExtra(ResourceManagerActivity.EXTRA_KEY_PROJECT, project));
         }
         return true;
       case R.id.export_xml:
