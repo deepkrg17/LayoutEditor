@@ -1,7 +1,9 @@
 package com.itsvks.layouteditor.tools;
 
 import android.widget.TextView;
-import com.itsvks.layouteditor.adapters.models.ColorItem;
+import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.adapters.models.ValuesItem;
+import com.itsvks.layouteditor.utils.FileUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -10,18 +12,20 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-public class ColorResourceParser {
+public class ValuesResourceParser {
+  public static final String TAG_STRING = "string";
+  public static final String TAG_COLOR = "color";
 
-  private List<ColorItem> colorList;
+  private List<ValuesItem> valuesList;
 
-  public ColorResourceParser(InputStream stream) {
-    colorList = new ArrayList<>();
-    parseXML(stream);
+  public ValuesResourceParser(InputStream stream, String tag) {
+    valuesList = new ArrayList<>();
+    parseXML(stream, tag);
   }
 
-  private void parseXML(InputStream stream) {
-    String colorName = "";
-    String colorValue = "";
+  private void parseXML(InputStream stream, String tag) {
+    String name = "";
+    String value = "";
     try {
       XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
       factory.setNamespaceAware(true);
@@ -33,15 +37,15 @@ public class ColorResourceParser {
       while (eventType != XmlPullParser.END_DOCUMENT) {
         if (eventType == XmlPullParser.START_TAG) {
           String tagName = xpp.getName();
-          if (tagName.equalsIgnoreCase("color")) {
-            colorName = xpp.getAttributeValue(null, "name");
+          if (tagName.equalsIgnoreCase(tag)) {
+            name = xpp.getAttributeValue(null, "name");
           }
         } else if (eventType == XmlPullParser.TEXT) {
-          colorValue = xpp.getText();
+          value = xpp.getText();
         } else if (eventType == XmlPullParser.END_TAG) {
           String tagName = xpp.getName();
-          if (tagName.equalsIgnoreCase("color")) {
-            colorList.add(new ColorItem(colorName, colorValue));
+          if (tagName.equalsIgnoreCase(tag)) {
+            valuesList.add(new ValuesItem(name, value));
           }
         }
         eventType = xpp.next();
@@ -54,17 +58,17 @@ public class ColorResourceParser {
 
   public void createTextView(TextView textView) {
     StringBuilder builder = new StringBuilder();
-    for (ColorItem colorItem : colorList) {
-      builder.append(colorItem.colorName).append(" = ").append(colorItem.colorValue).append("\n");
+    for (ValuesItem item : valuesList) {
+      builder.append(item.name).append(" = ").append(item.value).append("\n");
     }
     textView.setText(builder.toString());
   }
 
-  public List<ColorItem> getColorList() {
-    return this.colorList;
+  public List<ValuesItem> getValuesList() {
+    return this.valuesList;
   }
 
-  public void setColorList(List<ColorItem> colorList) {
-    this.colorList = colorList;
+  public void setValuesList(List<ValuesItem> valuesList) {
+    this.valuesList = valuesList;
   }
 }

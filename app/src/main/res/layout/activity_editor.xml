@@ -82,8 +82,7 @@
         android:id="@+id/structure_view"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:orientation="vertical"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        android:orientation="vertical" />
 
 
     </HorizontalScrollView>

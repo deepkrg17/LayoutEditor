@@ -337,7 +337,7 @@ public class EditorActivity extends BaseActivity
   }
 
   private String formattedProjectName() {
-    String projectName = project.getName().trim();
+    String projectName = project.getName().toLowerCase().trim();
 
     if (projectName.contains(" ")) {
       projectName = projectName.replaceAll(" ", "_");
@@ -345,7 +345,7 @@ public class EditorActivity extends BaseActivity
     if (!projectName.endsWith(".xml")) {
       projectName = projectName.concat(".xml");
     }
-    return projectName.toLowerCase();
+    return projectName;
   }
 
   private void saveXml() {
