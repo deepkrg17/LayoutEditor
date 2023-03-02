@@ -113,7 +113,7 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
 
   private void showOptions(View v, int position) {
     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-    popupMenu.inflate(R.menu.menu_project_file_options);
+    popupMenu.inflate(R.menu.menu_values);
     popupMenu.setOnMenuItemClickListener(
         new PopupMenu.OnMenuItemClickListener() {
 
