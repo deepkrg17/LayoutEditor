@@ -54,6 +54,11 @@
       android:name="com.itsvks.layouteditor.activities.ResourceManagerActivity"
       android:exported="true"
       android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity" />
+    <activity
+      android:name="com.itsvks.layouteditor.activities.PreviewDrawableActivity"
+      android:exported="true"
+      android:parentActivityName="com.itsvks.layouteditor.activities.ResourceManagerActivity" />
+
   </application>
 
 </manifest>
