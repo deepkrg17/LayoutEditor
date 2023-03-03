@@ -40,8 +40,6 @@ public class ResourceManagerActivity extends BaseActivity {
   private ActivityResourceManagerBinding binding;
   private ProjectFile project;
   private List<DrawableFile> drawableList = new ArrayList<>();
-  private List<ValuesItem> colorList = new ArrayList<>();
-  private List<ValuesItem> stringList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
@@ -63,9 +61,9 @@ public class ResourceManagerActivity extends BaseActivity {
     // loadDrawables();
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
-    adapter.addFragment(new DrawableFragment(project, drawableList));
-    adapter.addFragment(new ColorFragment(project, colorList));
-    adapter.addFragment(new StringFragment(project, stringList));
+    adapter.addFragment(new DrawableFragment(drawableList));
+    adapter.addFragment(new ColorFragment());
+    adapter.addFragment(new StringFragment());
     adapter.addFragment(new FontFragment());
     filepicker =
         new FilePicker(this) {

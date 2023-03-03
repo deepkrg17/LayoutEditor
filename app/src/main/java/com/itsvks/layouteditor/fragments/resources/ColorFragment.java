@@ -22,6 +22,7 @@ import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.databinding.FragmentResourcesBinding;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding;
 import com.itsvks.layouteditor.editor.dialogs.ColorDialog;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
@@ -43,11 +44,6 @@ public class ColorFragment extends Fragment {
   private List<ValuesItem> colorList = new ArrayList<>();
   ValuesResourceParser colorParser;
 
-  public ColorFragment(ProjectFile project, List<ValuesItem> colorList) {
-    this.project = project;
-    this.colorList = colorList;
-  }
-
   @Override
   public android.view.View onCreateView(
       @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +54,7 @@ public class ColorFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    project = ProjectManager.INSTANCE.getOpenedProject();
     try {
       loadColorsFromXML(project.getColorsPath());
     } catch (FileNotFoundException e) {
