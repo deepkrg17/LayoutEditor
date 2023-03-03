@@ -1,18 +1,29 @@
 package com.itsvks.layouteditor.tools;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.editor.initializer.AttributeInitializer;
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.managers.IdManager;
+import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.ValuesManager;
+import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
+import com.itsvks.layouteditor.utils.SBUtils;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,6 +155,7 @@ public class XmlLayoutParser {
       if (key.equals("android:id")) {
         continue;
       }
+
       InvokeUtil.invokeMethod(methodName, className, target, value, target.getContext());
     }
   }

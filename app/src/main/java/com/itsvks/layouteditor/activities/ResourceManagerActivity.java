@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.ShowXMLActivity;
 import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceManagerActivity extends BaseActivity {
-  public static final String EXTRA_KEY_PROJECT = "project";
 
   private ActivityResourceManagerBinding binding;
   private ProjectFile project;
@@ -59,7 +59,7 @@ public class ResourceManagerActivity extends BaseActivity {
           onBackPressed();
         });
 
-    project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
+    project = ProjectManager.INSTANCE.getOpenedProject();
     // loadDrawables();
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
 

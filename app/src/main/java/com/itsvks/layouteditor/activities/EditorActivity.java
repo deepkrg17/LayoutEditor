@@ -29,6 +29,7 @@ import com.itsvks.layouteditor.adapters.WidgetListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.Constants;
@@ -43,7 +44,6 @@ import java.util.HashMap;
 public class EditorActivity extends BaseActivity
     implements WidgetListAdapter.WidgetListClickListener {
 
-  public static final String EXTRA_KEY_PROJECT = "project";
   public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
 
   private ActivityEditorBinding binding;
@@ -88,7 +88,7 @@ public class EditorActivity extends BaseActivity
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
-    project = getIntent().getParcelableExtra(EXTRA_KEY_PROJECT);
+    project = ProjectManager.INSTANCE.getOpenedProject();
     getSupportActionBar().setTitle(getString(R.string.app_name));
     getSupportActionBar().setSubtitle(project.getName());
 
@@ -135,11 +135,7 @@ public class EditorActivity extends BaseActivity
     drawerLayout = binding.drawer;
     actionBarDrawerToggle =
         new ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            binding.topAppBar,
-            R.string.palette,
-            R.string.palette);
+            this, drawerLayout, binding.topAppBar, R.string.palette, R.string.palette);
 
     drawerLayout.addDrawerListener(actionBarDrawerToggle);
     actionBarDrawerToggle.syncState();
@@ -229,7 +225,6 @@ public class EditorActivity extends BaseActivity
                 binding.listView.setAdapter(
                     new WidgetListAdapter(PALETTE_LEGACY, EditorActivity.this));
                 break;
-              
             }
           }
 
@@ -286,9 +281,7 @@ public class EditorActivity extends BaseActivity
         return true;
       case R.id.resources_manager:
         saveXml();
-        startActivity(
-            new Intent(this, ResourceManagerActivity.class)
-                .putExtra(ResourceManagerActivity.EXTRA_KEY_PROJECT, project));
+        startActivity(new Intent(this, ResourceManagerActivity.class));
 
         return true;
       case R.id.preview:
@@ -296,9 +289,7 @@ public class EditorActivity extends BaseActivity
         if (result.isEmpty()) showNothingDialog();
         else {
           saveXml();
-          startActivity(
-              new Intent(this, PreviewLayoutActivity.class)
-                  .putExtra(ResourceManagerActivity.EXTRA_KEY_PROJECT, project));
+          startActivity(new Intent(this, PreviewLayoutActivity.class));
         }
         return true;
       case R.id.export_xml:
@@ -428,7 +419,7 @@ public class EditorActivity extends BaseActivity
                 FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS_FILE, this),
                 new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
-  
+
   private void initPalette() {
     PALETTE_COMMON = convertJsonToJavaObject(Constants.PALETTE_COMMON);
     PALETTE_TEXT = convertJsonToJavaObject(Constants.PALETTE_TEXT);
@@ -439,12 +430,12 @@ public class EditorActivity extends BaseActivity
     PALETTE_GOOGLE = convertJsonToJavaObject(Constants.PALETTE_GOOGLE);
     PALETTE_LEGACY = convertJsonToJavaObject(Constants.PALETTE_LEGACY);
   }
-  
+
   private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(String filePath) {
     return new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(filePath, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+        .fromJson(
+            FileUtil.readFromAsset(filePath, this),
+            new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 
   @Override
