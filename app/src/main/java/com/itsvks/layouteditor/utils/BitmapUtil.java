@@ -35,7 +35,7 @@ public class BitmapUtil {
       // Get the color from the CardView
       CardView cardView = (CardView) background;
       backgroundColor = cardView.getCardBackgroundColor().getDefaultColor();
-    // Check if the background View is a ColorDrawable
+      // Check if the background View is a ColorDrawable
     } else if (background.getBackground() instanceof ColorDrawable) {
       backgroundColor = ((ColorDrawable) background.getBackground()).getColor();
     } else {
@@ -108,7 +108,7 @@ public class BitmapUtil {
       textView.setTextColor(Color.WHITE);
     }
   }
-  
+
   public static double getLuminance(View view) {
     int backgroundColor = Color.WHITE;
     if (view instanceof CardView) {
@@ -213,5 +213,12 @@ public class BitmapUtil {
     } else {
       view.setBackgroundColor(backgroundColor);
     }
+  }
+
+  public static Bitmap createBitmapFromView(View view) {
+    Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    view.draw(canvas);
+    return bitmap;
   }
 }

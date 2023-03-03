@@ -56,6 +56,14 @@
     android:icon="@drawable/file_export"
     app:contentDescription="@string/export_layout"
     app:showAsAction="ifRoom" />
+  
+  <item
+    android:id="@+id/export_as_image"
+    android:name="@string/export_as_image"
+    android:title="@string/export_as_image"
+    android:icon="@drawable/image_filter_center_focus"
+    app:contentDescription="@string/export_as_image"
+    app:showAsAction="ifRoom" />
 
   <item
     android:id="@+id/save_xml"

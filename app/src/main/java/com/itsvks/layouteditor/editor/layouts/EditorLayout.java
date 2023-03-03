@@ -51,6 +51,7 @@ import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
+import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -457,8 +458,9 @@ public class EditorLayout extends LinearLayoutCompat {
             dialog.dismiss();
           }
         };
-    
-    AppliedAttributesAdapter appliedAttributesAdapter = new AppliedAttributesAdapter(attrs, values, listener);
+
+    AppliedAttributesAdapter appliedAttributesAdapter =
+        new AppliedAttributesAdapter(attrs, values, listener);
 
     binding.attributesList.setAdapter(appliedAttributesAdapter);
     binding.attributesList.setLayoutManager(
@@ -838,5 +840,11 @@ public class EditorLayout extends LinearLayoutCompat {
       }
     }
     return null;
+  }
+
+  @Override
+  protected void dispatchDraw(Canvas canvas) {
+    super.dispatchDraw(canvas);
+    Utils.drawDashPathStroke(this, canvas);
   }
 }

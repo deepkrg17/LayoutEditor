@@ -221,20 +221,22 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     //              : imgMap.get(ProgressBar.class.getSimpleName()));
     //    }
     if (view instanceof LinearLayout && !(view instanceof RadioGroup)) {
-      icon.setImageResource(
+      String orientation =
           ((LinearLayout) view).getOrientation() == LinearLayout.HORIZONTAL
-              ? imgMap.get(LinearLayout.class.getSimpleName() + "horizontal")
-              : imgMap.get(LinearLayout.class.getSimpleName() + "vertical"));
-      viewName.setText(
-          ((LinearLayout) view).getOrientation() == LinearLayout.HORIZONTAL
-              ? LinearLayout.class.getSimpleName() + " (horizontal)"
-              : LinearLayout.class.getSimpleName() + " (vertical)");
+              ? "horizontal"
+              : "vertical";
+      int imgResId = imgMap.get(LinearLayout.class.getSimpleName() + orientation);
+
+      icon.setImageResource(imgResId);
+      viewName.setText(LinearLayout.class.getSimpleName() + " (" + orientation + ")");
     } else {
-      icon.setImageResource(
-          imgMap.get(view.getClass().getSuperclass().getSimpleName()) == null
-              ? imgMap.get("_unknown")
-              : imgMap.get(view.getClass().getSuperclass().getSimpleName()));
-      viewName.setText(view.getClass().getSuperclass().getSimpleName());
+      String viewSimpleName = view.getClass().getSuperclass().getSimpleName();
+      Integer imageResource = imgMap.get(viewSimpleName);
+      if (imageResource == null) {
+        imageResource = imgMap.get("_unknown");
+      }
+      icon.setImageResource(imageResource);
+      viewName.setText(viewSimpleName);
     }
 
     binding.mainView.setOnClickListener(this);

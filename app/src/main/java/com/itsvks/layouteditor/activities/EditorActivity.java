@@ -31,10 +31,12 @@ import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
+import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileCreator;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,6 +95,7 @@ public class EditorActivity extends BaseActivity
     getSupportActionBar().setSubtitle(project.getName());
 
     contentView = binding.content;
+    binding.editorLayout.setBackgroundColor(Utils.getSurfaceColor(binding.getRoot()));
 
     defineFileCreator();
     setupDrawerLayout();
@@ -304,6 +307,20 @@ public class EditorActivity extends BaseActivity
       case R.id.export_xml:
         fileCreator.create(formattedProjectName(), "text/xml");
         return true;
+      case R.id.export_as_image:
+        if (binding.editorLayout.getChildAt(0) != null)
+          showSaveMessage(
+              Utils.saveBitmapAsImageToGallery(
+                  this,
+                  BitmapUtil.createBitmapFromView(binding.editorLayout),
+                  project.getName()));
+        else
+          SBUtils.make(binding.getRoot(), "Add some views...")
+              .setFadeAnimation()
+              .setType(SBUtils.Type.INFO)
+              .show();
+        return true;
+
       default:
         return false;
     }
@@ -452,5 +469,18 @@ public class EditorActivity extends BaseActivity
     view.startDragAndDrop(null, new View.DragShadowBuilder(view), widgetItem, 0);
     binding.drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+  private void showSaveMessage(boolean success) {
+    if (success)
+      SBUtils.make(binding.getRoot(), "Saved to gallery.")
+          .setFadeAnimation()
+          .setType(SBUtils.Type.INFO)
+          .show();
+    else
+      SBUtils.make(binding.getRoot(), "Failed to save...")
+          .setFadeAnimation()
+          .setType(SBUtils.Type.ERROR)
+          .show();
   }
 }
