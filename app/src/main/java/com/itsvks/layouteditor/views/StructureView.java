@@ -74,7 +74,7 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
   private Map<TextView, View> textViewMap = new HashMap<>();
   private Map<View, TextView> viewTextMap = new HashMap<>();
   private OnItemClickListener listener;
-  private int onSurfaceColor;
+  private int primaryColor;
 
   public static Map<String, Integer> imgMap = new HashMap<>();
 
@@ -154,9 +154,9 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     inflater = LayoutInflater.from(context);
 
     paint = new Paint();
-    onSurfaceColor =
-        MaterialColors.getColor(this, com.google.android.material.R.attr.colorOnSurface);
-    paint.setColor(onSurfaceColor);
+    primaryColor =
+        MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary);
+    paint.setColor(primaryColor);
     paint.setAntiAlias(true);
     paint.setStrokeWidth(getDip(1));
 
@@ -199,8 +199,8 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     TextView viewName = binding.viewName;
     TextView viewId = binding.viewId;
     ImageView icon = binding.icon;
-    viewName.setTextColor(onSurfaceColor);
-    icon.setColorFilter(onSurfaceColor);
+//    viewName.setTextColor(primaryColor);
+//    icon.setColorFilter(primaryColor);
     if (view.getId() == -1 || IdManager.getIdMap().get(view) == null) {
       viewId.setVisibility(View.GONE);
       viewName.setTranslationY(0);
