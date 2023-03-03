@@ -3,7 +3,9 @@ package com.itsvks.layouteditor.editor.callers.text;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
+import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 
@@ -29,5 +31,18 @@ public class TextViewCaller {
     }
 
     ((TextView) target).setGravity(result);
+  }
+
+  public static void setCheckMark(View target, String value, Context context) {
+    String name = value.replace("@drawable/", "");
+    if (target instanceof CheckedTextView)
+      ((CheckedTextView) target).setCheckMarkDrawable(DrawableManager.getDrawable(name));
+  }
+
+  public static void setChecked(View target, String value, Context context) {
+    if (target instanceof CheckedTextView) {
+      if (value.equals("true")) ((CheckedTextView) target).setChecked(true);
+      else if (value.equals("false")) ((CheckedTextView) target).setChecked(false);
+    }
   }
 }

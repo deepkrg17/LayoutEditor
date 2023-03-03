@@ -271,14 +271,14 @@
         {
             "name": "android:text",
             "methodName": "setText",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:text",
             "argumentType": "string"
         },
         {
             "name": "android:textSize",
             "methodName": "setTextSize",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:textSize",
             "argumentType": "dimension",
             "dimensionUnit": "sp"
@@ -286,14 +286,14 @@
         {
             "name": "android:textColor",
             "methodName": "setTextColor",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:textColor",
             "argumentType": "color"
         },
         {
             "name": "android:gravity",
             "methodName": "setGravity",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:gravity",
             "argumentType": "flag",
             "arguments": [
@@ -312,14 +312,14 @@
         {
             "name": "android:checkMark",
             "methodName": "setCheckMark",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:checkMark",
             "argumentType": "drawable"
         },
         {
             "name": "android:checked",
             "methodName": "setChecked",
-            "className": "text.TextViewCaller",
+            "className": "TextViewCaller",
             "attributeName": "android:checked",
             "argumentType": "boolean"
         }
@@ -539,6 +539,15 @@
             "methodName": "setIndeterminate",
             "className": "ProgressBarCaller",
             "attributeName": "android:indeterminate",
+            "argumentType": "boolean"
+        }
+    ],
+    "android.widget.ScrollView": [
+        {
+            "name": "android:fillViewport",
+            "methodName": "setFillViewport",
+            "className": "containers.ScrollViewCaller",
+            "attributeName": "android:fillViewport",
             "argumentType": "boolean"
         }
     ]
