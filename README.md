@@ -44,7 +44,7 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - [ ] Use custom themes and styles
 - [ ] Set constraints on views
 - [ ] Test and debug layouts
-- [ ] Export layouts as images
+- [X] Export layouts as images
 - [ ] Create multi-screen layouts
 - [ ] Add support for multiple languages
 - [ ] Share layouts with other users
