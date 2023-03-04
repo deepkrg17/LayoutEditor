@@ -1,11 +1,9 @@
 package com.itsvks.layouteditor.adapters;
 
-import android.content.SharedPreferences;
-import com.itsvks.layouteditor.R.string;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -16,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -24,19 +21,19 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.R.string;
 import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -243,7 +240,10 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
   private void openProject(View v, int position) {
     Intent intent = new Intent(v.getContext(), EditorActivity.class);
-    intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
+
+    ProjectManager.INSTANCE.setOpenedProject(projects.get(position));
+
+    // intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
     intent.setAction(EditorActivity.ACTION_OPEN);
     final String projectDir =
         FileUtil.getPackageDataDir(LayoutEditor.getContext())

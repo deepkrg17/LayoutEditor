@@ -21,6 +21,7 @@ import com.itsvks.layouteditor.adapters.StringResourceAdapter;
 import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.databinding.FragmentResourcesBinding;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
@@ -41,11 +42,6 @@ public class StringFragment extends Fragment {
   private List<ValuesItem> stringList = new ArrayList<>();
   ValuesResourceParser stringParser;
 
-  public StringFragment(ProjectFile project, List<ValuesItem> stringList) {
-    this.project = project;
-    this.stringList = stringList;
-  }
-
   @Override
   public android.view.View onCreateView(
       @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +52,7 @@ public class StringFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    project = ProjectManager.INSTANCE.getOpenedProject();
     try {
       loadStringsFromXML(project.getStringsPath());
     } catch (FileNotFoundException e) {

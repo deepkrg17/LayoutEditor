@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -22,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -32,8 +30,8 @@ import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.adapters.ProjectListAdapter;
 import com.itsvks.layouteditor.databinding.FragmentHomeBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -169,7 +167,7 @@ public class HomeFragment extends Fragment {
         projectTimes.edit().putString(projectDir, time).apply();
 
         final Intent intent = new Intent(requireContext(), EditorActivity.class);
-        intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, project);
+        ProjectManager.INSTANCE.setOpenedProject(project);
         startActivity(intent);
     }
 

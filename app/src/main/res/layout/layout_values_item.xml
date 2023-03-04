@@ -1,50 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_margin="2dp"
-  app:cardCornerRadius="8dp"
-  app:cardElevation="4dp"
-  app:cardUseCompatPadding="true">
+<RelativeLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_height="70dp"
+   android:layout_width="match_parent"
+   android:layout_marginBottom="5dp"
+   android:foreground="?attr/selectableItemBackground"
+   android:layout_marginTop="5dp">
 
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:padding="10dp"
-    android:background="?attr/selectableItemBackground">
+  <TextView
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:textSize="20sp"
+     android:textColor="?attr/colorPrimary"
+     android:layout_marginLeft="10dp"
+     android:layout_marginTop="12dp"
+     android:id="@+id/name" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="white"
-      android:textSize="18sp"
-      android:id="@+id/name"
-      android:layout_centerVertical="true"
-      android:translationY="-10dp"
-      android:layout_marginLeft="15dp"
-      android:textColor="#FF000000" />
+  <LinearLayout
+     android:layout_height="1dp"
+     android:layout_width="match_parent"
+     android:layout_marginBottom="8dp"
+     android:background="?attr/colorAccent"
+     android:orientation="horizontal"
+     android:layout_marginLeft="10dp"
+     android:layout_alignParentBottom="true"
+     android:id="@+id/line">
 
-    <androidx.appcompat.widget.AppCompatTextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="#FFFFFFFF"
-      android:layout_below="@id/name"
-      android:translationY="-5dp"
-      android:textSize="13sp"
-      android:layout_marginLeft="15dp"
-      android:textColor="#FF848482"
-      android:id="@+id/value" />
+  </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-      style="@style/ToolbarButtonStyle"
-      app:srcCompat="@drawable/dots_vertical"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:layout_marginRight="15dp"
-      android:id="@+id/menu" />
+  <TextView
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:layout_marginBottom="5dp"
+     android:layout_above="@id/line"
+     android:textSize="14sp"
+     android:layout_marginLeft="10dp"
+     android:textColor="?attr/colorOnSurfaceVariant"
+     android:text="Color"
+     android:id="@+id/value" />
 
-  </RelativeLayout>
+  <TextView
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:layout_marginBottom="5dp"
+     android:layout_above="@id/line"
+     android:layout_toRightOf="@id/value"
+     android:textSize="14sp"
+     android:textColor="?attr/colorOnSurfaceVariant"
+     android:layout_marginLeft="20dp"
+     android:text="1 version"
+     android:id="@+id/versions" />
 
-</androidx.cardview.widget.CardView>
+  <ImageView
+     android:layout_height="wrap_content"
+     android:layout_width="wrap_content"
+     android:src="@drawable/dots_vertical"
+     android:layout_centerVertical="true"
+     android:layout_margin="10dp"
+     app:tint="?attr/colorTertiary"
+     android:translationY="-4dp"
+     style="@style/ToolbarButtonStyle"
+     android:layout_alignParentRight="true"
+     android:id="@+id/menu" />
+
+</RelativeLayout>

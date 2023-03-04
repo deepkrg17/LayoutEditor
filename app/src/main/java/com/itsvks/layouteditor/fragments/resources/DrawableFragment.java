@@ -27,6 +27,7 @@ import com.itsvks.layouteditor.adapters.DrawableResourceAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.FragmentResourcesBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import java.io.File;
@@ -41,9 +42,8 @@ public class DrawableFragment extends Fragment {
   private RecyclerView mRecyclerView;
   List<DrawableFile> drawableList = new ArrayList<>();
 
-  public DrawableFragment(ProjectFile project, List<DrawableFile> drawableList) {
+  public DrawableFragment(List<DrawableFile> drawableList) {
     this.drawableList = drawableList;
-    this.project = project;
   }
 
   public DrawableFragment() {}
@@ -58,6 +58,7 @@ public class DrawableFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    project = ProjectManager.INSTANCE.getOpenedProject();
     loadDrawables();
     mRecyclerView = binding.recyclerView;
     // Create the adapter and set it to the RecyclerView
