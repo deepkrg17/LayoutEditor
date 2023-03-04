@@ -5,11 +5,22 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.widget.AppCompatEditText;
+import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.ValuesManager;
+import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.Constants;
 
 public class EditTextCaller {
 
   public static void setHint(View target, String value, Context context) {
+    if (value.startsWith("@string/")) {
+      ProjectFile project = ProjectManager.INSTANCE.getOpenedProject();
+
+      value =
+          ValuesManager.getValueFromResources(
+              ValuesResourceParser.TAG_STRING, value, project.getStringsPath());
+    }
     if (target instanceof EditText) ((EditText) target).setHint(value);
     else if (target instanceof AppCompatEditText) ((AppCompatEditText) target).setHint(value);
   }

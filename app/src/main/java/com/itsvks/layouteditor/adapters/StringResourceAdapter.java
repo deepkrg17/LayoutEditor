@@ -8,9 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ClipboardUtils;
@@ -42,8 +42,8 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
 
   public class VH extends RecyclerView.ViewHolder {
     LayoutValuesItemBinding binding;
-    AppCompatTextView stringName;
-    AppCompatTextView stringValue;
+    TextView stringName;
+    TextView stringValue;
 
     public VH(@NonNull LayoutValuesItemBinding binding) {
       super(binding.getRoot());
@@ -71,13 +71,6 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
             AnimationUtils.loadAnimation(
                 holder.itemView.getContext(), R.anim.project_list_animation));
 
-    BitmapUtil.setTextColorAccordingToBackground(holder.binding.getRoot(), holder.stringName);
-    BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
-    if (BitmapUtil.getLuminance(holder.binding.getRoot()) >= 0.5) {
-      holder.stringValue.setTextColor(Color.parseColor("#FF313131"));
-    } else {
-      holder.stringValue.setTextColor(Color.parseColor("#FFD9D9D9"));
-    }
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position));
     holder
         .binding
@@ -169,7 +162,7 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
     etValue.setText(stringList.get(pos).value);
     builder.setView(bind.getRoot());
     builder.setPositiveButton(
-        R.string.add,
+        R.string.okay,
         (dlg, i) -> {
           // Update position
           stringList.get(pos).name = etName.getText().toString();

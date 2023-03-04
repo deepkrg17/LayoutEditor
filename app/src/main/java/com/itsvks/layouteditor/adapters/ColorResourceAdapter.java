@@ -8,9 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ClipboardUtils;
@@ -18,12 +18,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemBinding;
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding;
 import com.itsvks.layouteditor.editor.dialogs.ColorDialog;
 import com.itsvks.layouteditor.utils.BitmapUtil;
-import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
@@ -42,8 +42,8 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
 
   public class VH extends RecyclerView.ViewHolder {
     LayoutValuesItemBinding binding;
-    AppCompatTextView colorName;
-    AppCompatTextView colorValue;
+    TextView colorName;
+    TextView colorValue;
 
     public VH(@NonNull LayoutValuesItemBinding binding) {
       super(binding.getRoot());
@@ -73,13 +73,15 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
     holder
         .binding
         .getRoot()
-        .setCardBackgroundColor(Color.parseColor(colorList.get(position).value));
+        .setBackgroundColor(Color.parseColor(colorList.get(position).value));
     BitmapUtil.setTextColorAccordingToBackground(holder.binding.getRoot(), holder.colorName);
     BitmapUtil.setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot());
     if (BitmapUtil.getLuminance(holder.binding.getRoot()) >= 0.5) {
       holder.colorValue.setTextColor(Color.parseColor("#FF313131"));
+      holder.binding.versions.setTextColor(Color.parseColor("#FF313131"));
     } else {
       holder.colorValue.setTextColor(Color.parseColor("#FFD9D9D9"));
+      holder.binding.versions.setTextColor(Color.parseColor("#FFD9D9D9"));
     }
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position));
     holder
@@ -184,7 +186,7 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
         });
 
     builder.setPositiveButton(
-        R.string.add,
+        R.string.okay,
         (dlg, i) -> {
           // Update position
           colorList.get(pos).name = etName.getText().toString();

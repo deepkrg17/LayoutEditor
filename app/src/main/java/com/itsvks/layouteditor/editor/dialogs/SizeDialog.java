@@ -51,6 +51,7 @@ public class SizeDialog extends AttributeDialog {
 
     textInputEditText = dialogView.findViewById(R.id.textinput_edittext);
     textInputEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+    textInputLayout.setVisibility(View.GONE);
 
     // Check if savedValue is "match_parent", "wrap_content", or a fixed value
     if (savedValue.equals("match_parent")) {

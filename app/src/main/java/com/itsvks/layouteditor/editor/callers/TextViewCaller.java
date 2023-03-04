@@ -5,13 +5,23 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.ValuesManager;
+import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 import com.itsvks.layouteditor.utils.Constants;
 
 public class TextViewCaller {
 
   public static void setText(View target, String value, Context context) {
-    
+    if (value.startsWith("@string/")) {
+      ProjectFile project = ProjectManager.INSTANCE.getOpenedProject();
+
+      value =
+          ValuesManager.getValueFromResources(
+              ValuesResourceParser.TAG_STRING, value, project.getStringsPath());
+    }
     ((TextView) target).setText(value);
   }
 
