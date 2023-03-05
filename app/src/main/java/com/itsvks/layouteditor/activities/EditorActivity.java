@@ -89,7 +89,6 @@ public class EditorActivity extends BaseActivity
     
     setupDrawerTab();
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
-      DrawableManager.loadFromFiles(project.getDrawables());
       binding.editorLayout.loadLayoutFromParser(project.getLayout());
     }
   }
@@ -281,7 +280,7 @@ public class EditorActivity extends BaseActivity
         }
         return true;
       case R.id.export_xml:
-        fileCreator.create(formattedProjectName(), "text/xml");
+        fileCreator.create(projectManager.getFormattedProjectName(), "text/xml");
         return true;
       case R.id.export_as_image:
         if (binding.editorLayout.getChildAt(0) != null)
@@ -325,18 +324,6 @@ public class EditorActivity extends BaseActivity
   protected void onDestroy() {
     super.onDestroy();
     binding = null;
-  }
-
-  private String formattedProjectName() {
-    String projectName = project.getName().toLowerCase().trim();
-
-    if (projectName.contains(" ")) {
-      projectName = projectName.replaceAll(" ", "_");
-    }
-    if (!projectName.endsWith(".xml")) {
-      projectName = projectName.concat(".xml");
-    }
-    return projectName;
   }
 
   private void saveXml() {

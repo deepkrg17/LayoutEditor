@@ -6,6 +6,10 @@
     android:title="@string/rename" />
 
   <item
+    android:id="@+id/menu_preview"
+    android:title="@string/preview_layout" />
+
+  <item
     android:id="@+id/menu_delete"
     android:title="@string/delete" />
 
