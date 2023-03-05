@@ -55,7 +55,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
   public DrawableResourceAdapter(List<DrawableFile> drawableList) {
     this.drawableList = drawableList;
-    this.project = ProjectManager.INSTANCE.getOpenedProject();
+    this.project = ProjectManager.getInstance().getOpenedProject();
   }
 
   public class VH extends RecyclerView.ViewHolder {

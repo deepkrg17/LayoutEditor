@@ -8,44 +8,33 @@ import android.os.ext.SdkExtensions;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
-import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.databinding.DialogSelectDpisBinding;
-import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.activities.ShowXMLActivity;
 import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
-import com.itsvks.layouteditor.adapters.models.ValuesItem;
 import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.fragments.resources.ColorFragment;
 import com.itsvks.layouteditor.fragments.resources.DrawableFragment;
 import com.itsvks.layouteditor.fragments.resources.FontFragment;
 import com.itsvks.layouteditor.fragments.resources.StringFragment;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
-import com.itsvks.layouteditor.utils.Utils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ResourceManagerActivity extends BaseActivity {
 
   private ActivityResourceManagerBinding binding;
-  private ProjectFile project;
   private List<DrawableFile> drawableList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
@@ -64,7 +53,6 @@ public class ResourceManagerActivity extends BaseActivity {
           onBackPressed();
         });
 
-    project = ProjectManager.INSTANCE.getOpenedProject();
     // loadDrawables();
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
 
@@ -183,14 +171,6 @@ public class ResourceManagerActivity extends BaseActivity {
     this.drawableList = drawableList;
   }
 
-  public ProjectFile getProject() {
-    return this.project;
-  }
-
-  public void setProject(ProjectFile project) {
-    this.project = project;
-  }
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // if (menu instanceof MenuBuilder) ((MenuBuilder) menu).setOptionalIconsVisible(true);
@@ -226,11 +206,11 @@ public class ResourceManagerActivity extends BaseActivity {
         if (fragment != null) {
           if (fragment instanceof ColorFragment) {
             Intent it = new Intent().setClass(this, ShowXMLActivity.class);
-            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, FileUtil.readFile(project.getColorsPath()));
+            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.getInstance().getColorsXml());
             startActivity(it);
           } else if (fragment instanceof StringFragment) {
             Intent it = new Intent().setClass(this, ShowXMLActivity.class);
-            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, FileUtil.readFile(project.getStringsPath()));
+            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.getInstance().getStringsXml());
             startActivity(it);
           } else {
             SBUtils.make(binding.getRoot(), "Unavailable for this fragment..").setSlideAnimation().showAsSuccess();

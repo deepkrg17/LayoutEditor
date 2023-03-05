@@ -78,7 +78,7 @@ public class DrawableFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    project = ProjectManager.INSTANCE.getOpenedProject();
+    project = ProjectManager.getInstance().getOpenedProject();
     loadDrawables();
     mRecyclerView = binding.recyclerView;
     // Create the adapter and set it to the RecyclerView

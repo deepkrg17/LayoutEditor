@@ -40,7 +40,6 @@ public class ColorFragment extends Fragment {
   private FragmentResourcesBinding binding;
   private ColorResourceAdapter adapter;
   private RecyclerView mRecyclerView;
-  private ProjectFile project;
   private List<ValuesItem> colorList = new ArrayList<>();
   ValuesResourceParser colorParser;
 
@@ -54,7 +53,7 @@ public class ColorFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    project = ProjectManager.INSTANCE.getOpenedProject();
+    ProjectFile project = ProjectManager.getInstance().getOpenedProject();
     try {
       loadColorsFromXML(project.getColorsPath());
     } catch (FileNotFoundException e) {

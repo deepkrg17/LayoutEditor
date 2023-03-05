@@ -38,7 +38,6 @@ public class StringFragment extends Fragment {
   private FragmentResourcesBinding binding;
   private StringResourceAdapter adapter;
   private RecyclerView mRecyclerView;
-  private ProjectFile project;
   private List<ValuesItem> stringList = new ArrayList<>();
   ValuesResourceParser stringParser;
 
@@ -52,7 +51,7 @@ public class StringFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    project = ProjectManager.INSTANCE.getOpenedProject();
+    ProjectFile project = ProjectManager.getInstance().getOpenedProject();
     try {
       loadStringsFromXML(project.getStringsPath());
     } catch (FileNotFoundException e) {

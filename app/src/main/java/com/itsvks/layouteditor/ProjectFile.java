@@ -1,13 +1,10 @@
 package com.itsvks.layouteditor;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import java.io.File;
 
-public class ProjectFile implements Parcelable {
+public class ProjectFile {
   private String path;
   public String name;
   public String date;
@@ -69,32 +66,5 @@ public class ProjectFile implements Parcelable {
 
   public String getLayout() {
     return FileUtil.readFile(path + "/layout/" + "layout_main.xml");
-  }
-
-  @Override
-  public int describeContents() {
-    return 0;
-  }
-
-  @Override
-  public void writeToParcel(Parcel parcel, int flags) {
-    parcel.writeString(path);
-    parcel.writeString(name);
-  }
-
-  public static final Parcelable.Creator<ProjectFile> CREATOR =
-      new Parcelable.Creator<ProjectFile>() {
-        public ProjectFile createFromParcel(Parcel in) {
-          return new ProjectFile(in);
-        }
-
-        public ProjectFile[] newArray(int size) {
-          return new ProjectFile[size];
-        }
-      };
-
-  private ProjectFile(Parcel parcel) {
-    path = parcel.readString();
-    name = parcel.readString();
   }
 }
