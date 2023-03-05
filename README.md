@@ -61,7 +61,7 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 - [ ] Generate responsive layouts
 - [ ] Add gesture-based interactions
 - [ ] Create complex data-driven layouts
-- [ ] Import existing layouts
+- [X] Import existing layouts
 - [ ] Add support for third-party libraries
 - [ ] Add support for custom view components
 - [X] Add support for testing layouts

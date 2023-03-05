@@ -25,6 +25,7 @@ import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.adapters.WidgetListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
+import com.itsvks.layouteditor.editor.convert.ConvertImportedXml;
 import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.ProjectManager;
@@ -44,6 +45,7 @@ public class EditorActivity extends BaseActivity
     implements WidgetListAdapter.WidgetListClickListener {
 
   public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
+  public static final int PICK_XML_FILE_REQUEST = 2255;
 
   private ActivityEditorBinding binding;
 
@@ -86,7 +88,7 @@ public class EditorActivity extends BaseActivity
     defineFileCreator();
     setupDrawerLayout();
     setupStructureView();
-    
+
     setupDrawerTab();
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
       binding.editorLayout.loadLayoutFromParser(project.getLayout());
@@ -293,9 +295,29 @@ public class EditorActivity extends BaseActivity
               .setType(SBUtils.Type.INFO)
               .show();
         return true;
+      case R.id.import_xml:
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/xml");
+        startActivityForResult(intent, PICK_XML_FILE_REQUEST);
+        return true;
 
       default:
         return false;
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == PICK_XML_FILE_REQUEST && resultCode == RESULT_OK) {
+      Uri uri = data.getData();
+      String xml = FileUtil.readFromUri(uri, this);
+      String xmlConverted = new ConvertImportedXml(xml).getXmlConverted(this);
+
+      if (xmlConverted != null) {
+        binding.editorLayout.loadLayoutFromParser(xmlConverted);
+      } else {
+        SBUtils.make(binding.getRoot(), "Failed to import!").setSlideAnimation().showAsError();
+      }
     }
   }
 
