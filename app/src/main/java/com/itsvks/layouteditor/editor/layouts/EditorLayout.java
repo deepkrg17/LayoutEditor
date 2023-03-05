@@ -598,16 +598,23 @@ public class EditorLayout extends LinearLayoutCompat {
         break;
 
       case Constants.ARGUMENT_TYPE_DRAWABLE:
-        if (savedValue.toString().contains("@drawable/")) {
+        if (savedValue.toString().startsWith("@drawable/")) {
           savedValue = savedValue.replace("@drawable/", "");
         }
-        dialog = new StringDialog(context, savedValue, true);
+        dialog = new StringDialog(context, savedValue, Constants.ARGUMENT_TYPE_DRAWABLE);
         break;
 
       case Constants.ARGUMENT_TYPE_STRING:
-        dialog = new StringDialog(context, savedValue, false);
+        if (savedValue.toString().startsWith("@string/")) {
+          savedValue = savedValue.replace("@string/", "");
+        }
+        dialog = new StringDialog(context, savedValue, Constants.ARGUMENT_TYPE_STRING);
         break;
-
+      
+      case Constants.ARGUMENT_TYPE_TEXT:
+        dialog = new StringDialog(context, savedValue, Constants.ARGUMENT_TYPE_TEXT);
+        break;
+      
       case Constants.ARGUMENT_TYPE_INT:
         dialog = new NumberDialog(context, savedValue, Constants.ARGUMENT_TYPE_INT);
         break;

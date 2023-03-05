@@ -56,6 +56,7 @@ public class Constants {
   public static final String ARGUMENT_TYPE_BOOLEAN   = "boolean";
   public static final String ARGUMENT_TYPE_DRAWABLE  = "drawable";
   public static final String ARGUMENT_TYPE_STRING    = "string";
+  public static final String ARGUMENT_TYPE_TEXT      = "text";
   public static final String ARGUMENT_TYPE_INT       = "int";
   public static final String ARGUMENT_TYPE_FLOAT     = "float";
   public static final String ARGUMENT_TYPE_FLAG      = "flag";

@@ -9,6 +9,7 @@ public class ArgumentUtil {
   public static final String COLOR = "color";
   /** Default drawable value */
   public static final String DRAWABLE = "drawable";
+  public static final String STRING = "string";
 
   /** Map used to store the patterns of color and drawable */
   static final HashMap<String, String> patterns = new HashMap<>();
@@ -17,6 +18,7 @@ public class ArgumentUtil {
   static {
     patterns.put(COLOR, "#[a-fA-F0-9]{6,8}");
     patterns.put(DRAWABLE, "@drawable/.*");
+    patterns.put(STRING, "@string/.*");
   }
 
   /**
@@ -32,6 +34,6 @@ public class ArgumentUtil {
         if (Pattern.matches(patterns.get(variant).toString(), value)) return variant;
     }
 
-    return "string";
+    return "text";
   }
 }

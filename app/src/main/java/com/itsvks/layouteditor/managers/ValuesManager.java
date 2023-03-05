@@ -10,7 +10,7 @@ public class ValuesManager {
 
   public static String getValueFromResources(String tag, String value, String path) {
     String resValueName = value.substring(value.indexOf("/") + 1);
-    String result = value;
+    String result = null;
     try {
       ValuesResourceParser parser = new ValuesResourceParser(new FileInputStream(path), tag);
 

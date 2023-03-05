@@ -9,6 +9,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.DrawableManager;
 
+import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.ValuesManager;
+import com.itsvks.layouteditor.tools.ValuesResourceParser;
+import com.itsvks.layouteditor.utils.Constants;
 import java.util.regex.Pattern;
 
 public class StringDialog extends AttributeDialog {
@@ -23,7 +27,7 @@ public class StringDialog extends AttributeDialog {
   private TextInputEditText textInputEditText;
 
   /** Boolean flag to check if the dialog is for drawable */
-  boolean isDrawable;
+  String argumentType;
 
   /**
    * Constructor for StringDialog class
@@ -32,9 +36,9 @@ public class StringDialog extends AttributeDialog {
    * @param savedValue  The saved value
    * @param isDrawable  Boolean flag to check for drawable
    */
-  public StringDialog(Context context, String savedValue, boolean isDrawable) {
+  public StringDialog(Context context, String savedValue, String argumentType) {
     super(context);
-    this.isDrawable = isDrawable;
+    this.argumentType = argumentType;
     binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
     textInputLayout = binding.getRoot();
@@ -43,44 +47,44 @@ public class StringDialog extends AttributeDialog {
     textInputEditText = binding.textinputEdittext;
     textInputEditText.setText(savedValue);
 
-    if (isDrawable) {
-      textInputLayout.setHint("Enter drawable name");
-      textInputLayout.setPrefixText("@drawable/");
-      textInputEditText.addTextChangedListener(
-          new TextWatcher() {
+    switch (argumentType) {
+      case Constants.ARGUMENT_TYPE_DRAWABLE:
+        textInputLayout.setHint("Enter drawable name");
+        textInputLayout.setPrefixText("@drawable/");
+        textInputEditText.addTextChangedListener(
+            new TextWatcher() {
+              @Override
+              public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
-            /**
-             * Invoked before text is changed
-             *
-             * @param arg0 CharSequence
-             * @param arg1 int
-             * @param arg2 int
-             * @param arg3 int
-             */
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+              @Override
+              public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
-            /**
-             * Invoked when the text is changed
-             *
-             * @param arg0 CharSequence
-             * @param arg1 int
-             * @param arg2 int
-             * @param arg3 int
-             */
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+              @Override
+              public void afterTextChanged(Editable arg0) {
+                checkErrors();
+              }
+            });
+        break;
+      case Constants.ARGUMENT_TYPE_TEXT:
+        textInputLayout.setHint("Enter string value");
+        break;
+      case Constants.ARGUMENT_TYPE_STRING:
+        textInputLayout.setHint("Enter string name");
+        textInputLayout.setPrefixText("@string/");
+        textInputEditText.addTextChangedListener(
+            new TextWatcher() {
+              @Override
+              public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
-            /**
-             * Invoked after text is changed
-             *
-             * @param arg0 Editable
-             */
-            @Override
-            public void afterTextChanged(Editable arg0) {
-              checkErrors();
-            }
-          });
+              @Override
+              public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+
+              @Override
+              public void afterTextChanged(Editable arg0) {
+                checkErrors();
+              }
+            });
+        break;
     }
 
     setView(textInputLayout, 10);
@@ -90,26 +94,41 @@ public class StringDialog extends AttributeDialog {
   /** Method to check for errors */
   private void checkErrors() {
     String text = textInputEditText.getText().toString();
+    if (!argumentType.equals(Constants.ARGUMENT_TYPE_TEXT)) {
 
-    if (text.equals("")) {
-      textInputLayout.setErrorEnabled(true);
-      textInputLayout.setError("Field cannot be empty!");
-      setEnabled(false);
-      return;
-    }
+      if (text.equals("")) {
+        textInputLayout.setErrorEnabled(true);
+        textInputLayout.setError("Field cannot be empty!");
+        setEnabled(false);
+        return;
+      }
 
-    if (!Pattern.matches("[a-z_][a-z0-9_]*", text)) {
-      textInputLayout.setErrorEnabled(true);
-      textInputLayout.setError("Only small letters(a-z) and numbers!");
-      setEnabled(false);
-      return;
-    }
+      if (!Pattern.matches("[a-z_][a-z0-9_]*", text)) {
+        textInputLayout.setErrorEnabled(true);
+        textInputLayout.setError("Only small letters(a-z) and numbers!");
+        setEnabled(false);
+        return;
+      }
 
-    if (isDrawable && !DrawableManager.contains(textInputEditText.getText().toString())) {
-      textInputLayout.setErrorEnabled(true);
-      textInputLayout.setError("No Drawable found");
-      setEnabled(false);
-      return;
+      if (argumentType.equals(Constants.ARGUMENT_TYPE_DRAWABLE)
+          && !DrawableManager.contains(text)) {
+        textInputLayout.setErrorEnabled(true);
+        textInputLayout.setError("No Drawable found");
+        setEnabled(false);
+        return;
+      }
+
+      if (argumentType.equals(Constants.ARGUMENT_TYPE_STRING)
+          && ValuesManager.getValueFromResources(
+                  ValuesResourceParser.TAG_STRING,
+                  (text.startsWith("@string/") ? text : "@string/" + text),
+                  ProjectManager.getInstance().getOpenedProject().getStringsPath())
+              == null) {
+        textInputLayout.setErrorEnabled(true);
+        textInputLayout.setError("No string found");
+        setEnabled(false);
+        return;
+      }
     }
 
     textInputLayout.setErrorEnabled(false);
@@ -122,16 +141,24 @@ public class StringDialog extends AttributeDialog {
   public void show() {
     super.show();
     requestEditText(textInputEditText);
-    if (isDrawable) checkErrors();
+    checkErrors();
   }
 
   /** Method to be invoked when the save button is clicked */
   @Override
   protected void onClickSave() {
     super.onClickSave();
-    listener.onSave(
-        isDrawable
-            ? "@drawable/" + textInputEditText.getText().toString()
-            : textInputEditText.getText().toString());
+    String text = textInputEditText.getText().toString();
+    switch (argumentType) {
+      case Constants.ARGUMENT_TYPE_DRAWABLE:
+        listener.onSave("@drawable/" + text);
+        break;
+      case Constants.ARGUMENT_TYPE_STRING:
+        listener.onSave("@string/" + text);
+        break;
+      case Constants.ARGUMENT_TYPE_TEXT:
+        listener.onSave(text);
+        break;
+    }
   }
 }

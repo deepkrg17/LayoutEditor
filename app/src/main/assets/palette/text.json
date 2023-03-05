@@ -4,7 +4,7 @@
         "className": "com.itsvks.layouteditor.editor.palette.text.TextViewDesign",
         "iconName": "ic_palette_text_view",
         "defaultAttributes": {
-            "android:text": "TextView"
+            "android:text": "@string/default_string"
         }
     },
     {

@@ -273,7 +273,7 @@
             "methodName": "setText",
             "className": "TextViewCaller",
             "attributeName": "android:text",
-            "argumentType": "string"
+            "argumentType": "text|string"
         },
         {
             "name": "android:textSize",

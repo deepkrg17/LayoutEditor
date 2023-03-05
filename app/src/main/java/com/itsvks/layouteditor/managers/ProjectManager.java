@@ -13,11 +13,6 @@ import java.util.concurrent.CompletableFuture;
 public class ProjectManager {
   private static ProjectManager INSTANCE;
 
-  public ArrayList<HashMap<String, Object>> views;
-  public ArrayList<HashMap<String, Object>> layouts;
-  public ArrayList<HashMap<String, Object>> androidxWidgets;
-  public ArrayList<HashMap<String, Object>> materialDesignWidgets;
-
   public ArrayList<HashMap<String, Object>> PALETTE_COMMON;
   public ArrayList<HashMap<String, Object>> PALETTE_TEXT;
   public ArrayList<HashMap<String, Object>> PALETTE_BUTTONS;
@@ -40,7 +35,6 @@ public class ProjectManager {
     CompletableFuture.runAsync(
         () -> {
           initPalette();
-          initializeWidgetLists();
         });
   }
 
@@ -69,31 +63,6 @@ public class ProjectManager {
     PALETTE_CONTAINERS = convertJsonToJavaObject(Constants.PALETTE_CONTAINERS);
     PALETTE_GOOGLE = convertJsonToJavaObject(Constants.PALETTE_GOOGLE);
     PALETTE_LEGACY = convertJsonToJavaObject(Constants.PALETTE_LEGACY);
-  }
-
-  private void initializeWidgetLists() {
-    views =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.VIEWS_FILE, LayoutEditor.getContext()),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    layouts =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.LAYOUTS_FILE, LayoutEditor.getContext()),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-
-    materialDesignWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(
-                    Constants.MATERIAL_DESIGN_WIDGETS_FILE, LayoutEditor.getContext()),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    androidxWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS_FILE, LayoutEditor.getContext()),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 
   private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(String filePath) {
