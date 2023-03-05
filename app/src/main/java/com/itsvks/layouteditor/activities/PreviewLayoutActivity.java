@@ -20,7 +20,7 @@ public class PreviewLayoutActivity extends BaseActivity {
     binding = ActivityPreviewLayoutBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
-    ProjectFile project = ProjectManager.INSTANCE.getOpenedProject();
+    ProjectFile project = ProjectManager.getInstance().getOpenedProject();
 
     XmlLayoutParser parser = new XmlLayoutParser(this);
     parser.parseFromXml(project.getLayout(), this);

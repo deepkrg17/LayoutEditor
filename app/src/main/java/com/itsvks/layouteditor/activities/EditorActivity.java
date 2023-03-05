@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
@@ -39,7 +37,6 @@ import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -54,20 +51,7 @@ public class EditorActivity extends BaseActivity
   private LinearLayoutCompat contentView;
   private ActionBarDrawerToggle actionBarDrawerToggle;
 
-  private ArrayList<HashMap<String, Object>> views;
-  private ArrayList<HashMap<String, Object>> layouts;
-  private ArrayList<HashMap<String, Object>> androidxWidgets;
-  private ArrayList<HashMap<String, Object>> materialDesignWidgets;
-
-  private ArrayList<HashMap<String, Object>> PALETTE_COMMON;
-  private ArrayList<HashMap<String, Object>> PALETTE_TEXT;
-  private ArrayList<HashMap<String, Object>> PALETTE_BUTTONS;
-  private ArrayList<HashMap<String, Object>> PALETTE_WIDGETS;
-  private ArrayList<HashMap<String, Object>> PALETTE_LAYOUTS;
-  private ArrayList<HashMap<String, Object>> PALETTE_CONTAINERS;
-  private ArrayList<HashMap<String, Object>> PALETTE_GOOGLE;
-  private ArrayList<HashMap<String, Object>> PALETTE_LEGACY;
-
+  private ProjectManager projectManager;
   private ProjectFile project;
 
   private UndoRedoManager undoRedo;
@@ -90,7 +74,9 @@ public class EditorActivity extends BaseActivity
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
-    project = ProjectManager.INSTANCE.getOpenedProject();
+    projectManager = ProjectManager.getInstance();
+    project = projectManager.getOpenedProject();
+
     getSupportActionBar().setTitle(getString(R.string.app_name));
     getSupportActionBar().setSubtitle(project.getName());
 
@@ -100,8 +86,7 @@ public class EditorActivity extends BaseActivity
     defineFileCreator();
     setupDrawerLayout();
     setupStructureView();
-    initPalette();
-    initializeWidgetLists();
+    
     setupDrawerTab();
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
       DrawableManager.loadFromFiles(project.getDrawables());
@@ -202,31 +187,31 @@ public class EditorActivity extends BaseActivity
             switch (tab.getPosition()) {
               case 0:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_COMMON, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_COMMON, EditorActivity.this));
                 break;
               case 1:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_TEXT, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_TEXT, EditorActivity.this));
                 break;
               case 2:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_BUTTONS, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_BUTTONS, EditorActivity.this));
                 break;
               case 3:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_WIDGETS, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_WIDGETS, EditorActivity.this));
                 break;
               case 4:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_LAYOUTS, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_LAYOUTS, EditorActivity.this));
                 break;
               case 5:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_CONTAINERS, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_CONTAINERS, EditorActivity.this));
                 break;
               case 6:
                 binding.listView.setAdapter(
-                    new WidgetListAdapter(PALETTE_LEGACY, EditorActivity.this));
+                    new WidgetListAdapter(projectManager.PALETTE_LEGACY, EditorActivity.this));
                 break;
             }
           }
@@ -239,7 +224,7 @@ public class EditorActivity extends BaseActivity
         });
     binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-    binding.listView.setAdapter(new WidgetListAdapter(PALETTE_COMMON, this));
+    binding.listView.setAdapter(new WidgetListAdapter(projectManager.PALETTE_COMMON, this));
 
     IdManager.clear();
   }
@@ -302,9 +287,7 @@ public class EditorActivity extends BaseActivity
         if (binding.editorLayout.getChildAt(0) != null)
           showSaveMessage(
               Utils.saveBitmapAsImageToGallery(
-                  this,
-                  BitmapUtil.createBitmapFromView(binding.editorLayout),
-                  project.getName()));
+                  this, BitmapUtil.createBitmapFromView(binding.editorLayout), project.getName()));
         else
           SBUtils.make(binding.getRoot(), "Add some views...")
               .setFadeAnimation()
@@ -411,48 +394,6 @@ public class EditorActivity extends BaseActivity
 
   private void addDrawerTab(CharSequence title) {
     binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
-  }
-
-  private void initializeWidgetLists() {
-    views =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.VIEWS_FILE, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    layouts =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.LAYOUTS_FILE, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-
-    materialDesignWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.MATERIAL_DESIGN_WIDGETS_FILE, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-    androidxWidgets =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.ANDROIDX_WIDGETS_FILE, this),
-                new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
-  }
-
-  private void initPalette() {
-    PALETTE_COMMON = convertJsonToJavaObject(Constants.PALETTE_COMMON);
-    PALETTE_TEXT = convertJsonToJavaObject(Constants.PALETTE_TEXT);
-    PALETTE_BUTTONS = convertJsonToJavaObject(Constants.PALETTE_BUTTONS);
-    PALETTE_WIDGETS = convertJsonToJavaObject(Constants.PALETTE_WIDGETS);
-    PALETTE_LAYOUTS = convertJsonToJavaObject(Constants.PALETTE_LAYOUTS);
-    PALETTE_CONTAINERS = convertJsonToJavaObject(Constants.PALETTE_CONTAINERS);
-    PALETTE_GOOGLE = convertJsonToJavaObject(Constants.PALETTE_GOOGLE);
-    PALETTE_LEGACY = convertJsonToJavaObject(Constants.PALETTE_LEGACY);
-  }
-
-  private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(String filePath) {
-    return new Gson()
-        .fromJson(
-            FileUtil.readFromAsset(filePath, this),
-            new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 
   @Override

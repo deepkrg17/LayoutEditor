@@ -34,7 +34,7 @@ public class ImageConverter {
 
       // Save the resized image to the appropriate DPI folder
       String outputDirectoryPath =
-          ProjectManager.INSTANCE.getOpenedProject().getPath() + "/drawable-" + dpi;
+          ProjectManager.getInstance().getOpenedProject().getPath() + "/drawable-" + dpi;
       File outputDirectory = new File(outputDirectoryPath);
       outputDirectory.mkdirs();
       FileOutputStream outputStream =

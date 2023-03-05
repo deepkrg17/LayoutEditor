@@ -16,7 +16,7 @@ public class TextViewCaller {
 
   public static void setText(View target, String value, Context context) {
     if (value.startsWith("@string/")) {
-      ProjectFile project = ProjectManager.INSTANCE.getOpenedProject();
+      ProjectFile project = ProjectManager.getInstance().getOpenedProject();
 
       value =
           ValuesManager.getValueFromResources(

@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
         projectTimes.edit().putString(projectDir, time).apply();
 
         final Intent intent = new Intent(requireContext(), EditorActivity.class);
-        ProjectManager.INSTANCE.setOpenedProject(project);
+        ProjectManager.getInstance().openProject(project);
         startActivity(intent);
     }
 
