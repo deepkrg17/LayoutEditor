@@ -8,16 +8,21 @@ import android.os.ext.SdkExtensions;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.databinding.DialogSelectDpisBinding;
 import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.ShowXMLActivity;
@@ -32,7 +37,9 @@ import com.itsvks.layouteditor.fragments.resources.StringFragment;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ResourceManagerActivity extends BaseActivity {
@@ -203,9 +210,9 @@ public class ResourceManagerActivity extends BaseActivity {
           if (fragment instanceof DrawableFragment) {
             launchPhotoPicker();
           } else if (fragment instanceof ColorFragment) {
-            ((ColorFragment)fragment).addColor();
+            ((ColorFragment) fragment).addColor();
           } else if (fragment instanceof StringFragment) {
-            ((StringFragment)fragment).addString();
+            ((StringFragment) fragment).addString();
           } else if (fragment instanceof FontFragment) {
             SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
           }

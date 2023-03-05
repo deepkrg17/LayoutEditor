@@ -38,6 +38,7 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.databinding.LayoutPreviewDrawableBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.interfaces.PreviewDrawableListener;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
@@ -52,9 +53,9 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
   private List<DrawableFile> drawableList = new ArrayList<>();
   private ProjectFile project;
 
-  public DrawableResourceAdapter(List<DrawableFile> drawableList, ProjectFile project) {
+  public DrawableResourceAdapter(List<DrawableFile> drawableList) {
     this.drawableList = drawableList;
-    this.project = project;
+    this.project = ProjectManager.INSTANCE.getOpenedProject();
   }
 
   public class VH extends RecyclerView.ViewHolder {
@@ -85,7 +86,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
   @Override
   public void onBindViewHolder(VH holder, int position) {
-    var name = drawableList.get(position).name;
+    var name = drawableList.get(position).getName();
     holder
         .binding
         .getRoot()
@@ -94,7 +95,8 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                 holder.itemView.getContext(), R.anim.project_list_animation));
     holder.drawableName.setText(name.substring(0, name.lastIndexOf(".")));
     holder.imageType.setText("Drawable");
-    holder.versions.setText("1 version");
+    var version = drawableList.get(position).getVersions();
+    holder.versions.setText(version + " version" + (version > 1 ? "s" : ""));
     holder.drawableBackground.setImageDrawable(new AlphaPatternDrawable(16));
     TooltipCompat.setTooltipText(
         holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
@@ -102,9 +104,9 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
     if (name.endsWith(".xml") || name.endsWith(".svg")) {
       // TODO: Set vector drawable to ImageView
-      var icon = VectorDrawableCompat.createFromPath(drawableList.get(position).path);
+      var icon = VectorDrawableCompat.createFromPath(drawableList.get(position).getPath());
       holder.drawable.setImageDrawable(icon);
-    } else holder.drawable.setImageDrawable(drawableList.get(position).drawable);
+    } else holder.drawable.setImageDrawable(drawableList.get(position).getDrawable());
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position, holder));
 
     PreviewDrawableListener listener =
@@ -113,7 +115,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
           @Override
           public void showInImage(ImageView imageView) {
             Glide.with(holder.itemView.getContext())
-                .load(drawableList.get(position).drawable)
+                .load(drawableList.get(position).getDrawable())
                 .placeholder(R.drawable.image_broken)
                 .into(imageView);
           }
@@ -154,8 +156,8 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                 ClipboardUtils.copyText(
                     drawableList
                         .get(position)
-                        .name
-                        .substring(0, drawableList.get(position).name.lastIndexOf(".")));
+                        .getName()
+                        .substring(0, drawableList.get(position).getName().lastIndexOf(".")));
                 SBUtils.make(holder.binding.getRoot(), v.getContext().getString(R.string.copied))
                     .setSlideAnimation()
                     .showAsSuccess();
@@ -168,7 +170,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          FileUtil.deleteFile(drawableList.get(position).path);
+                          FileUtil.deleteFile(drawableList.get(position).getPath());
                           drawableList.remove(position);
                           notifyDataSetChanged();
                         })
@@ -189,7 +191,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
   @SuppressLint("RestrictedApi")
   private void rename(View v, int position, VH holder) {
     // File name with extension
-    final String lastSegment = FileUtil.getLastSegmentFromPath(drawableList.get(position).path);
+    final String lastSegment = FileUtil.getLastSegmentFromPath(drawableList.get(position).getPath());
 
     // File name without extension
     final String fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."));
@@ -214,15 +216,15 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
           String toPath = drawablePath + editText.getText().toString() + extension;
           File newFile = new File(toPath);
-          File oldFile = new File(drawableList.get(position).path);
+          File oldFile = new File(drawableList.get(position).getPath());
           oldFile.renameTo(newFile);
 
           Drawable drawable = Drawable.createFromPath(toPath);
           String name = editText.getText().toString();
-          drawableList.get(position).path = toPath;
-          drawableList.get(position).name = FileUtil.getLastSegmentFromPath(toPath);
-          if (drawableList.get(position).name.endsWith(".xml")
-              || drawableList.get(position).name.endsWith(".svg")) {
+          drawableList.get(position).setPath(toPath);
+          drawableList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
+          if (drawableList.get(position).getName().endsWith(".xml")
+              || drawableList.get(position).getName().endsWith(".svg")) {
             // TODO: Set vector drawable to ImageView
             drawable = VectorDrawableCompat.createFromPath(toPath);
             holder.drawable.setImageDrawable(drawable);

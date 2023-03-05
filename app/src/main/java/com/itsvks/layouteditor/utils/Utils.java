@@ -4,14 +4,17 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -42,7 +45,7 @@ public class Utils {
   public static int getOnSurfaceColor(View view) {
     return MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnSurface);
   }
-  
+
   public static int getSurfaceColor(View view) {
     return MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
   }
@@ -87,7 +90,10 @@ public class Utils {
     }
 
     // Generate a unique file name for your image
-    String fileName = "IMG_".concat(context.getString(string.app_name)) + " " + title + new Date().getTime() + ".jpg";
+    String fileName =
+        context.getString(string.app_name).concat(" ").concat(title).concat(" ")
+            + new Date().getTime()
+            + ".jpg";
     fileName = fileName.replaceAll(" ", "_").toLowerCase(Locale.getDefault());
     File file = new File(appDir, fileName);
 
@@ -126,6 +132,49 @@ public class Utils {
       e.printStackTrace();
       Log.d("MediaUtils", "Error saving image to gallery: " + e.getMessage());
       return false;
+    }
+  }
+
+  public static int getScreenWidth() {
+    DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+    return displayMetrics.widthPixels;
+  }
+
+  public static String getDpiFolderName(int dpi) {
+    switch (dpi) {
+      case DisplayMetrics.DENSITY_LOW:
+        return "drawable-ldpi";
+      case DisplayMetrics.DENSITY_MEDIUM:
+        return "drawable-mdpi";
+      case DisplayMetrics.DENSITY_HIGH:
+        return "drawable-hdpi";
+      case DisplayMetrics.DENSITY_XHIGH:
+        return "drawable-xhdpi";
+      case DisplayMetrics.DENSITY_XXHIGH:
+        return "drawable-xxhdpi";
+      case DisplayMetrics.DENSITY_XXXHIGH:
+        return "drawable-xxxhdpi";
+      default:
+        return "drawable-mdpi";
+    }
+  }
+  
+  public static String getDpiFolderName(String dpi) {
+    switch (dpi) {
+      case "ldpi":
+        return "drawable-ldpi";
+      case "mdpi":
+        return "drawable-mdpi";
+      case "hdpi":
+        return "drawable-hdpi";
+      case "xhdpi":
+        return "drawable-xhdpi";
+      case "xxhdpi":
+        return "drawable-xxhdpi";
+      case "xxxhdpi":
+        return "drawable-xxxhdpi";
+      default:
+        return "drawable-mdpi";
     }
   }
 }

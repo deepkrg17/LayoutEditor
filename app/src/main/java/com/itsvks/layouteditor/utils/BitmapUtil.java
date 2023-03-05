@@ -2,6 +2,7 @@ package com.itsvks.layouteditor.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -10,6 +11,7 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +20,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import java.io.IOException;
+import java.io.InputStream;
 
 /** Utility class for manipulating bitmaps */
 public class BitmapUtil {
@@ -219,6 +223,16 @@ public class BitmapUtil {
     Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
     Canvas canvas = new Canvas(bitmap);
     view.draw(canvas);
+    return bitmap;
+  }
+
+  public static Bitmap loadBitmapFromUri(Context context, Uri uri) throws IOException {
+    InputStream inputStream = context.getContentResolver().openInputStream(uri);
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+    Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+    inputStream.close();
+
     return bitmap;
   }
 }
