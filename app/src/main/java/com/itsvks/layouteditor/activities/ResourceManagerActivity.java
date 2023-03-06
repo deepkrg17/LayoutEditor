@@ -1,6 +1,8 @@
 package com.itsvks.layouteditor.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
@@ -39,6 +42,7 @@ public class ResourceManagerActivity extends BaseActivity {
   private ResourcesPagerAdapter adapter;
   private FilePicker filepicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+  private ActivityResultLauncher<String> requestPermission;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class ResourceManagerActivity extends BaseActivity {
 
     // loadDrawables();
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
+    requestPermission =
+        registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), this::onRequestPermission);
 
     adapter.addFragment(new DrawableFragment(drawableList));
     adapter.addFragment(new ColorFragment());
@@ -64,20 +71,7 @@ public class ResourceManagerActivity extends BaseActivity {
         new FilePicker(this) {
           @Override
           public void onPickFile(Uri uri) {
-            if (uri == null) {
-              SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
-            } else {
-              if (FileUtil.isDownloadsDocument(uri)) {
-                SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
-                return;
-              }
-              Fragment fragment =
-                  getSupportFragmentManager()
-                      .findFragmentByTag("f" + binding.pager.getCurrentItem());
-              if (fragment != null && fragment instanceof DrawableFragment) {
-                ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
-              }
-            }
+            onPickPhoto(uri);
           }
         };
     pickMedia = registerForActivityResult(new PickVisualMedia(), this::onPickPhoto);
@@ -202,6 +196,11 @@ public class ResourceManagerActivity extends BaseActivity {
 
   private void launchPhotoPicker() {
     if (isPhotoPickerAvailable()) {
+      if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES)
+          == PackageManager.PERMISSION_DENIED) {
+        requestPermission.launch(Manifest.permission.READ_MEDIA_IMAGES);
+        return;
+      }
       // Launch the photo picker and allow the user to choose only images.
       pickMedia.launch(
           new PickVisualMediaRequest.Builder()
@@ -228,5 +227,16 @@ public class ResourceManagerActivity extends BaseActivity {
       Log.d("PhotoPicker", "No media selected");
       SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
     }
+  }
+
+  public void onRequestPermission(boolean isGranted) {
+    if (isGranted)
+      SBUtils.make(findViewById(android.R.id.content), R.string.permission_granted)
+          .setSlideAnimation()
+          .showAsSuccess();
+    else
+      SBUtils.make(findViewById(android.R.id.content), R.string.permission_denied)
+          .setSlideAnimation()
+          .showAsError();
   }
 }
