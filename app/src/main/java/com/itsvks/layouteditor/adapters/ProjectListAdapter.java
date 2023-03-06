@@ -29,6 +29,7 @@ import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.R.string;
 import com.itsvks.layouteditor.activities.EditorActivity;
+import com.itsvks.layouteditor.activities.PreviewLayoutActivity;
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
@@ -227,6 +228,9 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
               case R.id.menu_delete:
                 deleteProject(v, position);
                 return true;
+              case R.id.menu_preview:
+                previewLayout(v, position);
+                return true;
               case R.id.menu_rename:
                 renameProject(v, position);
                 return true;
@@ -257,6 +261,12 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
       FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
       prefs.edit().putBoolean("copyAssets", true).apply();
     }
+    v.getContext().startActivity(intent);
+  }
+  
+  private void previewLayout(View v, int position) {
+    Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
+    ProjectManager.getInstance().openProject(projects.get(position));
     v.getContext().startActivity(intent);
   }
 }

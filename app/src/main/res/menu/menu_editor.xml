@@ -66,6 +66,14 @@
     app:showAsAction="ifRoom" />
 
   <item
+    android:id="@+id/import_xml"
+    android:name="Import Xml Layout"
+    android:title="Import Xml Layout(Test)"
+    android:icon="@drawable/file_import"
+    app:contentDescription="Import Xml Layout"
+    app:showAsAction="ifRoom" />
+  
+  <item
     android:id="@+id/save_xml"
     android:name="@string/save"
     android:title="@string/save"

@@ -8,6 +8,7 @@ import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class ProjectManager {
@@ -22,9 +23,9 @@ public class ProjectManager {
   public ArrayList<HashMap<String, Object>> PALETTE_GOOGLE;
   public ArrayList<HashMap<String, Object>> PALETTE_LEGACY;
 
-  private ProjectFile project;
+  private ProjectFile openedProject;
 
-  public static ProjectManager getInstance() {
+  public static synchronized ProjectManager getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new ProjectManager();
     }
@@ -39,19 +40,32 @@ public class ProjectManager {
   }
 
   public void openProject(ProjectFile project) {
-    this.project = project;
+    openedProject = project;
+    DrawableManager.loadFromFiles(openedProject.getDrawables());
   }
 
   public ProjectFile getOpenedProject() {
-    return project;
+    return openedProject;
   }
 
   public String getColorsXml() {
-    return FileUtil.readFile(project.getColorsPath());
+    return FileUtil.readFile(openedProject.getColorsPath());
   }
 
   public String getStringsXml() {
-    return FileUtil.readFile(project.getStringsPath());
+    return FileUtil.readFile(openedProject.getStringsPath());
+  }
+
+  public String getFormattedProjectName() {
+    String projectName = openedProject.getName().toLowerCase(Locale.getDefault()).trim();
+
+    if (projectName.contains(" ")) {
+      projectName = projectName.replaceAll(" ", "_");
+    }
+    if (!projectName.endsWith(".xml")) {
+      projectName = projectName.concat(".xml");
+    }
+    return projectName;
   }
 
   private void initPalette() {

@@ -1,10 +1,15 @@
 package com.itsvks.layouteditor.managers;
 
+import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.adapters.models.ValuesItem;
+import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.tools.ValuesResourceParser;
 import com.itsvks.layouteditor.utils.SBUtils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ValuesManager {
 

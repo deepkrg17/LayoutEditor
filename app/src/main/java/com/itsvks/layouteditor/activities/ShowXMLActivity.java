@@ -58,6 +58,7 @@ public class ShowXMLActivity extends BaseActivity {
     binding.editor.setEditable(false);
     // binding.editor.setColorScheme(new SchemeLight());
     try {
+      
       loadDefaultThemes();
       ThemeRegistry.getInstance().setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
       loadDefaultLanguages();

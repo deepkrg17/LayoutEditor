@@ -32,6 +32,7 @@
       android:theme="@style/AppTheme.Licence" />
     <activity
       android:name="com.itsvks.layouteditor.activities.EditorActivity"
+      android:configChanges="orientation|screenSize"
       android:exported="true" />
     <activity
       android:name="com.itsvks.layouteditor.activities.ShowXMLActivity"

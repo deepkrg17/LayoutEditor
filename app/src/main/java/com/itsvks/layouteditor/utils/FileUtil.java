@@ -12,9 +12,8 @@ import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-
 import com.itsvks.layouteditor.LayoutEditor;
-
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,17 +23,49 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class FileUtil {
+
+  public static String readFromUri(Uri uri, Context context) {
+    try {
+      InputStream inputStream = context.getContentResolver().openInputStream(uri);
+
+      // Cria um BufferedReader para ler o conteúdo do InputStream
+      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+      // Cria uma StringBuilder para armazenar o conteúdo do arquivo
+      StringBuilder sb = new StringBuilder();
+      String line;
+
+      // Lê cada linha do arquivo e adiciona ao StringBuilder
+      while ((line = reader.readLine()) != null) {
+        sb.append(line);
+      }
+
+      // Fecha o InputStream e o BufferedReader
+      inputStream.close();
+      reader.close();
+
+      // Retorna a string contendo o conteúdo do arquivo XML
+      return sb.toString();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
   /**
    * Reads from an asset file and returns its content as a String.
    *
-   * @param path  The path to the asset file
-   * @param ctx  The context from which the asset should be read
-   * @return  The content of the asset file as a String
+   * @param path The path to the asset file
+   * @param ctx The context from which the asset should be read
+   * @return The content of the asset file as a String
    */
   public static String readFromAsset(String path, Context ctx) {
     try {
@@ -108,7 +139,7 @@ public class FileUtil {
   /**
    * Creates a new file in the specified directory path if it does not already exist
    *
-   * @param path  the directory path in which to create the new file
+   * @param path the directory path in which to create the new file
    */
   private static void createNewFile(String path) {
     // Get the last index of the file separator
@@ -133,8 +164,8 @@ public class FileUtil {
   /**
    * Reads the contents of a file in the specified path
    *
-   * @param path  the directory path of the file to read
-   * @return  the contents of the file as a string
+   * @param path the directory path of the file to read
+   * @return the contents of the file as a string
    */
   public static String readFile(String path) {
     // Create the file if it does not exist
@@ -171,8 +202,8 @@ public class FileUtil {
   /**
    * Method to write a file with the given path and string.
    *
-   * @param path  Path of the file to write.
-   * @param str  String to write in the file.
+   * @param path Path of the file to write.
+   * @param str String to write in the file.
    */
   public static void writeFile(String path, String str) {
     // Create a new file.
@@ -202,8 +233,8 @@ public class FileUtil {
   /**
    * Method to copy a file from source to destination.
    *
-   * @param sourcePath  Path of the file to copy from.
-   * @param destPath  Path of the file to copy to.
+   * @param sourcePath Path of the file to copy from.
+   * @param destPath Path of the file to copy to.
    */
   public static void copyFile(String sourcePath, String destPath) {
     // Check if file exist in source path.
@@ -280,8 +311,8 @@ public class FileUtil {
   /**
    * moveFile() Moves a file from one path to another
    *
-   * @param sourcePath  the path of the file to be moved
-   * @param destPath  the path of the destination
+   * @param sourcePath the path of the file to be moved
+   * @param destPath the path of the destination
    */
   public static void moveFile(String sourcePath, String destPath) {
     copyFile(sourcePath, destPath);
@@ -291,7 +322,7 @@ public class FileUtil {
   /**
    * deleteFile() Deletes a file with the given path
    *
-   * @param path  the path of the file to be deleted
+   * @param path the path of the file to be deleted
    */
   public static void deleteFile(String path) {
     File file = new File(path);
@@ -323,8 +354,8 @@ public class FileUtil {
   /**
    * Checks if a file exists at the given path.
    *
-   * @param path  the path to check
-   * @return  true if the file exists, false otherwise
+   * @param path the path to check
+   * @return true if the file exists, false otherwise
    */
   public static boolean isExistFile(String path) {
     File file = new File(path);
@@ -334,7 +365,7 @@ public class FileUtil {
   /**
    * Creates a directory at the given path, if it doesn't exist.
    *
-   * @param path  the path at which the directory should be created
+   * @param path the path at which the directory should be created
    */
   public static void makeDir(String path) {
     if (!isExistFile(path)) {
@@ -346,8 +377,8 @@ public class FileUtil {
   /**
    * Lists all the files in the given directory, and adds them to the given list.
    *
-   * @param path  the directory to list the files from
-   * @param list  the list to which the files should be added
+   * @param path the directory to list the files from
+   * @param list the list to which the files should be added
    */
   public static void listDir(String path, ArrayList<String> list) {
     File dir = new File(path);
@@ -366,8 +397,8 @@ public class FileUtil {
   /**
    * This method is used to convert the Uri to File Path.
    *
-   * @param uri  Uri of the file
-   * @return  Returns the File Path of Uri
+   * @param uri Uri of the file
+   * @return Returns the File Path of Uri
    */
   public static String convertUriToFilePath(final Uri uri) {
     String path = null;
@@ -440,10 +471,10 @@ public class FileUtil {
   /**
    * This method is used to get the data column of a particular URI.
    *
-   * @param uri  The URI of the data column to be retrieved.
-   * @param selection  The selection argument for the query.
-   * @param selectionArgs  The selection arguments for the query.
-   * @return  The data column retrieved from the specified URI.
+   * @param uri The URI of the data column to be retrieved.
+   * @param selection The selection argument for the query.
+   * @param selectionArgs The selection arguments for the query.
+   * @return The data column retrieved from the specified URI.
    */
   @SuppressLint("Recycle")
   private static String getDataColumn(Uri uri, String selection, String[] selectionArgs) {
@@ -470,8 +501,8 @@ public class FileUtil {
   /**
    * Checks whether the Uri authority is ExternalStorageProvider.
    *
-   * @param uri  The Uri to check.
-   * @return  Whether the Uri authority is ExternalStorageProvider.
+   * @param uri The Uri to check.
+   * @return Whether the Uri authority is ExternalStorageProvider.
    */
   public static boolean isExternalStorageDocument(Uri uri) {
     return "com.android.externalstorage.documents".equals(uri.getAuthority());
@@ -480,8 +511,8 @@ public class FileUtil {
   /**
    * Checks whether the Uri authority is DownloadsProvider.
    *
-   * @param uri  The Uri to check.
-   * @return  Whether the Uri authority is DownloadsProvider.
+   * @param uri The Uri to check.
+   * @return Whether the Uri authority is DownloadsProvider.
    */
   public static boolean isDownloadsDocument(Uri uri) {
     return "com.android.providers.downloads.documents".equals(uri.getAuthority());
@@ -490,8 +521,8 @@ public class FileUtil {
   /**
    * Checks whether the Uri authority is MediaProvider.
    *
-   * @param uri  The Uri to check.
-   * @return  Whether the Uri authority is MediaProvider.
+   * @param uri The Uri to check.
+   * @return Whether the Uri authority is MediaProvider.
    */
   public static boolean isMediaDocument(Uri uri) {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
@@ -500,8 +531,8 @@ public class FileUtil {
   /**
    * Checks whether the file is a directory.
    *
-   * @param path  The path of the file.
-   * @return  Whether the file is a directory.
+   * @param path The path of the file.
+   * @return Whether the file is a directory.
    */
   public static boolean isDirectory(String path) {
     if (!isExistFile(path)) return false;
@@ -511,8 +542,8 @@ public class FileUtil {
   /**
    * Checks whether the file is a file.
    *
-   * @param path  The path of the file.
-   * @return  Whether the file is a file.
+   * @param path The path of the file.
+   * @return Whether the file is a file.
    */
   public static boolean isFile(String path) {
     if (!isExistFile(path)) return false;
@@ -522,8 +553,8 @@ public class FileUtil {
   /**
    * Gets the file length.
    *
-   * @param path  The path of the file.
-   * @return  The file length.
+   * @param path The path of the file.
+   * @return The file length.
    */
   public static long getFileLength(String path) {
     if (!isExistFile(path)) return 0;
@@ -533,7 +564,7 @@ public class FileUtil {
   /**
    * Gets the absolute path of the external storage directory.
    *
-   * @return  The absolute path of the external storage directory.
+   * @return The absolute path of the external storage directory.
    */
   public static String getExternalStorageDir() {
     return Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -542,8 +573,8 @@ public class FileUtil {
   /**
    * Gets the absolute path of the application-specific directory.
    *
-   * @param ctx  The application context.
-   * @return  The absolute path of the application-specific directory.
+   * @param ctx The application context.
+   * @return The absolute path of the application-specific directory.
    */
   public static String getPackageDataDir(Context ctx) {
     return ctx.getExternalFilesDir("").getAbsolutePath();
@@ -552,8 +583,8 @@ public class FileUtil {
   /**
    * Gets the absolute path of the public directory.
    *
-   * @param type  The type of the public directory.
-   * @return  The absolute path of the public directory.
+   * @param type The type of the public directory.
+   * @return The absolute path of the public directory.
    */
   public static String getPublicDir(String type) {
     return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
@@ -562,8 +593,8 @@ public class FileUtil {
   /**
    * Gets the last segment from the path.
    *
-   * @param path  The path to get the last segment.
-   * @return  The last segment from the path.
+   * @param path The path to get the last segment.
+   * @return The last segment from the path.
    */
   public static String getLastSegmentFromPath(String path) {
     if (path == null) return "";
@@ -573,9 +604,9 @@ public class FileUtil {
   /**
    * Saves the file with given Uri and data.
    *
-   * @param uri  URI of the file to be saved
-   * @param data  Data to be written in the file
-   * @return boolean  True if file is saved successfully, else false
+   * @param uri URI of the file to be saved
+   * @param data Data to be written in the file
+   * @return boolean True if file is saved successfully, else false
    */
   public static boolean saveFile(Uri uri, String data) {
     try {
