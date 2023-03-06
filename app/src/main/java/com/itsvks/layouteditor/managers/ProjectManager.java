@@ -82,7 +82,7 @@ public class ProjectManager {
   private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(String filePath) {
     return new Gson()
         .fromJson(
-            FileUtil.readFromAsset(filePath, LayoutEditor.getContext()),
+            FileUtil.readFromAsset(filePath, LayoutEditor.getInstance().getContext()),
             new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
   }
 }

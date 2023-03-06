@@ -21,7 +21,7 @@ public class LayoutEditor extends Application {
     }
   }
 
-  public static Context getContext() {
+  public Context getContext() {
     return sIstance.getApplicationContext();
   }
 
@@ -29,15 +29,19 @@ public class LayoutEditor extends Application {
     return sIstance;
   }
 
-  public static boolean isAtLeastS() {
+  public boolean isAtLeastS() {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
   }
+  
+  public boolean isAtLeastTiramisu() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
+  }
 
-  public static boolean isAtLeastQ() {
+  public boolean isAtLeastQ() {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
   }
 
-  public static void updateTheme(int nightMode, Activity activity) {
+  public void updateTheme(int nightMode, Activity activity) {
     AppCompatDelegate.setDefaultNightMode(nightMode);
     activity.recreate();
   }

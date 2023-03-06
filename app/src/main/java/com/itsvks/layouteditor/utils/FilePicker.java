@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.itsvks.layouteditor.LayoutEditor;
+import com.itsvks.layouteditor.R;
+
 /**
  * Class for FilePicker
  *
@@ -32,10 +35,7 @@ public abstract class FilePicker {
     // when the result is returned, call the onPickFile method with the returned uri
     this.getFile =
         actvty.registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
-            uri -> {
-              onPickFile(uri);
-            });
+            new ActivityResultContracts.GetContent(), this::onPickFile);
 
     // Create an instance of ActivityResultContracts.RequestPermission and register it with actvty
     // when the result is returned, call the onRequestPermission method with the granted boolean
@@ -44,12 +44,16 @@ public abstract class FilePicker {
             new ActivityResultContracts.RequestPermission(), this::onRequestPermission);
   }
 
-  /**
-   * Abstract method called onRequestPermission, takes in a boolean as a parameter
-   *
-   * @param isGranted boolean
-   */
-  public abstract void onRequestPermission(boolean isGranted);
+  public void onRequestPermission(boolean isGranted) {
+    if (isGranted)
+      SBUtils.make(actvty.findViewById(android.R.id.content), R.string.permission_granted)
+          .setSlideAnimation()
+          .showAsSuccess();
+    else
+      SBUtils.make(actvty.findViewById(android.R.id.content), R.string.permission_denied)
+          .setSlideAnimation()
+          .showAsError();
+  }
 
   /**
    * Abstract method called onPickFile, takes in a Nullable Uri as a parameter
@@ -63,16 +67,27 @@ public abstract class FilePicker {
    *
    * @param type String
    */
-  public void launch(String type) {
+  public void launch(String mimeType) {
+    boolean isImageType =
+        mimeType.equals("image/*")
+            || mimeType.equals("image/png")
+            || mimeType.equals("image/jpg")
+            || mimeType.equals("image/jpeg");
 
-    // Check if the app has the READ_EXTERNAL_STORAGE permission, if not launch the reqPermission
-    if (actvty.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_DENIED) {
-      reqPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-      return;
+    if (isImageType) {
+      if (LayoutEditor.getInstance().isAtLeastTiramisu()) {
+        if (actvty.checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES)
+            == PackageManager.PERMISSION_DENIED) {
+          reqPermission.launch(Manifest.permission.READ_MEDIA_IMAGES);
+          return;
+        }
+      } else if (actvty.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+          == PackageManager.PERMISSION_DENIED) {
+        reqPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        return;
+      }
     }
-
     // If the app has the permission, launch the getFile instance
-    getFile.launch(type);
+    getFile.launch(mimeType);
   }
 }

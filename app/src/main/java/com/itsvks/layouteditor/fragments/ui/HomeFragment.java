@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        projectTimes = PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());
+        projectTimes = PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getInstance().getContext());
         return binding.getRoot();
     }
 

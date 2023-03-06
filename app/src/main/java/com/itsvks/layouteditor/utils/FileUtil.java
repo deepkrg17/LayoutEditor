@@ -34,23 +34,23 @@ public class FileUtil {
     try {
       InputStream inputStream = context.getContentResolver().openInputStream(uri);
 
-      // Cria um BufferedReader para ler o conteúdo do InputStream
+      // Creates a BufferedReader to read the contents of the InputStream
       BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-      // Cria uma StringBuilder para armazenar o conteúdo do arquivo
+      // Creates a StringBuilder to store the file's contents
       StringBuilder sb = new StringBuilder();
       String line;
 
-      // Lê cada linha do arquivo e adiciona ao StringBuilder
+      // Reads each line from the file and adds it to StringBuilder
       while ((line = reader.readLine()) != null) {
         sb.append(line);
       }
 
-      // Fecha o InputStream e o BufferedReader
+      // Closes the InputStream and the BufferedReader
       inputStream.close();
       reader.close();
 
-      // Retorna a string contendo o conteúdo do arquivo XML
+      // Returns the string containing the content of the XML file
       return sb.toString();
 
     } catch (Exception e) {
@@ -104,7 +104,7 @@ public class FileUtil {
    */
   public static void copyFileFromAsset(String filename, String outPath) {
     // Get asset manager instance from application context
-    AssetManager assetManager = LayoutEditor.getContext().getAssets();
+    AssetManager assetManager = LayoutEditor.getInstance().getContext().getAssets();
 
     // Create streams for read and write
     InputStream in;
@@ -403,7 +403,7 @@ public class FileUtil {
   public static String convertUriToFilePath(final Uri uri) {
     String path = null;
     // Check if the Uri is provided by documents contract
-    if (DocumentsContract.isDocumentUri(LayoutEditor.getContext(), uri)) {
+    if (DocumentsContract.isDocumentUri(LayoutEditor.getInstance().getContext(), uri)) {
       // Check if Uri is External Storage Document
       if (isExternalStorageDocument(uri)) {
         final String docId = DocumentsContract.getDocumentId(uri);
@@ -484,7 +484,7 @@ public class FileUtil {
 
     try {
       Cursor cursor =
-          LayoutEditor.getContext() // Get the application context
+          LayoutEditor.getInstance().getContext() // Get the application context
               .getContentResolver() // Get the content resolver
               .query(uri, projection, selection, selectionArgs, null); // Query the content resolver
       if (cursor != null && cursor.moveToFirst()) {
@@ -612,7 +612,7 @@ public class FileUtil {
     try {
       // Open the file descriptor in read-write-truncate mode
       ParcelFileDescriptor pfd =
-          LayoutEditor.getContext().getContentResolver().openFileDescriptor(uri, "rwt");
+          LayoutEditor.getInstance().getContext().getContentResolver().openFileDescriptor(uri, "rwt");
       // Initialize file output stream with the file descriptor
       FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
       // Write the data in the file

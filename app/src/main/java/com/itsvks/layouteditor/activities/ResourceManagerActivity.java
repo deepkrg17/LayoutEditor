@@ -62,19 +62,6 @@ public class ResourceManagerActivity extends BaseActivity {
     adapter.addFragment(new FontFragment());
     filepicker =
         new FilePicker(this) {
-
-          @Override
-          public void onRequestPermission(boolean isGranted) {
-            if (isGranted)
-              SBUtils.make(binding.getRoot(), R.string.permission_granted)
-                  .setSlideAnimation()
-                  .showAsSuccess();
-            else
-              SBUtils.make(binding.getRoot(), R.string.permission_denied)
-                  .setSlideAnimation()
-                  .showAsError();
-          }
-
           @Override
           public void onPickFile(Uri uri) {
             if (uri == null) {
@@ -93,29 +80,7 @@ public class ResourceManagerActivity extends BaseActivity {
             }
           }
         };
-    pickMedia =
-        registerForActivityResult(
-            new PickVisualMedia(),
-            uri -> {
-              // Callback is invoked after the user selects a media item or closes the
-              // photo picker.
-              if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: " + uri);
-                if (FileUtil.isDownloadsDocument(uri)) {
-                  SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
-                  return;
-                }
-                Fragment fragment =
-                    getSupportFragmentManager()
-                        .findFragmentByTag("f" + binding.pager.getCurrentItem());
-                if (fragment != null && fragment instanceof DrawableFragment) {
-                  ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
-                }
-              } else {
-                Log.d("PhotoPicker", "No media selected");
-                SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
-              }
-            });
+    pickMedia = registerForActivityResult(new PickVisualMedia(), this::onPickPhoto);
 
     binding.pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
     binding.pager.setAdapter(adapter);
@@ -202,7 +167,7 @@ public class ResourceManagerActivity extends BaseActivity {
               .showAsError();
         }
         break;
-     case R.id.menu_viewxml:
+      case R.id.menu_viewxml:
         if (fragment != null) {
           if (fragment instanceof ColorFragment) {
             Intent it = new Intent().setClass(this, ShowXMLActivity.class);
@@ -210,10 +175,13 @@ public class ResourceManagerActivity extends BaseActivity {
             startActivity(it);
           } else if (fragment instanceof StringFragment) {
             Intent it = new Intent().setClass(this, ShowXMLActivity.class);
-            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.getInstance().getStringsXml());
+            it.putExtra(
+                ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.getInstance().getStringsXml());
             startActivity(it);
           } else {
-            SBUtils.make(binding.getRoot(), "Unavailable for this fragment..").setSlideAnimation().showAsSuccess();
+            SBUtils.make(binding.getRoot(), "Unavailable for this fragment..")
+                .setSlideAnimation()
+                .showAsSuccess();
           }
         } else {
           SBUtils.make(binding.getRoot(), "Something went wrong..")
@@ -232,7 +200,7 @@ public class ResourceManagerActivity extends BaseActivity {
     else return false;
   }
 
-  public void launchPhotoPicker() {
+  private void launchPhotoPicker() {
     if (isPhotoPickerAvailable()) {
       // Launch the photo picker and allow the user to choose only images.
       pickMedia.launch(
@@ -241,6 +209,24 @@ public class ResourceManagerActivity extends BaseActivity {
               .build());
     } else {
       filepicker.launch("image/*");
+    }
+  }
+
+  private void onPickPhoto(Uri uri) {
+    if (uri != null) {
+      Log.d("PhotoPicker", "Selected URI: " + uri);
+      if (FileUtil.isDownloadsDocument(uri)) {
+        SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+        return;
+      }
+      Fragment fragment =
+          getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
+      if (fragment != null && fragment instanceof DrawableFragment) {
+        ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
+      }
+    } else {
+      Log.d("PhotoPicker", "No media selected");
+      SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
     }
   }
 }

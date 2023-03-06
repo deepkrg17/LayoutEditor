@@ -35,6 +35,7 @@ import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
+import com.itsvks.layouteditor.utils.SBUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +118,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
       if (file.getName().equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(
-            LayoutEditor.getContext().getString(string.msg_current_name_unavailable));
+            LayoutEditor.getInstance().getContext().getString(string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         return;
       }
@@ -250,7 +251,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     // intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
     intent.setAction(EditorActivity.ACTION_OPEN);
     final String projectDir =
-        FileUtil.getPackageDataDir(LayoutEditor.getContext())
+        FileUtil.getPackageDataDir(LayoutEditor.getInstance().getContext())
             + "/projects/"
             + projects.get(position).name;
     if (!prefs.getBoolean("copyAssets", false)
@@ -263,10 +264,12 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     }
     v.getContext().startActivity(intent);
   }
-  
+
   private void previewLayout(View v, int position) {
     Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
     ProjectManager.getInstance().openProject(projects.get(position));
-    v.getContext().startActivity(intent);
+    if (projects.get(position).getLayout().isEmpty()) {
+      SBUtils.make(v, "Project is empty...").setFadeAnimation().showAsError();
+    } else v.getContext().startActivity(intent);
   }
 }

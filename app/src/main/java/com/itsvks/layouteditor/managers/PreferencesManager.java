@@ -17,6 +17,6 @@ public class PreferencesManager {
   }
 
   public static SharedPreferences getPrefs() {
-    return PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getContext());
+    return PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getInstance().getContext());
   }
 }

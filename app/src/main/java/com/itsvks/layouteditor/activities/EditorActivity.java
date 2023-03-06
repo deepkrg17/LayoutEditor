@@ -23,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.adapters.WidgetListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.editor.convert.ConvertImportedXml;
@@ -34,6 +35,7 @@ import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileCreator;
+import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import com.itsvks.layouteditor.utils.Utils;
@@ -58,6 +60,7 @@ public class EditorActivity extends BaseActivity
 
   private UndoRedoManager undoRedo;
   private FileCreator fileCreator;
+  private FilePicker xmlPicker;
   private MenuItem undo = null;
   private MenuItem redo = null;
 
@@ -86,6 +89,7 @@ public class EditorActivity extends BaseActivity
     binding.editorLayout.setBackgroundColor(Utils.getSurfaceColor(binding.getRoot()));
 
     defineFileCreator();
+    defineXmlPicker();
     setupDrawerLayout();
     setupStructureView();
 
@@ -93,6 +97,35 @@ public class EditorActivity extends BaseActivity
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
       binding.editorLayout.loadLayoutFromParser(project.getLayout());
     }
+  }
+
+  private void defineXmlPicker() {
+    xmlPicker =
+        new FilePicker(this) {
+          @Override
+          public void onPickFile(Uri uri) {
+            if (uri == null) {
+              SBUtils.make(binding.getRoot(), "No xml selected").setFadeAnimation().show();
+            } else {
+              if (FileUtil.isDownloadsDocument(uri)) {
+                SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+                return;
+              }
+              String xml = FileUtil.readFromUri(uri, EditorActivity.this);
+              String xmlConverted =
+                  new ConvertImportedXml(xml).getXmlConverted(EditorActivity.this);
+
+              if (xmlConverted != null) {
+                binding.editorLayout.loadLayoutFromParser(xmlConverted);
+                SBUtils.make(binding.getRoot(), "Imported").setFadeAnimation().showAsSuccess();
+              } else {
+                SBUtils.make(binding.getRoot(), "Failed to import!")
+                    .setSlideAnimation()
+                    .showAsError();
+              }
+            }
+          }
+        };
   }
 
   private void defineFileCreator() {
@@ -296,28 +329,11 @@ public class EditorActivity extends BaseActivity
               .show();
         return true;
       case R.id.import_xml:
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("text/xml");
-        startActivityForResult(intent, PICK_XML_FILE_REQUEST);
+        xmlPicker.launch("text/xml");
         return true;
 
       default:
         return false;
-    }
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == PICK_XML_FILE_REQUEST && resultCode == RESULT_OK) {
-      Uri uri = data.getData();
-      String xml = FileUtil.readFromUri(uri, this);
-      String xmlConverted = new ConvertImportedXml(xml).getXmlConverted(this);
-
-      if (xmlConverted != null) {
-        binding.editorLayout.loadLayoutFromParser(xmlConverted);
-      } else {
-        SBUtils.make(binding.getRoot(), "Failed to import!").setSlideAnimation().showAsError();
-      }
     }
   }
 
