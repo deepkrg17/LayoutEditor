@@ -40,7 +40,8 @@ public class ResourceManagerActivity extends BaseActivity {
   private ActivityResourceManagerBinding binding;
   private List<DrawableFile> drawableList = new ArrayList<>();
   private ResourcesPagerAdapter adapter;
-  private FilePicker filepicker;
+  private FilePicker photoPicker;
+  private FilePicker fontPicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
   private ActivityResultLauncher<String> requestPermission;
 
@@ -67,11 +68,18 @@ public class ResourceManagerActivity extends BaseActivity {
     adapter.addFragment(new ColorFragment());
     adapter.addFragment(new StringFragment());
     adapter.addFragment(new FontFragment());
-    filepicker =
+    photoPicker =
         new FilePicker(this) {
           @Override
           public void onPickFile(Uri uri) {
             onPickPhoto(uri);
+          }
+        };
+    fontPicker =
+        new FilePicker(this) {
+          @Override
+          public void onPickFile(Uri uri) {
+            onPickFont(uri);
           }
         };
     pickMedia = registerForActivityResult(new PickVisualMedia(), this::onPickPhoto);
@@ -153,7 +161,7 @@ public class ResourceManagerActivity extends BaseActivity {
           } else if (fragment instanceof StringFragment) {
             ((StringFragment) fragment).addString();
           } else if (fragment instanceof FontFragment) {
-            SBUtils.make(binding.getRoot(), "Soon...").setSlideAnimation().showAsSuccess();
+            fontPicker.launch("font/*");
           }
         } else {
           SBUtils.make(binding.getRoot(), "Something went wrong..")
@@ -207,7 +215,7 @@ public class ResourceManagerActivity extends BaseActivity {
               .setMediaType(PickVisualMedia.ImageOnly.INSTANCE)
               .build());
     } else {
-      filepicker.launch("image/*");
+      photoPicker.launch("image/*");
     }
   }
 
@@ -226,6 +234,24 @@ public class ResourceManagerActivity extends BaseActivity {
     } else {
       Log.d("PhotoPicker", "No media selected");
       SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
+    }
+  }
+  
+  private void onPickFont(Uri uri) {
+    if (uri != null) {
+      Log.d("FontPicker", "Selected URI: " + uri);
+      if (FileUtil.isDownloadsDocument(uri)) {
+        SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+        return;
+      }
+      Fragment fragment =
+          getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
+      if (fragment != null && fragment instanceof FontFragment) {
+        ((FontFragment) fragment).addFont(uri);
+      }
+    } else {
+      Log.d("FontPicker", "No font selected");
+      SBUtils.make(binding.getRoot(), "No font selected").setFadeAnimation().show();
     }
   }
 

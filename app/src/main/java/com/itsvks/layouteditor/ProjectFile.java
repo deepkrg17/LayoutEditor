@@ -37,6 +37,10 @@ public class ProjectFile {
   public String getDrawablePath() {
     return path + "/drawable/";
   }
+  
+  public String getFontPath() {
+    return path + "/font/";
+  }
 
   public String getColorsPath() {
     return path + "/values/colors.xml";
@@ -51,6 +55,16 @@ public class ProjectFile {
 
     if (!file.exists()) {
       FileUtil.makeDir(path + "/drawable/");
+    }
+
+    return file.listFiles();
+  }
+  
+  public File[] getFonts() {
+    File file = new File(path + "/font/");
+
+    if (!file.exists()) {
+      FileUtil.makeDir(path + "/font/");
     }
 
     return file.listFiles();

@@ -13,7 +13,11 @@
     app:hintAnimationEnabled="true"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    app:boxCornerRadiusBottomEnd="@dimen/cornerLow"
+    app:boxCornerRadiusBottomStart="@dimen/cornerLow"
+    app:boxCornerRadiusTopEnd="@dimen/cornerLow"
+    app:boxCornerRadiusTopStart="@dimen/cornerLow">
 
     <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/textinput_name"
@@ -22,19 +26,12 @@
       android:textSize="16sp" />
   </com.google.android.material.textfield.TextInputLayout>
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/text_input_layout_value"
-    android:hint="Value"
-    app:hintAnimationEnabled="true"
+  <!-- <TextView
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:padding="10dp">
-
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/textinput_value"
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      android:textSize="16sp" />
-  </com.google.android.material.textfield.TextInputLayout>
+    android:padding="10dp"
+    android:text="How will the font look"
+    android:textSize="16sp"
+    android:id="@+id/font_look" /> -->
 
 </android.widget.LinearLayout>

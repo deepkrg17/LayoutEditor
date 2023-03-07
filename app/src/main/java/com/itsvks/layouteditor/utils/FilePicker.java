@@ -68,6 +68,12 @@ public abstract class FilePicker {
    * @param type String
    */
   public void launch(String mimeType) {
+    checkPermissions(mimeType);
+    // If the app has the permission, launch the getFile instance
+    getFile.launch(mimeType);
+  }
+  
+  private void checkPermissions(String mimeType) {
     boolean isImageType =
         mimeType.equals("image/*")
             || mimeType.equals("image/png")
@@ -87,7 +93,5 @@ public abstract class FilePicker {
         return;
       }
     }
-    // If the app has the permission, launch the getFile instance
-    getFile.launch(mimeType);
   }
 }

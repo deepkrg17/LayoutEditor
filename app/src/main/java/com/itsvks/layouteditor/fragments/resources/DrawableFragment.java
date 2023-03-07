@@ -184,8 +184,6 @@ public class DrawableFragment extends Fragment {
           String name = editText.getText().toString();
           var drawableFile = new DrawableFile(version + 1, drawable, toPath);
           drawableList.add(drawableFile);
-          // holder.drawableName.setText(name);
-          // holder.drawable.setImageDrawable(drawable);
           adapter.notifyItemInserted(drawableList.indexOf(drawableFile));
         });
 

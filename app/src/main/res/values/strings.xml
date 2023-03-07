@@ -47,7 +47,9 @@
     <string name="show_stroke">Show Stroke</string>
     <string name="summary_show_stroke">Show stroke in the editor?</string>
     <string name="remove_drawable">Remove drawable</string>
+    <string name="remove_font">Remove font</string>
     <string name="msg_remove_drawable">Do you want to remove the drawables?</string>
+    <string name="msg_remove_font">Do you want to remove the font?</string>
     <string name="msg_enter_new_name">Enter new name</string>
     <string name="add_drawable">Add drawable</string>
     <string name="add">Add</string>
@@ -107,4 +109,6 @@
     <string name="legacy">Legacy</string>
     <string name="preview_drawable">Preview Drawable</string>
     <string name="export_as_image">Export as Image</string>
+    <string name="add_font">Add font</string>
+    <string name="rename_font">Rename font</string>
 </resources>

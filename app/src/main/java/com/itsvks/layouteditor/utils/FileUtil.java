@@ -12,6 +12,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.itsvks.layouteditor.LayoutEditor;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -58,6 +59,41 @@ public class FileUtil {
     }
 
     return null;
+  }
+
+  public static boolean copyFile(Uri uri, String destinationPath) {
+    InputStream inputStream = null;
+    OutputStream outputStream = null;
+
+    try {
+      inputStream = LayoutEditor.getInstance().getContext().getContentResolver().openInputStream(uri);
+      outputStream = new FileOutputStream(new File(destinationPath));
+
+      byte[] buffer = new byte[1024];
+      int length;
+
+      while ((length = inputStream.read(buffer)) > 0) {
+        outputStream.write(buffer, 0, length);
+      }
+
+      return true;
+    } catch (IOException e) {
+      e.printStackTrace();
+      ToastUtils.showLong(e.toString());
+      return false;
+    } finally {
+      try {
+        if (inputStream != null) {
+          inputStream.close();
+        }
+        if (outputStream != null) {
+          outputStream.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+        ToastUtils.showLong(e.toString());
+      }
+    }
   }
 
   /**

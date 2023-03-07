@@ -362,6 +362,7 @@ public class EditorActivity extends BaseActivity
   protected void onDestroy() {
     super.onDestroy();
     binding = null;
+    ProjectManager.getInstance().closeProject();
   }
 
   private void saveXml() {
