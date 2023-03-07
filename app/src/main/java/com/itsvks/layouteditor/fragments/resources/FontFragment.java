@@ -1,7 +1,6 @@
 package com.itsvks.layouteditor.fragments.resources;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,12 +28,9 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
-import com.itsvks.layouteditor.utils.SBUtils;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
 
 public class FontFragment extends Fragment {
 

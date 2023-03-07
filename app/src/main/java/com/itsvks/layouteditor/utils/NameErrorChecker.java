@@ -24,7 +24,8 @@ public class NameErrorChecker {
       String name,
       TextInputLayout inputLayout,
       AlertDialog dialog,
-      List<DrawableFile> drawableList) {
+      List<DrawableFile> drawableList,
+      int position) {
     // Check if name is not empty
     if (!name.isEmpty()) {
       // First character should not be a number
@@ -56,9 +57,10 @@ public class NameErrorChecker {
       return;
     }
 
-    // Check if the name already exists in the drawableList
+    // Check if the name already exists in the valuesList
     for (DrawableFile item : drawableList) {
-      if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)) {
+      if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)
+          && drawableList.indexOf(item) != position) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -75,6 +77,16 @@ public class NameErrorChecker {
   public static void checkForValues(
       String name, TextInputLayout inputLayout, AlertDialog dialog, List<ValuesItem> valuesList) {
     checkForValues(name, inputLayout, dialog, valuesList, -1);
+  }
+
+  public static void checkForFont(
+      String name, TextInputLayout inputLayout, AlertDialog dialog, List<FontItem> fontList) {
+    checkForFont(name, inputLayout, dialog, fontList, -1);
+  }
+
+  public static void checkForDrawable(
+      String name, TextInputLayout inputLayout, AlertDialog dialog, List<DrawableFile> drawableList) {
+    checkForDrawable(name, inputLayout, dialog, drawableList, -1);
   }
 
   public static void checkForValues(
@@ -131,7 +143,11 @@ public class NameErrorChecker {
   }
 
   public static void checkForFont(
-      String name, TextInputLayout inputLayout, AlertDialog dialog, List<FontItem> fontList) {
+      String name,
+      TextInputLayout inputLayout,
+      AlertDialog dialog,
+      List<FontItem> fontList,
+      int position) {
     // Check if name is not empty
     if (!name.isEmpty()) {
       // First character should not be a number
@@ -163,9 +179,10 @@ public class NameErrorChecker {
       return;
     }
 
-    // Check if the name already exists in the drawableList
+    // Check if the name already exists in the fontList
     for (FontItem item : fontList) {
-      if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)) {
+      if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)
+          && fontList.indexOf(item) != position) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);

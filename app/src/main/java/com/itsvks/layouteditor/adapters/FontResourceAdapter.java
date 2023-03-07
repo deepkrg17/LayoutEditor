@@ -28,6 +28,7 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import java.io.File;
 import java.util.List;
 
@@ -141,8 +142,9 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
     final TextInputEditText editText = bind.textinputEdittext;
     final TextInputLayout inputLayout = bind.textinputLayout;
     editText.setText(fileName);
-    builder.setView(bind.getRoot());
-    builder.setTitle(R.string.remove_font);
+    var padding = Utils.getDip(builder.getContext(), 10);
+    builder.setView(bind.getRoot(), padding, padding, padding, padding);
+    builder.setTitle(R.string.rename_font);
     builder.setNegativeButton(R.string.cancel, (di, which) -> {});
     builder.setPositiveButton(
         R.string.rename,
@@ -179,11 +181,11 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
           @Override
           public void afterTextChanged(Editable p1) {
             NameErrorChecker.checkForFont(
-                editText.getText().toString(), inputLayout, dialog, fontList);
+                editText.getText().toString(), inputLayout, dialog, fontList, position);
           }
         });
 
-    NameErrorChecker.checkForFont(fileName, inputLayout, dialog, fontList);
+    NameErrorChecker.checkForFont(fileName, inputLayout, dialog, fontList, position);
 
     editText.requestFocus();
     InputMethodManager inputMethodManager =

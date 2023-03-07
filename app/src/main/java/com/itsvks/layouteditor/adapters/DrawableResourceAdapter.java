@@ -43,6 +43,7 @@ import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.AlphaPatternDrawable;
 import java.io.File;
 import java.util.ArrayList;
@@ -191,7 +192,8 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
   @SuppressLint("RestrictedApi")
   private void rename(View v, int position, VH holder) {
     // File name with extension
-    final String lastSegment = FileUtil.getLastSegmentFromPath(drawableList.get(position).getPath());
+    final String lastSegment =
+        FileUtil.getLastSegmentFromPath(drawableList.get(position).getPath());
 
     // File name without extension
     final String fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."));
@@ -206,7 +208,8 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     final TextInputEditText editText = bind.textinputEdittext;
     final TextInputLayout inputLayout = bind.textinputLayout;
     editText.setText(fileName);
-    builder.setView(bind.getRoot());
+    var padding = Utils.getDip(builder.getContext(), 10);
+    builder.setView(bind.getRoot(), padding, padding, padding, padding);
     builder.setTitle(R.string.rename_drawable);
     builder.setNegativeButton(R.string.cancel, (di, which) -> {});
     builder.setPositiveButton(
@@ -250,11 +253,11 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
           @Override
           public void afterTextChanged(Editable p1) {
             NameErrorChecker.checkForDrawable(
-                editText.getText().toString(), inputLayout, dialog, drawableList);
+                editText.getText().toString(), inputLayout, dialog, drawableList, position);
           }
         });
 
-    NameErrorChecker.checkForDrawable(fileName, inputLayout, dialog, drawableList);
+    NameErrorChecker.checkForDrawable(fileName, inputLayout, dialog, drawableList, position);
 
     editText.requestFocus();
     InputMethodManager inputMethodManager =
