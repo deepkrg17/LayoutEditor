@@ -10,6 +10,7 @@ import android.os.ext.SdkExtensions;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -17,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
@@ -32,6 +34,7 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
+import com.itsvks.layouteditor.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +45,7 @@ public class ResourceManagerActivity extends BaseActivity {
   private ResourcesPagerAdapter adapter;
   private FilePicker photoPicker;
   private FilePicker fontPicker;
+  private FilePicker xmlPicker;
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
   private ActivityResultLauncher<String> requestPermission;
 
@@ -80,6 +84,13 @@ public class ResourceManagerActivity extends BaseActivity {
           @Override
           public void onPickFile(Uri uri) {
             onPickFont(uri);
+          }
+        };
+    xmlPicker =
+        new FilePicker(this) {
+          @Override
+          public void onPickFile(Uri uri) {
+            onPickXml(uri);
           }
         };
     pickMedia = registerForActivityResult(new PickVisualMedia(), this::onPickPhoto);
@@ -155,7 +166,24 @@ public class ResourceManagerActivity extends BaseActivity {
       case R.id.menu_add:
         if (fragment != null) {
           if (fragment instanceof DrawableFragment) {
-            launchPhotoPicker();
+            new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.select_drawable_type)
+                .setAdapter(
+                    new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_list_item_1,
+                        new String[] {"Vector Drawable", "Image Drawable"}),
+                    (d, w) -> {
+                      switch (w) {
+                        case 0:
+                          xmlPicker.launch("text/xml");
+                          break;
+                        case 1:
+                          launchPhotoPicker();
+                          break;
+                      }
+                    })
+                .show();
           } else if (fragment instanceof ColorFragment) {
             ((ColorFragment) fragment).addColor();
           } else if (fragment instanceof StringFragment) {
@@ -229,14 +257,14 @@ public class ResourceManagerActivity extends BaseActivity {
       Fragment fragment =
           getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
       if (fragment != null && fragment instanceof DrawableFragment) {
-        ((DrawableFragment) fragment).addDrawable(FileUtil.convertUriToFilePath(uri));
+        ((DrawableFragment) fragment).addDrawable(uri);
       }
     } else {
       Log.d("PhotoPicker", "No media selected");
       SBUtils.make(binding.getRoot(), "No image selected").setFadeAnimation().show();
     }
   }
-  
+
   private void onPickFont(Uri uri) {
     if (uri != null) {
       Log.d("FontPicker", "Selected URI: " + uri);
@@ -252,6 +280,26 @@ public class ResourceManagerActivity extends BaseActivity {
     } else {
       Log.d("FontPicker", "No font selected");
       SBUtils.make(binding.getRoot(), "No font selected").setFadeAnimation().show();
+    }
+  }
+
+  private void onPickXml(Uri uri) {
+    if (uri != null) {
+      Log.d("DrawablePicker", "Selected URI: " + uri);
+      if (FileUtil.isDownloadsDocument(uri)) {
+        SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
+        return;
+      }
+      Fragment fragment =
+          getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
+      if (fragment != null && fragment instanceof DrawableFragment) {
+      //  if (Utils.isValidVectorDrawable(this, uri))
+          ((DrawableFragment) fragment).addDrawable(uri);
+      //  else SBUtils.make(binding.getRoot(), "Not valid vector drawable").setFadeAnimation().show();
+      }
+    } else {
+      Log.d("DrawablePicker", "No drawable selected");
+      SBUtils.make(binding.getRoot(), "No drawable selected").setFadeAnimation().show();
     }
   }
 

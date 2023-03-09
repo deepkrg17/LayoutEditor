@@ -3,6 +3,7 @@ package com.itsvks.layouteditor.fragments.resources;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -35,6 +36,7 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.tools.ImageConverter;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.NameErrorChecker;
+import com.itsvks.layouteditor.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class DrawableFragment extends Fragment {
 
   private FragmentResourcesBinding binding;
   private DrawableResourceAdapter adapter;
+  DPIsListAdapter dpiAdapter = null;
   private ProjectFile project;
   private RecyclerView mRecyclerView;
   List<DrawableFile> drawableList = new ArrayList<>();
@@ -98,10 +101,13 @@ public class DrawableFragment extends Fragment {
               if (drawableFolder.exists()) {
                 Collection<File> drawables =
                     FileUtils.listFiles(
-                        drawableFolder, new String[] {"png", "jpg", "jpeg", "gif"}, false);
+                        drawableFolder, new String[] {"png", "jpg", "jpeg", "gif", "xml"}, false);
                 for (File drawable : drawables) {
                   String drawableName = drawable.getName();
-                  Drawable drawableObj = Drawable.createFromPath(drawable.getPath());
+                  Drawable drawableObj =
+                      drawableName.endsWith(".xml")
+                          ? Utils.getVectorDrawableAsync(requireContext(), Uri.fromFile(drawable))
+                          : Drawable.createFromPath(drawable.getPath());
                   for (int i = 0; i < dpiList.size(); i++) {
                     File dpiFolder =
                         new File(project.getPath() + "/drawable-" + dpiList.get(i) + "/");
@@ -131,7 +137,8 @@ public class DrawableFragment extends Fragment {
     }
   }
 
-  public void addDrawable(final String path) {
+  public void addDrawable(Uri uri) {
+    final String path = FileUtil.convertUriToFilePath(uri);
     if (TextUtils.isEmpty(path)) {
       ToastUtils.showLong(R.string.invalid_data_intent);
       return;
@@ -153,9 +160,12 @@ public class DrawableFragment extends Fragment {
     inputLayout.setHint(R.string.msg_enter_new_name);
     editText.setText(fileName);
 
-    DPIsListAdapter dpiAdapter = new DPIsListAdapter(Drawable.createFromPath(path));
-    dialogBinding.listDpi.setAdapter(dpiAdapter);
-    dialogBinding.listDpi.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+    if (!lastSegment.endsWith(".xml")) {
+      dpiAdapter = new DPIsListAdapter(Drawable.createFromPath(path));
+      dialogBinding.listDpi.setAdapter(dpiAdapter);
+      dialogBinding.listDpi.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+    }
+    dialogBinding.listDpi.setVisibility(lastSegment.endsWith(".xml") ? View.GONE : View.VISIBLE);
 
     builder.setView(dialogBinding.getRoot());
     builder.setTitle(R.string.add_drawable);
@@ -164,23 +174,28 @@ public class DrawableFragment extends Fragment {
         R.string.add,
         (di, which) -> {
           String drawablePath = project.getDrawablePath();
-          var selectedDPIs = dpiAdapter.getSelectedItems();
-          int version = 1;
-          for (int i = 0; i < selectedDPIs.size(); i++) {
-            try {
-              ImageConverter.convertToDrawableDpis(
-                  editText.getText().toString() + extension,
-                  BitmapFactory.decodeFile(path),
-                  selectedDPIs);
-            } catch (IOException e) {
-              e.printStackTrace();
+          int version = 0;
+          if (!lastSegment.endsWith(".xml") && dpiAdapter != null) {
+            var selectedDPIs = dpiAdapter.getSelectedItems();
+            for (int i = 0; i < selectedDPIs.size(); i++) {
+              try {
+                ImageConverter.convertToDrawableDpis(
+                    editText.getText().toString() + extension,
+                    BitmapFactory.decodeFile(path),
+                    selectedDPIs);
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+              version = i;
             }
-            version = i;
           }
           String toPath = drawablePath + editText.getText().toString() + extension;
-          FileUtil.copyFile(path, toPath);
+          FileUtil.copyFile(uri, toPath);
 
-          Drawable drawable = Drawable.createFromPath(toPath);
+          Drawable drawable =
+              lastSegment.endsWith(".xml")
+                  ? Utils.getVectorDrawableAsync(requireContext(), Uri.fromFile(new File(toPath)))
+                  : Drawable.createFromPath(toPath);
           String name = editText.getText().toString();
           var drawableFile = new DrawableFile(version + 1, drawable, toPath);
           drawableList.add(drawableFile);

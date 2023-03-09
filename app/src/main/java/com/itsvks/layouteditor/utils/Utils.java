@@ -11,22 +11,36 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.util.Xml;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.color.MaterialColors;
+import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.R.string;
+import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 public class Utils {
   /** This method is used to convert the input into the equivalent dip value. */
@@ -158,7 +172,7 @@ public class Utils {
         return "drawable-mdpi";
     }
   }
-  
+
   public static String getDpiFolderName(String dpi) {
     switch (dpi) {
       case "ldpi":
@@ -175,6 +189,32 @@ public class Utils {
         return "drawable-xxxhdpi";
       default:
         return "drawable-mdpi";
+    }
+  }
+
+  public static VectorMasterDrawable getVectorDrawableAsync(Context context, Uri uri) {
+    Callable<VectorMasterDrawable> callable =
+        new Callable<VectorMasterDrawable>() {
+          @Override
+          public VectorMasterDrawable call() throws Exception {
+            // Load the drawable from file
+            InputStream is = context.getContentResolver().openInputStream(uri);
+            VectorMasterDrawable drawable = new VectorMasterDrawable(context);
+            drawable.setInputStream(is);
+            is.close();
+            return drawable;
+          }
+        };
+
+    FutureTask<VectorMasterDrawable> futureTask = new FutureTask<>(callable);
+    new Thread(futureTask).start();
+
+    try {
+      VectorMasterDrawable drawable = futureTask.get();
+      return drawable;
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+      return null;
     }
   }
 }

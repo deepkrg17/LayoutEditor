@@ -33,4 +33,8 @@ public class FontManager {
   public static Set<String> keySet() {
     return items.keySet();
   }
+  
+  public static void clear() {
+    items.clear();
+  }
 }

@@ -102,12 +102,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     TooltipCompat.setTooltipText(
         holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
     TooltipCompat.setTooltipText(holder.binding.menu, "Options");
-
-    if (name.endsWith(".xml") || name.endsWith(".svg")) {
-      // TODO: Set vector drawable to ImageView
-      var icon = VectorDrawableCompat.createFromPath(drawableList.get(position).getPath());
-      holder.drawable.setImageDrawable(icon);
-    } else holder.drawable.setImageDrawable(drawableList.get(position).getDrawable());
+    holder.drawable.setImageDrawable(drawableList.get(position).getDrawable());
     holder.binding.menu.setOnClickListener(v -> showOptions(v, position, holder));
 
     PreviewDrawableListener listener =

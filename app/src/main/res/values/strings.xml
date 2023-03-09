@@ -71,6 +71,7 @@
     <string name="delete_view">Delete view</string>
     <string name="msg_delete_view">Do you want to remove the view?</string>
     <string name="select_arg_type">Select argument type</string>
+    <string name="select_drawable_type">Select drawable type</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_light">Light</string>
     <string name="theme_auto">Auto</string>

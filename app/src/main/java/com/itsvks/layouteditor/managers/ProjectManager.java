@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.ProjectFile;
+import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.FontManager;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
@@ -45,9 +46,11 @@ public class ProjectManager {
     DrawableManager.loadFromFiles(openedProject.getDrawables());
     FontManager.loadFromFiles(openedProject.getFonts());
   }
-  
+
   public void closeProject() {
     openedProject = null;
+    DrawableManager.clear();
+    FontManager.clear();
   }
 
   public ProjectFile getOpenedProject() {
