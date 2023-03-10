@@ -110,10 +110,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
 
           @Override
           public void showInImage(ImageView imageView) {
-            Glide.with(holder.itemView.getContext())
-                .load(drawableList.get(position).getDrawable())
-                .placeholder(R.drawable.image_broken)
-                .into(imageView);
+            imageView.setImageDrawable(drawableList.get(position).getDrawable());
           }
 
           @Override

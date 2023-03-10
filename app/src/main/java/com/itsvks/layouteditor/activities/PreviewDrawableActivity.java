@@ -6,6 +6,7 @@ import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.databinding.ActivityPreviewDrawableBinding;
 import com.itsvks.layouteditor.interfaces.PreviewDrawableListener;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.views.AlphaPatternDrawable;
 
 public class PreviewDrawableActivity extends BaseActivity {
 
@@ -22,6 +23,7 @@ public class PreviewDrawableActivity extends BaseActivity {
     getSupportActionBar().setTitle(R.string.preview_drawable);
 
     binding.topAppBar.setNavigationOnClickListener(v -> onBackPressed());
+    binding.background.setImageDrawable(new AlphaPatternDrawable(24));
 
     if (listener != null) {
       listener.showInImage(binding.mainImage);
