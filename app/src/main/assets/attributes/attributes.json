@@ -330,7 +330,7 @@
             "methodName": "setHint",
             "className": "EditTextCaller",
             "attributeName": "android:hint",
-            "argumentType": "string"
+            "argumentType": "text|string"
         },
         {
             "name": "android:inputType",

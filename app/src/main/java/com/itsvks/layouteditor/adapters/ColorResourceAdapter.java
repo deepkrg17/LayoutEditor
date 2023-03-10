@@ -145,9 +145,21 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          colorList.remove(position);
-                          notifyDataSetChanged();
-                          generateColorsXml();
+                          var name = colorList.get(position).name;
+                          if (name.equals("default_color")) {
+                            SBUtils.make(
+                                    v,
+                                    v.getContext()
+                                        .getString(
+                                            R.string.msg_cannot_delete_default, "color"))
+                                .setFadeAnimation()
+                                .setType(SBUtils.Type.INFO)
+                                .show();
+                          } else {
+                            colorList.remove(position);
+                            notifyDataSetChanged();
+                            generateColorsXml();
+                          }
                         })
                     .show();
                 return true;

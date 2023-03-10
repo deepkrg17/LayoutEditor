@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
         FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
         FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
         FileUtil.copyFileFromAsset("strings.xml", projectDir + "/values");
-        FileUtil.copyFileFromAsset("jetbrains_mono_regular.ttf", projectDir + "/font");
+        FileUtil.copyFileFromAsset("default_font.ttf", projectDir + "/font");
 
         ProjectFile project = new ProjectFile(projectDir, time);
         project.saveLayout("");

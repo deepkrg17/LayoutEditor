@@ -114,9 +114,21 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          FileUtil.deleteFile(fontList.get(position).getPath());
-                          fontList.remove(position);
-                          notifyItemRemoved(position);
+                          var name = fontList.get(position).getName();
+                          if (name.substring(0, name.lastIndexOf(".")).equals("default_font")) {
+                            SBUtils.make(
+                                    v,
+                                    v.getContext()
+                                        .getString(
+                                            R.string.msg_cannot_delete_default, "font"))
+                                .setFadeAnimation()
+                                .setType(SBUtils.Type.INFO)
+                                .show();
+                          } else {
+                            FileUtil.deleteFile(fontList.get(position).getPath());
+                            fontList.remove(position);
+                            notifyDataSetChanged();
+                          }
                         })
                     .show();
                 return true;

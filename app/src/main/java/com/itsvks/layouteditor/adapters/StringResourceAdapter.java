@@ -133,9 +133,21 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          stringList.remove(position);
-                          notifyDataSetChanged();
-                          generateStringsXml();
+                          var name = stringList.get(position).name;
+                          if (name.equals("default_string")) {
+                            SBUtils.make(
+                                    v,
+                                    v.getContext()
+                                        .getString(
+                                            R.string.msg_cannot_delete_default, "string"))
+                                .setFadeAnimation()
+                                .setType(SBUtils.Type.INFO)
+                                .show();
+                          } else {
+                            stringList.remove(position);
+                            notifyDataSetChanged();
+                            generateStringsXml();
+                          }
                         })
                     .show();
                 return true;

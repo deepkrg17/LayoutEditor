@@ -48,13 +48,13 @@
     <string name="summary_show_stroke">Show stroke in the editor?</string>
     <string name="remove_drawable">Remove drawable</string>
     <string name="remove_font">Remove font</string>
-    <string name="msg_remove_drawable">Do you want to remove the drawables?</string>
+    <string name="msg_remove_drawable">Do you want to remove the drawable?</string>
     <string name="msg_remove_font">Do you want to remove the font?</string>
     <string name="msg_enter_new_name">Enter new name</string>
     <string name="add_drawable">Add drawable</string>
     <string name="add">Add</string>
     <string name="msg_only_letters_and_numbers">Only small letters(a-z) and numbers!</string>
-    <string name="msg_cannot_select_default_image">You cannot select the default image&#8230;</string>
+    <string name="msg_cannot_delete_default">You cannot delete the default %1$s&#8230;</string>
     <string name="msg_feature_not_available">This feature is not available yet. Will be available soon.</string>
     <string name="nothing">Nothing&#8230;</string>
     <string name="msg_add_some_widgets">Add some widgets</string>

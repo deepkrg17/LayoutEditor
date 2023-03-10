@@ -166,9 +166,21 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
                     .setPositiveButton(
                         R.string.yes,
                         (d, w) -> {
-                          FileUtil.deleteFile(drawableList.get(position).getPath());
-                          drawableList.remove(position);
-                          notifyDataSetChanged();
+                          var name = drawableList.get(position).getName();
+                          if (name.substring(0, name.lastIndexOf(".")).equals("default_image")) {
+                            SBUtils.make(
+                                    v,
+                                    v.getContext()
+                                        .getString(
+                                            R.string.msg_cannot_delete_default, "image"))
+                                .setFadeAnimation()
+                                .setType(SBUtils.Type.INFO)
+                                .show();
+                          } else {
+                            FileUtil.deleteFile(drawableList.get(position).getPath());
+                            drawableList.remove(position);
+                            notifyDataSetChanged();
+                          }
                         })
                     .show();
                 return true;
