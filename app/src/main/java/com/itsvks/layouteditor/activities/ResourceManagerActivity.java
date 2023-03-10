@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -34,7 +35,8 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
-import com.itsvks.layouteditor.utils.Utils;
+import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,9 +295,19 @@ public class ResourceManagerActivity extends BaseActivity {
       Fragment fragment =
           getSupportFragmentManager().findFragmentByTag("f" + binding.pager.getCurrentItem());
       if (fragment != null && fragment instanceof DrawableFragment) {
-      //  if (Utils.isValidVectorDrawable(this, uri))
-          ((DrawableFragment) fragment).addDrawable(uri);
-      //  else SBUtils.make(binding.getRoot(), "Not valid vector drawable").setFadeAnimation().show();
+        try {
+          var drawable = new VectorMasterDrawable(this);
+          drawable.setInputStream(getContentResolver().openInputStream(uri));
+          if (drawable.isVector()) ((DrawableFragment) fragment).addDrawable(uri);
+          else
+            SBUtils.make(binding.getRoot(), "Not a valid vector drawable")
+                .setFadeAnimation()
+                .setType(SBUtils.Type.INFO)
+                .show();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+          ToastUtils.showShort(e.toString());
+        }
       }
     } else {
       Log.d("DrawablePicker", "No drawable selected");

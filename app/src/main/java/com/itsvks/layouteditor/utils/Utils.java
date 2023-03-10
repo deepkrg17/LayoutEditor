@@ -10,25 +10,18 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.util.Xml;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.color.MaterialColors;
-import com.itsvks.layouteditor.LayoutEditor;
 import com.itsvks.layouteditor.R.string;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,9 +31,6 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 public class Utils {
   /** This method is used to convert the input into the equivalent dip value. */

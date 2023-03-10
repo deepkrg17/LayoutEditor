@@ -33,7 +33,7 @@ public class ViewCaller {
       target.setBackgroundColor(Color.parseColor(value));
     } else {
       String name = value.replace("@drawable/", "");
-      target.setBackground(DrawableManager.getDrawable(name));
+      target.setBackground(DrawableManager.getDrawable(context, name));
     }
   }
 
@@ -43,7 +43,7 @@ public class ViewCaller {
       target.setForeground(new ColorDrawable(Color.parseColor(value)));
     } else {
       String name = value.replace("@drawable/", "");
-      target.setForeground(DrawableManager.getDrawable(name));
+      target.setForeground(DrawableManager.getDrawable(context, name));
     }
   }
 

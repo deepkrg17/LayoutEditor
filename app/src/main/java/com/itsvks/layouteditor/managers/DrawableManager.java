@@ -1,9 +1,12 @@
 package com.itsvks.layouteditor.managers;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import android.net.Uri;
 import com.itsvks.layouteditor.utils.FileUtil;
 
+import com.itsvks.layouteditor.utils.Utils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
@@ -27,14 +30,16 @@ public class DrawableManager {
     return items.containsKey(name);
   }
 
-  public static Drawable getDrawable(String key) {
-    return Drawable.createFromPath(items.get(key));
+  public static Drawable getDrawable(Context context, String key) {
+    return items.get(key).endsWith(".xml")
+        ? Utils.getVectorDrawableAsync(context, Uri.fromFile(new File(items.get(key))))
+        : Drawable.createFromPath(items.get(key));
   }
 
   public static Set<String> keySet() {
     return items.keySet();
   }
-  
+
   public static void clear() {
     items.clear();
   }

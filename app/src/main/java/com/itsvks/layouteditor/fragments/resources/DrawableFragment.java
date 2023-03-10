@@ -199,7 +199,7 @@ public class DrawableFragment extends Fragment {
           String name = editText.getText().toString();
           var drawableFile = new DrawableFile(version + 1, drawable, toPath);
           drawableList.add(drawableFile);
-          adapter.notifyItemInserted(drawableList.indexOf(drawableFile));
+          adapter.notifyDataSetChanged();
         });
 
     final AlertDialog dialog = builder.create();

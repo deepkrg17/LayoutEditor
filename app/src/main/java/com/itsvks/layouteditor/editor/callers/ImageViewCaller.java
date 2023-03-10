@@ -25,7 +25,7 @@ public class ImageViewCaller {
 
     public static void setImage(View target, String value, Context context) {
         String name = value.replace("@drawable/", "");
-        ((ImageView) target).setImageDrawable(DrawableManager.getDrawable(name));
+        ((ImageView) target).setImageDrawable(DrawableManager.getDrawable(context, name));
     }
 
     public static void setScaleType(View target, String value, Context context) {

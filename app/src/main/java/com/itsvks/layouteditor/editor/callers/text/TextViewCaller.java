@@ -47,7 +47,7 @@ public class TextViewCaller {
   public static void setCheckMark(View target, String value, Context context) {
     String name = value.replace("@drawable/", "");
     if (target instanceof CheckedTextView)
-      ((CheckedTextView) target).setCheckMarkDrawable(DrawableManager.getDrawable(name));
+      ((CheckedTextView) target).setCheckMarkDrawable(DrawableManager.getDrawable(context, name));
   }
 
   public static void setChecked(View target, String value, Context context) {
