@@ -69,17 +69,26 @@ public class EditorActivity extends BaseActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    init();
+    init(savedInstanceState);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outstate) {
+    super.onSaveInstanceState(outstate);
+    outstate.putParcelable("project", project);
   }
 
   @SuppressWarnings("deprecation")
-  private void init() {
+  private void init(Bundle savedInstanceState) {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
 
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
     projectManager = ProjectManager.getInstance();
+    if (savedInstanceState != null && savedInstanceState.getParcelable("project") != null) {
+      projectManager.openProject(savedInstanceState.getParcelable("project"));
+    }
     project = projectManager.getOpenedProject();
 
     getSupportActionBar().setTitle(getString(R.string.app_name));
