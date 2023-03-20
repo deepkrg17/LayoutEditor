@@ -64,7 +64,7 @@
         }
     },
     {
-        "name": "RecyclerView (not usable)",
+        "name": "RecyclerView",
         "className": "com.itsvks.layouteditor.editor.palette.containers.RecyclerViewDesign",
         "iconName": "ic_palette_recycler_view",
         "defaultAttributes": {

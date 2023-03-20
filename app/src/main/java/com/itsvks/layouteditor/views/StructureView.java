@@ -61,6 +61,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.itsvks.layouteditor.databinding.LayoutStructureViewItemBinding;
 import com.itsvks.layouteditor.managers.IdManager;
 import java.util.HashMap;
@@ -154,8 +155,7 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     inflater = LayoutInflater.from(context);
 
     paint = new Paint();
-    primaryColor =
-        MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary);
+    primaryColor = MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary);
     paint.setColor(primaryColor);
     paint.setAntiAlias(true);
     paint.setStrokeWidth(getDip(1));
@@ -199,8 +199,6 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     TextView viewName = binding.viewName;
     TextView viewId = binding.viewId;
     ImageView icon = binding.icon;
-//    viewName.setTextColor(primaryColor);
-//    icon.setColorFilter(primaryColor);
     if (view.getId() == -1 || IdManager.getIdMap().get(view) == null) {
       viewId.setVisibility(View.GONE);
       viewName.setTranslationY(0);
@@ -214,17 +212,9 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
       viewId.setText(IdManager.getIdMap().get(view));
       TooltipCompat.setTooltipText(binding.mainView, IdManager.getIdMap().get(view));
     }
-    //    if (view instanceof ProgressBar) {
-    //      icon.setImageResource(
-    //          ((ProgressBar) view).isHorizontalScrollBarEnabled()
-    //              ? imgMap.get(ProgressBar.class.getSimpleName() + "horizontal")
-    //              : imgMap.get(ProgressBar.class.getSimpleName()));
-    //    }
     if (view instanceof LinearLayout && !(view instanceof RadioGroup)) {
       String orientation =
-          ((LinearLayout) view).getOrientation() == LinearLayout.HORIZONTAL
-              ? "horizontal"
-              : "vertical";
+          ((LinearLayout) view).getOrientation() == HORIZONTAL ? "horizontal" : "vertical";
       int imgResId = imgMap.get(LinearLayout.class.getSimpleName() + orientation);
 
       icon.setImageResource(imgResId);
@@ -252,11 +242,17 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
 
     if (view instanceof ViewGroup) {
       ViewGroup group = (ViewGroup) view;
-      nextDepth++;
+      if (!(group instanceof CalendarView)
+          && !(group instanceof SearchView)
+          && !(group instanceof NavigationView)
+          && !(group instanceof BottomNavigationView)
+          && !(group instanceof TabLayout)) {
+        nextDepth++;
 
-      for (int i = 0; i < group.getChildCount(); i++) {
-        View child = group.getChildAt(i);
-        peek(child, nextDepth);
+        for (int i = 0; i < group.getChildCount(); i++) {
+          View child = group.getChildAt(i);
+          peek(child, nextDepth);
+        }
       }
     }
   }
@@ -273,25 +269,34 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
       if (view instanceof ViewGroup && ((ViewGroup) view).getChildCount() > 0) {
         float x = parent.getX();
         float y = parent.getY() + parent.getHeight() / 2;
-        canvas.drawRect(x - pointRadius, y - pointRadius, x + pointRadius, y + pointRadius, paint);
 
         ViewGroup group = (ViewGroup) view;
-
-        for (int i = 0; i < group.getChildCount(); i++) {
-          TextView current = viewTextMap.get(group.getChildAt(i));
-          ViewGroup currentParent = (ViewGroup) current.getParent().getParent();
-          canvas.drawLine(
-              parent.getX(),
-              parent.getY() + parent.getHeight() / 2,
-              parent.getX(),
-              currentParent.getY() + currentParent.getHeight() / 2,
-              paint);
-          canvas.drawLine(
-              parent.getX(),
-              currentParent.getY() + currentParent.getHeight() / 2,
-              currentParent.getX(),
-              currentParent.getY() + currentParent.getHeight() / 2,
-              paint);
+        if (!(group instanceof CalendarView)
+            && !(group instanceof SearchView)
+            && !(group instanceof NavigationView)
+            && !(group instanceof BottomNavigationView)
+            && !(group instanceof TabLayout)) {
+          canvas.drawRect(
+              x - pointRadius, y - pointRadius, x + pointRadius, y + pointRadius, paint);
+          for (int i = 0; i < group.getChildCount(); i++) {
+            TextView current = viewTextMap.get(group.getChildAt(i));
+            ViewGroup currentParent = (ViewGroup) current.getParent().getParent();
+            canvas.drawLine(
+                parent.getX(),
+                parent.getY() + parent.getHeight() / 2,
+                parent.getX(),
+                currentParent.getY() + currentParent.getHeight() / 2,
+                paint);
+            canvas.drawLine(
+                parent.getX(),
+                currentParent.getY() + currentParent.getHeight() / 2,
+                currentParent.getX(),
+                currentParent.getY() + currentParent.getHeight() / 2,
+                paint);
+          }
+        } else {
+          canvas.drawCircle(
+              parent.getX(), parent.getY() + parent.getHeight() / 2, pointRadius, paint);
         }
       } else {
         canvas.drawCircle(

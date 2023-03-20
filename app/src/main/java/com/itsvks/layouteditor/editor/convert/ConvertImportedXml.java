@@ -41,8 +41,6 @@ public class ConvertImportedXml {
 
             convertedXml = convertedXml.replace("<" + fullTag, "<" + widgetClass);
             convertedXml = convertedXml.replace("</" + fullTag, "</" + widgetClass);
-          } else {
-            convertedXml = convertedXml.replace(fullTag, "");
           }
         }
       } catch (Exception e) {

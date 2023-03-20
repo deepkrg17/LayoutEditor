@@ -212,7 +212,7 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     final TextInputEditText editText = bind.textinputEdittext;
     final TextInputLayout inputLayout = bind.textinputLayout;
     editText.setText(fileName);
-    var padding = Utils.getDip(builder.getContext(), 10);
+    var padding = Utils.pxToDp(builder.getContext(), 10);
     builder.setView(bind.getRoot(), padding, padding, padding, padding);
     builder.setTitle(R.string.rename_drawable);
     builder.setNegativeButton(R.string.cancel, (di, which) -> {});

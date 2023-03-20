@@ -39,17 +39,7 @@ public class AttributeInitializer {
     this.attributes = attributes;
     this.parentAttributes = parentAttributes;
   }
-  /*
-      private View rootView;
 
-      public View getRootView() {
-          return this.rootView;
-      }
-
-      public HashMap<View, AttributeMap> getViewAttributeMap() {
-          return this.viewAttributeMap;
-      }
-  */
   public void applyDefaultAttributes(final View target, final Map<String, String> defaultAttrs) {
     List<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
 

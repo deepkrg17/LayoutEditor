@@ -299,8 +299,9 @@ public class EditorLayout extends LinearLayoutCompat {
 
   public void updateUndoRedoHistory() {
     if (undoRedoManager == null) return;
-    String result = new XmlLayoutGenerator().generate(this, false);
-    undoRedoManager.addToHistory(result);
+//    String result = new XmlLayoutGenerator().generate(this, false);
+//    undoRedoManager.addToHistory(result);
+    return;
   }
 
   private void rearrangeListeners(final View view) {

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.View;
 import android.widget.RelativeLayout;
+import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.Utils;
 
 public class RelativeLayoutDesign extends RelativeLayout {
@@ -15,13 +16,14 @@ public class RelativeLayoutDesign extends RelativeLayout {
   private Paint fillPaint;
 
   private boolean drawStrokeEnabled;
+  private boolean isBlueprint;
 
   public RelativeLayoutDesign(Context context) {
     super(context);
 
     linePaint = new Paint();
     linePaint.setColor(Color.LTGRAY);
-    linePaint.setStrokeWidth(Utils.getDip(getContext(), 2));
+    linePaint.setStrokeWidth(Utils.pxToDp(context, 2));
     linePaint.setAntiAlias(true);
     linePaint.setStyle(Paint.Style.STROKE);
 
@@ -38,9 +40,9 @@ public class RelativeLayoutDesign extends RelativeLayout {
 
     super.dispatchDraw(canvas);
 
-    if (drawStrokeEnabled) {
-      Utils.drawDashPathStroke(this, canvas);
-    }
+    if (drawStrokeEnabled)
+      Utils.drawDashPathStroke(
+          this, canvas, isBlueprint ? Constants.BLUEPRINT_DASH_COLOR : Constants.DESIGN_DASH_COLOR);
   }
 
   private void drawBindings(Canvas canvas) {
@@ -240,5 +242,16 @@ public class RelativeLayoutDesign extends RelativeLayout {
 
     canvas.drawPath(path, linePaint);
     canvas.drawCircle(x2, y2, 10, fillPaint);
+  }
+  
+  @Override
+  public void draw(Canvas canvas) {
+    if (isBlueprint) Utils.drawDashPathStroke(this, canvas, Constants.BLUEPRINT_DASH_COLOR);
+    else super.draw(canvas);
+  }
+
+  public void setBlueprint(boolean isBlueprint) {
+    this.isBlueprint = isBlueprint;
+    invalidate();
   }
 }

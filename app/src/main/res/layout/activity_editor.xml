@@ -23,17 +23,43 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent" />
 
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:padding="0dp">
+
+        <ImageView
+          style="@style/ToolbarButtonStyle"
+          android:src="@drawable/cellphone_screenshot"
+          android:layout_alignParentRight="true"
+          android:layout_marginRight="5dp"
+          android:id="@+id/device_size"
+          android:layout_centerVertical="true" />
+
+        <ImageView
+          style="@style/ToolbarButtonStyle"
+          android:src="@drawable/view_type"
+          android:layout_toLeftOf="@id/device_size"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="5dp"
+          android:id="@+id/view_type" />
+
+        <com.google.android.material.divider.MaterialDivider
+          android:layout_height="1px"
+          android:layout_width="match_parent"
+          android:alpha="0.5"
+          android:layout_alignParentBottom="true"
+          android:id="@+id/divider" />
+      </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.itsvks.layouteditor.editor.layouts.EditorLayout
-      android:background="@drawable/background_stroke_dash"
+    <com.itsvks.layouteditor.editor.DesignEditor
       android:id="@+id/editor_layout"
       android:layout_height="match_parent"
       android:layout_width="match_parent"
       android:orientation="vertical"
-      android:scaleX="0.85"
-      android:scaleY="0.85" />
+      android:theme="@style/DesignEditorTheme" />
 
   </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -60,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
-        
+
     </HorizontalScrollView>
 
   </androidx.appcompat.widget.LinearLayoutCompat>
@@ -84,11 +110,6 @@
         android:layout_width="wrap_content"
         android:orientation="vertical" />
 
-
     </HorizontalScrollView>
-
-
   </ScrollView>
-
-
 </com.itsvks.layouteditor.views.CustomDrawerLayout>

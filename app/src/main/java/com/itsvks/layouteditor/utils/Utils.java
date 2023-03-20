@@ -34,7 +34,7 @@ import java.util.concurrent.FutureTask;
 
 public class Utils {
   /** This method is used to convert the input into the equivalent dip value. */
-  public static int getDip(Context context, int input) {
+  public static int pxToDp(Context context, int input) {
     return (int)
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, input, context.getResources().getDisplayMetrics());
@@ -78,7 +78,7 @@ public class Utils {
   private static Paint getDefaultPaint(View view) {
     Paint paint = new Paint();
     paint.setColor(isDarkMode(view.getContext()) ? Color.WHITE : getOnSurfaceColor(view));
-    paint.setStrokeWidth(getDip(view.getContext(), 2));
+    paint.setStrokeWidth(pxToDp(view.getContext(), 2));
     return paint;
   }
 

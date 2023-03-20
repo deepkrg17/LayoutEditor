@@ -66,6 +66,7 @@ public class Constants {
   public static final int BLUEPRINT_DASH_COLOR = Color.WHITE;
   public static final int BLUEPRINT_BACKGROUND_COLOR = Color.parseColor("#235C6F");
   public static final int DESIGN_DASH_COLOR = Color.parseColor("#1689F6");
+  public static final int DESIGN_BACKGROUND_COLOR = Color.WHITE;
 
   public static final String GITHUB_URL = "https://github.com/itsvks19/LayoutEditor";
 

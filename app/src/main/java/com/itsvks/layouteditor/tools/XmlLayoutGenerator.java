@@ -2,8 +2,15 @@ package com.itsvks.layouteditor.tools;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.SearchView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import com.itsvks.layouteditor.editor.layouts.EditorLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.text.StringEscapeUtils;
@@ -14,7 +21,7 @@ public class XmlLayoutGenerator {
 
   boolean useSuperclasses;
 
-  public String generate(EditorLayout editor, boolean useSuperclasses) {
+  public String generate(DesignEditor editor, boolean useSuperclasses) {
     this.useSuperclasses = useSuperclasses;
 
     if (editor.getChildCount() == 0) {
@@ -51,9 +58,10 @@ public class XmlLayoutGenerator {
       builder.append(TAB + "xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n");
     }
 
-    List<String> keys = attributeMap.get(view).keySet();
-    List<String> values = attributeMap.get(view).values();
-
+    List<String> keys =
+        (attributeMap.get(view) != null) ? attributeMap.get(view).keySet() : new ArrayList<>();
+    List<String> values =
+        (attributeMap.get(view) != null) ? attributeMap.get(view).values() : new ArrayList<>();
     for (String key : keys) {
       // If the value contains special characters it will be converted
       builder.append(
@@ -69,16 +77,24 @@ public class XmlLayoutGenerator {
 
     if (view instanceof ViewGroup) {
       ViewGroup group = (ViewGroup) view;
-      nextDepth++;
+      if (!(group instanceof CalendarView)
+          && !(group instanceof SearchView)
+          && !(group instanceof NavigationView)
+          && !(group instanceof BottomNavigationView)
+          && !(group instanceof TabLayout)) {
+        nextDepth++;
 
-      if (group.getChildCount() > 0) {
-        builder.append(">\n\n");
+        if (group.getChildCount() > 0) {
+          builder.append(">\n\n");
 
-        for (int i = 0; i < group.getChildCount(); i++) {
-          peek(group.getChildAt(i), attributeMap, nextDepth);
+          for (int i = 0; i < group.getChildCount(); i++) {
+            peek(group.getChildAt(i), attributeMap, nextDepth);
+          }
+
+          builder.append(indent + "</" + className + ">\n\n");
+        } else {
+          builder.append(" />\n\n");
         }
-
-        builder.append(indent + "</" + className + ">\n\n");
       } else {
         builder.append(" />\n\n");
       }

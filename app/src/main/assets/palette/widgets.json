@@ -38,7 +38,7 @@
         }
     },
     {
-        "name": "CalendarView (not usable)",
+        "name": "CalendarView",
         "className": "com.itsvks.layouteditor.editor.palette.widgets.CalendarViewDesign",
         "iconName": "ic_palette_calendar_view",
         "defaultAttributes": {
@@ -91,7 +91,7 @@
         "iconName": "ic_palette_rating_bar"
     },
     {
-        "name": "SearchView  (not usable)",
+        "name": "SearchView",
         "className": "com.itsvks.layouteditor.editor.palette.widgets.SearchViewDesign",
         "iconName": "ic_palette_search_view",
         "defaultAttributes": {

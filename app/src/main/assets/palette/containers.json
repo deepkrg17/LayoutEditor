@@ -77,7 +77,7 @@
         }
     },
     {
-        "name": "NavigationView (not usable)",
+        "name": "NavigationView",
         "className": "com.itsvks.layouteditor.editor.palette.containers.NavigationViewDesign",
         "iconName": "ic_palette_navigation_view",
         "defaultAttributes": {
@@ -85,7 +85,7 @@
         }
     },
     {
-        "name": "BottomNavigationView (not usable)",
+        "name": "BottomNavigationView",
         "className": "com.itsvks.layouteditor.editor.palette.containers.BottomNavigationViewDesign",
         "iconName": "ic_palette_bottom_navigation_view",
         "defaultAttributes": {
@@ -110,7 +110,7 @@
         }
     },
     {
-        "name": "TabLayout (not usable)",
+        "name": "TabLayout",
         "className": "com.itsvks.layouteditor.editor.palette.containers.TabLayoutDesign",
         "iconName": "ic_palette_tab_layout",
         "defaultAttributes": {

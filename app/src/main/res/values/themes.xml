@@ -65,4 +65,7 @@
     <item name="android:scaleType">fitCenter</item>
     <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
   </style>
+
+  <style name="DesignEditorTheme" parent="Theme.Material3.Light">
+  </style>
 </resources>

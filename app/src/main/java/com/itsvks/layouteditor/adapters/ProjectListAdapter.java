@@ -209,7 +209,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
         (d, w) -> {
           FileUtil.deleteFile(projects.get(position).getPath());
           projects.remove(projects.get(position));
-          notifyItemRemoved(position);
+          notifyDataSetChanged();
         });
 
     builder.create().show();

@@ -8,7 +8,7 @@
         }
     },
     {
-        "name": "ListView (unable to remove from editor)",
+        "name": "ListView",
         "className": "com.itsvks.layouteditor.editor.palette.legacy.ListViewDesign",
         "iconName": "ic_palette_list_view"
     },
@@ -21,7 +21,7 @@
         }
     },
     {
-        "name": "GridView (unable to remove from editor)",
+        "name": "GridView",
         "className": "com.itsvks.layouteditor.editor.palette.legacy.GridViewDesign",
         "iconName": "ic_palette_grid_view",
         "defaultAttributes": {

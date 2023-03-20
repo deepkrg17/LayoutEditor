@@ -13,6 +13,8 @@ import android.view.View;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +28,9 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.activities.EditorActivity;
 import com.itsvks.layouteditor.adapters.WidgetListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
+import com.itsvks.layouteditor.editor.DesignEditor;
+import com.itsvks.layouteditor.editor.DeviceConfiguration;
+import com.itsvks.layouteditor.editor.DeviceSize;
 import com.itsvks.layouteditor.editor.convert.ConvertImportedXml;
 import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
@@ -106,6 +111,7 @@ public class EditorActivity extends BaseActivity
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
       binding.editorLayout.loadLayoutFromParser(project.getLayout());
     }
+    setToolbarButtonOnClickListener(binding);
   }
 
   private void defineXmlPicker() {
@@ -449,5 +455,63 @@ public class EditorActivity extends BaseActivity
           .setFadeAnimation()
           .setType(SBUtils.Type.ERROR)
           .show();
+  }
+
+  private void setToolbarButtonOnClickListener(ActivityEditorBinding binding) {
+    TooltipCompat.setTooltipText(binding.viewType, "View Type");
+    TooltipCompat.setTooltipText(binding.deviceSize, "Size");
+    binding.viewType.setOnClickListener(
+        v -> {
+          final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+          popupMenu.inflate(R.menu.menu_view_type);
+          popupMenu.setOnMenuItemClickListener(
+              new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                  var id = item.getItemId();
+                  switch (id) {
+                    case R.id.view_type_design:
+                      binding.editorLayout.setViewType(DesignEditor.ViewType.DESIGN);
+                      break;
+                    case R.id.view_type_blueprint:
+                      binding.editorLayout.setViewType(DesignEditor.ViewType.BLUEPRINT);
+                      break;
+                  }
+                  return true;
+                }
+              });
+
+          popupMenu.show();
+        });
+    binding.deviceSize.setOnClickListener(
+        v -> {
+          final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+          popupMenu.inflate(R.menu.menu_device_size);
+          popupMenu.setOnMenuItemClickListener(
+              new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                  var id = item.getItemId();
+                  switch (id) {
+                    case R.id.device_size_small:
+                      binding.editorLayout.resizeLayout(new DeviceConfiguration(DeviceSize.SMALL));
+                      break;
+                    case R.id.device_size_medium:
+                      binding.editorLayout.resizeLayout(new DeviceConfiguration(DeviceSize.MEDIUM));
+                      break;
+                    case R.id.device_size_large:
+                      binding.editorLayout.resizeLayout(new DeviceConfiguration(DeviceSize.LARGE));
+                      break;
+                  }
+                  return true;
+                }
+              });
+
+          popupMenu.show();
+        });
   }
 }
