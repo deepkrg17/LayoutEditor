@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster.utilities.parser;
+package com.itsvks.layouteditor.vectormaster.utilities.parser;
 
 import android.graphics.Path;
 import android.graphics.RectF;

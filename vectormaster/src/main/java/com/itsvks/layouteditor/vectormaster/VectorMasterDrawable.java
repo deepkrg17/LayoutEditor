@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster;
+package com.itsvks.layouteditor.vectormaster;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,11 +13,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.sdsmdg.harjot.vectormaster.models.ClipPathModel;
-import com.sdsmdg.harjot.vectormaster.models.GroupModel;
-import com.sdsmdg.harjot.vectormaster.models.PathModel;
-import com.sdsmdg.harjot.vectormaster.models.VectorModel;
-import com.sdsmdg.harjot.vectormaster.utilities.Utils;
+import com.itsvks.layouteditor.vectormaster.models.ClipPathModel;
+import com.itsvks.layouteditor.vectormaster.models.GroupModel;
+import com.itsvks.layouteditor.vectormaster.models.PathModel;
+import com.itsvks.layouteditor.vectormaster.models.VectorModel;
+import com.itsvks.layouteditor.vectormaster.utilities.Utils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

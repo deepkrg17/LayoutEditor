@@ -106,7 +106,6 @@ public class DesignEditor extends LinearLayout {
     setOrientation(VERTICAL);
     setTransition(this);
     setDragListener(this);
-    
 
     toggleStrokeWidgets();
     setBlueprintOnChilds();
@@ -242,7 +241,8 @@ public class DesignEditor extends LinearLayout {
             switch (event.getAction()) {
               case DragEvent.ACTION_DRAG_STARTED:
                 if (PreferencesManager.isEnableVibration()) VibrateUtils.vibrate(100);
-                if (draggedView != null && !(draggedView instanceof AdapterView)) parent.removeView(draggedView);
+                if (draggedView != null && !(draggedView instanceof AdapterView))
+                  parent.removeView(draggedView);
                 break;
               case DragEvent.ACTION_DRAG_EXITED:
                 removeWidget(shadow);
@@ -295,10 +295,10 @@ public class DesignEditor extends LinearLayout {
 
                   if (newView instanceof ViewGroup) {
                     setDragListener((ViewGroup) newView);
-                    newView.setMinimumWidth(Utils.pxToDp(getContext(), 20));
-                    newView.setMinimumHeight(Utils.pxToDp(getContext(), 20));
                     setTransition((ViewGroup) newView);
                   }
+                  newView.setMinimumWidth(Utils.pxToDp(getContext(), 20));
+                  newView.setMinimumHeight(Utils.pxToDp(getContext(), 20));
 
                   AttributeMap map = new AttributeMap();
                   map.putValue("android:layout_width", "wrap_content");
@@ -348,10 +348,10 @@ public class DesignEditor extends LinearLayout {
 
       if (view instanceof ViewGroup) {
         setDragListener((ViewGroup) view);
-        view.setMinimumWidth(Utils.pxToDp(getContext(), 20));
-        view.setMinimumHeight(Utils.pxToDp(getContext(), 20));
         setTransition((ViewGroup) view);
       }
+      view.setMinimumWidth(Utils.pxToDp(getContext(), 20));
+      view.setMinimumHeight(Utils.pxToDp(getContext(), 20));
     }
 
     updateStructure();
@@ -495,7 +495,8 @@ public class DesignEditor extends LinearLayout {
     final List<HashMap<String, Object>> allAttrs = INITIALIZER.getAllAttributesForView(target);
 
     final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-    ShowAttributesDialogBinding binding = ShowAttributesDialogBinding.inflate(dialog.getLayoutInflater());
+    ShowAttributesDialogBinding binding =
+        ShowAttributesDialogBinding.inflate(dialog.getLayoutInflater());
 
     dialog.setContentView(binding.getRoot());
     TooltipCompat.setTooltipText(binding.btnAdd, "Add attribute");

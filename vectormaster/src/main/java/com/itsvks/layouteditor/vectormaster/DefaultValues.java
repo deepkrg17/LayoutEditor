@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster;
+package com.itsvks.layouteditor.vectormaster;
 
 import android.graphics.Color;
 import android.graphics.Paint;

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster.models;
+package com.itsvks.layouteditor.vectormaster.models;
 
 
 import android.graphics.Matrix;
@@ -8,7 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 
-import com.sdsmdg.harjot.vectormaster.utilities.parser.PathParser;
+import com.itsvks.layouteditor.vectormaster.utilities.parser.PathParser;
 
 public class ClipPathModel {
     private String name;
@@ -30,7 +30,7 @@ public class ClipPathModel {
     public void buildPath(boolean useLegacyParser) {
         if (pathData != null) {
             if (useLegacyParser) {
-                originalPath = com.sdsmdg.harjot.vectormaster.utilities.legacyparser.PathParser.createPathFromPathData(pathData);
+                originalPath = com.itsvks.layouteditor.vectormaster.utilities.legacyparser.PathParser.createPathFromPathData(pathData);
             } else {
                 originalPath = PathParser.doPath(pathData);
             }

@@ -4,8 +4,8 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.itsvks'
-version = project.artifactVersion
+group = 'com.itsvks.layouteditor'
+version = project.versionName
 
 android {
     compileSdk 33
@@ -24,7 +24,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    namespace 'com.itsvks.vectormaster'
+    namespace 'com.itsvks.layouteditor.vectormaster'
 }
 
 dependencies {
@@ -42,9 +42,9 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.itsvks'
+                groupId = 'com.itsvks.layouteditor'
                 artifactId = 'vectormaster'
-                version = project.artifactVersion
+                version = project.versionName
             }
         }
     }

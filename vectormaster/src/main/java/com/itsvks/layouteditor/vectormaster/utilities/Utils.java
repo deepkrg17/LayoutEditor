@@ -1,11 +1,11 @@
-package com.sdsmdg.harjot.vectormaster.utilities;
+package com.itsvks.layouteditor.vectormaster.utilities;
 
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.sdsmdg.harjot.vectormaster.DefaultValues;
+import com.itsvks.layouteditor.vectormaster.DefaultValues;
 
 import java.lang.reflect.Field;
 

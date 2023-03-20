@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster.enums;
+package com.itsvks.layouteditor.vectormaster.enums;
 
 public enum TintMode {
     ADD,

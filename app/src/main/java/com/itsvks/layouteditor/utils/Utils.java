@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.material.color.MaterialColors;
 import com.itsvks.layouteditor.R.string;
-import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
+import com.itsvks.layouteditor.vectormaster.VectorMasterDrawable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

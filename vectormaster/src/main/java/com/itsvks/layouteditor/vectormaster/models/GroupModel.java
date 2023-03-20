@@ -1,11 +1,11 @@
-package com.sdsmdg.harjot.vectormaster.models;
+package com.itsvks.layouteditor.vectormaster.models;
 
 
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
-import com.sdsmdg.harjot.vectormaster.DefaultValues;
-import com.sdsmdg.harjot.vectormaster.utilities.Utils;
+import com.itsvks.layouteditor.vectormaster.DefaultValues;
+import com.itsvks.layouteditor.vectormaster.utilities.Utils;
 
 import java.util.ArrayList;
 

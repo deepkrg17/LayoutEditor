@@ -1,11 +1,11 @@
-package com.sdsmdg.harjot.vectormaster.models;
+package com.itsvks.layouteditor.vectormaster.models;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Path;
 
-import com.sdsmdg.harjot.vectormaster.enums.TintMode;
+import com.itsvks.layouteditor.vectormaster.enums.TintMode;
 
 import java.util.ArrayList;
 

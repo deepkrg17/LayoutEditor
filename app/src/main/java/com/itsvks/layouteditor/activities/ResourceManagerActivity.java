@@ -35,7 +35,7 @@ import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
-import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
+import com.itsvks.layouteditor.vectormaster.VectorMasterDrawable;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;

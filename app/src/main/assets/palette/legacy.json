@@ -10,7 +10,10 @@
     {
         "name": "ListView",
         "className": "com.itsvks.layouteditor.editor.palette.legacy.ListViewDesign",
-        "iconName": "ic_palette_list_view"
+        "iconName": "ic_palette_list_view",
+        "defaultAttributes": {
+            "android:layout_width":"match_parent"
+        }
     },
     {
         "name": "TabHost",

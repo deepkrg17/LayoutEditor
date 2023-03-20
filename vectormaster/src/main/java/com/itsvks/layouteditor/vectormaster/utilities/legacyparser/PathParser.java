@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.vectormaster.utilities.legacyparser;
+package com.itsvks.layouteditor.vectormaster.utilities.legacyparser;
 
 /*
  * This class has been extracted from the android source code. In the latest versions, most of the code has been moved for
