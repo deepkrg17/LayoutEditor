@@ -14,14 +14,16 @@
 Use Layout Editor to easily build Android app layouts by dragging UI elements into a visual layout editor.
 
 ### Features
-- Design layout with Drag & Drop
-- Edit view and layout properties
-- See and Copy the XML code of layout
-- Save and use drawables
-- See the layout structure
-- Save layouts as projects
-- Preview Layout in devices
-- Export layouts as XML
+- [X] Drag and drop: The Layout Editor allows developers to easily drag and drop UI elements onto the design canvas, making it easy to create a visual representation of the app's layout.
+- [X] WYSIWYG editing: The Layout Editor provides a What You See Is What You Get (WYSIWYG) interface, which allows developers to preview how their app will look on different devices.
+- [X] Blueprint mode: In addition to the WYSIWYG mode, the Layout Editor also has a blueprint mode that allows developers to work with a wireframe view of the layout.
+- [ ] Design tools: The Layout Editor provides a range of design tools, including alignment guides, snap-to-grid functionality, and a range of layout templates to make it easier to create professional-looking layouts.
+- [ ] Theme editing: Developers can modify the theme of their app's layout by selecting from a range of pre-built themes or creating their own custom theme.
+- [X] Component properties: The Layout Editor provides a range of component properties that developers can modify, including size, padding, margins, and more.
+- [X] Preview mode: Developers can preview their app's layout on a range of devices, including smartphones, tablets, and wearables, to ensure that it looks good on all screen sizes.
+- [ ] Code editing: The Layout Editor also allows developers to switch to code mode and manually edit the layout's XML code.
+- [ ] Accessibility tools: The Layout Editor includes a range of accessibility tools to help developers ensure that their app's layout is accessible to all users, including those with disabilities.
+- [ ] Layout validation: The Layout Editor includes a layout validation tool that can identify common layout issues and suggest ways to fix them.
 
 ### Screenshots
 <div align="center">
@@ -38,46 +40,6 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 <img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_10.jpg" alt="Screenshot_10" title="Screenshot_10">
 <img width="125" height="250" src="./screenshots/ScreenShot_LayoutEditor_11.jpg" alt="Screenshot_11" title="Screenshot_11">
 </div>
-
-### TODO
-- [ ] Create custom widgets and components
-- [ ] Group and organize views and layouts
-- [ ] Use custom themes and styles
-- [ ] Set constraints on views
-- [ ] Test and debug layouts
-- [X] Export layouts as images
-- [ ] Create multi-screen layouts
-- [ ] Add support for multiple languages
-- [ ] Share layouts with other users
-- [ ] Automatically generate layouts from code
-- [ ] Reuse existing layouts and elements
-- [ ] Add support for third-party libraries
-- [ ] Add support for device orientation
-- [ ] Create custom layout wizards
-- [ ] Create interactive and dynamic layouts
-- [ ] Create custom view groups
-- [ ] Integrate with existing development tools
-- [X] Generate code from layouts
-- [ ] Add support for custom transitions
-- [ ] Generate responsive layouts
-- [ ] Add gesture-based interactions
-- [ ] Create complex data-driven layouts
-- [X] Import existing layouts
-- [ ] Add support for third-party libraries
-- [ ] Add support for custom view components
-- [X] Add support for testing layouts
-- [ ] Create custom animations
-- [X] Customize view properties
-- [ ] Add support for custom plugins
-- [X] Add support for undo/redo
-- [ ] Add support for custom fonts
-- [ ] Add support for creating custom widgets
-- [ ] Add support for creating custom icons
-- [ ] Add support for creating custom themes
-- [ ] Add support for creating custom shapes
-- [ ] Add support for creating custom colors
-- [X] Add support for creating custom layouts
-- [ ] Add support for creating custom layout templates
 
 **Known issues**:
 1. `ConstraintLayout` is not usable right now.

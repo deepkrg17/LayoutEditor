@@ -9,7 +9,8 @@
         "className": "com.itsvks.layouteditor.editor.palette.containers.RecyclerViewDesign",
         "iconName": "ic_palette_recycler_view",
         "defaultAttributes": {
-            "android:layout_width":"match_parent"
+            "android:layout_width":"match_parent",
+            "android:layout_height":"100dp"
         }
     },
     {

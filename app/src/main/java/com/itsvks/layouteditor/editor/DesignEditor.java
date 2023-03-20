@@ -241,7 +241,8 @@ public class DesignEditor extends LinearLayout {
             switch (event.getAction()) {
               case DragEvent.ACTION_DRAG_STARTED:
                 if (PreferencesManager.isEnableVibration()) VibrateUtils.vibrate(100);
-                if (draggedView != null && !(draggedView instanceof AdapterView))
+                if (draggedView != null
+                    && !(draggedView instanceof AdapterView && parent instanceof AdapterView))
                   parent.removeView(draggedView);
                 break;
               case DragEvent.ACTION_DRAG_EXITED:
