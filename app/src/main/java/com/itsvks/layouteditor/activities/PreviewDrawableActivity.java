@@ -1,7 +1,6 @@
 package com.itsvks.layouteditor.activities;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.databinding.ActivityPreviewDrawableBinding;
 import com.itsvks.layouteditor.interfaces.PreviewDrawableListener;

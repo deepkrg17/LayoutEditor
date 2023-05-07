@@ -16,7 +16,7 @@
     android:theme="@style/AppTheme">
 
     <activity
-      android:name="com.itsvks.layouteditor.activities.HomeActivity"
+      android:name=".activities.HomeActivity"
       android:exported="true">
 
       <intent-filter>
@@ -32,33 +32,33 @@
       android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
       android:theme="@style/AppTheme.Licence" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.EditorActivity"
+      android:name=".activities.EditorActivity"
       android:exported="true" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.ShowXMLActivity"
+      android:name=".activities.ShowXMLActivity"
       android:configChanges="orientation|keyboardHidden|screenSize"
       android:exported="true"
       android:windowSoftInputMode="adjustResize"
-      android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity" />
+      android:parentActivityName=".activities.EditorActivity" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.CrashActivity"
+      android:name=".activities.CrashActivity"
       android:exported="true" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.DrawableManagerActivity"
+      android:name=".activities.DrawableManagerActivity"
       android:exported="true"
-      android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity" />
+      android:parentActivityName=".activities.EditorActivity" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.PreviewLayoutActivity"
+      android:name=".activities.PreviewLayoutActivity"
       android:exported="true"
-      android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity" />
+      android:parentActivityName=".activities.EditorActivity" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.ResourceManagerActivity"
+      android:name=".activities.ResourceManagerActivity"
       android:exported="true"
-      android:parentActivityName="com.itsvks.layouteditor.activities.EditorActivity" />
+      android:parentActivityName=".activities.EditorActivity" />
     <activity
-      android:name="com.itsvks.layouteditor.activities.PreviewDrawableActivity"
+      android:name=".activities.PreviewDrawableActivity"
       android:exported="true"
-      android:parentActivityName="com.itsvks.layouteditor.activities.ResourceManagerActivity" />
+      android:parentActivityName=".activities.ResourceManagerActivity" />
 
   </application>
 
