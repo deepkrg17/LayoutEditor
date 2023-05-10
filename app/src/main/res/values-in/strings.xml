@@ -52,7 +52,6 @@
     <string name="add_drawable">Tambah drawable</string>
     <string name="add">Tambah</string>
     <string name="msg_only_letters_and_numbers">Hanya huruf kecil (a-z) dan angka!</string>
-    <string name="msg_cannot_select_default_image">Anda tidak dapat memilih gambar default&#8230;</string>
     <string name="msg_feature_not_available">Fitur ini belum tersedia. Akan tersedia segera.</string>
     <string name="nothing">Tidak ada apa-apa&#8230;</string>
     <string name="msg_add_some_widgets">Tambahkan beberapa widget</string>

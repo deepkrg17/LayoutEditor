@@ -53,7 +53,6 @@
     <string name="add_drawable">Adicionar drawable</string>
     <string name="add">Adicionar</string>
     <string name="msg_only_letters_and_numbers">Apenas letras minúsculas (a-z) e números!</string>
-    <string name="msg_cannot_select_default_image">Você não pode selecionar a imagem padrão&#8230;</string>
     <string name="msg_feature_not_available">Este recurso ainda não está disponível. Estará disponível em breve.</string>
     <string name="nothing">Nada&#8230;</string>
     <string name="msg_add_some_widgets">Adicionar alguns widgets</string>

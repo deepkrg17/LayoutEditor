@@ -163,7 +163,8 @@ public class DesignEditor extends LinearLayout {
 
   private void drawDesign(Canvas canvas) {
     paint.setColor(Constants.DESIGN_DASH_COLOR);
-    // setBackgroundColor(Constants.DESIGN_BACKGROUND_COLOR);
+    setBackgroundColor(
+        MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface));
     Utils.drawDashPathStroke(this, canvas, paint);
   }
 
