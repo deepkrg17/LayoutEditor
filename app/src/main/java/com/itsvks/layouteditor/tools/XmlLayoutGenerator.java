@@ -9,7 +9,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
-import com.itsvks.layouteditor.editor.layouts.EditorLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

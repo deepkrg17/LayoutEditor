@@ -39,172 +39,169 @@ import java.util.Calendar;
 @SuppressWarnings("unused")
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
-    private SharedPreferences projectTimes;
+  private FragmentHomeBinding binding;
+  private SharedPreferences projectTimes;
 
-    private ArrayList<ProjectFile> projects = new ArrayList<>();
-    private ProjectListAdapter adapter;
+  private ArrayList<ProjectFile> projects = new ArrayList<>();
+  private ProjectListAdapter adapter;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        projectTimes = PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getInstance().getContext());
-        return binding.getRoot();
+    binding = FragmentHomeBinding.inflate(inflater, container, false);
+    projectTimes =
+        PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getInstance().getContext());
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    binding.fab.setOnClickListener(v -> showCreateProjectDialog());
+    adapter = new ProjectListAdapter(projects);
+
+    binding.listProjects.setAdapter(adapter);
+    binding.listProjects.setLayoutManager(
+        new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+
+    binding.listProjects.setVisibility(
+        binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
+  @SuppressWarnings("deprecation")
+  private void showCreateProjectDialog() {
+    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+    builder.setTitle(getString(string.create_project));
+
+    final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
+    final TextInputEditText editText = bind.textinputEdittext;
+    final TextInputLayout inputLayout = bind.textinputLayout;
+
+    builder.setView(bind.getRoot(), 10, 10, 10, 10);
+    builder.setNegativeButton(string.cancel, (di, which) -> {});
+    builder.setPositiveButton(
+        string.create, (di, which) -> createProject(bind.textinputEdittext.getText().toString()));
+
+    final AlertDialog dialog = builder.create();
+    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    dialog.show();
+
+    inputLayout.setHint(getString(string.msg_new_project_name));
+    editText.setText("NewProject" + System.currentTimeMillis());
+    editText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void afterTextChanged(Editable p1) {
+            checkNameErrors(editText.getText().toString(), null, inputLayout, dialog);
+          }
+        });
+
+    editText.requestFocus();
+
+    InputMethodManager inputMethodManager =
+        (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+
+    if (!editText.getText().toString().isEmpty()) {
+      editText.setSelection(0, editText.getText().toString().length());
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    checkNameErrors(editText.getText().toString(), "", inputLayout, dialog);
+  }
 
-        binding.fab.setOnClickListener(v -> showCreateProjectDialog());
-        adapter = new ProjectListAdapter(projects);
+  @SuppressLint("NotifyDataSetChanged")
+  private void loadProjects() {
+    projects.clear();
 
-        binding.listProjects.setAdapter(adapter);
-        binding.listProjects.setLayoutManager(
-                new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+    File root = new File(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
 
-        // binding.noProjectsView.setVisibility(
-        //         adapter.getItemCount() != 0 ? View.VISIBLE : View.GONE);
-        binding.listProjects.setVisibility(
-                binding.noProjectsView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+    if (!root.exists()) {
+      FileUtil.makeDir(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    for (File file : root.listFiles()) {
+      String path = file.getPath();
+      projects.add(new ProjectFile(path, projectTimes.getString(path, getCurrentTime())));
     }
 
-    @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
-    @SuppressWarnings("deprecation")
-    private void showCreateProjectDialog() {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        builder.setTitle(getString(string.create_project));
+    adapter.notifyDataSetChanged();
+    // binding.noProjectsView.setVisibility(projects.size() != 0 ? View.VISIBLE : View.GONE);
+  }
 
-        final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(getLayoutInflater());
-        final TextInputEditText editText = bind.textinputEdittext;
-        final TextInputLayout inputLayout = bind.textinputLayout;
+  @SuppressLint("NotifyDataSetChanged")
+  private void createProject(String name) {
 
-        builder.setView(bind.getRoot(), 10, 10, 10, 10);
-        builder.setNegativeButton(string.cancel, (di, which) -> {});
-        builder.setPositiveButton(
-                string.create,
-                (di, which) -> createProject(bind.textinputEdittext.getText().toString()));
+    final String projectDir = FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
+    final String time = Calendar.getInstance().getTime().toString();
+    FileUtil.makeDir(projectDir);
+    FileUtil.makeDir(projectDir + "/drawable/");
+    FileUtil.makeDir(projectDir + "/values/");
+    FileUtil.makeDir(projectDir + "/font/");
+    FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
+    FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
+    FileUtil.copyFileFromAsset("strings.xml", projectDir + "/values");
+    FileUtil.copyFileFromAsset("default_font.ttf", projectDir + "/font");
 
-        final AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
+    ProjectFile project = new ProjectFile(projectDir, time);
+    project.saveLayout("");
+    projects.add(project);
+    adapter.notifyDataSetChanged();
 
-        inputLayout.setHint(getString(string.msg_new_project_name));
-        editText.setText("NewProject" + System.currentTimeMillis());
-        editText.addTextChangedListener(
-                new TextWatcher() {
+    projectTimes.edit().putString(projectDir, time).apply();
 
-                    @Override
-                    public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+    final Intent intent = new Intent(requireContext(), EditorActivity.class);
+    ProjectManager.getInstance().openProject(project);
+    startActivity(intent);
+  }
 
-                    @Override
-                    public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
-
-                    @Override
-                    public void afterTextChanged(Editable p1) {
-                        checkNameErrors(editText.getText().toString(), null, inputLayout, dialog);
-                    }
-                });
-
-        editText.requestFocus();
-
-        InputMethodManager inputMethodManager =
-                (InputMethodManager)
-                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-
-        if (!editText.getText().toString().isEmpty()) {
-            editText.setSelection(0, editText.getText().toString().length());
-        }
-
-        checkNameErrors(editText.getText().toString(), "", inputLayout, dialog);
+  private void checkNameErrors(
+      String name, String currentName, TextInputLayout inputLayout, AlertDialog dialog) {
+    if (name.equals("")) {
+      inputLayout.setErrorEnabled(true);
+      inputLayout.setError(getString(string.msg_cannnot_empty));
+      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+      return;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void loadProjects() {
-        projects.clear();
+    for (ProjectFile file : projects) {
+      if (name.equals(currentName)) break;
 
-        File root = new File(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
-
-        if (!root.exists()) {
-            FileUtil.makeDir(FileUtil.getPackageDataDir(requireContext()) + "/projects/");
-        }
-
-        for (File file : root.listFiles()) {
-            String path = file.getPath();
-            projects.add(new ProjectFile(path, projectTimes.getString(path, getCurrentTime())));
-        }
-
-        adapter.notifyDataSetChanged();
+      if (file.getName().equals(name)) {
+        inputLayout.setErrorEnabled(true);
+        inputLayout.setError(getString(string.msg_current_name_unavailable));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        return;
+      }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void createProject(String name) {
+    inputLayout.setErrorEnabled(false);
+    inputLayout.setError("");
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+  }
 
-        final String projectDir =
-                FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
-        final String time = Calendar.getInstance().getTime().toString();
-        FileUtil.makeDir(projectDir);
-        FileUtil.makeDir(projectDir + "/drawable/");
-        FileUtil.makeDir(projectDir + "/values/");
-        FileUtil.makeDir(projectDir + "/font/");
-        FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
-        FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
-        FileUtil.copyFileFromAsset("strings.xml", projectDir + "/values");
-        FileUtil.copyFileFromAsset("default_font.ttf", projectDir + "/font");
+  @Override
+  public void onResume() {
+    super.onResume();
+    loadProjects();
+  }
 
-        ProjectFile project = new ProjectFile(projectDir, time);
-        project.saveLayout("");
-        projects.add(project);
-        adapter.notifyDataSetChanged();
-
-        projectTimes.edit().putString(projectDir, time).apply();
-
-        final Intent intent = new Intent(requireContext(), EditorActivity.class);
-        ProjectManager.getInstance().openProject(project);
-        startActivity(intent);
-    }
-
-    private void checkNameErrors(
-            String name, String currentName, TextInputLayout inputLayout, AlertDialog dialog) {
-        if (name.equals("")) {
-            inputLayout.setErrorEnabled(true);
-            inputLayout.setError(getString(string.msg_cannnot_empty));
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-            return;
-        }
-
-        for (ProjectFile file : projects) {
-            if (name.equals(currentName)) break;
-
-            if (file.getName().equals(name)) {
-                inputLayout.setErrorEnabled(true);
-                inputLayout.setError(getString(string.msg_current_name_unavailable));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                return;
-            }
-        }
-
-        inputLayout.setErrorEnabled(false);
-        inputLayout.setError("");
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadProjects();
-    }
-
-    private String getCurrentTime() {
-        return Calendar.getInstance().getTime().toString();
-    }
+  private String getCurrentTime() {
+    return Calendar.getInstance().getTime().toString();
+  }
 }

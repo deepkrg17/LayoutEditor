@@ -12,40 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.webkit.WebView;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.GridView;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RatingBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-import android.widget.SeekBar;
-import android.widget.Space;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TabHost;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextClock;
-import android.widget.TextView;
-
-import android.widget.ToggleButton;
-import android.widget.VideoView;
+import android.widget.*;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import androidx.appcompat.widget.TooltipCompat;
@@ -332,10 +299,7 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     this.listener = listener;
   }
 
-  /**
-   * This is an abstract OnItemClickListener class which contains an abstract onItemClick method.
-   */
-  public abstract static class OnItemClickListener {
-    public abstract void onItemClick(View view);
+  public interface OnItemClickListener {
+    public void onItemClick(View view);
   }
 }

@@ -3,8 +3,7 @@ package com.itsvks.layouteditor.editor.initializer;
 import android.content.Context;
 import android.view.View;
 
-import com.itsvks.layouteditor.editor.initializer.AttributeMap;
-import com.itsvks.layouteditor.editor.layouts.EditorLayout;
+import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.InvokeUtil;
 
@@ -107,7 +106,7 @@ public class AttributeInitializer {
       cls = cls.getSuperclass();
     }
 
-    if (target.getParent() != null && target.getParent().getClass() != EditorLayout.class) {
+    if (target.getParent() != null && target.getParent().getClass() != DesignEditor.class) {
       cls = target.getParent().getClass();
 
       while (cls != viewParentCls) {

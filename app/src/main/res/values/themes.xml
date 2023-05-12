@@ -40,7 +40,7 @@
   <style
     name="AppTheme.Licence"
     parent="AppTheme">
-    <item name="android:statusBarColor">@color/md_theme_light_surface</item>
+    <item name="android:statusBarColor">?attr/colorSurface</item>
     <item name="android:windowLightStatusBar">true</item>
   </style>
 

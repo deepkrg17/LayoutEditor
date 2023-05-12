@@ -12,12 +12,8 @@ public class Constants {
   public static final HashMap<String, Integer> imeOptions = new HashMap<>();
   public static final HashMap<String, Integer> visibilityMap = new HashMap<>();
 
-  public static final String ATTRIBUTES_FILE = "attributes/attributes.json";
-  public static final String PARENT_ATTRIBUTES_FILE = "parent_attributes.json";
-  public static final String LAYOUTS_FILE = "layouts.json";
-  public static final String VIEWS_FILE = "views.json";
-  public static final String ANDROIDX_WIDGETS_FILE = "androidx_widgets.json";
-  public static final String MATERIAL_DESIGN_WIDGETS_FILE = "material_design_widgets.json";
+  public static final String ATTRIBUTES_FILE        = "attributes/attributes.json";
+  public static final String PARENT_ATTRIBUTES_FILE = "attributes/parent_attributes.json";
   
   public static final String PALETTE_COMMON     = "palette/common.json";
   public static final String PALETTE_TEXT       = "palette/text.json";
