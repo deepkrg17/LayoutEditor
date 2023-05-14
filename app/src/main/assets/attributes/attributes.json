@@ -324,6 +324,57 @@
             "argumentType": "boolean"
         }
     ],
+    "android.widget.AutoCompleteTextView": [
+        {
+            "name": "android:completionHint",
+            "methodName": "setCompletionHint",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:completionHint",
+            "argumentType": "string|text"
+        },
+        {
+            "name": "android:dropDownHeight",
+            "methodName": "setDropDownHeight",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:dropDownHeight",
+            "argumentType": "size"
+        },
+        {
+            "name": "android:dropDownHorizontalOffset",
+            "methodName": "setDropDownHorizontalOffset",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:dropDownHorizontalOffset",
+            "argumentType": "float"
+        },
+        {
+            "name": "android:dropDownVerticalOffset",
+            "methodName": "setDropDownVerticalOffset",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:dropDownVerticalOffset",
+            "argumentType": "float"
+        },
+        {
+            "name": "android:dropDownWidth",
+            "methodName": "setDropDownWidth",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:dropDownWidth",
+            "argumentType": "size"
+        },
+        {
+            "name": "android:popupBackground",
+            "methodName": "setDropDownBackgroundResource",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:popupBackground",
+            "argumentType": "color"
+        },
+        {
+            "name": "android:completionThreshold",
+            "methodName": "setThreshold",
+            "className": "text.AutoCompleteTextViewCaller",
+            "attributeName": "android:completionThreshold",
+            "argumentType": "int"
+        }
+    ],
     "android.widget.EditText": [
         {
             "name": "android:hint",

@@ -54,14 +54,16 @@ public class SizeDialog extends AttributeDialog {
     textInputLayout.setVisibility(View.GONE);
 
     // Check if savedValue is "match_parent", "wrap_content", or a fixed value
-    if (savedValue.equals("match_parent")) {
-      rbMatchParent.setChecked(true);
-    } else if (savedValue.equals("wrap_content")) {
-      rbWrapContent.setChecked(true);
-    } else {
-      rbFixedValue.setChecked(true);
-      textInputLayout.setVisibility(View.VISIBLE);
-      textInputEditText.setText(DimensionUtil.getDimenWithoutSuffix(savedValue));
+    if (!savedValue.equals("")) {
+      if (savedValue.equals("match_parent")) {
+        rbMatchParent.setChecked(true);
+      } else if (savedValue.equals("wrap_content")) {
+        rbWrapContent.setChecked(true);
+      } else {
+        rbFixedValue.setChecked(true);
+        textInputLayout.setVisibility(View.VISIBLE);
+        textInputEditText.setText(DimensionUtil.getDimenWithoutSuffix(savedValue));
+      }
     }
 
     // Add a TextChangeListener to the TextInputEditText to check for an error
