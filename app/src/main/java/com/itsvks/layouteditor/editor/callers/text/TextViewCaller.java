@@ -56,4 +56,8 @@ public class TextViewCaller {
       else if (value.equals("false")) ((CheckedTextView) target).setChecked(false);
     }
   }
+
+  public static void setTextStyle(View target, String value, Context context) {
+    ((TextView) target).setTypeface(null, Constants.textStyleMap.get(value));
+  }
 }

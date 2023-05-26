@@ -108,52 +108,47 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
     popupMenu.inflate(R.menu.menu_values);
     popupMenu.setOnMenuItemClickListener(
-        new PopupMenu.OnMenuItemClickListener() {
-
-          @Override
-          public boolean onMenuItemClick(MenuItem item) {
-
-            var id = item.getItemId();
-            switch (id) {
-              case R.id.menu_copy_name:
-                ClipboardUtils.copyText(stringList.get(position).name);
-                SBUtils.make(
-                        v,
-                        v.getContext().getString(R.string.copied)
-                            + " "
-                            + stringList.get(position).name)
-                    .setSlideAnimation()
-                    .showAsSuccess();
-                return true;
-              case R.id.menu_delete:
-                new MaterialAlertDialogBuilder(v.getContext())
-                    .setTitle("Remove String")
-                    .setMessage("Do you want to remove " + stringList.get(position).name + "?")
-                    .setNegativeButton(R.string.no, null)
-                    .setPositiveButton(
-                        R.string.yes,
-                        (d, w) -> {
-                          var name = stringList.get(position).name;
-                          if (name.equals("default_string")) {
-                            SBUtils.make(
-                                    v,
-                                    v.getContext()
-                                        .getString(
-                                            R.string.msg_cannot_delete_default, "string"))
-                                .setFadeAnimation()
-                                .setType(SBUtils.Type.INFO)
-                                .show();
-                          } else {
-                            stringList.remove(position);
-                            notifyDataSetChanged();
-                            generateStringsXml();
-                          }
-                        })
-                    .show();
-                return true;
-            }
-            return false;
+        item -> {
+          var id = item.getItemId();
+          switch (id) {
+            case R.id.menu_copy_name:
+              ClipboardUtils.copyText(stringList.get(position).name);
+              SBUtils.make(
+                      v,
+                      v.getContext().getString(R.string.copied)
+                          + " "
+                          + stringList.get(position).name)
+                  .setSlideAnimation()
+                  .showAsSuccess();
+              return true;
+            case R.id.menu_delete:
+              new MaterialAlertDialogBuilder(v.getContext())
+                  .setTitle("Remove String")
+                  .setMessage(
+                      String.format("Do you want to remove %s?", stringList.get(position).name))
+                  .setNegativeButton(R.string.no, null)
+                  .setPositiveButton(
+                      R.string.yes,
+                      (d, w) -> {
+                        var name = stringList.get(position).name;
+                        if (name.equals("default_string")) {
+                          SBUtils.make(
+                                  v,
+                                  v.getContext()
+                                      .getString(R.string.msg_cannot_delete_default, "string"))
+                              .setFadeAnimation()
+                              .setType(SBUtils.Type.INFO)
+                              .show();
+                        } else {
+                          stringList.remove(position);
+                          notifyDataSetChanged();
+                          generateStringsXml();
+                        }
+                      })
+                  .show();
+              return true;
           }
+          return false;
         });
 
     popupMenu.show();

@@ -1,6 +1,7 @@
 package com.itsvks.layouteditor.utils;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -11,6 +12,7 @@ public class Constants {
   public static final HashMap<String, Integer> inputTypes = new HashMap<>();
   public static final HashMap<String, Integer> imeOptions = new HashMap<>();
   public static final HashMap<String, Integer> visibilityMap = new HashMap<>();
+  public static final HashMap<String, Integer> textStyleMap = new HashMap<>();
 
   public static final String ATTRIBUTES_FILE        = "attributes/attributes.json";
   public static final String PARENT_ATTRIBUTES_FILE = "attributes/parent_attributes.json";
@@ -114,5 +116,10 @@ public class Constants {
     visibilityMap.put("visible", View.VISIBLE);
     visibilityMap.put("invisible", View.INVISIBLE);
     visibilityMap.put("gone", View.GONE);
+    
+    textStyleMap.put("normal", Typeface.NORMAL);
+    textStyleMap.put("bold", Typeface.BOLD);
+    textStyleMap.put("italic", Typeface.ITALIC);
+    textStyleMap.put("bold|italic", Typeface.BOLD_ITALIC);
   }
 }

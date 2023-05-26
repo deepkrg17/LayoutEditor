@@ -46,16 +46,12 @@ public class Utils {
     return uiMode == Configuration.UI_MODE_NIGHT_YES;
   }
 
-  public static int getOnSurfaceColor(View view) {
-    return MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnSurface);
+  public static int getOnSurfaceColor(Context context) {
+    return MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, 0);
   }
 
-  public static int getSurfaceColor(View view) {
-    return MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface);
-  }
-
-  public static int getOnSurfaceColor(ViewGroup viewGroup) {
-    return viewGroup instanceof View ? getOnSurfaceColor((View) viewGroup) : Color.WHITE;
+  public static int getSurfaceColor(Context context) {
+    return MaterialColors.getColor(context, com.google.android.material.R.attr.colorSurface, 0);
   }
 
   public static void drawDashPathStroke(View view, Canvas canvas, Paint paint) {
@@ -66,19 +62,19 @@ public class Utils {
   }
 
   public static void drawDashPathStroke(View view, Canvas canvas) {
-    drawDashPathStroke(view, canvas, getDefaultPaint(view));
+    drawDashPathStroke(view, canvas, getDefaultPaint(view.getContext()));
   }
 
   public static void drawDashPathStroke(View view, Canvas canvas, int paintColor) {
-    Paint paint = getDefaultPaint(view);
+    Paint paint = getDefaultPaint(view.getContext());
     paint.setColor(paintColor);
     drawDashPathStroke(view, canvas, paint);
   }
 
-  private static Paint getDefaultPaint(View view) {
+  private static Paint getDefaultPaint(Context context) {
     Paint paint = new Paint();
-    paint.setColor(isDarkMode(view.getContext()) ? Color.WHITE : getOnSurfaceColor(view));
-    paint.setStrokeWidth(pxToDp(view.getContext(), 2));
+    paint.setColor(isDarkMode(context) ? Color.WHITE : getOnSurfaceColor(context));
+    paint.setStrokeWidth(pxToDp(context, 2));
     return paint;
   }
 
@@ -142,44 +138,6 @@ public class Utils {
   public static int getScreenWidth() {
     DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
     return displayMetrics.widthPixels;
-  }
-
-  public static String getDpiFolderName(int dpi) {
-    switch (dpi) {
-      case DisplayMetrics.DENSITY_LOW:
-        return "drawable-ldpi";
-      case DisplayMetrics.DENSITY_MEDIUM:
-        return "drawable-mdpi";
-      case DisplayMetrics.DENSITY_HIGH:
-        return "drawable-hdpi";
-      case DisplayMetrics.DENSITY_XHIGH:
-        return "drawable-xhdpi";
-      case DisplayMetrics.DENSITY_XXHIGH:
-        return "drawable-xxhdpi";
-      case DisplayMetrics.DENSITY_XXXHIGH:
-        return "drawable-xxxhdpi";
-      default:
-        return "drawable-mdpi";
-    }
-  }
-
-  public static String getDpiFolderName(String dpi) {
-    switch (dpi) {
-      case "ldpi":
-        return "drawable-ldpi";
-      case "mdpi":
-        return "drawable-mdpi";
-      case "hdpi":
-        return "drawable-hdpi";
-      case "xhdpi":
-        return "drawable-xhdpi";
-      case "xxhdpi":
-        return "drawable-xxhdpi";
-      case "xxxhdpi":
-        return "drawable-xxxhdpi";
-      default:
-        return "drawable-mdpi";
-    }
   }
 
   public static VectorMasterDrawable getVectorDrawableAsync(Context context, Uri uri) {

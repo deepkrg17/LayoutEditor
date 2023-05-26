@@ -271,14 +271,14 @@
         {
             "name": "android:text",
             "methodName": "setText",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:text",
             "argumentType": "text|string"
         },
         {
             "name": "android:textSize",
             "methodName": "setTextSize",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:textSize",
             "argumentType": "dimension",
             "dimensionUnit": "sp"
@@ -286,14 +286,28 @@
         {
             "name": "android:textColor",
             "methodName": "setTextColor",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:textColor",
             "argumentType": "color"
         },
         {
+            "name": "android:textStyle",
+            "methodName": "setTextStyle",
+            "className": "text.TextViewCaller",
+            "attributeName": "android:textStyle",
+            "argumentType": "enum",
+            "arguments": [
+                "normal",
+                "bold",
+                "italic",
+                "bold|italic"
+            ],
+            "defaultValue": "-1"
+        },
+        {
             "name": "android:gravity",
             "methodName": "setGravity",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:gravity",
             "argumentType": "flag",
             "arguments": [
@@ -312,14 +326,14 @@
         {
             "name": "android:checkMark",
             "methodName": "setCheckMark",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:checkMark",
             "argumentType": "drawable"
         },
         {
             "name": "android:checked",
             "methodName": "setChecked",
-            "className": "TextViewCaller",
+            "className": "text.TextViewCaller",
             "attributeName": "android:checked",
             "argumentType": "boolean"
         }

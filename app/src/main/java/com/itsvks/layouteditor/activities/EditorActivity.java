@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -45,6 +47,7 @@ import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
+import java.io.InputStream;
 import java.util.HashMap;
 
 @SuppressLint("UnsafeOptInUsageError")
@@ -100,7 +103,7 @@ public class EditorActivity extends BaseActivity
     getSupportActionBar().setSubtitle(project.getName());
 
     contentView = binding.content;
-    binding.editorLayout.setBackgroundColor(Utils.getSurfaceColor(binding.getRoot()));
+    binding.editorLayout.setBackgroundColor(Utils.getSurfaceColor(this));
 
     defineFileCreator();
     defineXmlPicker();
@@ -126,17 +129,26 @@ public class EditorActivity extends BaseActivity
                 SBUtils.make(binding.getRoot(), R.string.select_from_storage).showAsError();
                 return;
               }
-              String xml = FileUtil.readFromUri(uri, EditorActivity.this);
-              String xmlConverted =
-                  new ConvertImportedXml(xml).getXmlConverted(EditorActivity.this);
+              String path = uri.getPath();
+              if (path != null && path.endsWith(".xml")) {
+                String xml = FileUtil.readFromUri(uri, EditorActivity.this);
+                String xmlConverted =
+                    new ConvertImportedXml(xml).getXmlConverted(EditorActivity.this);
 
-              if (xmlConverted != null) {
-                binding.editorLayout.loadLayoutFromParser(xmlConverted);
-                SBUtils.make(binding.getRoot(), "Imported").setFadeAnimation().showAsSuccess();
+                if (xmlConverted != null) {
+                  binding.editorLayout.loadLayoutFromParser(xmlConverted);
+                  SBUtils.make(binding.getRoot(), "Imported").setFadeAnimation().showAsSuccess();
+                } else {
+                  SBUtils.make(binding.getRoot(), "Failed to import!")
+                      .setSlideAnimation()
+                      .showAsError();
+                }
               } else {
-                SBUtils.make(binding.getRoot(), "Failed to import!")
-                    .setSlideAnimation()
-                    .showAsError();
+                Toast.makeText(
+                        EditorActivity.this,
+                        "Selected file is not an Android XML layout file",
+                        Toast.LENGTH_SHORT)
+                    .show();
               }
             }
           }
