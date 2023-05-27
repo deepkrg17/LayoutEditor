@@ -92,7 +92,7 @@ public class DesignEditor extends LinearLayout {
   private void init(Context context, AttributeSet attrs) {
     viewType = ViewType.DESIGN;
     isBlueprint = viewType == ViewType.BLUEPRINT;
-    deviceConfiguration = new DeviceConfiguration(DeviceSize.MEDIUM);
+    deviceConfiguration = new DeviceConfiguration(DeviceSize.LARGE);
     initAttributes();
     shadow = new View(context);
     paint = new Paint();
@@ -129,11 +129,11 @@ public class DesignEditor extends LinearLayout {
         setScaleY(0.75f);
         break;
       case MEDIUM:
-      default:
         setScaleX(0.85f);
         setScaleY(0.85f);
         break;
       case LARGE:
+      default:
         setScaleX(0.95f);
         setScaleY(0.95f);
         break;
