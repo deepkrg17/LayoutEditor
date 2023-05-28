@@ -1,9 +1,7 @@
 package com.itsvks.layouteditor.tools;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.os.Environment;
 import com.itsvks.layouteditor.managers.ProjectManager;
 import java.io.File;
 import java.io.FileOutputStream;

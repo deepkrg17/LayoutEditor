@@ -42,9 +42,8 @@ Use Layout Editor to easily build Android app layouts by dragging UI elements in
 </div>
 
 **Known issues**:
-1. `ConstraintLayout` is not usable right now.
-2. Only a few widgets have been added. More will be added soon.
-3. Not all attributes of widgets are available.
+1. Only a few widgets have been added. More will be added soon.
+2. Not all attributes of widgets are available.
 
 The app is in alpha.
 You may face issues when using the app. If you do, please report it in github [issues](https://github.com/itsvks19/LayoutEditor/issues).
