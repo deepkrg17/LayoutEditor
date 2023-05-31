@@ -3,8 +3,6 @@ package com.itsvks.layouteditor.editor;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.DragEvent;
@@ -15,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +46,6 @@ import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.tools.XmlLayoutParser;
 import com.itsvks.layouteditor.utils.ArgumentUtil;
-import com.itsvks.layouteditor.utils.BitmapUtil;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.InvokeUtil;
@@ -281,7 +279,18 @@ public class DesignEditor extends LinearLayout {
                 break;
               case DragEvent.ACTION_DROP:
                 removeWidget(shadow);
-
+                if (getChildCount() >= 1) {
+                  if (!(getChildAt(0) instanceof ViewGroup)) {
+                    Toast.makeText(
+                            getContext(),
+                            "Can\'t add more than one widget in the editor.",
+                            Toast.LENGTH_SHORT)
+                        .show();
+                    break;
+                  } else {
+                    if (parent instanceof DesignEditor) parent = (ViewGroup) getChildAt(0);
+                  }
+                }
                 if (draggedView == null) {
                   final HashMap<String, Object> data = (HashMap) event.getLocalState();
                   final View newView =
@@ -324,7 +333,6 @@ public class DesignEditor extends LinearLayout {
                         newView, (Map) data.get(Constants.KEY_DEFAULT_ATTRS));
                   }
                 } else addWidget(draggedView, parent, event);
-
                 updateStructure();
                 updateUndoRedoHistory();
                 break;
