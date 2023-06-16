@@ -64,4 +64,36 @@ public class ConstraintLayoutDesign extends ConstraintLayout {
     drawStrokeEnabled = enabled;
     invalidate();
   }
+
+  private void drawBindings(Canvas canvas) {
+    for (int i = 0; i < getChildCount(); i++) {
+      View view = getChildAt(i);
+      ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+      
+      
+    }
+  }
+  
+  private void drawHorArrow(Canvas canvas, int x, int y, int x2, int y2) {
+    int width = x2 - x;
+    int step = 10;
+    int height = 10;
+
+    for (int i = 0; i < width; i += step) {
+      // line(x + i, y, x + i + step, y + step);
+      canvas.drawLine(x + i, y - height / 2, x + i + step, y + height / 2, linePaint);
+      canvas.drawLine(x + i + step, y - height / 2, x + i + step, y + height / 2, linePaint);
+    }
+  }
+
+  private void drawVerArrow(Canvas canvas, int x, int y, int x2, int y2) {
+    int height = y2 - y;
+    int step = 10;
+    int width = 10;
+
+    for (int i = 0; i < height; i += step) {
+      canvas.drawLine(x - width / 2, y + i, x + width / 2, y + i + step, linePaint);
+      canvas.drawLine(x - width / 2, y + i + step, x + width / 2, y + i + step, linePaint);
+    }
+  }
 }

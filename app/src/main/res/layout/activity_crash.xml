@@ -42,7 +42,6 @@
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp"/>
                 
-            
             </HorizontalScrollView>
             
         

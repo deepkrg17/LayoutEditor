@@ -37,31 +37,7 @@
       <io.github.rosemoe.sora.widget.CodeEditor
         android:id="@+id/editor"
         android:layout_height="match_parent"
-        android:layout_marginBottom="40dp"
         android:layout_width="match_parent" />
-
-      <LinearLayout
-        android:id="@+id/symbol"
-        android:layout_height="40dp"
-        android:layout_marginTop="-40dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
-
-        <HorizontalScrollView
-          android:layout_height="40dp"
-          android:layout_width="match_parent">
-
-          <io.github.rosemoe.sora.widget.SymbolInputView
-            android:id="@+id/symbol_input"
-            android:layout_height="40dp"
-            android:layout_width="wrap_content" />
-
-
-        </HorizontalScrollView>
-
-
-      </LinearLayout>
-
 
     </LinearLayout>
 

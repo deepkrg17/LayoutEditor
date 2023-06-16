@@ -394,6 +394,132 @@
             "argumentType": "view",
             "constant": "parent",
             "defaultValue": "-1"
+        },
+        {
+            "name": "android:layout_marginLeft",
+            "methodName": "setLayoutMarginLeft",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginLeft",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "android:layout_marginRight",
+            "methodName": "setLayoutMarginRight",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginRight",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "android:layout_marginTop",
+            "methodName": "setLayoutMarginTop",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginTop",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "android:layout_marginBottom",
+            "methodName": "setLayoutMarginBottom",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginBottom",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "android:layout_marginStart",
+            "methodName": "setLayoutMarginStart",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginStart",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "android:layout_marginEnd",
+            "methodName": "setLayoutMarginEnd",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "android:layout_marginEnd",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_marginBaseline",
+            "methodName": "setLayoutMarginBaseline",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_marginBaseline",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginLeft",
+            "methodName": "setLayoutGoneMarginLeft",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginLeft",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginRight",
+            "methodName": "setLayoutGoneMarginRight",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginRight",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginTop",
+            "methodName": "setLayoutGoneMarginTop",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginTop",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginBottom",
+            "methodName": "setLayoutGoneMarginBottom",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginBottom",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginStart",
+            "methodName": "setLayoutGoneMarginStart",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginStart",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginEnd",
+            "methodName": "setLayoutGoneMarginEnd",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginEnd",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_goneMarginBaseline",
+            "methodName": "setLayoutGoneMarginBaseline",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_goneMarginBaseline",
+            "argumentType": "dimension",
+            "dimensionUnit": "dp"
+        },
+        {
+            "name": "app:layout_constraintHorizontal_bias",
+            "methodName": "setHorizontalBias",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintHorizontal_bias",
+            "argumentType": "float"
+        },
+        {
+            "name": "app:layout_constraintVertical_bias",
+            "methodName": "setVerticalBias",
+            "className": "layouts.ConstraintLayoutCaller",
+            "attributeName": "app:layout_constraintVertical_bias",
+            "argumentType": "float"
         }
     ]
 }

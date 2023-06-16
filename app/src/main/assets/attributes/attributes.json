@@ -393,14 +393,14 @@
         {
             "name": "android:hint",
             "methodName": "setHint",
-            "className": "EditTextCaller",
+            "className": "text.EditTextCaller",
             "attributeName": "android:hint",
             "argumentType": "text|string"
         },
         {
             "name": "android:inputType",
             "methodName": "setInputType",
-            "className": "EditTextCaller",
+            "className": "text.EditTextCaller",
             "attributeName": "android:inputType",
             "argumentType": "flag",
             "arguments": [
@@ -443,14 +443,14 @@
         {
             "name": "android:textColorHint",
             "methodName": "setHintTextColor",
-            "className": "EditTextCaller",
+            "className": "text.EditTextCaller",
             "attributeName": "android:textColorHint",
             "argumentType": "color"
         },
         {
             "name": "android:singleLine",
             "methodName": "setSingleLine",
-            "className": "EditTextCaller",
+            "className": "text.EditTextCaller",
             "attributeName": "android:singleLine",
             "argumentType": "boolean"
         }

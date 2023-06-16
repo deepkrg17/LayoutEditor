@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.widget.TooltipCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.VibrateUtils;
@@ -593,6 +594,28 @@ public class DesignEditor extends LinearLayout {
         .setAdapter(
             new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, names),
             (d, w) -> {
+              /*
+                    if (getChildAt(0) instanceof ConstraintLayout) {
+                      final List<String> keys = VIEW_ATTRIBUTE_MAP.get(target).keySet();
+
+                      final List<HashMap<String, Object>> attrs = new ArrayList<>();
+                      final List<HashMap<String, Object>> allAttrs =
+                          INITIALIZER.getAllAttributesForView(target);
+
+                      for (String key : keys) {
+                        for (HashMap<String, Object> map : allAttrs) {
+                          if (map.get(Constants.KEY_ATTRIBUTE_NAME).toString().equals(key)) {
+                            attrs.add(map);
+                            break;
+                          }
+                        }
+                      }
+
+                      for(HashMap<String, Object> attr : attrs) {
+
+                      }
+                    }
+              */
               showAttributeEdit(
                   target, availableAttrs.get(w).get(Constants.KEY_ATTRIBUTE_NAME).toString());
             })

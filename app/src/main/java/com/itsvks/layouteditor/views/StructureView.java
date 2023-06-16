@@ -17,6 +17,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -108,6 +109,7 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
     imgMap.put(TextClock.class.getSimpleName(), R.mipmap.ic_palette_text_clock);
     imgMap.put(AppBarLayout.class.getSimpleName(), R.mipmap.ic_palette_app_bar_layout);
     imgMap.put(NavigationView.class.getSimpleName(), R.mipmap.ic_palette_navigation_view);
+    imgMap.put(ConstraintLayout.class.getSimpleName(), R.mipmap.ic_palette_constraint_layout);
     imgMap.put(
         BottomNavigationView.class.getSimpleName(), R.mipmap.ic_palette_bottom_navigation_view);
   }

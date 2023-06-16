@@ -44,8 +44,6 @@ public class ShowXMLActivity extends BaseActivity {
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
     getSupportActionBar().setTitle(R.string.xml_preview);
-    binding.symbolInput.bindEditor(binding.editor);
-    setupSymbols(binding.symbolInput);
 
     binding.topAppBar.setNavigationOnClickListener(
         v -> {
@@ -133,36 +131,8 @@ public class ShowXMLActivity extends BaseActivity {
     }
   }
 
-  private void setupSymbols(SymbolInputView symbolInput) {
-    symbolInput.addSymbols(
-        new String[] {
-          "➜", "<", ">", "/", "=", "\"", ":", "@", "+", "(", ")", ";", ",", ".", "?", "|", "\\",
-          "&", "[", "]", "{", "}", "_", "-"
-        },
-        new String[] {
-          "\t", "<>", ">", "/", "=", "\"\"", ":", "@", "+", "()", ")", ";", ",", ".", "?", "|",
-          "\\", "&", "[]", "]", "{}", "}", "_", "-"
-        });
-    symbolInput.forEachButton(
-        (b) -> {
-          b.setTypeface(jetBrainsMono());
-        });
-  }
-
   private Typeface jetBrainsMono() {
     return ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular);
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
-      // Keyboard is now visible
-      binding.fab.hide();
-    } else if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
-      // Keyboard is now hidden
-      binding.fab.show();
-    }
   }
 
   @Override
