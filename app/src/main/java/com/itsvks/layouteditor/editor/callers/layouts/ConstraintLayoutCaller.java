@@ -215,20 +215,4 @@ public class ConstraintLayoutCaller {
     set.setVerticalBias(target.getId(), bias);
     set.applyTo(layout);
   }
-  
-  public static void constrainCircle(View target, String value, Context context) {
-    ConstraintLayout layout = (ConstraintLayout) target.getParent();
-    generateViewId(target);
-    generateViewId(layout);
-
-    float bias = Float.valueOf(value);
-
-    if (bias > 1.0f) bias = 1.0f;
-    if (bias < 0) bias = 0.0f;
-
-    ConstraintSet set = new ConstraintSet();
-    set.clone(layout);
-    set.constrainCircle(target.getId(), bias);
-    set.applyTo(layout);
-  }
 }
