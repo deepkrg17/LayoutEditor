@@ -14,7 +14,22 @@
           "line": 0
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidProjects/LayoutEditor/.github/workflows/test_and_build.yml",
+      "selection": {
+        "end": {
+          "column": 57,
+          "index": -1,
+          "line": 30
+        },
+        "start": {
+          "column": 57,
+          "index": -1,
+          "line": 30
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/src/main/java/com/itsvks/editor/palette/buttons/ButtonDesign.java"
+  "selectedFile": "/storage/emulated/0/AndroidProjects/LayoutEditor/.github/workflows/test_and_build.yml"
 }
