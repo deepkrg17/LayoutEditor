@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_open"
+        android:title="@string/open"
+        android:icon="@drawable/open_in_new" />
+
+    <item
+        android:id="@+id/menu_edit"
+        android:title="@string/edit"
+        android:icon="@drawable/pencil" />
+
+    <item
+        android:id="@+id/menu_preview"
+        android:title="@string/preview"
+        android:icon="@drawable/cellphone_play" />
+
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/delete"
+        android:icon="@drawable/delete" />
+
+</menu>

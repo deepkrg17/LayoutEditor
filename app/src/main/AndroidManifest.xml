@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.itsvks.layouteditor">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-  <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
-  <application
-    android:name=".LayoutEditor"
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme">
+    <application
+        android:name=".app.LayoutEditor"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.MAIN" />
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".crash.CrashActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.SettingsActivity" />
+        <activity
+            android:name=".activities.DesignActivity"
+            android:exported="true" />
 
-    <activity
-      android:name=".activities.HomeActivity"
-      android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/AppTheme.Licence" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/AppTheme.Licence" />
 
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-      android:theme="@style/AppTheme.Licence" />
-    <activity
-      android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-      android:theme="@style/AppTheme.Licence" />
-    <activity
-      android:name=".activities.EditorActivity"
-      android:exported="true" />
-    <activity
-      android:name=".activities.ShowXMLActivity"
-      android:configChanges="orientation|keyboardHidden|screenSize"
-      android:exported="true"
-      android:windowSoftInputMode="adjustResize"
-      android:parentActivityName=".activities.EditorActivity" />
-    <activity
-      android:name=".activities.CrashActivity"
-      android:exported="true" />
-    <activity
-      android:name=".activities.PreviewLayoutActivity"
-      android:exported="true"
-      android:parentActivityName=".activities.EditorActivity" />
-    <activity
-      android:name=".activities.ResourceManagerActivity"
-      android:exported="true"
-      android:parentActivityName=".activities.EditorActivity" />
-    <activity
-      android:name=".activities.PreviewDrawableActivity"
-      android:exported="true"
-      android:parentActivityName=".activities.ResourceManagerActivity" />
-
-  </application>
-
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3379334818862611~4201580524" />
+    </application>
 </manifest>

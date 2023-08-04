@@ -4,121 +4,121 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
-    
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical">
-        
+
         <androidx.cardview.widget.CardView
             android:layout_height="70dp"
             android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
-            app:cardCornerRadius="@dimen/cornerLow"
+            app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
-            
-            <com.itsvks.layouteditor.views.ColorView
+
+            <com.itsvks.editor.view.ColorView
                 android:id="@+id/color_preview"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"/>
-            
+                android:layout_width="match_parent" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_color_preview"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"/>
-            
-        
+                android:textSize="16sp" />
+
+
         </androidx.cardview.widget.CardView>
-        
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent">
-            
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="A:"
-                android:textSize="14sp"/>
-            
+                android:textSize="14sp" />
+
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seek_alpha"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
-            
-        
+                android:layout_width="match_parent" />
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
-        
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent">
-            
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="R:"
-                android:textSize="14sp"/>
-            
+                android:textSize="14sp" />
+
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seek_red"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
-            
-        
+                android:layout_width="match_parent" />
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
-        
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent">
-            
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="G:"
-                android:textSize="14sp"/>
-            
+                android:textSize="14sp" />
+
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seek_green"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
-            
-        
+                android:layout_width="match_parent" />
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
-        
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent">
-            
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="B:"
-                android:textSize="14sp"/>
-            
+                android:textSize="14sp" />
+
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seek_blue"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
-            
-        
+                android:layout_width="match_parent" />
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
-        
+
         <include
-            layout="@layout/textinputlayout"/>
-        
-    
+            layout="@layout/layout_text_input" />
+
+
     </androidx.appcompat.widget.LinearLayoutCompat>
-    
+
 
 </ScrollView>
