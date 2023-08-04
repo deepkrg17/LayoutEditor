@@ -8,8 +8,8 @@ plugins {
 
 android {
     namespace = "com.itsvks.editor"
-    compileSdk = 33
-    buildToolsVersion = "33.0.3"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.itsvks.editor"

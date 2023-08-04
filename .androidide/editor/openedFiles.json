@@ -1,35 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/src/main/java/com/itsvks/editor/palette/buttons/ButtonDesign.java",
+      "file": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/build.gradle.kts",
       "selection": {
         "end": {
-          "column": 0,
+          "column": 27,
           "index": -1,
-          "line": 0
+          "line": 11
         },
         "start": {
-          "column": 0,
+          "column": 27,
           "index": -1,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidProjects/LayoutEditor/.github/workflows/test_and_build.yml",
-      "selection": {
-        "end": {
-          "column": 57,
-          "index": -1,
-          "line": 30
-        },
-        "start": {
-          "column": 57,
-          "index": -1,
-          "line": 30
+          "line": 11
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidProjects/LayoutEditor/.github/workflows/test_and_build.yml"
+  "selectedFile": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/build.gradle.kts"
 }
