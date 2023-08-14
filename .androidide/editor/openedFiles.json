@@ -1,20 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/build.gradle.kts",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/app/src/main/java/com/itsvks/layouteditor/BaseActivity.java",
       "selection": {
         "end": {
-          "column": 27,
+          "column": 0,
           "index": -1,
-          "line": 11
+          "line": 0
         },
         "start": {
-          "column": 27,
+          "column": 0,
           "index": -1,
-          "line": 11
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidProjects/LayoutEditor/app/build.gradle.kts"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/app/src/main/java/com/itsvks/layouteditor/BaseActivity.java"
 }

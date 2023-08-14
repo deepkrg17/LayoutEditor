@@ -5,76 +5,51 @@
     android:id="@+id/drawer"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    
+    <androidx.appcompat.widget.FitWindowsFrameLayout
         android:background="?android:attr/colorBackground"
         android:id="@+id/content"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:transitionGroup="true">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                style="?attr/collapsingToolbarLayoutLargeStyle"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:elevation="0dp"
-                    app:title="@string/projects"
-                    app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-      
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:indicatorColor="?colorPrimaryDark" />
-
-        <com.itsvks.editor.view.GridRecyclerView
-            android:id="@+id/project_list"
-            android:layout_width="match_parent"
+        android:layout_width="match_parent">
+        
+        <androidx.appcompat.widget.FitWindowsLinearLayout
+            android:background="?android:attr/colorBackground"
             android:layout_height="match_parent"
-            android:transitionGroup="true"
-            android:layoutAnimation="@anim/grid_layout_animation_from_bottom"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            style="@style/Widget.Material3.BottomAppBar"
-            app:navigationIcon="@drawable/menu"
-            app:menu="@menu/bottom_app_bar"
-            app:hideOnScroll="true" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab"
-            app:srcCompat="@drawable/plus"
-            app:layout_anchor="@id/bottomAppBar" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+            android:orientation="vertical">
+            
+            <com.google.android.material.appbar.AppBarLayout
+                android:fitsSystemWindows="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+                
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/topAppBar"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_width="match_parent"/>
+                
+            
+            </com.google.android.material.appbar.AppBarLayout>
+            
+            <androidx.appcompat.widget.FitWindowsFrameLayout
+                android:id="@+id/main_fragment"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            
+        
+        </androidx.appcompat.widget.FitWindowsLinearLayout>
+        
+    
+    </androidx.appcompat.widget.FitWindowsFrameLayout>
+    
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_gravity="start"
         android:layout_height="match_parent"
         android:layout_width="300dp"
-        app:headerLayout="@layout/layout_navigation_header"
-        app:menu="@menu/home_navigation" />
+        app:headerLayout="@layout/menu_header"
+        app:menu="@menu/menu_home"/>
+    
 
 </androidx.drawerlayout.widget.DrawerLayout>

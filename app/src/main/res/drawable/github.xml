@@ -4,8 +4,8 @@
 	android:height="24dp"
 	android:viewportHeight="24"
 	android:viewportWidth="24"
-	android:tint="?android:colorControlNormal"
-	android:autoMirrored="true">
+	android:autoMirrored="true"
+    android:tint="?attr/colorControlNormal">
 
 		<path
 			android:fillColor="#ff000000"
