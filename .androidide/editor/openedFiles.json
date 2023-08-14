@@ -1,7 +1,22 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/app/src/main/java/com/itsvks/layouteditor/BaseActivity.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/.gitignore",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": -1,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": -1,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/build.gradle",
       "selection": {
         "end": {
           "column": 0,
@@ -16,5 +31,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/app/src/main/java/com/itsvks/layouteditor/BaseActivity.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LayoutEditor/.gitignore"
 }
