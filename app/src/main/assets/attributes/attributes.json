@@ -201,6 +201,13 @@
                 "vertical"
             ],
             "defaultValue": "-1"
+        },
+        {
+            "name": "android:weightSum",
+            "methodName": "setWeightSum",
+            "className": "layouts.LinearLayoutCaller",
+            "attributeName": "android:weightSum",
+            "argumentType": "float"
         }
     ],
     "androidx.appcompat.widget.LinearLayoutCompat": [
