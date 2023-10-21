@@ -89,7 +89,7 @@
         android:ellipsize="end"
         android:text="Palette"
         android:textSize="15sp"
-        android:paddingStart="8dp"
+        android:paddingStart="5dp"
         android:paddingTop="8dp"
         android:singleLine="true" />
 
@@ -104,7 +104,7 @@
         android:text="Common"
         android:textSize="12sp"
         android:ellipsize="end"
-        android:paddingStart="8dp"
+        android:paddingStart="5dp"
         android:paddingBottom="8dp"
         android:singleLine="true" />
 

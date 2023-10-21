@@ -186,26 +186,26 @@ public class EditorActivity extends BaseActivity {
         new DrawerLayout.SimpleDrawerListener() {
 
           @Override
-          public void onDrawerStateChanged(int arg0) {
-            super.onDrawerStateChanged(arg0);
+          public void onDrawerStateChanged(int state) {
+            super.onDrawerStateChanged(state);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerSlide(View arg0, float arg1) {
-            super.onDrawerSlide(arg0, arg1);
+          public void onDrawerSlide(View v, float slideOffset) {
+            super.onDrawerSlide(v, slideOffset);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerClosed(View arg0) {
-            super.onDrawerClosed(arg0);
+          public void onDrawerClosed(View v) {
+            super.onDrawerClosed(v);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerOpened(View arg0) {
-            super.onDrawerOpened(arg0);
+          public void onDrawerOpened(View v) {
+            super.onDrawerOpened(v);
             undoRedo.updateButtons();
           }
         });
