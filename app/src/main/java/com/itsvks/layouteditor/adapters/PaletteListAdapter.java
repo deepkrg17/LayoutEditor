@@ -47,7 +47,6 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
               if (ViewCompat.startDragAndDrop(
                   v, null, new View.DragShadowBuilder(v), widgetItem, 0)) {
                 drawerLayout.closeDrawers();
-                VibrateUtils.vibrate(100);
               }
               return true;
             });
