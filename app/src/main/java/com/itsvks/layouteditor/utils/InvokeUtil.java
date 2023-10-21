@@ -64,4 +64,12 @@ public class InvokeUtil {
 
     return 0;
   }
+
+  public static String getSuperClassName(String clazz) {
+    try {
+      return Class.forName(clazz).getSuperclass().getName();
+    } catch (ClassNotFoundException e) {
+      return null;
+    }
+  }
 }

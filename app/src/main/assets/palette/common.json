@@ -1,6 +1,6 @@
 [
     {
-        "name": "LinearLayout (horizontal)",
+        "name": "LinearLayout (H)",
         "className": "com.itsvks.layouteditor.editor.palette.layouts.LinearLayoutDesign",
         "iconName": "ic_palette_linear_layout_horz",
         "defaultAttributes": {
@@ -10,7 +10,7 @@
         }
     },
     {
-        "name": "LinearLayout (vertical)",
+        "name": "LinearLayout (V)",
         "className": "com.itsvks.layouteditor.editor.palette.layouts.LinearLayoutDesign",
         "iconName": "ic_palette_linear_layout_vert",
         "defaultAttributes": {
@@ -21,6 +21,16 @@
     },
     {
         "name": "ScrollView (unable to scroll in the editor)",
+        "className": "com.itsvks.layouteditor.editor.palette.containers.ScrollViewDesign",
+        "iconName": "ic_palette_scroll_view",
+        "defaultAttributes": {
+            "android:layout_height": "match_parent",
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    },
+  {
+        "name": "HorizontalScrollView (unable to scroll in the editor)",
         "className": "com.itsvks.layouteditor.editor.palette.containers.ScrollViewDesign",
         "iconName": "ic_palette_scroll_view",
         "defaultAttributes": {
