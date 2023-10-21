@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,12 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.tabs.TabLayout;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.activities.EditorActivity;
-import com.itsvks.layouteditor.adapters.WidgetListAdapter;
+import com.itsvks.layouteditor.adapters.PaletteListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
 import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.editor.DeviceConfiguration;
@@ -47,12 +44,9 @@ import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
-import java.io.InputStream;
-import java.util.HashMap;
 
 @SuppressLint("UnsafeOptInUsageError")
-public class EditorActivity extends BaseActivity
-    implements WidgetListAdapter.WidgetListClickListener {
+public class EditorActivity extends BaseActivity {
 
   public static final String ACTION_OPEN = "com.itsvks.layouteditor.open";
   public static final int PICK_XML_FILE_REQUEST = 2255;
@@ -110,7 +104,7 @@ public class EditorActivity extends BaseActivity
     setupDrawerLayout();
     setupStructureView();
 
-    setupDrawerTab();
+    setupDrawerNavigationRail();
     if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
       binding.editorLayout.loadLayoutFromParser(project.getLayout());
     }
@@ -231,62 +225,33 @@ public class EditorActivity extends BaseActivity
         });
   }
 
-  private void setupDrawerTab() {
-    addDrawerTab(Constants.TAB_TITLE_COMMON);
-    addDrawerTab(Constants.TAB_TITLE_TEXT);
-    addDrawerTab(Constants.TAB_TITLE_BUTTONS);
-    addDrawerTab(Constants.TAB_TITLE_WIDGETS);
-    addDrawerTab(Constants.TAB_TITLE_LAYOUTS);
-    addDrawerTab(Constants.TAB_TITLE_CONTAINERS);
-    // addDrawerTab(Constants.TAB_TITLE_GOOGLE);
-    addDrawerTab(Constants.TAB_TITLE_LEGACY);
-    binding.tabLayout.addOnTabSelectedListener(
-        new TabLayout.OnTabSelectedListener() {
+  private void setupDrawerNavigationRail() {
+    var menu = binding.navigation.getMenu();
+    menu.add(Menu.NONE, 0, Menu.NONE, Constants.TAB_TITLE_COMMON).setIcon(R.drawable.android);
+    menu.add(Menu.NONE, 1, Menu.NONE, Constants.TAB_TITLE_TEXT)
+        .setIcon(R.mipmap.ic_palette_text_view);
+    menu.add(Menu.NONE, 2, Menu.NONE, Constants.TAB_TITLE_BUTTONS)
+        .setIcon(R.mipmap.ic_palette_button);
+    menu.add(Menu.NONE, 3, Menu.NONE, Constants.TAB_TITLE_WIDGETS)
+        .setIcon(R.mipmap.ic_palette_view);
+    menu.add(Menu.NONE, 4, Menu.NONE, Constants.TAB_TITLE_LAYOUTS)
+        .setIcon(R.mipmap.ic_palette_relative_layout);
+    menu.add(Menu.NONE, 5, Menu.NONE, Constants.TAB_TITLE_CONTAINERS)
+        .setIcon(R.mipmap.ic_palette_view_pager);
+    menu.add(Menu.NONE, 6, Menu.NONE, Constants.TAB_TITLE_LEGACY)
+        .setIcon(R.mipmap.ic_palette_grid_layout);
 
-          @Override
-          public void onTabSelected(TabLayout.Tab tab) {
-            switch (tab.getPosition()) {
-              case 0:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_COMMON, EditorActivity.this));
-                break;
-              case 1:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_TEXT, EditorActivity.this));
-                break;
-              case 2:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_BUTTONS, EditorActivity.this));
-                break;
-              case 3:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_WIDGETS, EditorActivity.this));
-                break;
-              case 4:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_LAYOUTS, EditorActivity.this));
-                break;
-              case 5:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_CONTAINERS, EditorActivity.this));
-                break;
-              case 6:
-                binding.listView.setAdapter(
-                    new WidgetListAdapter(projectManager.PALETTE_LEGACY, EditorActivity.this));
-                break;
-            }
-          }
+    PaletteListAdapter adapter = new PaletteListAdapter(binding.drawer);
+    adapter.submitPaletteList(projectManager.getPalette(0));
 
-          @Override
-          public void onTabUnselected(TabLayout.Tab tab) {}
-
-          @Override
-          public void onTabReselected(TabLayout.Tab tab) {}
+    binding.navigation.setOnItemSelectedListener(
+        item -> {
+          adapter.submitPaletteList(projectManager.getPalette(item.getItemId()));
+          binding.title.setText(item.getTitle());
+          return true;
         });
     binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
-    binding.listView.setAdapter(new WidgetListAdapter(projectManager.PALETTE_COMMON, this));
-
+    binding.listView.setAdapter(adapter);
     IdManager.clear();
   }
 
@@ -443,17 +408,6 @@ public class EditorActivity extends BaseActivity
 
   public void updateUndoRedoBtnState() {
     new Handler(Looper.getMainLooper()).postDelayed(updateMenuIconsState, 10);
-  }
-
-  private void addDrawerTab(CharSequence title) {
-    binding.tabLayout.addTab(binding.tabLayout.newTab().setText(title));
-  }
-
-  @Override
-  public boolean onWidgetLongClicked(View view, HashMap<String, Object> widgetItem) {
-    view.startDragAndDrop(null, new View.DragShadowBuilder(view), widgetItem, 0);
-    binding.drawer.closeDrawer(GravityCompat.START);
-    return true;
   }
 
   private void showSaveMessage(boolean success) {

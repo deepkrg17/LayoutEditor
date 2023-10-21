@@ -61,54 +61,95 @@
       android:orientation="vertical" />
 
   </androidx.appcompat.widget.LinearLayoutCompat>
-
-  <androidx.appcompat.widget.LinearLayoutCompat
-    android:background="?attr/colorSurface"
-    android:layout_gravity="start"
+  
+  <com.google.android.material.navigation.NavigationView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="270dp"
-    android:orientation="vertical">
+    android:layout_gravity="start"
+    app:elevation="8dp">
 
-    <com.google.android.material.tabs.TabLayout
-      android:id="@+id/tab_layout"
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      app:tabMode="scrollable" />
+    <RelativeLayout
+      android:background="?attr/colorSurface"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent">
 
-    <HorizontalScrollView
-      android:fillViewport="true"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      <com.google.android.material.navigationrail.NavigationRailView
+        android:id="@+id/navigation"
+        android:layout_height="match_parent"
+        android:layout_width="55dp"
+        app:labelVisibilityMode="unlabeled" />
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_view"
+      <TextView
+        android:id="@+id/palette_text"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@id/navigation"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:ellipsize="end"
+        android:text="Palette"
+        android:textSize="15sp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:singleLine="true" />
+
+      <TextView
+        android:id="@+id/title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/palette_text"
+        android:layout_toEndOf="@id/navigation"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:text="Common"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:paddingStart="8dp"
+        android:paddingBottom="8dp"
+        android:singleLine="true" />
+
+      <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:layout_toEndOf="@id/navigation"
+        android:layout_below="@id/title"
+        android:fillViewport="true">
 
-    </HorizontalScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/list_view"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scrollbars="vertical" />
 
-  </androidx.appcompat.widget.LinearLayoutCompat>
+      </HorizontalScrollView>
+    </RelativeLayout>
+  </com.google.android.material.navigation.NavigationView>
 
-  <ScrollView
-    android:background="?attr/colorSurface"
-    android:fillViewport="true"
-    android:layout_gravity="end"
+  <com.google.android.material.navigation.NavigationView
+    android:layout_width="270dp"
     android:layout_height="match_parent"
-    android:layout_width="220dp"
-    android:nestedScrollingEnabled="true">
-
-    <HorizontalScrollView
-      android:layout_height="wrap_content"
-      android:layout_width="wrap_content"
+    android:layout_gravity="end"
+    app:elevation="8dp">
+  
+    <ScrollView
+      android:background="?attr/colorSurface"
+      android:fillViewport="true"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
       android:nestedScrollingEnabled="true">
 
-      <com.itsvks.layouteditor.views.StructureView
-        android:id="@+id/structure_view"
+      <HorizontalScrollView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:orientation="vertical" />
+        android:nestedScrollingEnabled="true">
 
-    </HorizontalScrollView>
-  </ScrollView>
+        <com.itsvks.layouteditor.views.StructureView
+          android:id="@+id/structure_view"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:orientation="vertical" />
+
+      </HorizontalScrollView>
+    </ScrollView>
+  </com.google.android.material.navigation.NavigationView>
 </com.itsvks.layouteditor.views.CustomDrawerLayout>

@@ -18,7 +18,7 @@
         }
     },
     {
-        "name": "LinearLayout (horizontal)",
+        "name": "LinearLayout (H)",
         "className": "com.itsvks.layouteditor.editor.palette.layouts.LinearLayoutDesign",
         "iconName": "ic_palette_linear_layout_horz",
         "defaultAttributes": {
@@ -28,7 +28,7 @@
         }
     },
     {
-        "name": "LinearLayout (vertical)",
+        "name": "LinearLayout (V)",
         "className": "com.itsvks.layouteditor.editor.palette.layouts.LinearLayoutDesign",
         "iconName": "ic_palette_linear_layout_vert",
         "defaultAttributes": {
