@@ -74,6 +74,7 @@ public class EditorActivity extends BaseActivity {
     init();
   }
 
+  @SuppressWarnings("deprecation")
   private void init() {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
 

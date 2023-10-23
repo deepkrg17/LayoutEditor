@@ -13,13 +13,14 @@ public class PreviewLayoutActivity extends BaseActivity {
 
   private ActivityPreviewLayoutBinding binding;
 
+  @SuppressWarnings("deprecation")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     binding = ActivityPreviewLayoutBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
-    ProjectFile project = getIntent().getExtras().getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class);
+    ProjectFile project = (ProjectFile) getIntent().getExtras().getParcelable(Constants.EXTRA_KEY_PROJECT);
 
     XmlLayoutParser parser = new XmlLayoutParser(this);
     parser.parseFromXml(project.getLayout(), this);

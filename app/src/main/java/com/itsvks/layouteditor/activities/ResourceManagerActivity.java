@@ -53,6 +53,7 @@ public class ResourceManagerActivity extends BaseActivity {
   private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
   private ActivityResultLauncher<String> requestPermission;
 
+  @SuppressWarnings("deprecation")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,7 +68,7 @@ public class ResourceManagerActivity extends BaseActivity {
       var extras = getIntent().getExtras();
       if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
         ProjectManager.getInstance()
-            .openProject(extras.getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class));
+            .openProject((ProjectFile) extras.getParcelable(Constants.EXTRA_KEY_PROJECT));
       }
     }
     // loadDrawables();
