@@ -91,8 +91,8 @@ public class ShowXMLActivity extends BaseActivity {
 
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     binding = null;
+    super.onDestroy();
   }
 
   private void loadDefaultThemes() throws Exception {

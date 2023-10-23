@@ -10,6 +10,7 @@ import com.itsvks.layouteditor.activities.CrashActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
@@ -26,8 +27,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
    *
    * @param myContext The application context
    */
-  public CrashHandler(Context myContext) {
-    this.myContext = myContext;
+  public CrashHandler(WeakReference<Context> myContext) {
+    this.myContext = myContext.get();
   }
 
   @Override

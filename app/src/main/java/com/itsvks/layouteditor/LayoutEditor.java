@@ -15,10 +15,9 @@ public class LayoutEditor extends Application {
   public void onCreate() {
     super.onCreate();
     sIstance = this;
-    Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(this));
-//    if (isAtLeastS() && DynamicColors.isDynamicColorAvailable()) {
-//      DynamicColors.applyToActivitiesIfAvailable(this);
-//    }
+    if (isAtLeastS() && DynamicColors.isDynamicColorAvailable()) {
+      DynamicColors.applyToActivitiesIfAvailable(this);
+    }
   }
 
   public Context getContext() {
