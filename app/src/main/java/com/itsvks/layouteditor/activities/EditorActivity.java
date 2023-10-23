@@ -71,25 +71,20 @@ public class EditorActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    init(savedInstanceState);
+    init();
   }
 
-  @Override
-  protected void onSaveInstanceState(Bundle outstate) {
-    super.onSaveInstanceState(outstate);
-    outstate.putParcelable("project", project);
-  }
-
-  @SuppressWarnings("deprecation")
-  private void init(Bundle savedInstanceState) {
+  private void init() {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
 
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
     projectManager = ProjectManager.getInstance();
-    if (savedInstanceState != null && savedInstanceState.getParcelable("project") != null) {
-      projectManager.openProject(savedInstanceState.getParcelable("project"));
+    var extras = getIntent().getExtras();
+    if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
+      projectManager.openProject(
+          extras.getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class));
     }
     project = projectManager.getOpenedProject();
 
@@ -295,7 +290,9 @@ public class EditorActivity extends BaseActivity {
         return true;
       case R.id.resources_manager:
         saveXml();
-        startActivity(new Intent(this, ResourceManagerActivity.class));
+        startActivity(
+            new Intent(this, ResourceManagerActivity.class)
+                .putExtra(Constants.EXTRA_KEY_PROJECT, project));
 
         return true;
       case R.id.preview:
@@ -303,7 +300,9 @@ public class EditorActivity extends BaseActivity {
         if (result.isEmpty()) showNothingDialog();
         else {
           saveXml();
-          startActivity(new Intent(this, PreviewLayoutActivity.class));
+          startActivity(
+              new Intent(this, PreviewLayoutActivity.class)
+                  .putExtra(Constants.EXTRA_KEY_PROJECT, project));
         }
         return true;
       case R.id.export_xml:

@@ -34,6 +34,7 @@ import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import java.io.File;
@@ -246,10 +247,9 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
   private void openProject(View v, int position) {
     Intent intent = new Intent(v.getContext(), EditorActivity.class);
 
-    ProjectManager.getInstance().openProject(projects.get(position));
-
-    // intent.putExtra(EditorActivity.EXTRA_KEY_PROJECT, projects.get(position));
+    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects.get(position));
     intent.setAction(EditorActivity.ACTION_OPEN);
+
     final String projectDir =
         FileUtil.getPackageDataDir(LayoutEditor.getInstance().getContext())
             + "/projects/"
@@ -267,7 +267,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
   private void previewLayout(View v, int position) {
     Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
-    ProjectManager.getInstance().openProject(projects.get(position));
+    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects.get(position));
     if (projects.get(position).getLayout().isEmpty()) {
       SBUtils.make(v, "Project is empty...").setFadeAnimation().showAsError();
     } else v.getContext().startActivity(intent);
