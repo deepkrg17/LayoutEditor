@@ -83,8 +83,8 @@ public class EditorActivity extends BaseActivity {
     projectManager = ProjectManager.getInstance();
     var extras = getIntent().getExtras();
     if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
-      projectManager.openProject(
-          extras.getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class));
+      ProjectFile projectFile = (ProjectFile) extras.getParcelable(Constants.EXTRA_KEY_PROJECT);
+      projectManager.openProject(projectFile);
     }
     project = projectManager.getOpenedProject();
 
