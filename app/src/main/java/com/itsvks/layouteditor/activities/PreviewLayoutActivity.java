@@ -1,12 +1,11 @@
 package com.itsvks.layouteditor.activities;
 
 import android.os.Bundle;
-
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.managers.ProjectManager;
 import com.itsvks.layouteditor.databinding.ActivityPreviewLayoutBinding;
 import com.itsvks.layouteditor.tools.XmlLayoutParser;
+import com.itsvks.layouteditor.utils.Constants;
 
 public class PreviewLayoutActivity extends BaseActivity {
 
@@ -20,7 +19,7 @@ public class PreviewLayoutActivity extends BaseActivity {
     binding = ActivityPreviewLayoutBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
-    ProjectFile project = ProjectManager.getInstance().getOpenedProject();
+    ProjectFile project = getIntent().getExtras().getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class);
 
     XmlLayoutParser parser = new XmlLayoutParser(this);
     parser.parseFromXml(project.getLayout(), this);

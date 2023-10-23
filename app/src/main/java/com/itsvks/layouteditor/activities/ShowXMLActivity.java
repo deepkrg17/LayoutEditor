@@ -24,7 +24,6 @@ import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry;
 import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry;
 import io.github.rosemoe.sora.langs.textmate.registry.model.ThemeModel;
 import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver;
-import io.github.rosemoe.sora.widget.SymbolInputView;
 import org.eclipse.tm4e.core.registry.IThemeSource;
 
 public class ShowXMLActivity extends BaseActivity {
@@ -45,10 +44,7 @@ public class ShowXMLActivity extends BaseActivity {
     setSupportActionBar(binding.topAppBar);
     getSupportActionBar().setTitle(R.string.xml_preview);
 
-    binding.topAppBar.setNavigationOnClickListener(
-        v -> {
-          super.onBackPressed();
-        });
+    binding.topAppBar.setNavigationOnClickListener(v -> super.onBackPressed());
 
     binding.editor.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
     binding.editor.setTypefaceText(jetBrainsMono());
@@ -56,7 +52,7 @@ public class ShowXMLActivity extends BaseActivity {
     binding.editor.setEditable(false);
     // binding.editor.setColorScheme(new SchemeLight());
     try {
-      
+
       loadDefaultThemes();
       ThemeRegistry.getInstance().setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
       loadDefaultLanguages();
@@ -173,7 +169,6 @@ public class ShowXMLActivity extends BaseActivity {
                     case 4:
                       ThemeRegistry.getInstance().setTheme("solarized_drak");
                       break;
-                    
                   }
                 } catch (Exception e) {
                   e.printStackTrace();

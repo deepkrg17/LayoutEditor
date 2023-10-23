@@ -71,25 +71,20 @@ public class EditorActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    init(savedInstanceState);
+    init();
   }
 
-  @Override
-  protected void onSaveInstanceState(Bundle outstate) {
-    super.onSaveInstanceState(outstate);
-    outstate.putParcelable("project", project);
-  }
-
-  @SuppressWarnings("deprecation")
-  private void init(Bundle savedInstanceState) {
+  private void init() {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
 
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
     projectManager = ProjectManager.getInstance();
-    if (savedInstanceState != null && savedInstanceState.getParcelable("project") != null) {
-      projectManager.openProject(savedInstanceState.getParcelable("project"));
+    var extras = getIntent().getExtras();
+    if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
+      projectManager.openProject(
+          extras.getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class));
     }
     project = projectManager.getOpenedProject();
 
@@ -186,26 +181,26 @@ public class EditorActivity extends BaseActivity {
         new DrawerLayout.SimpleDrawerListener() {
 
           @Override
-          public void onDrawerStateChanged(int arg0) {
-            super.onDrawerStateChanged(arg0);
+          public void onDrawerStateChanged(int state) {
+            super.onDrawerStateChanged(state);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerSlide(View arg0, float arg1) {
-            super.onDrawerSlide(arg0, arg1);
+          public void onDrawerSlide(View v, float slideOffset) {
+            super.onDrawerSlide(v, slideOffset);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerClosed(View arg0) {
-            super.onDrawerClosed(arg0);
+          public void onDrawerClosed(View v) {
+            super.onDrawerClosed(v);
             undoRedo.updateButtons();
           }
 
           @Override
-          public void onDrawerOpened(View arg0) {
-            super.onDrawerOpened(arg0);
+          public void onDrawerOpened(View v) {
+            super.onDrawerOpened(v);
             undoRedo.updateButtons();
           }
         });
@@ -295,7 +290,9 @@ public class EditorActivity extends BaseActivity {
         return true;
       case R.id.resources_manager:
         saveXml();
-        startActivity(new Intent(this, ResourceManagerActivity.class));
+        startActivity(
+            new Intent(this, ResourceManagerActivity.class)
+                .putExtra(Constants.EXTRA_KEY_PROJECT, project));
 
         return true;
       case R.id.preview:
@@ -303,7 +300,9 @@ public class EditorActivity extends BaseActivity {
         if (result.isEmpty()) showNothingDialog();
         else {
           saveXml();
-          startActivity(new Intent(this, PreviewLayoutActivity.class));
+          startActivity(
+              new Intent(this, PreviewLayoutActivity.class)
+                  .putExtra(Constants.EXTRA_KEY_PROJECT, project));
         }
         return true;
       case R.id.export_xml:

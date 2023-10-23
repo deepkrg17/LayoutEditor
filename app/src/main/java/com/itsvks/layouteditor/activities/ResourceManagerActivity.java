@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
+import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
@@ -32,6 +33,7 @@ import com.itsvks.layouteditor.fragments.resources.DrawableFragment;
 import com.itsvks.layouteditor.fragments.resources.FontFragment;
 import com.itsvks.layouteditor.fragments.resources.StringFragment;
 import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FilePicker;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
@@ -59,11 +61,15 @@ public class ResourceManagerActivity extends BaseActivity {
     setSupportActionBar(binding.topAppBar);
     getSupportActionBar().setTitle(R.string.res_manager);
 
-    binding.topAppBar.setNavigationOnClickListener(
-        __ -> {
-          onBackPressed();
-        });
+    binding.topAppBar.setNavigationOnClickListener(__ -> onBackPressed());
 
+    if (ProjectManager.getInstance().getOpenedProject() == null) {
+      var extras = getIntent().getExtras();
+      if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
+        ProjectManager.getInstance()
+            .openProject(extras.getParcelable(Constants.EXTRA_KEY_PROJECT, ProjectFile.class));
+      }
+    }
     // loadDrawables();
     adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
     requestPermission =
