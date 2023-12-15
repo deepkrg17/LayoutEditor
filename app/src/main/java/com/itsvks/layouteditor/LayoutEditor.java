@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.color.DynamicColors;
+import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.managers.SharedPreferenceManager;
 
 public class LayoutEditor extends Application {
 
@@ -15,7 +17,10 @@ public class LayoutEditor extends Application {
   public void onCreate() {
     super.onCreate();
     sIstance = this;
-    if (isAtLeastS() && DynamicColors.isDynamicColorAvailable()) {
+    SharedPreferenceManager.setContext(this);
+        
+    AppCompatDelegate.setDefaultNightMode(SharedPreferenceManager.loadPrefInt(getString(R.string.choose_theme), -1));
+    if (SharedPreferenceManager.loadPrefBool(R.string.dynamic_colors, false) && isAtLeastS() && DynamicColors.isDynamicColorAvailable()) {
       DynamicColors.applyToActivitiesIfAvailable(this);
     }
   }
