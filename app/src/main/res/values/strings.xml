@@ -58,6 +58,7 @@
   <string name="msg_feature_not_available">This feature is not available yet. Will be available soon.</string>
   <string name="nothing">Nothing&#8230;</string>
   <string name="msg_add_some_widgets">Add some widgets</string>
+  <string name="note">Note</string>
   <string name="okay">Okay</string>
   <string name="app_crashed">App crashed</string>
   <string name="close">Close</string>
@@ -75,15 +76,17 @@
   <string name="theme_dark">Dark</string>
   <string name="theme_light">Light</string>
   <string name="theme_auto">Auto</string>
-  <string name="msg_choose_theme">Choose theme</string>
-  <string name="theme">Theme</string>
+  <string name="choose_theme">Choose theme</string>
+  <string name="summary_choose_theme">Apply theme to the app.</string>
   <string name="dynamic_colors">Use Dynamic Colors</string>
   <string name="summary_dynamic_colors">This feature is only for Android 12+.</string>
+  <string name="msg_dynamic_colors_dialog">This will close the application with all tasks!.</string>
   <string name="export_layout">Export Layout</string>
   <string name="invalid_data_intent">Invalid Data returned by Intent.</string>
   <string name="select_from_storage">Select file from Primary Storage.</string>
   <string name="msg_first_letter_not_number">The first letter must not be a number!</string>
   <string name="msg_space_not_allowed">The name must not contain spaces.</string>
+  <string name="confirm">Confirm</string>
   <string name="confirmation">Confirmation</string>
   <string name="msg_confirmation">Do you want to save this project?</string>
   <string name="do_not_save">Don\'t Save</string>
@@ -101,6 +104,7 @@
   <string name="select">Select</string>
   <string name="palette">Palette</string>
   <string name="common">Common</string>
+  <string name="ui">UI</string>
   <string name="texts">Texts</string>
   <string name="buttons">Buttons</string>
   <string name="widgets">Widgets</string>
