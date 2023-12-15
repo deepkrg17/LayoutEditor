@@ -16,16 +16,22 @@ import java.lang.ref.WeakReference;
 public class BaseActivity extends AppCompatActivity {
 
   public LayoutEditor app;
+  private static BaseActivity sIstance;
   private WeakReference<Context> ctx;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // LogSender.startLogging(this);
     super.onCreate(savedInstanceState);
+    sIstance = this;
     ctx = new WeakReference<>(this);
     Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(ctx));
     app = LayoutEditor.getInstance();
     getWindow().setStatusBarColor(SurfaceColors.SURFACE_0.getColor(this));
+  }
+    
+  public static BaseActivity getInstance() {
+      return sIstance;
   }
 
   public void openUrl(String url) {
