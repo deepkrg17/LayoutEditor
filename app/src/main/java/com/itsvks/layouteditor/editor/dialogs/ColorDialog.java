@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.SeekBar;
@@ -25,14 +26,13 @@ public class ColorDialog extends AttributeDialog
 
   // Declaring Views
   private ColorView colorPreview;
-  private MaterialTextView textColorPreview;
   private LayoutColorDialogBinding binding;
   private AppCompatSeekBar seekAlpha;
   private AppCompatSeekBar seekRed;
   private AppCompatSeekBar seekGreen;
   private AppCompatSeekBar seekBlue;
-  private TextInputLayout inputLayout;
-  private TextInputEditText editText;
+  private TextInputLayout inputLayout, aInputLayout, rInputLayout, gInputLayout, bInputLayout;
+  private TextInputEditText editText, aInputEditText, rInputEditText, gInputEditText, bInputEditText;
 
   /**
    * Constructor of ColorDialog
@@ -51,13 +51,21 @@ public class ColorDialog extends AttributeDialog
 
     // Initializing Views
     colorPreview = binding.colorPreview;
-    textColorPreview = binding.textColorPreview;
     seekAlpha = binding.seekAlpha;
     seekRed = binding.seekRed;
     seekGreen = binding.seekGreen;
     seekBlue = binding.seekBlue;
+    
     inputLayout = dialogView.findViewById(R.id.textinput_layout);
+    aInputLayout = dialogView.findViewById(R.id.ainput_layout);
+    rInputLayout = dialogView.findViewById(R.id.rinput_layout);
+    gInputLayout = dialogView.findViewById(R.id.ginput_layout);
+    bInputLayout = dialogView.findViewById(R.id.binput_layout);
     editText = dialogView.findViewById(R.id.textinput_edittext);
+    aInputEditText = dialogView.findViewById(R.id.ainput_edittext);
+    rInputEditText = dialogView.findViewById(R.id.rinput_edittext);
+    gInputEditText = dialogView.findViewById(R.id.ginput_edittext);
+    bInputEditText = dialogView.findViewById(R.id.binput_edittext);
 
     // Setting Seekbar Progress and Listener
     setSeekbarProgressAndListener(seekAlpha, 255);
@@ -95,9 +103,13 @@ public class ColorDialog extends AttributeDialog
     inputLayout.setHint("Enter custom HEX code");
     inputLayout.setPrefixText("#");
     editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(8)});
+    aInputEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+    rInputEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+    gInputEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+    bInputEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
     if (!savedValue.equals("")) {
       colorPreview.setColor(Color.parseColor(savedValue));
-      updateText(colorPreview.getColor());
+      updateARGB(colorPreview.getColor());
       updateSeekbars(colorPreview.getColor());
       updateEditText();
     }
@@ -119,6 +131,90 @@ public class ColorDialog extends AttributeDialog
             checkHexErrors(editText.getText().toString());
           }
         });
+    aInputEditText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {
+              final String str = p1.toString();
+              if (!TextUtils.isEmpty(str)) {
+                  final Integer inte = (!(str != "") && Integer.parseInt(str) > 255) ? 255 : Integer.parseInt(str);
+                  //aInputEditText.setText(Integer.parseInt(str) > 255 ? "255" : str);
+                  colorPreview.setAlpha(inte);
+              }
+              updateARGB(colorPreview.getColor());
+              updateEditText();
+          }
+
+          @Override
+          public void afterTextChanged(Editable p1) {}
+        });
+    rInputEditText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {
+              final String str = p1.toString();
+              if (!TextUtils.isEmpty(str)) {
+                  final Integer inte = (!(str != "") && Integer.parseInt(str) > 255) ? 255 : Integer.parseInt(str);
+                  //rInputEditText.setText(Integer.parseInt(str) > 255 ? "255" : str);
+                  colorPreview.setRed(inte);
+              }
+              updateARGB(colorPreview.getColor());
+              updateEditText();
+          }
+
+          @Override
+          public void afterTextChanged(Editable p1) {}
+        });
+    gInputEditText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {
+              final String str = p1.toString();
+              if (!TextUtils.isEmpty(str)) {
+                  final Integer inte = (!(str != "") && Integer.parseInt(str) > 255) ? 255 : Integer.parseInt(str);
+                  //gInputEditText.setText(Integer.parseInt(str) > 255 ? "255" : str);
+                  colorPreview.setGreen(inte);
+              }
+              updateARGB(colorPreview.getColor());
+              updateEditText();
+          }
+
+          @Override
+          public void afterTextChanged(Editable p1) {}
+        });
+    bInputEditText.addTextChangedListener(
+        new TextWatcher() {
+
+          @Override
+          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+
+          @Override
+          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {
+              final String str = p1.toString();
+              if (!TextUtils.isEmpty(str)) {
+                  final Integer inte = (!(str != "") && Integer.parseInt(str) > 255) ? 255 : Integer.parseInt(str);
+                  //bInputEditText.setText(Integer.parseInt(str) > 255 ? "255" : str);
+                  colorPreview.setBlue(inte);
+              }
+              updateARGB(colorPreview.getColor());
+              updateEditText();
+          }
+
+          @Override
+          public void afterTextChanged(Editable p1) {}
+        });
   }
 
   /** Called when Save button is clicked */
@@ -136,7 +232,7 @@ public class ColorDialog extends AttributeDialog
     if (Pattern.matches("[a-fA-F0-9]{6}", hex) || Pattern.matches("[a-fA-F0-9]{8}", hex)) {
       colorPreview.setColor(Color.parseColor("#" + hex));
       updateSeekbars(colorPreview.getColor());
-      updateText(colorPreview.getColor());
+      updateARGB(colorPreview.getColor());
       inputLayout.setErrorEnabled(false);
       inputLayout.setError("");
       setEnabled(true);
@@ -148,17 +244,23 @@ public class ColorDialog extends AttributeDialog
   }
 
   /**
-   * Updates TextView with Color Values
+   * Updates ARGB with Color Values
    *
    * @param color Color to be set
    */
-  private void updateText(int color) {
+  private void updateARGB(int color) {
     int a = Color.alpha(color);
     int r = Color.red(color);
     int g = Color.green(color);
     int b = Color.blue(color);
-    textColorPreview.setText(a + ", " + r + ", " + g + ", " + b);
-    textColorPreview.setTextColor(Color.luminance(color) < 0.5f ? Color.WHITE : Color.DKGRAY);
+//    aInputEditText.setText(String.valueOf(a));
+//    aInputEditText.setTextColor(Color.luminance(a) < 0.5f ? Color.WHITE : Color.DKGRAY);
+//    rInputEditText.setText(String.valueOf(r));
+//    rInputEditText.setTextColor(Color.luminance(r) < 0.5f ? Color.WHITE : Color.DKGRAY);
+//    gInputEditText.setText(String.valueOf(g));
+//    gInputEditText.setTextColor(Color.luminance(g) < 0.5f ? Color.WHITE : Color.DKGRAY);
+//    bInputEditText.setText(String.valueOf(b));
+//    bInputEditText.setTextColor(Color.luminance(b) < 0.5f ? Color.WHITE : Color.DKGRAY);
   }
 
   /**
@@ -196,25 +298,25 @@ public class ColorDialog extends AttributeDialog
       switch (seek.getId()) {
         case R.id.seek_alpha:
           colorPreview.setAlpha(progress);
-          updateText(colorPreview.getColor());
+          updateARGB(colorPreview.getColor());
           updateEditText();
           break;
 
         case R.id.seek_red:
           colorPreview.setRed(progress);
-          updateText(colorPreview.getColor());
+          updateARGB(colorPreview.getColor());
           updateEditText();
           break;
 
         case R.id.seek_green:
           colorPreview.setGreen(progress);
-          updateText(colorPreview.getColor());
+          updateARGB(colorPreview.getColor());
           updateEditText();
           break;
 
         case R.id.seek_blue:
           colorPreview.setBlue(progress);
-          updateText(colorPreview.getColor());
+          updateARGB(colorPreview.getColor());
           updateEditText();
           break;
       }
