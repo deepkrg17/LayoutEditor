@@ -25,7 +25,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.adapters.ResourcesPagerAdapter;
+import com.itsvks.layouteditor.adapters.PagerAdapter;
 import com.itsvks.layouteditor.adapters.models.DrawableFile;
 import com.itsvks.layouteditor.databinding.ActivityResourceManagerBinding;
 import com.itsvks.layouteditor.fragments.resources.ColorFragment;
@@ -46,7 +46,7 @@ public class ResourceManagerActivity extends BaseActivity {
 
   private ActivityResourceManagerBinding binding;
   private List<DrawableFile> drawableList = new ArrayList<>();
-  private ResourcesPagerAdapter adapter;
+  private PagerAdapter adapter;
   private FilePicker photoPicker;
   private FilePicker fontPicker;
   private FilePicker xmlPicker;
@@ -72,15 +72,18 @@ public class ResourceManagerActivity extends BaseActivity {
       }
     }
     // loadDrawables();
-    adapter = new ResourcesPagerAdapter(getSupportFragmentManager(), getLifecycle());
+    adapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle());
+    adapter.setup(binding.pager, binding.tabLayout);
+    adapter.addFragmentToAdapter(new DrawableFragment(drawableList), getString(R.string.drawable), getDrawable(R.drawable.image_outline));
+    adapter.addFragmentToAdapter(new ColorFragment(), getString(R.string.color), getDrawable(R.drawable.palette_outline));
+    adapter.addFragmentToAdapter(new StringFragment(), getString(R.string.string), getDrawable(R.drawable.format_letter_case));
+    adapter.addFragmentToAdapter(new FontFragment(), getString(R.string.font), getDrawable(R.drawable.format_font));
+    adapter.setupPager(ViewPager2.ORIENTATION_HORIZONTAL);
+    adapter.setupMediatorWithIcon();
+        
     requestPermission =
         registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), this::onRequestPermission);
-
-    adapter.addFragment(new DrawableFragment(drawableList));
-    adapter.addFragment(new ColorFragment());
-    adapter.addFragment(new StringFragment());
-    adapter.addFragment(new FontFragment());
     photoPicker =
         new FilePicker(this) {
           @Override
@@ -103,46 +106,6 @@ public class ResourceManagerActivity extends BaseActivity {
           }
         };
     pickMedia = registerForActivityResult(new PickVisualMedia(), this::onPickPhoto);
-
-    binding.pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-    binding.pager.setAdapter(adapter);
-
-    TabLayoutMediator mediator =
-        new TabLayoutMediator(
-            binding.tabLayout,
-            binding.pager,
-            new TabLayoutMediator.TabConfigurationStrategy() {
-              @Override
-              public void onConfigureTab(TabLayout.Tab tab, int position) {
-                switch (position) {
-                  case 0:
-                    tab.setText(R.string.drawable);
-                    tab.setIcon(
-                        AppCompatResources.getDrawable(
-                            ResourceManagerActivity.this, R.drawable.image_outline));
-                    break;
-                  case 1:
-                    tab.setText(R.string.color);
-                    tab.setIcon(
-                        AppCompatResources.getDrawable(
-                            ResourceManagerActivity.this, R.drawable.palette_outline));
-                    break;
-                  case 2:
-                    tab.setText(R.string.string);
-                    tab.setIcon(
-                        AppCompatResources.getDrawable(
-                            ResourceManagerActivity.this, R.drawable.format_letter_case));
-                    break;
-                  case 3:
-                    tab.setText(R.string.font);
-                    tab.setIcon(
-                        AppCompatResources.getDrawable(
-                            ResourceManagerActivity.this, R.drawable.format_font));
-                    break;
-                }
-              }
-            });
-    mediator.attach();
   }
 
   @Override
