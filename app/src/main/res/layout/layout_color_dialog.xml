@@ -23,89 +23,94 @@
                 android:layout_width="match_parent"
                 android:id="@+id/color_preview" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_height="wrap_content"
+                android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="10dp"
+                android:gravity="center">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="A"
                     android:id="@+id/ainput_layout"
-                    app:boxCornerRadiusBottomStart="@dimen/cornerHigh"
-                    app:boxCornerRadiusTopStart="@dimen/cornerHigh"
+                    app:hintAnimationEnabled="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     app:boxCornerRadiusBottomEnd="0dp"
-                    app:boxCornerRadiusTopEnd="0dp">
+                    app:boxCornerRadiusBottomStart="@dimen/cornerHigh"
+                    app:boxCornerRadiusTopEnd="0dp"
+                    app:boxCornerRadiusTopStart="@dimen/cornerHigh">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/ainput_edittext"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:inputType="number"
-                        android:id="@+id/ainput_edittext" />
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+        
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="R"
                     android:id="@+id/rinput_layout"
+                    app:hintAnimationEnabled="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     app:boxCornerRadiusBottomEnd="0dp"
                     app:boxCornerRadiusBottomStart="0dp"
                     app:boxCornerRadiusTopEnd="0dp"
                     app:boxCornerRadiusTopStart="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/rinput_edittext"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:inputType="number"
-                        android:id="@+id/rinput_edittext" />
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+        
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="G"
                     android:id="@+id/ginput_layout"
+                    app:hintAnimationEnabled="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     app:boxCornerRadiusBottomEnd="0dp"
                     app:boxCornerRadiusBottomStart="0dp"
                     app:boxCornerRadiusTopEnd="0dp"
                     app:boxCornerRadiusTopStart="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/ginput_edittext"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:inputType="number"
-                        android:id="@+id/ginput_edittext" />
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+        
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="B"
                     android:id="@+id/binput_layout"
+                    app:hintAnimationEnabled="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     app:boxCornerRadiusBottomEnd="@dimen/cornerHigh"
-                    app:boxCornerRadiusTopEnd="@dimen/cornerHigh"
                     app:boxCornerRadiusBottomStart="0dp"
+                    app:boxCornerRadiusTopEnd="@dimen/cornerHigh"
                     app:boxCornerRadiusTopStart="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/binput_edittext"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:inputType="number"
-                        android:id="@+id/binput_edittext" />
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.cardview.widget.CardView>
 
@@ -127,7 +132,6 @@
                 android:id="@+id/seek_alpha" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -146,7 +150,6 @@
                 android:id="@+id/seek_red" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -165,7 +168,6 @@
                 android:id="@+id/seek_green" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -184,7 +186,6 @@
                 android:id="@+id/seek_blue" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
         <include
             layout="@layout/textinputlayout" />
 
