@@ -136,6 +136,15 @@ public class ColorView extends View {
   public int getColor() {
     return Color.argb(a, r, g, b);
   }
+    
+  /**
+   * Get the inverted rgb color.
+   *
+   * @return The inverted color, packed as RGB in a 32-bit int.
+   */
+  public int getInvertedRGB() {
+    return 0xFFFFFF ^ Color.rgb(r, g, b);
+  }
 
   /**
    * Get the hex value of the color.
