@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.fragments.ui;
 
+import com.itsvks.layouteditor.LayoutFile;
 import static com.itsvks.layouteditor.R.string;
 
 import android.annotation.SuppressLint;
@@ -31,6 +32,7 @@ import com.itsvks.layouteditor.adapters.ProjectListAdapter;
 import com.itsvks.layouteditor.databinding.FragmentHomeBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -146,7 +148,6 @@ public class HomeFragment extends Fragment {
 
   @SuppressLint("NotifyDataSetChanged")
   private void createProject(String name) {
-
     final String projectDir = FileUtil.getPackageDataDir(requireContext()) + "/projects/" + name;
     final String time = Calendar.getInstance().getTime().toString();
     FileUtil.makeDir(projectDir);
@@ -159,7 +160,8 @@ public class HomeFragment extends Fragment {
     FileUtil.copyFileFromAsset("default_font.ttf", projectDir + "/font");
 
     ProjectFile project = new ProjectFile(projectDir, time);
-    project.saveLayout("");
+    //((LayoutFile) getActivity().getIntent().getExtras().getParcelable(Constants.EXTRA_KEY_LAYOUT)).saveLayout("");
+    project.createDefaultLayout();
     projects.add(project);
     adapter.notifyDataSetChanged();
 
