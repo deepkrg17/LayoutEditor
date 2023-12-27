@@ -146,16 +146,16 @@ public class SharedPreferenceManager {
      * @param defaultString
      * @return Returns the stored value of 'what'
      */
-    public static String readString(Object what, Object defaultString) {
-        return sharedPreferences.getString(checkKey(what), String.valueOf(defaultString));
+    public static String readString(Object what, String defaultString) {
+        return sharedPreferences.getString(checkKey(what), (String) defaultString);
     }
     
     /**
      * @param where
      * @param what
      */
-    public static void writeString(Object where, Object what) {
-        sharedPreferences.edit().putString(checkKey(where), String.valueOf(what)).apply();
+    public static void writeString(Object where, String what) {
+        sharedPreferences.edit().putString(checkKey(where), (String) what).apply();
     }
 
     // int related methods
@@ -177,16 +177,16 @@ public class SharedPreferenceManager {
      * @param defaultInt
      * @return Returns the stored value of 'what'
      */
-    public static int readInt(Object what, Object defaultInt) {
-        return sharedPreferences.getInt(checkKey(what), Integer.parseInt(String.valueOf(defaultInt)));
+    public static int readInt(Object what, int defaultInt) {
+        return sharedPreferences.getInt(checkKey(what), (int) defaultInt);
     }
 
     /**
      * @param where
      * @param what
      */
-    public static void writeInt(Object where, Object what) {
-        sharedPreferences.edit().putInt(checkKey(where), Integer.parseInt(String.valueOf(what))).apply();
+    public static void writeInt(Object where, int what) {
+        sharedPreferences.edit().putInt(checkKey(where), (int) what).apply();
     }
 
     // double related methods
@@ -206,9 +206,9 @@ public class SharedPreferenceManager {
      * @param defaultDouble
      * @return Returns the stored value of 'what'
      */
-    public static double readDouble(Object what, Object defaultDouble) {
+    public static double readDouble(Object what, double defaultDouble) {
         if (!contains(what))
-            return Double.parseDouble(String.valueOf(defaultDouble));
+            return (double) defaultDouble;
         return Double.longBitsToDouble(readLong(what));
     }
 
@@ -216,8 +216,8 @@ public class SharedPreferenceManager {
      * @param where
      * @param what
      */
-    public static void writeDouble(Object where, Object what) {
-        writeLong(where, Double.doubleToRawLongBits(Double.parseDouble(String.valueOf(what))));
+    public static void writeDouble(Object where, double what) {
+        writeLong(where, Double.doubleToRawLongBits((double) what));
     }
 
     // float related methods
@@ -235,16 +235,16 @@ public class SharedPreferenceManager {
      * @param defaultFloat
      * @return Returns the stored value of 'what'
      */
-    public static float readFloat(Object what, Object defaultFloat) {
-        return sharedPreferences.getFloat(checkKey(what), Float.parseFloat(String.valueOf(defaultFloat)));
+    public static float readFloat(Object what, float defaultFloat) {
+        return sharedPreferences.getFloat(checkKey(what), (float) defaultFloat);
     }
 
     /**
      * @param where
      * @param what
      */
-    public static void writeFloat(Object where, Object what) {
-        sharedPreferences.edit().putFloat(checkKey(where), Float.parseFloat(String.valueOf(what))).apply();
+    public static void writeFloat(Object where, float what) {
+        sharedPreferences.edit().putFloat(checkKey(where), (float) what).apply();
     }
 
     // long related methods
@@ -262,16 +262,16 @@ public class SharedPreferenceManager {
      * @param defaultLong
      * @return Returns the stored value of 'what'
      */
-    public static long readLong(Object what, Object defaultLong) {
-        return sharedPreferences.getLong(checkKey(what), Long.parseLong(String.valueOf(defaultLong)));
+    public static long readLong(Object what, long defaultLong) {
+        return sharedPreferences.getLong(checkKey(what), (long) defaultLong);
     }
 
     /**
      * @param where
      * @param what
      */
-    public static void writeLong(Object where, Object what) {
-        sharedPreferences.edit().putLong(checkKey(where), Long.parseLong(String.valueOf(what))).apply();
+    public static void writeLong(Object where, long what) {
+        sharedPreferences.edit().putLong(checkKey(where), (long) what).apply();
     }
 
     // boolean related methods
@@ -289,13 +289,13 @@ public class SharedPreferenceManager {
      * @param defaultBoolean
      * @return Returns the stored value of 'what'
      */
-    public static boolean readBoolean(Object what, Object defaultBoolean) {
+    public static boolean readBoolean(Object what, boolean defaultBoolean) {
         /*if (defaultBoolean == true && !sharedPreferences.contains(String.valueOf(what)))
             writeBoolean(what, true);*/
         try {
-            return sharedPreferences.getBoolean(checkKey(what), Boolean.parseBoolean(String.valueOf(defaultBoolean)));
+            return sharedPreferences.getBoolean(checkKey(what), (boolean) defaultBoolean);
         } catch (java.lang.ClassCastException ex) {
-            return Boolean.parseBoolean(String.valueOf(defaultBoolean));
+            return (boolean) defaultBoolean;
         }
     }
 
@@ -303,8 +303,8 @@ public class SharedPreferenceManager {
      * @param where
      * @param what
      */
-    public static void writeBoolean(Object where, Object what) {
-        sharedPreferences.edit().putBoolean(checkKey(where), Boolean.parseBoolean(String.valueOf(what))).apply();
+    public static void writeBoolean(Object where, boolean what) {
+        sharedPreferences.edit().putBoolean(checkKey(where), (boolean) what).apply();
     }
 
     // String set methods
