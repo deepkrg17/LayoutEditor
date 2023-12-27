@@ -69,6 +69,7 @@ public class Constants {
   public static final String GITHUB_URL = "https://github.com/itsvks19/LayoutEditor";
 
   public static final String EXTRA_KEY_PROJECT = "project";
+  public static final String EXTRA_KEY_LAYOUT = "layout";
 
   static {
     gravityMap.put("left", Gravity.START);
