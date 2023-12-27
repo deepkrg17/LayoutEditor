@@ -74,17 +74,21 @@
       android:layout_width="match_parent">
 
       <com.google.android.material.navigationrail.NavigationRailView
-        android:id="@+id/navigation"
+        android:id="@+id/palette_navigation"
         android:layout_height="match_parent"
-        android:layout_width="55dp"
-        app:labelVisibilityMode="unlabeled" />
+        android:layout_width="65dp"
+        android:background="@android:color/transparent"
+        app:headerLayout="@layout/foldertablayout"
+        app:menuGravity="bottom"
+        app:labelVisibilityMode="unlabeled"
+        android:layout_alignParentTop="true" />
 
       <TextView
         android:id="@+id/palette_text"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginLeft="5dp"
-        android:layout_toEndOf="@id/navigation"
+        android:layout_toEndOf="@id/palette_navigation"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:ellipsize="end"
         android:text="Palette"
@@ -99,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_below="@id/palette_text"
-        android:layout_toEndOf="@id/navigation"
+        android:layout_toEndOf="@id/palette_navigation"
         android:textColor="?attr/colorSecondaryVariant"
         android:text="Common"
         android:textSize="12sp"
@@ -111,7 +115,7 @@
       <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toEndOf="@id/navigation"
+        android:layout_toEndOf="@id/palette_navigation"
         android:layout_below="@id/title"
         android:fillViewport="true">
 
