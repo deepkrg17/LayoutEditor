@@ -25,16 +25,6 @@ public class ProjectFile implements Parcelable {
     name = FileUtil.getLastSegmentFromPath(path);
   }
 
-  public void saveLayout(String text) {
-    File file = new File(path + "/layout/");
-
-    if (!file.exists()) {
-      FileUtil.makeDir(path + "/layout/");
-    }
-
-    FileUtil.writeFile(path + "/layout/" + "layout_main.xml", text);
-  }
-
   public String getDrawablePath() {
     return path + "/drawable/";
   }
@@ -79,8 +69,12 @@ public class ProjectFile implements Parcelable {
     return name;
   }
 
-  public String getLayout() {
-    return FileUtil.readFile(path + "/layout/" + "layout_main.xml");
+  public String getDefaultLayout() {
+    return FileUtil.readFile(path + "/layout/layout_main.xml");
+  }
+    
+  public void createDefaultLayout() {
+    FileUtil.writeFile(path + "/layout/layout_main.xml", "");
   }
 
   @Override
