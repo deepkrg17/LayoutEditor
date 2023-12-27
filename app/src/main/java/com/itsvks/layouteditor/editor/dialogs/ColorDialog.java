@@ -108,13 +108,13 @@ public class ColorDialog extends AttributeDialog
     if (!savedValue.equals("")) {
       colorPreview.setColor(Color.parseColor(savedValue));
       aEdittext.setText(String.valueOf(Color.alpha(colorPreview.getColor())));
-      aEdittext.setTextColor(Color.luminance(colorPreview.getColor()) < 0.5f ? Color.WHITE : Color.DKGRAY);
+      aEdittext.setTextColor(colorPreview.getInvertedRGB());
       rEdittext.setText(String.valueOf(Color.red(colorPreview.getColor())));
-      rEdittext.setTextColor(Color.luminance(colorPreview.getColor()) < 0.5f ? Color.WHITE : Color.DKGRAY);
+      rEdittext.setTextColor(colorPreview.getInvertedRGB());
       gEdittext.setText(String.valueOf(Color.green(colorPreview.getColor())));
-      gEdittext.setTextColor(Color.luminance(colorPreview.getColor()) < 0.5f ? Color.WHITE : Color.DKGRAY);
+      gEdittext.setTextColor(colorPreview.getInvertedRGB());
       bEdittext.setText(String.valueOf(Color.blue(colorPreview.getColor())));
-      bEdittext.setTextColor(Color.luminance(colorPreview.getColor()) < 0.5f ? Color.WHITE : Color.DKGRAY);
+      bEdittext.setTextColor(colorPreview.getInvertedRGB());
       updateARGB(colorPreview.getColor());
       updateSeekbars(colorPreview.getColor());
       updateEditText();
@@ -134,7 +134,7 @@ public class ColorDialog extends AttributeDialog
 
           @Override
           public void afterTextChanged(Editable p1) {
-            checkHexErrors(editText.getText().toString());
+            if (!editText.getText().toString().equals("")) checkHexErrors(editText.getText().toString());
           }
         });
     aEdittext.addTextChangedListener(
@@ -320,25 +320,26 @@ public class ColorDialog extends AttributeDialog
     int g = Color.green(color);
     int b = Color.blue(color);
         
-    if (!aEdittext.getText().toString().equals("") && a != Integer.parseInt(aEdittext.getText().toString())) {
+    if (a != (aEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(aEdittext.getText().toString()))) {
       aEdittext.setText(String.valueOf(a));
-      aEdittext.setTextColor(Color.luminance(a) < 0.5f ? Color.WHITE : Color.DKGRAY);
     }
 
-    if (!rEdittext.getText().toString().equals("") && r != Integer.parseInt(rEdittext.getText().toString())) {
+    if (r != (rEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(rEdittext.getText().toString()))) {
       rEdittext.setText(String.valueOf(r));
-      rEdittext.setTextColor(Color.luminance(r) < 0.5f ? Color.WHITE : Color.DKGRAY);
     }
 
-    if (!gEdittext.getText().toString().equals("") && g != Integer.parseInt(gEdittext.getText().toString())) {
+    if (g != (gEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(gEdittext.getText().toString()))) {
       gEdittext.setText(String.valueOf(g));
-      gEdittext.setTextColor(Color.luminance(g) < 0.5f ? Color.WHITE : Color.DKGRAY);
     }
 
-    if (!bEdittext.getText().toString().equals("") && b != Integer.parseInt(bEdittext.getText().toString())) {
+    if (b != (bEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(bEdittext.getText().toString()))) {
       bEdittext.setText(String.valueOf(b));
-      bEdittext.setTextColor(Color.luminance(b) < 0.5f ? Color.WHITE : Color.DKGRAY);
     }
+        
+    aEdittext.setTextColor(colorPreview.getInvertedRGB());
+    rEdittext.setTextColor(colorPreview.getInvertedRGB());
+    gEdittext.setTextColor(colorPreview.getInvertedRGB());
+    bEdittext.setTextColor(colorPreview.getInvertedRGB());
   }
 
   /**
