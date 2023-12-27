@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.LayoutEditor;
+import com.itsvks.layouteditor.LayoutFile;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
 import com.itsvks.layouteditor.R.string;
@@ -34,6 +35,7 @@ import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
 import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.SharedPreferenceManager;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
@@ -266,9 +268,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
   }
 
   private void previewLayout(View v, int position) {
+    final String layoutDir = projects.get(position).getPath() + "/layout/" + SharedPreferenceManager.loadPrefString(projects.get(position).getName(), "layout_main.xml");
+
     Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
-    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects.get(position));
-    if (projects.get(position).getLayout().isEmpty()) {
+    intent.putExtra(Constants.EXTRA_KEY_LAYOUT, new LayoutFile(layoutDir));
+    if (FileUtil.readFile(layoutDir).isEmpty()) {
       SBUtils.make(v, "Project is empty...").setFadeAnimation().showAsError();
     } else v.getContext().startActivity(intent);
   }

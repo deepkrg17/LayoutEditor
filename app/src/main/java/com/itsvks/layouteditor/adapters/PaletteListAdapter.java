@@ -17,7 +17,7 @@ import java.util.List;
 
 public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.ViewHolder> {
 
-  private List<HashMap<String, Object>> palette;
+  private List<HashMap<String, Object>> tab;
   private DrawerLayout drawerLayout;
 
   public PaletteListAdapter(DrawerLayout drawerLayout) {
@@ -32,7 +32,7 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    HashMap<String, Object> widgetItem = palette.get(position);
+    HashMap<String, Object> widgetItem = tab.get(position);
 
     var binding = holder.binding;
 
@@ -60,11 +60,11 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
 
   @Override
   public int getItemCount() {
-    return palette != null ? palette.size() : 0;
+    return tab != null ? tab.size() : 0;
   }
 
-  public void submitPaletteList(List<HashMap<String, Object>> palette) {
-    this.palette = palette;
+  public void submitPaletteList(List<HashMap<String, Object>> tab) {
+    this.tab = tab;
     notifyDataSetChanged();
   }
 

@@ -161,20 +161,31 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
     builder.setPositiveButton(
         R.string.rename,
         (di, which) -> {
-          String fontPath = project.getFontPath();
+          if (fontList
+              .get(position)
+              .getName()
+              .substring(0, fontList.get(position).getName().lastIndexOf("."))
+              .equals("default_font")) {
+            SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "font"))
+                .setFadeAnimation()
+                .setType(SBUtils.Type.INFO)
+                .show();
+          } else {
+            String fontPath = project.getFontPath();
 
-          String toPath = fontPath + editText.getText().toString() + extension;
-          File newFile = new File(toPath);
-          File oldFile = new File(fontList.get(position).getPath());
-          oldFile.renameTo(newFile);
+            String toPath = fontPath + editText.getText().toString() + extension;
+            File newFile = new File(toPath);
+            File oldFile = new File(fontList.get(position).getPath());
+            oldFile.renameTo(newFile);
 
-          String name = editText.getText().toString();
-          fontList.get(position).setPath(toPath);
-          fontList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
-          holder.fontName.setText(name);
-          holder.fontLook.setTypeface(
-              Typeface.createFromFile(new File(fontList.get(position).getPath())));
-          notifyItemChanged(position);
+            String name = editText.getText().toString();
+            fontList.get(position).setPath(toPath);
+            fontList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
+            holder.fontName.setText(name);
+            holder.fontLook.setTypeface(
+                Typeface.createFromFile(new File(fontList.get(position).getPath())));
+            notifyItemChanged(position);
+          }
         });
 
     final AlertDialog dialog = builder.create();

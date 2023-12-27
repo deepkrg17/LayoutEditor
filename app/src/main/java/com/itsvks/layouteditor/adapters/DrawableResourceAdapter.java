@@ -219,26 +219,37 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
     builder.setPositiveButton(
         R.string.rename,
         (di, which) -> {
-          String drawablePath = project.getDrawablePath();
+          if (drawableList
+              .get(position)
+              .getName()
+              .substring(0, drawableList.get(position).getName().lastIndexOf("."))
+              .equals("default_image")) {
+            SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "image"))
+                .setFadeAnimation()
+                .setType(SBUtils.Type.INFO)
+                .show();
+          } else {
+            String drawablePath = project.getDrawablePath();
 
-          String toPath = drawablePath + editText.getText().toString() + extension;
-          File newFile = new File(toPath);
-          File oldFile = new File(drawableList.get(position).getPath());
-          oldFile.renameTo(newFile);
+            String toPath = drawablePath + editText.getText().toString() + extension;
+            File newFile = new File(toPath);
+            File oldFile = new File(drawableList.get(position).getPath());
+            oldFile.renameTo(newFile);
 
-          Drawable drawable = Drawable.createFromPath(toPath);
-          String name = editText.getText().toString();
-          drawableList.get(position).setPath(toPath);
-          drawableList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
-          if (drawableList.get(position).getName().endsWith(".xml")
-              || drawableList.get(position).getName().endsWith(".svg")) {
-            // TODO: Set vector drawable to ImageView
-            drawable = VectorDrawableCompat.createFromPath(toPath);
+            Drawable drawable = Drawable.createFromPath(toPath);
+            String name = editText.getText().toString();
+            drawableList.get(position).setPath(toPath);
+            drawableList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
+            if (drawableList.get(position).getName().endsWith(".xml")
+                || drawableList.get(position).getName().endsWith(".svg")) {
+              // TODO: Set vector drawable to ImageView
+              drawable = VectorDrawableCompat.createFromPath(toPath);
+              holder.drawable.setImageDrawable(drawable);
+            }
+            holder.drawableName.setText(name);
             holder.drawable.setImageDrawable(drawable);
+            notifyItemChanged(position);
           }
-          holder.drawableName.setText(name);
-          holder.drawable.setImageDrawable(drawable);
-          notifyItemChanged(position);
         });
 
     final AlertDialog dialog = builder.create();

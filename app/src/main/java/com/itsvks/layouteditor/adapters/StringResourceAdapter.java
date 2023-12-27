@@ -171,8 +171,16 @@ public class StringResourceAdapter extends RecyclerView.Adapter<StringResourceAd
     builder.setPositiveButton(
         R.string.okay,
         (dlg, i) -> {
+          if (stringList.get(pos).name.equals("default_string") && !etName.getText().toString().equals("default_string")) {
+            SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "string"))
+                .setFadeAnimation()
+                .setType(SBUtils.Type.INFO)
+                .show();
+          } else {
+            // Update position
+            stringList.get(pos).name = etName.getText().toString();
+          }
           // Update position
-          stringList.get(pos).name = etName.getText().toString();
           stringList.get(pos).value = etValue.getText().toString();
           notifyDataSetChanged();
           // Generate code from all strings in list

@@ -200,8 +200,16 @@ public class ColorResourceAdapter extends RecyclerView.Adapter<ColorResourceAdap
     builder.setPositiveButton(
         R.string.okay,
         (dlg, i) -> {
+          if (colorList.get(pos).name.equals("default_color") && !etName.getText().toString().equals("default_color")) {
+            SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "color"))
+                .setFadeAnimation()
+                .setType(SBUtils.Type.INFO)
+                .show();
+          } else {
+            // Update position
+            colorList.get(pos).name = etName.getText().toString();
+          }
           // Update position
-          colorList.get(pos).name = etName.getText().toString();
           colorList.get(pos).value = etValue.getText().toString();
           notifyDataSetChanged();
           // Generate code from all colors in list
