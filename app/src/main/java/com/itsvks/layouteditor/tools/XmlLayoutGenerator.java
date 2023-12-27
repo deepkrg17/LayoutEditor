@@ -4,9 +4,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.SearchView;
+import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.itsvks.layouteditor.BaseActivity;
 import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.editor.initializer.AttributeMap;
 import java.util.ArrayList;
@@ -46,9 +48,14 @@ public class XmlLayoutGenerator {
 
     if (useSuperclasses) {
       if (className.startsWith("android.widget")) {
-        className = view.getClass().getSuperclass().getSimpleName();
+        className = view.getClass().getSuperclass().getName();
       }
     }
+    
+//    if (className.endsWith("Design")) {
+//      className = className.substring(0, className.length() - "Design".length());
+//      Toast.makeText(BaseActivity.getInstance(), className, Toast.LENGTH_LONG).show();
+//    }
 
     builder.append(indent + "<" + className + "\n");
 
