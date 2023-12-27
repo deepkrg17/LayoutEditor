@@ -7,26 +7,40 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.TooltipCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AlertDialog;
+import android.text.TextWatcher;
+import android.view.inputmethod.InputMethodManager;
+import android.content.Context;
 import com.itsvks.layouteditor.BaseActivity;
+import com.itsvks.layouteditor.LayoutFile;
 import com.itsvks.layouteditor.ProjectFile;
 import com.itsvks.layouteditor.R;
+import com.itsvks.layouteditor.adapters.LayoutListAdapter;
 import com.itsvks.layouteditor.adapters.PaletteListAdapter;
 import com.itsvks.layouteditor.databinding.ActivityEditorBinding;
+import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.editor.DesignEditor;
 import com.itsvks.layouteditor.editor.DeviceConfiguration;
 import com.itsvks.layouteditor.editor.DeviceSize;
@@ -34,6 +48,7 @@ import com.itsvks.layouteditor.editor.convert.ConvertImportedXml;
 import com.itsvks.layouteditor.managers.DrawableManager;
 import com.itsvks.layouteditor.managers.IdManager;
 import com.itsvks.layouteditor.managers.ProjectManager;
+import com.itsvks.layouteditor.managers.SharedPreferenceManager;
 import com.itsvks.layouteditor.managers.UndoRedoManager;
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator;
 import com.itsvks.layouteditor.utils.BitmapUtil;
@@ -44,6 +59,9 @@ import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import com.itsvks.layouteditor.utils.Utils;
 import com.itsvks.layouteditor.views.StructureView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 @SuppressLint("UnsafeOptInUsageError")
 public class EditorActivity extends BaseActivity {
@@ -65,6 +83,8 @@ public class EditorActivity extends BaseActivity {
   private FilePicker xmlPicker;
   private MenuItem undo = null;
   private MenuItem redo = null;
+  
+  private LayoutListAdapter layoutAdapter;
 
   final Runnable updateMenuIconsState = () -> undoRedo.updateButtons();
 
@@ -77,20 +97,21 @@ public class EditorActivity extends BaseActivity {
   @SuppressWarnings("deprecation")
   private void init() {
     binding = ActivityEditorBinding.inflate(getLayoutInflater());
-
+    
     setContentView(binding.getRoot());
     setSupportActionBar(binding.topAppBar);
 
     projectManager = ProjectManager.getInstance();
+        
     var extras = getIntent().getExtras();
     if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
       ProjectFile projectFile = (ProjectFile) extras.getParcelable(Constants.EXTRA_KEY_PROJECT);
       projectManager.openProject(projectFile);
     }
     project = projectManager.getOpenedProject();
-
-    getSupportActionBar().setTitle(getString(R.string.app_name));
-    getSupportActionBar().setSubtitle(project.getName());
+    
+    getSupportActionBar().setTitle(project.getName());
+    layoutAdapter = new LayoutListAdapter(binding, getSupportActionBar(), project.getPath());
 
     contentView = binding.content;
     binding.editorLayout.setBackgroundColor(Utils.getSurfaceColor(this));
@@ -101,10 +122,9 @@ public class EditorActivity extends BaseActivity {
     setupStructureView();
 
     setupDrawerNavigationRail();
-    if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) {
-      binding.editorLayout.loadLayoutFromParser(project.getLayout());
-    }
     setToolbarButtonOnClickListener(binding);
+    
+    if (getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN)) layoutAdapter.openLastLayout();
   }
 
   private void defineXmlPicker() {
@@ -122,12 +142,15 @@ public class EditorActivity extends BaseActivity {
               String path = uri.getPath();
               if (path != null && path.endsWith(".xml")) {
                 String xml = FileUtil.readFromUri(uri, EditorActivity.this);
-                String xmlConverted =
-                    new ConvertImportedXml(xml).getXmlConverted(EditorActivity.this);
+                String xmlConverted = new ConvertImportedXml(xml).getXmlConverted(EditorActivity.this);
 
                 if (xmlConverted != null) {
-                  binding.editorLayout.loadLayoutFromParser(xmlConverted);
-                  SBUtils.make(binding.getRoot(), "Imported").setFadeAnimation().showAsSuccess();
+                  if (!new File(project.getPath() + "/layout/" + FileUtil.getLastSegmentFromPath(path)).exists()) {
+                    layoutAdapter.createNewLayout(project.getPath() + "/layout/" + FileUtil.getLastSegmentFromPath(path), xmlConverted);
+                    SBUtils.make(binding.getRoot(), "Imported!").setFadeAnimation().showAsSuccess();
+                  } else {
+                    SBUtils.make(binding.getRoot(), "Layout Already Exists!").setFadeAnimation().showAsError();
+                  }
                 } else {
                   SBUtils.make(binding.getRoot(), "Failed to import!")
                       .setSlideAnimation()
@@ -222,33 +245,48 @@ public class EditorActivity extends BaseActivity {
   }
 
   private void setupDrawerNavigationRail() {
-    var menu = binding.navigation.getMenu();
-    menu.add(Menu.NONE, 0, Menu.NONE, Constants.TAB_TITLE_COMMON).setIcon(R.drawable.android);
-    menu.add(Menu.NONE, 1, Menu.NONE, Constants.TAB_TITLE_TEXT)
+    View headerView = binding.paletteNavigation.getHeaderView();
+    final FloatingActionButton fab = headerView.findViewById(R.id.fab);
+        
+    var paletteMenu = binding.paletteNavigation.getMenu();
+    paletteMenu.add(Menu.NONE, 0, Menu.NONE, Constants.TAB_TITLE_COMMON).setIcon(R.drawable.android);
+    paletteMenu.add(Menu.NONE, 1, Menu.NONE, Constants.TAB_TITLE_TEXT)
         .setIcon(R.mipmap.ic_palette_text_view);
-    menu.add(Menu.NONE, 2, Menu.NONE, Constants.TAB_TITLE_BUTTONS)
+    paletteMenu.add(Menu.NONE, 2, Menu.NONE, Constants.TAB_TITLE_BUTTONS)
         .setIcon(R.mipmap.ic_palette_button);
-    menu.add(Menu.NONE, 3, Menu.NONE, Constants.TAB_TITLE_WIDGETS)
+    paletteMenu.add(Menu.NONE, 3, Menu.NONE, Constants.TAB_TITLE_WIDGETS)
         .setIcon(R.mipmap.ic_palette_view);
-    menu.add(Menu.NONE, 4, Menu.NONE, Constants.TAB_TITLE_LAYOUTS)
+    paletteMenu.add(Menu.NONE, 4, Menu.NONE, Constants.TAB_TITLE_LAYOUTS)
         .setIcon(R.mipmap.ic_palette_relative_layout);
-    menu.add(Menu.NONE, 5, Menu.NONE, Constants.TAB_TITLE_CONTAINERS)
+    paletteMenu.add(Menu.NONE, 5, Menu.NONE, Constants.TAB_TITLE_CONTAINERS)
         .setIcon(R.mipmap.ic_palette_view_pager);
-    menu.add(Menu.NONE, 6, Menu.NONE, Constants.TAB_TITLE_LEGACY)
+    paletteMenu.add(Menu.NONE, 6, Menu.NONE, Constants.TAB_TITLE_LEGACY)
         .setIcon(R.mipmap.ic_palette_grid_layout);
+        
+    binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
     PaletteListAdapter adapter = new PaletteListAdapter(binding.drawer);
     adapter.submitPaletteList(projectManager.getPalette(0));
 
-    binding.navigation.setOnItemSelectedListener(
+    binding.paletteNavigation.setOnItemSelectedListener(
         item -> {
           adapter.submitPaletteList(projectManager.getPalette(item.getItemId()));
           binding.title.setText(item.getTitle());
+          binding.listView.setAdapter(adapter);
+          fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.folder_outline));
+          fab.setOnClickListener(v -> setLayoutAdapter(fab));
           return true;
         });
-    binding.listView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     binding.listView.setAdapter(adapter);
+    fab.setOnClickListener(v -> setLayoutAdapter(fab));
     IdManager.clear();
+  }
+    
+  public void setLayoutAdapter(FloatingActionButton fab) {
+    fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.plus));
+    fab.setOnClickListener(i -> layoutAdapter.createLayout(i));
+    binding.title.setText(R.string.layouts);
+    binding.listView.setAdapter(layoutAdapter);
   }
 
   @Override
@@ -258,7 +296,7 @@ public class EditorActivity extends BaseActivity {
     else {
       String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
       if (!result.isEmpty()) {
-        saveXml();
+        layoutAdapter.saveXml(binding.getRoot());
         super.onBackPressed();
       } else super.onBackPressed();
     }
@@ -284,30 +322,30 @@ public class EditorActivity extends BaseActivity {
         drawerLayout.openDrawer(GravityCompat.END);
         return true;
       case R.id.save_xml:
-        saveXml();
+        layoutAdapter.saveXml(binding.getRoot());
         return true;
       case R.id.edit_xml:
         showXml();
         return true;
       case R.id.resources_manager:
-        saveXml();
+        layoutAdapter.saveXml(binding.getRoot());
         startActivity(
             new Intent(this, ResourceManagerActivity.class)
-                .putExtra(Constants.EXTRA_KEY_PROJECT, project));
+                .putExtra(Constants.EXTRA_KEY_PROJECT, project).putExtra(Constants.EXTRA_KEY_LAYOUT, layoutAdapter.getCurrentLayout()));
 
         return true;
       case R.id.preview:
         String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
         if (result.isEmpty()) showNothingDialog();
         else {
-          saveXml();
+          layoutAdapter.saveXml(binding.getRoot());
           startActivity(
-              new Intent(this, PreviewLayoutActivity.class)
-                  .putExtra(Constants.EXTRA_KEY_PROJECT, project));
+              new Intent(this, PreviewLayoutActivity.class).putExtra(Constants.EXTRA_KEY_LAYOUT, layoutAdapter.getCurrentLayout()));
         }
         return true;
       case R.id.export_xml:
-        fileCreator.create(projectManager.getFormattedProjectName(), "text/xml");
+        fileCreator.create(layoutAdapter.getCurrentLayout().getName(), "text/xml");
+        //binding.editorLayout.loadLayoutFromParser((layoutAdapter.getCurrentLayout() == null ? currentLayout : layoutAdapter.getCurrentLayout()).getLayout());
         return true;
       case R.id.export_as_image:
         if (binding.editorLayout.getChildAt(0) != null)
@@ -321,7 +359,13 @@ public class EditorActivity extends BaseActivity {
               .show();
         return true;
       case R.id.import_xml:
-        xmlPicker.launch("text/xml");
+        new MaterialAlertDialogBuilder(EditorActivity.this)
+          .setTitle(R.string.note)
+          .setMessage("*Be aware it will fail to import when you try to import the layout file with view, different from LayoutEditor view set!")
+          .setCancelable(false)
+          .setNegativeButton(R.string.cancel, (d, w) -> d.cancel())
+          .setPositiveButton(R.string.okay, (d, w) -> xmlPicker.launch("text/xml"))
+          .show();
         return true;
 
       default:
@@ -346,6 +390,8 @@ public class EditorActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    layoutAdapter.init();
+    
     DrawableManager.loadFromFiles(project.getDrawables());
     if (undoRedo != null) undoRedo.updateButtons();
   }
@@ -357,27 +403,12 @@ public class EditorActivity extends BaseActivity {
     ProjectManager.getInstance().closeProject();
   }
 
-  private void saveXml() {
-
-    if (project == null) return;
-
-    if (binding.editorLayout.getChildCount() == 0) {
-      project.saveLayout("");
-      SBUtils.make(binding.getRoot(), R.string.project_empty).setSlideAnimation().showLongAsError();
-      return;
-    }
-
-    String result = new XmlLayoutGenerator().generate(binding.editorLayout, false);
-    project.saveLayout(result);
-    ToastUtils.showShort(getString(R.string.project_saved));
-  }
-
   private void showXml() {
     String result = new XmlLayoutGenerator().generate(binding.editorLayout, true);
     if (result.isEmpty()) {
       showNothingDialog();
     } else {
-      saveXml();
+      layoutAdapter.saveXml(binding.getRoot());
       startActivity(
           new Intent(this, ShowXMLActivity.class).putExtra(ShowXMLActivity.EXTRA_KEY_XML, result));
     }
