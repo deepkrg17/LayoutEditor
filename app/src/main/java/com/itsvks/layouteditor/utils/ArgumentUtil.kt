@@ -1,24 +1,23 @@
-package com.itsvks.layouteditor.utils;
+package com.itsvks.layouteditor.utils
 
-import java.util.HashMap;
-import java.util.regex.Pattern;
+import java.util.regex.Pattern
 
-/** This class holds all utility methods related to arguments */
-public class ArgumentUtil {
-  /** Default color value */
-  public static final String COLOR = "color";
-  /** Default drawable value */
-  public static final String DRAWABLE = "drawable";
-  public static final String STRING = "string";
+/** This class holds all utility methods related to arguments  */
+object ArgumentUtil {
+  /** Default color value  */
+  const val COLOR = "color"
 
-  /** Map used to store the patterns of color and drawable */
-  static final HashMap<String, String> patterns = new HashMap<>();
+  /** Default drawable value  */
+  const val DRAWABLE = "drawable"
+  const val STRING = "string"
 
-  /** The static block initializes the map with the color and drawable patterns */
-  static {
-    patterns.put(COLOR, "#[a-fA-F0-9]{6,8}");
-    patterns.put(DRAWABLE, "@drawable/.*");
-    patterns.put(STRING, "@string/.*");
+  /** Map used to store the patterns of color and drawable  */
+  val patterns = HashMap<String, String>()
+
+  init {
+    patterns[COLOR] = "#[a-fA-F0-9]{6,8}"
+    patterns[DRAWABLE] = "@drawable/.*"
+    patterns[STRING] = "@string/.*"
   }
 
   /**
@@ -28,12 +27,14 @@ public class ArgumentUtil {
    * @param variants  The list of variants from which type should be parsed
    * @return          The type of the value
    */
-  public static String parseType(String value, String[] variants) {
-    for (String variant : variants) {
-      if (patterns.containsKey(variant))
-        if (Pattern.matches(patterns.get(variant).toString(), value)) return variant;
+  @JvmStatic
+  fun parseType(value: String?, variants: Array<String>): String {
+    for (variant in variants) {
+      if (patterns.containsKey(variant)) if (Pattern.matches(
+          patterns[variant], value
+        )
+      ) return variant
     }
-
-    return "text";
+    return "text"
   }
 }
