@@ -81,7 +81,7 @@ public abstract class FilePicker {
             || mimeType.equals("image/jpeg");
 
     if (isImageType) {
-      if (LayoutEditor.getInstance().isAtLeastTiramisu()) {
+      if (LayoutEditor.Companion.getInstance().isAtLeastTiramisu()) {
         if (actvty.checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES)
             == PackageManager.PERMISSION_DENIED) {
           reqPermission.launch(Manifest.permission.READ_MEDIA_IMAGES);

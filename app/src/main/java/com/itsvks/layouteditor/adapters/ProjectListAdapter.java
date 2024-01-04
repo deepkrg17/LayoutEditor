@@ -121,7 +121,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
       if (file.getName().equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(
-            LayoutEditor.getInstance().getContext().getString(string.msg_current_name_unavailable));
+            LayoutEditor.Companion.getInstance().getContext().getString(string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         return;
       }
@@ -253,7 +253,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     intent.setAction(EditorActivity.ACTION_OPEN);
 
     final String projectDir =
-        FileUtil.getPackageDataDir(LayoutEditor.getInstance().getContext())
+        FileUtil.getPackageDataDir(LayoutEditor.Companion.getInstance().getContext())
             + "/projects/"
             + projects.get(position).name;
     if (!prefs.getBoolean("copyAssets", false)

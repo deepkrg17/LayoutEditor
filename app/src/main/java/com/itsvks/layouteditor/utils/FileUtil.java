@@ -66,7 +66,7 @@ public class FileUtil {
     OutputStream outputStream = null;
 
     try {
-      inputStream = LayoutEditor.getInstance().getContext().getContentResolver().openInputStream(uri);
+      inputStream = LayoutEditor.Companion.getInstance().getContext().getContentResolver().openInputStream(uri);
       outputStream = new FileOutputStream(new File(destinationPath));
 
       byte[] buffer = new byte[1024];
@@ -140,7 +140,7 @@ public class FileUtil {
    */
   public static void copyFileFromAsset(String filename, String outPath) {
     // Get asset manager instance from application context
-    AssetManager assetManager = LayoutEditor.getInstance().getContext().getAssets();
+    AssetManager assetManager = LayoutEditor.Companion.getInstance().getContext().getAssets();
 
     // Create streams for read and write
     InputStream in;
@@ -439,7 +439,7 @@ public class FileUtil {
   public static String convertUriToFilePath(final Uri uri) {
     String path = null;
     // Check if the Uri is provided by documents contract
-    if (DocumentsContract.isDocumentUri(LayoutEditor.getInstance().getContext(), uri)) {
+    if (DocumentsContract.isDocumentUri(LayoutEditor.Companion.getInstance().getContext(), uri)) {
       // Check if Uri is External Storage Document
       if (isExternalStorageDocument(uri)) {
         final String docId = DocumentsContract.getDocumentId(uri);
@@ -520,7 +520,7 @@ public class FileUtil {
 
     try {
       Cursor cursor =
-          LayoutEditor.getInstance().getContext() // Get the application context
+          LayoutEditor.Companion.getInstance().getContext() // Get the application context
               .getContentResolver() // Get the content resolver
               .query(uri, projection, selection, selectionArgs, null); // Query the content resolver
       if (cursor != null && cursor.moveToFirst()) {
@@ -648,7 +648,7 @@ public class FileUtil {
     try {
       // Open the file descriptor in read-write-truncate mode
       ParcelFileDescriptor pfd =
-          LayoutEditor.getInstance().getContext().getContentResolver().openFileDescriptor(uri, "rwt");
+          LayoutEditor.Companion.getInstance().getContext().getContentResolver().openFileDescriptor(uri, "rwt");
       // Initialize file output stream with the file descriptor
       FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
       // Write the data in the file

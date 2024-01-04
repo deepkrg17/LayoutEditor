@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,17 +22,17 @@ public class SharedPreferenceManager {
     private static final float DEFAULT_FLOAT_VALUE = 0f; //-1f
     private static final long DEFAULT_LONG_VALUE = 0L; //-1L
     private static final boolean DEFAULT_BOOLEAN_VALUE = false;
-    
+
     public static void setContext(Context ctx) {
         if (ctx != null) {
             context = ctx;
         }
     }
-    
+
     public static void changePrefInt(Object where, int what) {
         SharedPreferenceManager.with(context).writeInt(where, what);
     }
-    
+
     public static void changePrefString(Object where, String what) {
         SharedPreferenceManager.with(context).writeString(where, what);
     }
@@ -38,7 +40,7 @@ public class SharedPreferenceManager {
     public static void changePrefBool(Object where, boolean what) {
         SharedPreferenceManager.with(context).writeBoolean(where, what);
     }
-    
+
     public static int loadPrefInt(Object what) {
         int i = SharedPreferenceManager.with(context).readInt(what);
         return i;
@@ -48,7 +50,7 @@ public class SharedPreferenceManager {
         int i = SharedPreferenceManager.with(context).readInt(what, where);
         return i;
     }
-    
+
     public static boolean loadPrefBool(Object what) {
         boolean bool = SharedPreferenceManager.with(context).readBoolean(what);
         return bool;
@@ -58,7 +60,7 @@ public class SharedPreferenceManager {
         boolean bool = SharedPreferenceManager.with(context).readBoolean(what, where);
         return bool;
     }
-    
+
     public static String loadPrefString(Object what) {
         String str = SharedPreferenceManager.with(context).readString(what);
         return str;
@@ -68,7 +70,7 @@ public class SharedPreferenceManager {
         String str = SharedPreferenceManager.with(context).readString(what, where);
         return str;
     }
-    
+
     private SharedPreferenceManager(Context context) {
         sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 context.getPackageName() + "_preferences",
@@ -149,7 +151,7 @@ public class SharedPreferenceManager {
     public static String readString(Object what, String defaultString) {
         return sharedPreferences.getString(checkKey(what), (String) defaultString);
     }
-    
+
     /**
      * @param where
      * @param what
@@ -378,29 +380,30 @@ public class SharedPreferenceManager {
         }
         return defValue;
     }
-    
+
     // checking related methods
-    
+
     /**
      * @param obj
      */
+    @Contract("null -> null")
     public static String checkKey(Object obj) {
         // Check if the our Object is String or not if yes then return it
         if (obj instanceof String) return (String) obj;
-        
+
         /**
          * If the Object is not String then check if the Object is Integer
          * if yes then try to fetch the string from resources if availble
          * if not then convert the Integer to String
         **/
         if (obj instanceof Integer) return fetchKeyString((int) obj);
-        
+
         // Return null if the Object is neither String nor Integer
         return (String) obj;
     }
-    
+
     // fetching related methods
-    
+
     /**
      * @param key
      */
@@ -413,7 +416,7 @@ public class SharedPreferenceManager {
             return String.valueOf(key);
         }
     }
-    
+
     // end related methods
 
     /**

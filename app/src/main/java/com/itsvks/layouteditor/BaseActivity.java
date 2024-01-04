@@ -26,7 +26,7 @@ public class BaseActivity extends AppCompatActivity {
     sIstance = this;
     ctx = new WeakReference<>(this);
     Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(ctx));
-    app = LayoutEditor.getInstance();
+    app = LayoutEditor.Companion.getInstance();
     getWindow().setStatusBarColor(SurfaceColors.SURFACE_0.getColor(this));
   }
     

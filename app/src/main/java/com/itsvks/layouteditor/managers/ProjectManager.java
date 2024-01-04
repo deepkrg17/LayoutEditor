@@ -88,6 +88,6 @@ public class ProjectManager {
   private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(
       Gson gson, Type type, String filePath) {
     return gson.fromJson(
-        FileUtil.readFromAsset(filePath, LayoutEditor.getInstance().getContext()), type);
+        FileUtil.readFromAsset(filePath, LayoutEditor.Companion.getInstance().getContext()), type);
   }
 }

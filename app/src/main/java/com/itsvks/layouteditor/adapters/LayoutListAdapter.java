@@ -46,10 +46,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.ViewHolder> {
-  private ActivityEditorBinding editorBinding;
   private ActionBar toolbar;
 
   private DrawerLayout drawerLayout;
@@ -64,10 +64,9 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
   private final String projectName;
 
   public LayoutListAdapter(
-    ActivityEditorBinding editorBinding,
+    @NonNull ActivityEditorBinding editorBinding,
     ActionBar toolbar,
     String projectPath) {
-    this.editorBinding = editorBinding;
     this.toolbar = toolbar;
     this.projectPath = projectPath;
     drawerLayout = editorBinding.drawer;
@@ -89,7 +88,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     if (!new File(defaultLayoutPath).exists()) createNewLayout(defaultLayoutPath, "");
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder {
+  public static class ViewHolder extends RecyclerView.ViewHolder {
     LayoutsListItemBinding binding;
     RelativeLayout container;
     TextView layoutName;
@@ -105,10 +104,11 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     }
   }
 
+  @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return new ViewHolder(
-        LayoutsListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+      LayoutsListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
   }
 
   @SuppressLint("RecyclerView")
@@ -178,7 +178,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
       if (file.getName().equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(
-            LayoutEditor.getInstance().getContext().getString(string.msg_current_name_unavailable));
+            Objects.requireNonNull(LayoutEditor.Companion.getInstance()).getContext().getString(string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         return;
       }
@@ -191,7 +191,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
   
   @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
   @SuppressWarnings("deprecation")
-  public void createLayout(View v) {
+  public void createLayout(@NonNull View v) {
     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
     builder.setTitle(string.create_layout);
 
@@ -204,7 +204,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     builder.setPositiveButton(string.create, (di, which) -> createNewLayout(projectPath + "/layout/" + bind.textinputEdittext.getText().toString(), ""));
 
     final AlertDialog dialog = builder.create();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    Objects.requireNonNull(dialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     dialog.show();
 
     inputLayout.setHint(string.msg_new_layout_name);
@@ -230,7 +230,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
         (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
-    if (!editText.getText().toString().isEmpty()) {
+    if (!Objects.requireNonNull(editText.getText()).toString().isEmpty()) {
       editText.setSelection(0, editText.getText().toString().length());
     }
 
@@ -239,7 +239,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
 
   @SuppressWarnings("deprecation")
   @SuppressLint("RestrictedApi")
-  public void renameLayout(View v, int pos) {
+  public void renameLayout(@NonNull View v, int pos) {
     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
     builder.setTitle(string.rename_layout);
     final TextinputlayoutBinding bind = TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
@@ -263,7 +263,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
         });
 
     final AlertDialog dialog = builder.create();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    Objects.requireNonNull(dialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     dialog.show();
 
     editText.addTextChangedListener(
@@ -282,7 +282,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
         });
 
     checkNameErrors(
-        editText.getText().toString(),
+        Objects.requireNonNull(editText.getText()).toString(),
         layouts.get(pos).getName(),
         inputLayout,
         dialog);
@@ -297,7 +297,8 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     }
   }
 
-  public void deleteLayout(View v, int pos) {
+  @SuppressLint("NotifyDataSetChanged")
+  public void deleteLayout(@NonNull View v, int pos) {
     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
     builder.setTitle(string.delete_layout);
     builder.setMessage(string.msg_delete_layout);
@@ -314,25 +315,23 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     builder.create().show();
   }
 
+  @SuppressLint("NonConstantResourceId")
   public void showOptions(View v, int pos) {
     final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
     popupMenu.inflate(R.menu.menu_layout_file_options);
     popupMenu.setOnMenuItemClickListener(
-        new PopupMenu.OnMenuItemClickListener() {
-          @Override
-          public boolean onMenuItemClick(MenuItem item) {
-            var id = item.getItemId();
-            switch (id) {
-              case R.id.menu_delete_layout:
-                deleteLayout(v, pos);
-                return true;
-              case R.id.menu_rename_layout:
-                renameLayout(v, pos);
-                return true;
-            }
-            return false;
-          }
-        });
+      item -> {
+        var id = item.getItemId();
+        switch (id) {
+          case R.id.menu_delete_layout:
+            deleteLayout(v, pos);
+            return true;
+          case R.id.menu_rename_layout:
+            renameLayout(v, pos);
+            return true;
+        }
+        return false;
+      });
 
     popupMenu.show();
   }
@@ -395,12 +394,14 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     ToastUtils.showShort(v.getContext().getString(string.layout_saved));
   }
   
+  @SuppressLint("NotifyDataSetChanged")
   public void createLayout(String path) {
     LayoutFile layout = new LayoutFile(path);
     layouts.add(layout);
     notifyDataSetChanged();
   }
   
+  @SuppressLint("NotifyDataSetChanged")
   public void createNewLayout(String path, String text) {
     LayoutFile layout = new LayoutFile(path);
     layout.saveLayout(text);
@@ -412,7 +413,7 @@ public class LayoutListAdapter extends RecyclerView.Adapter<LayoutListAdapter.Vi
     loadLayouts();
 
     for (int i = 0; i < layouts.size(); i++) {
-      if (name == layouts.get(i).getName()) {
+      if (Objects.equals(name, layouts.get(i).getName())) {
         return i;
       }
     }

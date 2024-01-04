@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 
     binding = FragmentHomeBinding.inflate(inflater, container, false);
     projectTimes =
-        PreferenceManager.getDefaultSharedPreferences(LayoutEditor.getInstance().getContext());
+        PreferenceManager.getDefaultSharedPreferences(LayoutEditor.Companion.getInstance().getContext());
     return binding.getRoot();
   }
 
