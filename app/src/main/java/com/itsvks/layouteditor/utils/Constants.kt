@@ -8,8 +8,9 @@ import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
 
-@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 object Constants {
+  const val CURRENT_LAYOUT: String = "currentLayout"
+
   @JvmField
   val gravityMap = HashMap<String, Int>()
   @JvmField
@@ -110,6 +111,7 @@ object Constants {
     inputTypes["textCapWords"] = InputType.TYPE_TEXT_FLAG_CAP_WORDS
     inputTypes["textEmailAddress"] = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     inputTypes["textEmailSubject"] = InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     inputTypes["textEnableTextConversionSuggestions"] =
       InputType.TYPE_TEXT_FLAG_ENABLE_TEXT_CONVERSION_SUGGESTIONS
     inputTypes["textFilter"] =

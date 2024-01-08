@@ -34,13 +34,10 @@ import com.itsvks.layouteditor.activities.PreviewLayoutActivity;
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 import com.itsvks.layouteditor.managers.PreferencesManager;
-import com.itsvks.layouteditor.managers.ProjectManager;
-import com.itsvks.layouteditor.managers.SharedPreferenceManager;
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.FileUtil;
 import com.itsvks.layouteditor.utils.SBUtils;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -93,7 +90,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
     holder.binding.getRoot().setOnClickListener(v -> openProject(v, position));
     holder.projectIcon.setText(
-        projects.get(position).getName().substring(0, 1).toUpperCase(Locale.US));
+        projects.get(position).name.substring(0, 1).toUpperCase(Locale.US));
     holder.menu.setOnClickListener(v -> showOptions(v, position));
   }
 
@@ -118,7 +115,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     for (ProjectFile file : projects) {
       if (name.equals(currentName)) break;
 
-      if (file.getName().equals(name)) {
+      if (file.name.equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(
             LayoutEditor.Companion.getInstance().getContext().getString(string.msg_current_name_unavailable));
@@ -142,7 +139,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     final TextInputEditText editText = bind.textinputEdittext;
     final TextInputLayout inputLayout = bind.textinputLayout;
 
-    editText.setText(projects.get(position).getName());
+    editText.setText(projects.get(position).name);
     inputLayout.setHint(string.msg_new_project_name);
 
     final int padding =
@@ -179,7 +176,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
             checkNameErrors(
                 projects,
                 editText.getText().toString(),
-                projects.get(position).getName(),
+              projects.get(position).name,
                 inputLayout,
                 dialog);
           }
@@ -188,7 +185,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     checkNameErrors(
         projects,
         editText.getText().toString(),
-        projects.get(position).getName(),
+      projects.get(position).name,
         inputLayout,
         dialog);
 
@@ -268,7 +265,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
   }
 
   private void previewLayout(View v, int position) {
-    final String layoutDir = projects.get(position).getPath() + "/layout/" + SharedPreferenceManager.loadPrefString(projects.get(position).getName(), "layout_main.xml");
+    final String layoutDir = projects.get(position).getLayoutPath() + "layout_main.xml";
 
     Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
     intent.putExtra(Constants.EXTRA_KEY_LAYOUT, new LayoutFile(layoutDir));

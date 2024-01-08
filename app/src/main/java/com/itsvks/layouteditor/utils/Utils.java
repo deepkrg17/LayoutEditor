@@ -18,6 +18,10 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.R;
 import com.google.android.material.color.MaterialColors;
 import com.itsvks.layouteditor.R.string;
 import com.itsvks.layouteditor.vectormaster.VectorMasterDrawable;
@@ -34,27 +38,35 @@ import java.util.concurrent.FutureTask;
 
 public class Utils {
   /** This method is used to convert the input into the equivalent dip value. */
-  public static int pxToDp(Context context, int input) {
+  public static int pxToDp(@NonNull Context context, int input) {
     return (int)
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, input, context.getResources().getDisplayMetrics());
   }
 
-  public static boolean isDarkMode(Context context) {
+  public static boolean isDarkMode(@NonNull Context context) {
     int uiMode =
         context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
     return uiMode == Configuration.UI_MODE_NIGHT_YES;
   }
 
   public static int getOnSurfaceColor(Context context) {
-    return MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, 0);
+    return MaterialColors.getColor(context, R.attr.colorOnSurface, 0);
   }
 
   public static int getSurfaceColor(Context context) {
-    return MaterialColors.getColor(context, com.google.android.material.R.attr.colorSurface, 0);
+    return MaterialColors.getColor(context, R.attr.colorSurface, 0);
   }
 
-  public static void drawDashPathStroke(View view, Canvas canvas, Paint paint) {
+  public static int getPrimaryColor(Context context) {
+    return MaterialColors.getColor(context, R.attr.colorPrimary, 0);
+  }
+
+  public static int getSecondaryColor(Context context) {
+    return MaterialColors.getColor(context, R.attr.colorSecondary, 0);
+  }
+
+  public static void drawDashPathStroke(@NonNull View view, @NonNull Canvas canvas, @NonNull Paint paint) {
     paint.setAntiAlias(true);
     paint.setStyle(Paint.Style.STROKE);
     paint.setPathEffect(new DashPathEffect(new float[] {10, 7}, 0));
@@ -65,12 +77,13 @@ public class Utils {
     drawDashPathStroke(view, canvas, getDefaultPaint(view.getContext()));
   }
 
-  public static void drawDashPathStroke(View view, Canvas canvas, int paintColor) {
+  public static void drawDashPathStroke(@NonNull View view, Canvas canvas, int paintColor) {
     Paint paint = getDefaultPaint(view.getContext());
     paint.setColor(paintColor);
     drawDashPathStroke(view, canvas, paint);
   }
 
+  @NonNull
   private static Paint getDefaultPaint(Context context) {
     Paint paint = new Paint();
     paint.setColor(isDarkMode(context) ? Color.WHITE : getOnSurfaceColor(context));
@@ -78,7 +91,7 @@ public class Utils {
     return paint;
   }
 
-  public static boolean saveBitmapAsImageToGallery(Context context, Bitmap bitmap, String title) {
+  public static boolean saveBitmapAsImageToGallery(@NonNull Context context, Bitmap bitmap, String title) {
     String savedImageURL = null;
 
     // Get the directory for the user's public pictures directory.

@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
     for (ProjectFile file : projects) {
       if (name.equals(currentName)) break;
 
-      if (file.getName().equals(name)) {
+      if (file.name.equals(name)) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(getString(string.msg_current_name_unavailable));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);

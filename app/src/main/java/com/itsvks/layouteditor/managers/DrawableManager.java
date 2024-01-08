@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import android.net.Uri;
+
+import androidx.annotation.NonNull;
+
 import com.itsvks.layouteditor.utils.FileUtil;
 
 import com.itsvks.layouteditor.utils.Utils;
@@ -12,9 +15,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class DrawableManager {
-  private static HashMap<String, String> items = new HashMap<>();
+  private static final HashMap<String, String> items = new HashMap<>();
 
-  public static void loadFromFiles(File[] files) {
+  public static void loadFromFiles(@NonNull File[] files) {
     items.clear();
 
     for (File f : files) {

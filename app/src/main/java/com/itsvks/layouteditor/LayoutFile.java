@@ -2,7 +2,13 @@ package com.itsvks.layouteditor;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.itsvks.layouteditor.utils.FileUtil;
+
+import org.jetbrains.annotations.Contract;
+
 import java.io.File;
 
 public class LayoutFile implements Parcelable {
@@ -23,10 +29,8 @@ public class LayoutFile implements Parcelable {
     name = FileUtil.getLastSegmentFromPath(path);
   }
 
-  public void saveLayout(String text) {
-    File file = new File(path);
-
-    FileUtil.writeFile(path, text);
+  public void saveLayout(String content) {
+    FileUtil.writeFile(path, content);
   }
 
   public String getPath() {
@@ -37,7 +41,7 @@ public class LayoutFile implements Parcelable {
     return name;
   }
 
-  public String getLayout() {
+  public String read() {
     return FileUtil.readFile(path);
   }
 
@@ -47,23 +51,27 @@ public class LayoutFile implements Parcelable {
   }
 
   @Override
-  public void writeToParcel(Parcel parcel, int flags) {
+  public void writeToParcel(@NonNull Parcel parcel, int flags) {
     parcel.writeString(path);
     parcel.writeString(name);
   }
 
   public static final Parcelable.Creator<LayoutFile> CREATOR =
-      new Parcelable.Creator<LayoutFile>() {
-        public LayoutFile createFromParcel(Parcel in) {
-          return new LayoutFile(in);
-        }
+    new Parcelable.Creator<>() {
+      @NonNull
+      @Contract("_ -> new")
+      public LayoutFile createFromParcel(Parcel in) {
+        return new LayoutFile(in);
+      }
 
-        public LayoutFile[] newArray(int size) {
-          return new LayoutFile[size];
-        }
-      };
+      @NonNull
+      @Contract(value = "_ -> new", pure = true)
+      public LayoutFile[] newArray(int size) {
+        return new LayoutFile[size];
+      }
+    };
 
-  private LayoutFile(Parcel parcel) {
+  private LayoutFile(@NonNull Parcel parcel) {
     path = parcel.readString();
     name = parcel.readString();
   }
