@@ -1,30 +1,27 @@
-package com.itsvks.layouteditor.activities;
+package com.itsvks.layouteditor.activities
 
-import android.os.Bundle;
-import com.itsvks.layouteditor.BaseActivity;
-import com.itsvks.layouteditor.LayoutFile;
-import com.itsvks.layouteditor.databinding.ActivityPreviewLayoutBinding;
-import com.itsvks.layouteditor.tools.XmlLayoutParser;
-import com.itsvks.layouteditor.utils.Constants;
+import android.os.Bundle
+import com.itsvks.layouteditor.BaseActivity
+import com.itsvks.layouteditor.LayoutFile
+import com.itsvks.layouteditor.ProjectFile
+import com.itsvks.layouteditor.databinding.ActivityPreviewLayoutBinding
+import com.itsvks.layouteditor.tools.XmlLayoutParser
+import com.itsvks.layouteditor.utils.Constants
 
-public class PreviewLayoutActivity extends BaseActivity {
+class PreviewLayoutActivity : BaseActivity() {
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    val binding = ActivityPreviewLayoutBinding.inflate(
+      layoutInflater
+    )
+    setContentView(binding.getRoot())
+    val projectFile = intent.extras!!.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
+    val parser = XmlLayoutParser(this)
+//    parser.parseFromXml(projectFile!!.layoutPath, this)
+    binding.getRoot().addView(parser.getRoot())
+  }
 
-  public static final String EXTRA_KEY_XML = "xml";
-
-  private ActivityPreviewLayoutBinding binding;
-
-  @SuppressWarnings("deprecation")
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    binding = ActivityPreviewLayoutBinding.inflate(getLayoutInflater());
-    setContentView(binding.getRoot());
-
-    LayoutFile layout = (LayoutFile) getIntent().getExtras().getParcelable(Constants.EXTRA_KEY_LAYOUT);
-
-    XmlLayoutParser parser = new XmlLayoutParser(this);
-    parser.parseFromXml(layout.getLayout(), this);
-
-    binding.getRoot().addView(parser.getRoot());
+  companion object {
+    const val EXTRA_KEY_XML = "xml"
   }
 }

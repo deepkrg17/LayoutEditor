@@ -1,93 +1,90 @@
-package com.itsvks.layouteditor.managers;
+package com.itsvks.layouteditor.managers
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.itsvks.layouteditor.LayoutEditor;
-import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.FileUtil;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.itsvks.layouteditor.LayoutEditor
+import com.itsvks.layouteditor.ProjectFile
+import com.itsvks.layouteditor.utils.Constants
+import com.itsvks.layouteditor.utils.FileUtil
+import java.lang.reflect.Type
+import java.util.Locale
+import java.util.Objects
+import java.util.concurrent.CompletableFuture
 
-public class ProjectManager {
-  private static ProjectManager INSTANCE;
+class ProjectManager private constructor() {
+  private val paletteList: MutableList<List<HashMap<String, Any>>> = ArrayList()
+  var openedProject: ProjectFile? = null
+    private set
 
-  public static synchronized ProjectManager getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new ProjectManager();
+  init {
+    CompletableFuture.runAsync { initPalette() }
+  }
+
+  fun openProject(project: ProjectFile?) {
+    openedProject = project
+    openedProject!!.drawables?.let { DrawableManager.loadFromFiles(it) }
+    FontManager.loadFromFiles(openedProject!!.fonts)
+  }
+
+  fun closeProject() {
+    openedProject = null
+    DrawableManager.clear()
+    FontManager.clear()
+  }
+
+  val colorsXml: String
+    get() = FileUtil.readFile(openedProject!!.colorsPath)
+  val stringsXml: String
+    get() = FileUtil.readFile(openedProject!!.stringsPath)
+  val formattedProjectName: String
+    get() {
+      var projectName = openedProject!!.name.lowercase(Locale.getDefault()).trim { it <= ' ' }
+      if (projectName.contains(" ")) {
+        projectName = projectName.replace(" ".toRegex(), "_")
+      }
+      if (!projectName.endsWith(".xml")) {
+        projectName = "$projectName.xml"
+      }
+      return projectName
     }
-    return INSTANCE;
+
+  fun getPalette(position: Int): List<HashMap<String, Any>> {
+    return paletteList[position]
   }
 
-  private List<List<HashMap<String, Object>>> paletteList = new ArrayList<>();
-
-  private ProjectFile openedProject;
-
-  private ProjectManager() {
-    CompletableFuture.runAsync(() -> initPalette());
+  private fun initPalette() {
+    val gson = Gson()
+    val type = object : TypeToken<ArrayList<HashMap<String?, Any?>?>?>() {}.type
+    paletteList.clear()
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_COMMON))
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_TEXT))
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_BUTTONS))
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_WIDGETS))
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_LAYOUTS))
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_CONTAINERS))
+    // paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_GOOGLE));
+    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_LEGACY))
   }
 
-  public void openProject(ProjectFile project) {
-    openedProject = project;
-    DrawableManager.loadFromFiles(openedProject.getDrawables());
-    FontManager.loadFromFiles(openedProject.getFonts());
-  }
-
-  public void closeProject() {
-    openedProject = null;
-    DrawableManager.clear();
-    FontManager.clear();
-  }
-
-  public ProjectFile getOpenedProject() {
-    return openedProject;
-  }
-
-  public String getColorsXml() {
-    return FileUtil.readFile(openedProject.getColorsPath());
-  }
-
-  public String getStringsXml() {
-    return FileUtil.readFile(openedProject.getStringsPath());
-  }
-
-  public String getFormattedProjectName() {
-    String projectName = openedProject.getName().toLowerCase(Locale.getDefault()).trim();
-
-    if (projectName.contains(" ")) {
-      projectName = projectName.replaceAll(" ", "_");
-    }
-    if (!projectName.endsWith(".xml")) {
-      projectName = projectName.concat(".xml");
-    }
-    return projectName;
-  }
-
-  public List<HashMap<String, Object>> getPalette(int position) {
-    return paletteList.get(position);
-  }
-
-  private void initPalette() {
-    final var gson = new Gson();
-    final var type = new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType();
-    paletteList.clear();
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_COMMON));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_TEXT));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_BUTTONS));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_WIDGETS));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_LAYOUTS));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_CONTAINERS));
-   // paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_GOOGLE));
-    paletteList.add(convertJsonToJavaObject(gson, type, Constants.PALETTE_LEGACY));
-  }
-
-  private ArrayList<HashMap<String, Object>> convertJsonToJavaObject(
-      Gson gson, Type type, String filePath) {
+  private fun convertJsonToJavaObject(
+    gson: Gson, type: Type, filePath: String
+  ): ArrayList<HashMap<String, Any>> {
     return gson.fromJson(
-        FileUtil.readFromAsset(filePath, LayoutEditor.Companion.getInstance().getContext()), type);
+      FileUtil.readFromAsset(filePath, LayoutEditor.instance?.context), type
+    )
+  }
+
+  companion object {
+    private var INSTANCE: ProjectManager? = null
+
+    @JvmStatic
+    @get:Synchronized
+    val instance: ProjectManager?
+      get() {
+        if (INSTANCE == null) {
+          INSTANCE = ProjectManager()
+        }
+        return INSTANCE
+      }
   }
 }

@@ -1,106 +1,132 @@
-package com.itsvks.layouteditor;
+package com.itsvks.layouteditor
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import com.itsvks.layouteditor.utils.FileUtil;
-import java.io.File;
+import android.os.Parcel
+import android.os.Parcelable
+import android.os.Parcelable.Creator
+import com.itsvks.layouteditor.managers.PreferencesManager
+import com.itsvks.layouteditor.utils.Constants
+import com.itsvks.layouteditor.utils.FileUtil
+import org.jetbrains.annotations.Contract
+import java.io.File
 
-public class ProjectFile implements Parcelable {
-  private String path;
-  public String name;
-  public String date;
+class ProjectFile : Parcelable {
+  var path: String
+    private set
+  @JvmField
+  var name: String
+  @JvmField
+  var date: String? = null
 
-  public ProjectFile(String path, String date) {
-    this.path = path;
-    this.date = date;
-    this.name = FileUtil.getLastSegmentFromPath(path);
+  constructor(path: String, date: String?) {
+    this.path = path
+    this.date = date
+    this.name = FileUtil.getLastSegmentFromPath(path)
   }
 
-  public void rename(String newPath) {
-    File newFile = new File(newPath);
-    File oldFile = new File(getPath());
-    oldFile.renameTo(newFile);
+  fun rename(newPath: String) {
+    val newFile = File(newPath)
+    val oldFile = File(path)
+    oldFile.renameTo(newFile)
 
-    path = newPath;
-    name = FileUtil.getLastSegmentFromPath(path);
+    path = newPath
+    name = FileUtil.getLastSegmentFromPath(path)
   }
 
-  public String getDrawablePath() {
-    return path + "/drawable/";
-  }
+  val drawablePath: String
+    get() = "$path/drawable/"
 
-  public String getFontPath() {
-    return path + "/font/";
-  }
+  val fontPath: String
+    get() = "$path/font/"
 
-  public String getColorsPath() {
-    return path + "/values/colors.xml";
-  }
+  val colorsPath: String
+    get() = "$path/values/colors.xml"
 
-  public String getStringsPath() {
-    return path + "/values/strings.xml";
-  }
+  val stringsPath: String
+    get() = "$path/values/strings.xml"
 
-  public File[] getDrawables() {
-    File file = new File(path + "/drawable/");
+  val layoutPath: String
+    get() = "$path/layout/"
 
-    if (!file.exists()) {
-      FileUtil.makeDir(path + "/drawable/");
+  val drawables: Array<out File>?
+    get() {
+      val file = File("$path/drawable/")
+
+      if (!file.exists()) {
+        FileUtil.makeDir("$path/drawable/")
+      }
+
+      return file.listFiles()
     }
 
-    return file.listFiles();
-  }
+  val fonts: Array<out File>?
+    get() {
+      val file = File("$path/font/")
 
-  public File[] getFonts() {
-    File file = new File(path + "/font/");
+      if (!file.exists()) {
+        FileUtil.makeDir("$path/font/")
+      }
 
-    if (!file.exists()) {
-      FileUtil.makeDir(path + "/font/");
+      return file.listFiles()
     }
 
-    return file.listFiles();
+  val layouts: Array<out File>?
+    get() {
+      val file = File(layoutPath)
+      if (!file.exists()) {
+        FileUtil.makeDir(layoutPath)
+      }
+      return file.listFiles()
+    }
+
+  val allLayouts: MutableList<LayoutFile>
+    get() {
+      val list: MutableList<LayoutFile> = mutableListOf()
+      layouts?.forEach { list.add(LayoutFile(it.absolutePath)) }
+      return list
+    }
+
+  val mainLayout: LayoutFile
+    get() = LayoutFile("$path/layout/layout_main.xml")
+
+  var currentLayout: LayoutFile
+    get() {
+      val currentLayoutPath = PreferencesManager.prefs.getString(Constants.CURRENT_LAYOUT, "")
+      return LayoutFile(currentLayoutPath)
+    }
+    set(value) {
+      PreferencesManager.prefs.edit().putString(Constants.CURRENT_LAYOUT, value.path).apply()
+    }
+
+  fun createDefaultLayout() {
+    FileUtil.writeFile(layoutPath + "layout_main.xml", "")
   }
 
-  public String getPath() {
-    return path;
+  override fun describeContents(): Int {
+    return 0
   }
 
-  public String getName() {
-    return name;
+  override fun writeToParcel(parcel: Parcel, flags: Int) {
+    parcel.writeString(path)
+    parcel.writeString(name)
   }
 
-  public String getDefaultLayout() {
-    return FileUtil.readFile(path + "/layout/layout_main.xml");
-  }
-    
-  public void createDefaultLayout() {
-    FileUtil.writeFile(path + "/layout/layout_main.xml", "");
+  private constructor(parcel: Parcel) {
+    path = parcel.readString().toString()
+    name = parcel.readString().toString()
   }
 
-  @Override
-  public int describeContents() {
-    return 0;
-  }
+  companion object {
+    @JvmField
+    val CREATOR: Creator<ProjectFile> = object : Creator<ProjectFile> {
+      @Contract("_ -> new")
+      override fun createFromParcel(`in`: Parcel): ProjectFile {
+        return ProjectFile(`in`)
+      }
 
-  @Override
-  public void writeToParcel(Parcel parcel, int flags) {
-    parcel.writeString(path);
-    parcel.writeString(name);
-  }
-
-  public static final Parcelable.Creator<ProjectFile> CREATOR =
-      new Parcelable.Creator<ProjectFile>() {
-        public ProjectFile createFromParcel(Parcel in) {
-          return new ProjectFile(in);
-        }
-
-        public ProjectFile[] newArray(int size) {
-          return new ProjectFile[size];
-        }
-      };
-
-  private ProjectFile(Parcel parcel) {
-    path = parcel.readString();
-    name = parcel.readString();
+      @Contract(value = "_ -> new", pure = true)
+      override fun newArray(size: Int): Array<ProjectFile?> {
+        return arrayOfNulls(size)
+      }
+    }
   }
 }
