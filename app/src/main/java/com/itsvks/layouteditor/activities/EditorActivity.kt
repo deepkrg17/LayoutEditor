@@ -61,7 +61,6 @@ import com.itsvks.layouteditor.utils.Utils
 import com.itsvks.layouteditor.views.CustomDrawerLayout
 import java.io.File
 
-
 @SuppressLint("UnsafeOptInUsageError")
 class EditorActivity : BaseActivity() {
   private var binding: ActivityEditorBinding? = null
@@ -171,8 +170,7 @@ class EditorActivity : BaseActivity() {
                 this@EditorActivity,
                 "Selected file is not an Android XML layout file",
                 Toast.LENGTH_SHORT
-              )
-                .show()
+              ).show()
             }
           }
         }
@@ -283,6 +281,7 @@ class EditorActivity : BaseActivity() {
         createLayout()
       } else {
         replaceListViewAdapter(layoutAdapter!!)
+        binding!!.title.setText(string.layouts)
         // binding.paletteNavigation.getMenu().getItem(binding.paletteNavigation.getSelectedItemId()).setChecked(false);
         fab.setImageResource(R.drawable.plus)
         TooltipCompat.setTooltipText(fab, "Create new layout")
@@ -292,7 +291,6 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun replaceListViewAdapter(adapter: RecyclerView.Adapter<*>) {
-    binding!!.title.setText(string.layouts)
     binding!!.listView.adapter = adapter
   }
 

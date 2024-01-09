@@ -3,6 +3,8 @@ package com.itsvks.layouteditor.tools;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -102,9 +104,8 @@ public class XmlLayoutParser {
 
         parser.next();
       }
-    } catch (XmlPullParserException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (XmlPullParserException | IOException e) {
+      //noinspection CallToPrintStackTrace
       e.printStackTrace();
     }
 
@@ -113,6 +114,7 @@ public class XmlLayoutParser {
     for (View view : viewAttributeMap.keySet()) {
       AttributeMap map = viewAttributeMap.get(view);
 
+      assert map != null;
       for (String key : map.keySet()) {
         if (key.equals("android:id")) {
           IdManager.addNewId(view, map.getValue("android:id"));
@@ -122,11 +124,12 @@ public class XmlLayoutParser {
 
     for (View view : viewAttributeMap.keySet()) {
       AttributeMap map = viewAttributeMap.get(view);
+      assert map != null;
       applyAttributes(view, map);
     }
   }
 
-  private void applyAttributes(View target, AttributeMap attributeMap) {
+  private void applyAttributes(View target, @NonNull AttributeMap attributeMap) {
     final List<HashMap<String, Object>> allAttrs = initializer.getAllAttributesForView(target);
 
     final List<String> keys = attributeMap.keySet();

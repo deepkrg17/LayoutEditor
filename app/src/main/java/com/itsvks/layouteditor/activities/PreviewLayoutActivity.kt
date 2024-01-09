@@ -15,13 +15,9 @@ class PreviewLayoutActivity : BaseActivity() {
       layoutInflater
     )
     setContentView(binding.getRoot())
-    val projectFile = intent.extras!!.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
+    @Suppress("DEPRECATION") val projectFile = intent.extras!!.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
     val parser = XmlLayoutParser(this)
-//    parser.parseFromXml(projectFile!!.layoutPath, this)
+    parser.parseFromXml(projectFile!!.currentLayout.read(), this)
     binding.getRoot().addView(parser.getRoot())
-  }
-
-  companion object {
-    const val EXTRA_KEY_XML = "xml"
   }
 }
