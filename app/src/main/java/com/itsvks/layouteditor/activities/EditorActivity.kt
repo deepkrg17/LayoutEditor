@@ -235,7 +235,7 @@ class EditorActivity : BaseActivity() {
   private fun setupStructureView() {
     binding!!.editorLayout.setStructureView(binding!!.structureView)
 
-    binding!!.structureView.setOnItemClickListener { view: View? ->
+    binding!!.structureView.setOnItemClickListener { view: View ->
       binding!!.editorLayout.showDefinedAttributes(view)
       drawerLayout!!.closeDrawer(GravityCompat.END)
     }
@@ -348,7 +348,6 @@ class EditorActivity : BaseActivity() {
           Intent(this, ResourceManagerActivity::class.java)
             .putExtra(Constants.EXTRA_KEY_PROJECT, project)
         )
-
         return true
       }
 
@@ -356,6 +355,7 @@ class EditorActivity : BaseActivity() {
         val result = XmlLayoutGenerator().generate(binding!!.editorLayout, true)
         if (result.isEmpty()) showNothingDialog()
         else {
+          saveXml()
           startActivity(
             Intent(this, PreviewLayoutActivity::class.java)
               .putExtra(Constants.EXTRA_KEY_PROJECT, project)

@@ -12,7 +12,7 @@ class LayoutEditor : Application() {
   override fun onCreate() {
     super.onCreate()
     instance = this
-//    AppCompatDelegate.setDefaultNightMode(PreferencesManager.currentTheme)
+    AppCompatDelegate.setDefaultNightMode(PreferencesManager.currentTheme)
     if (PreferencesManager.isApplyDynamicColors && DynamicColors.isDynamicColorAvailable()) {
       DynamicColors.applyToActivitiesIfAvailable(this)
     }

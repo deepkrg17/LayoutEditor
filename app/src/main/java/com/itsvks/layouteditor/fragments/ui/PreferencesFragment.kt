@@ -1,54 +1,64 @@
-package com.itsvks.layouteditor.fragments.ui;
+package com.itsvks.layouteditor.fragments.ui
 
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.managers.PreferencesManager
+import com.itsvks.layouteditor.managers.SharedPreferencesKeys
 
-import androidx.annotation.NonNull;
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
+class PreferencesFragment : PreferenceFragmentCompat() {
 
-import androidx.preference.SwitchPreferenceCompat;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.itsvks.layouteditor.BaseActivity;
-import com.itsvks.layouteditor.LayoutEditor;
-import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.managers.PreferencesManager;
-
-public class PreferencesFragment extends PreferenceFragmentCompat {
-
-  private SwitchPreferenceCompat dynamic_colors;
-
-  @Override
-  public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-    setPreferencesFromResource(R.xml.preference, rootKey);
-
-    ListPreference choose_theme = findPreference("choose_theme");
-    dynamic_colors = findPreference("dynamic_colors");
-
-    assert choose_theme != null;
-//    choose_theme.setValue(String.valueOf(PreferencesManager.getCurrentTheme()));
-        
-    dynamic_colors.setChecked(PreferencesManager.isApplyDynamicColors());
-    dynamic_colors.setOnPreferenceChangeListener(dynamicThemeChangeListener());
+  private val themes by lazy {
+    arrayOf(
+      getString(R.string.theme_auto),
+      getString(R.string.theme_dark),
+      getString(R.string.theme_light)
+    )
   }
-    
-  public Preference.OnPreferenceChangeListener dynamicThemeChangeListener() {
-        return (preference, obj) -> {
-            new MaterialAlertDialogBuilder(getContext())
-                .setTitle(R.string.note)
-                .setMessage(R.string.msg_dynamic_colors_dialog)
-                .setCancelable(false)
-                .setNegativeButton(R.string.cancel, (d, w) -> {
-                    dynamic_colors.setOnPreferenceChangeListener(null);
-                    dynamic_colors.setChecked(PreferencesManager.isApplyDynamicColors());
-                    dynamic_colors.setOnPreferenceChangeListener(dynamicThemeChangeListener());
-                    d.cancel();
-                })
-                .setPositiveButton(R.string.okay, (d, w) -> {
-                    getActivity().finishAffinity();
-                })
-                .show();
-            return true;
-        };
-    }
+
+  private val themeValues by lazy { arrayOf("Auto", "Dark", "Light") }
+
+  override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    setPreferencesFromResource(R.xml.preference, rootKey)
+    setDynamicColorsChangeWarning(findPreference(SharedPreferencesKeys.KEY_DYNAMIC_COLORS))
+
+    findPreference<Preference>(SharedPreferencesKeys.KEY_APP_THEME)?.onPreferenceClickListener =
+      Preference.OnPreferenceClickListener {
+        val selectedThemeValue =
+          PreferencesManager.prefs.getString(SharedPreferencesKeys.KEY_APP_THEME, "Auto")
+        MaterialAlertDialogBuilder(requireContext())
+          .setTitle(R.string.choose_theme)
+          .setSingleChoiceItems(themes, themeValues.indexOf(selectedThemeValue)) { d, w ->
+            PreferencesManager.prefs.edit()
+              .putString(SharedPreferencesKeys.KEY_APP_THEME, themeValues[w]).apply()
+            AppCompatDelegate.setDefaultNightMode(PreferencesManager.currentTheme)
+            d.dismiss()
+          }
+          .setPositiveButton(R.string.cancel, null)
+          .show()
+        true
+      }
+  }
+
+  private fun setDynamicColorsChangeWarning(preference: SwitchPreferenceCompat?) {
+    preference?.onPreferenceChangeListener =
+      Preference.OnPreferenceChangeListener { _, _ ->
+        MaterialAlertDialogBuilder(requireContext())
+          .setTitle(R.string.note)
+          .setMessage(R.string.msg_dynamic_colors_dialog)
+          .setCancelable(false)
+          .setNegativeButton(R.string.cancel) { d, _ ->
+            d.cancel()
+          }
+          .setPositiveButton(R.string.okay) { _, _ ->
+            requireActivity().finishAffinity()
+          }
+          .show()
+        true
+      }
+  }
 }

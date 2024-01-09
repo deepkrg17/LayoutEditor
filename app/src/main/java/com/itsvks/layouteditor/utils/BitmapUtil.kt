@@ -2,6 +2,7 @@ package com.itsvks.layouteditor.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
@@ -229,17 +230,17 @@ object BitmapUtil {
 
   @JvmStatic
   fun createBitmapFromView(view: View): Bitmap {
-    val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+    val bitmap = Bitmap.createBitmap(view.width, view.height, ARGB_8888)
     val canvas = Canvas(bitmap)
     view.draw(canvas)
     return bitmap
   }
 
   @Throws(IOException::class)
-  fun loadBitmapFromUri(context: Context, uri: Uri?): Bitmap? {
-    val inputStream = context.contentResolver.openInputStream(uri!!)
+  fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+    val inputStream = context.contentResolver.openInputStream(uri)
     val options = BitmapFactory.Options()
-    options.inPreferredConfig = Bitmap.Config.ARGB_8888
+    options.inPreferredConfig = ARGB_8888
     val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
     inputStream!!.close()
     return bitmap

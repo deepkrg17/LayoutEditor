@@ -1,6 +1,7 @@
 package com.itsvks.layouteditor.managers
 
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.itsvks.layouteditor.LayoutEditor.Companion.instance
 
@@ -16,7 +17,11 @@ object PreferencesManager {
     get() = prefs.getBoolean(SharedPreferencesKeys.KEY_DYNAMIC_COLORS, false)
   @JvmStatic
   val currentTheme: Int
-    get() = prefs.getInt(SharedPreferencesKeys.KEY_CHOOSE_THEME, 0)
+    get() = when (prefs.getString(SharedPreferencesKeys.KEY_APP_THEME, "Auto")) {
+      "Light" -> AppCompatDelegate.MODE_NIGHT_NO
+      "Dark" -> AppCompatDelegate.MODE_NIGHT_YES
+      else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    }
   @JvmStatic
   val prefs: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(instance!!.context)

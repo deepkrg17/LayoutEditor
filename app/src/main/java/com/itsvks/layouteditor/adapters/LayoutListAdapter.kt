@@ -2,17 +2,28 @@ package com.itsvks.layouteditor.adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.HardwareRenderer
+import android.graphics.PixelFormat
+import android.graphics.RenderEffect
+import android.graphics.RenderNode
+import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
+import android.hardware.HardwareBuffer
+import android.media.ImageReader
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.itsvks.layouteditor.LayoutFile
 import com.itsvks.layouteditor.ProjectFile
 import com.itsvks.layouteditor.R
 import com.itsvks.layouteditor.databinding.LayoutProjectLayoutItemBinding
+import com.itsvks.layouteditor.utils.BitmapUtil
 
 class LayoutListAdapter(
   val project: ProjectFile
@@ -32,7 +43,8 @@ class LayoutListAdapter(
     )
   }
 
-  @SuppressLint("RecyclerView")
+  @RequiresApi(Build.VERSION_CODES.S)
+  @SuppressLint("RecyclerView", "WrongConstant")
   override fun onBindViewHolder(holder: VH, position: Int) {
     val layoutList = project.allLayouts
 
