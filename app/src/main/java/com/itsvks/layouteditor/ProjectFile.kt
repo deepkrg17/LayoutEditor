@@ -78,12 +78,11 @@ class ProjectFile : Parcelable {
       return file.listFiles()
     }
 
-  val allLayouts: MutableList<LayoutFile>
-    get() {
-      val list: MutableList<LayoutFile> = mutableListOf()
-      layouts?.forEach { list.add(LayoutFile(it.absolutePath)) }
-      return list
-    }
+  val allLayouts: MutableList<LayoutFile> by lazy {
+    val list: MutableList<LayoutFile> = mutableListOf()
+    layouts?.forEach { list.add(LayoutFile(it.absolutePath)) }
+    list
+  }
 
   val mainLayout: LayoutFile
     get() = LayoutFile("$path/layout/layout_main.xml")

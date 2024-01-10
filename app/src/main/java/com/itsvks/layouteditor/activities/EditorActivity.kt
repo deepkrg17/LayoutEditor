@@ -132,7 +132,9 @@ class EditorActivity : BaseActivity() {
     }
 
     layoutAdapter!!.onLongClickListener = { view, position ->
-      showLayoutListOptions(view, position)
+      if (project!!.allLayouts[position].path == project!!.mainLayout.path) {
+        ToastUtils.showShort("You can't modify main layout.")
+      } else showLayoutListOptions(view, position)
       true
     }
   }
