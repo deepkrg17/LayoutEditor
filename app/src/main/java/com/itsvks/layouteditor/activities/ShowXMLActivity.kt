@@ -1,183 +1,122 @@
-package com.itsvks.layouteditor.activities;
+package com.itsvks.layouteditor.activities
 
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
-import com.blankj.utilcode.util.ClipboardUtils;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.itsvks.layouteditor.BaseActivity;
-import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.databinding.ActivityShowXMLBinding;
-import com.itsvks.layouteditor.managers.PreferencesManager;
-import com.itsvks.layouteditor.utils.SBUtils;
-import com.itsvks.layouteditor.utils.Utils;
-import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme;
-import io.github.rosemoe.sora.langs.textmate.TextMateLanguage;
-import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry;
-import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry;
-import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry;
-import io.github.rosemoe.sora.langs.textmate.registry.model.ThemeModel;
-import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver;
-import org.eclipse.tm4e.core.registry.IThemeSource;
+import android.graphics.Typeface
+import android.os.Bundle
+import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import com.blankj.utilcode.util.ClipboardUtils
+import com.itsvks.layouteditor.BaseActivity
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.databinding.ActivityShowXMLBinding
+import com.itsvks.layouteditor.utils.SBUtils.Companion.make
+import com.itsvks.layouteditor.utils.Utils
+import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
+import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
+import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.model.ThemeModel
+import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver
+import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
+import org.eclipse.tm4e.core.registry.IThemeSource
 
-public class ShowXMLActivity extends BaseActivity {
+class ShowXMLActivity : BaseActivity() {
+  private var binding: ActivityShowXMLBinding? = null
 
-  public static final String EXTRA_KEY_XML = "xml";
-  private int lastUiMode = Configuration.UI_MODE_NIGHT_NO; // default to light theme
-  private SharedPreferences prefs;
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = ActivityShowXMLBinding.inflate(layoutInflater)
 
-  private ActivityShowXMLBinding binding;
+    setContentView(binding!!.getRoot())
+    setSupportActionBar(binding!!.topAppBar)
+    supportActionBar!!.setTitle(R.string.xml_preview)
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    binding = ActivityShowXMLBinding.inflate(getLayoutInflater());
-    prefs = PreferencesManager.getPrefs();
+    binding!!.topAppBar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-    setContentView(binding.getRoot());
-    setSupportActionBar(binding.topAppBar);
-    getSupportActionBar().setTitle(R.string.xml_preview);
-
-    binding.topAppBar.setNavigationOnClickListener(v -> super.onBackPressed());
-
-    binding.editor.setText(getIntent().getStringExtra(EXTRA_KEY_XML));
-    binding.editor.setTypefaceText(jetBrainsMono());
-    binding.editor.setTypefaceLineNumber(jetBrainsMono());
-    binding.editor.setEditable(false);
-    // binding.editor.setColorScheme(new SchemeLight());
+    binding!!.editor.apply {
+      setText(intent.getStringExtra(EXTRA_KEY_XML))
+      typefaceText = jetBrainsMono()
+      typefaceLineNumber = jetBrainsMono()
+      isEditable = false
+    }
     try {
+      loadDefaultThemes()
+      ThemeRegistry.getInstance().setTheme("darcula")
+      loadDefaultLanguages()
 
-      loadDefaultThemes();
-      ThemeRegistry.getInstance().setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
-      loadDefaultLanguages();
+      ensureTextmateTheme()
 
-      ensureTextmateTheme();
-
-      var editor = binding.editor;
-      var language = TextMateLanguage.create("text.xml", true);
-      editor.setEditorLanguage(language);
-    } catch (Exception e) {
-      e.printStackTrace();
+      val editor = binding!!.editor
+      val language = TextMateLanguage.create("text.xml", true)
+      editor.setEditorLanguage(language)
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
 
-    binding.fab.setOnClickListener(
-        v -> {
-          ClipboardUtils.copyText(binding.editor.getText().toString());
-          SBUtils.make(binding.getRoot(), getString(R.string.copied))
-              .setAnchorView(binding.fab)
-              .setSlideAnimation()
-              .show();
-        });
+    binding!!.fab.setOnClickListener {
+      ClipboardUtils.copyText(binding!!.editor.text.toString())
+      make(binding!!.getRoot(), getString(R.string.copied))
+        .setAnchorView(binding!!.fab)
+        .setSlideAnimation()
+        .show()
+    }
 
-    binding.editor.setOnScrollChangeListener(
-        (v, x, y, oldX, oldY) -> {
-          if (y > oldY + 20 && binding.fab.isExtended()) {
-            binding.fab.shrink();
-          }
-          if (y < oldY - 20 && !binding.fab.isExtended()) {
-            binding.fab.extend();
-          }
-          if (y == 0) {
-            binding.fab.extend();
-          }
-        });
+    binding!!.editor.setOnScrollChangeListener { _, _, y, _, oldY ->
+      if (y > oldY + 20 && binding!!.fab.isExtended) {
+        binding!!.fab.shrink()
+      }
+      if (y < oldY - 20 && !binding!!.fab.isExtended) {
+        binding!!.fab.extend()
+      }
+      if (y == 0) {
+        binding!!.fab.extend()
+      }
+    }
   }
 
-  @Override
-  protected void onDestroy() {
-    binding = null;
-    super.onDestroy();
+  override fun onDestroy() {
+    binding = null
+    super.onDestroy()
   }
 
-  private void loadDefaultThemes() throws Exception {
+  @Throws(Exception::class)
+  private fun loadDefaultThemes() {
     // add assets file provider
     FileProviderRegistry.getInstance()
-        .addFileProvider(new AssetsFileResolver(getApplicationContext().getAssets()));
+      .addFileProvider(AssetsFileResolver(applicationContext.assets))
 
-    String[] themes = new String[] {"default", "darcula", "abyss", "quietlight", "solarized_drak"};
-    ThemeRegistry themeRegistry = ThemeRegistry.getInstance();
-    for (String name : themes) {
-      String path = "editor/textmate/" + name + ".json";
-      themeRegistry.loadTheme(
-          new ThemeModel(
-              IThemeSource.fromInputStream(
-                  FileProviderRegistry.getInstance().tryGetInputStream(path), path, null),
-              name));
+    val themeRegistry = ThemeRegistry.getInstance()
+    val path = "editor/textmate/darcula.json"
+    themeRegistry.loadTheme(
+      ThemeModel(
+        IThemeSource.fromInputStream(
+          FileProviderRegistry.getInstance().tryGetInputStream(path), path, null
+        ), "darcula"
+      )
+    )
+
+    themeRegistry.setTheme("darcula")
+  }
+
+  private fun loadDefaultLanguages() {
+    GrammarRegistry.getInstance().loadGrammars("editor/textmate/languages.json")
+  }
+
+  @Throws(Exception::class)
+  private fun ensureTextmateTheme() {
+    val editor = binding!!.editor
+    var editorColorScheme: EditorColorScheme? = editor.colorScheme
+    if (editorColorScheme !is TextMateColorScheme) {
+      editorColorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
+      editor.colorScheme = editorColorScheme
     }
-
-    themeRegistry.setTheme(Utils.isDarkMode(this) ? "darcula" : "quietlight");
   }
 
-  private void loadDefaultLanguages() {
-    GrammarRegistry.getInstance().loadGrammars("editor/textmate/languages.json");
+  private fun jetBrainsMono(): Typeface? {
+    return ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular)
   }
 
-  private void ensureTextmateTheme() throws Exception {
-    var editor = binding.editor;
-    var editorColorScheme = editor.getColorScheme();
-    if (!(editorColorScheme instanceof TextMateColorScheme)) {
-      editorColorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance());
-      editor.setColorScheme(editorColorScheme);
-    }
-  }
-
-  private Typeface jetBrainsMono() {
-    return ResourcesCompat.getFont(this, R.font.jetbrains_mono_regular);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    var editorThemeMenu = menu.add(getString(R.string.color_scheme));
-    editorThemeMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-    editorThemeMenu.setIcon(AppCompatResources.getDrawable(this, R.drawable.palette));
-    editorThemeMenu.setContentDescription(getString(R.string.color_scheme));
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getTitle().equals(getString(R.string.color_scheme))) {
-      new MaterialAlertDialogBuilder(this)
-          .setTitle(getString(R.string.select) + " " + getString(R.string.color_scheme))
-          .setAdapter(
-              new ArrayAdapter<String>(
-                  this,
-                  android.R.layout.simple_list_item_1,
-                  new String[] {"Default", "Abyss", "Darcula", "Quiet Light", "Solarized (dark)"}),
-              (d, w) -> {
-                try {
-                  ensureTextmateTheme();
-                  switch (w) {
-                    case 0:
-                      ThemeRegistry.getInstance().setTheme("default");
-                      break;
-                    case 1:
-                      ThemeRegistry.getInstance().setTheme("abyss");
-                      break;
-                    case 2:
-                      ThemeRegistry.getInstance().setTheme("darcula");
-                      break;
-                    case 3:
-                      ThemeRegistry.getInstance().setTheme("quietlight");
-                      break;
-                    case 4:
-                      ThemeRegistry.getInstance().setTheme("solarized_drak");
-                      break;
-                  }
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              })
-          .setNegativeButton(getString(R.string.cancel), (d, w) -> d.dismiss())
-          .show();
-      return true;
-    }
-    return false;
+  companion object {
+    const val EXTRA_KEY_XML: String = "xml"
   }
 }

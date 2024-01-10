@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class ConvertImportedXml {
   private final String TAG = this.getClass().getSimpleName();
 
-  private String xml;
+  private final String xml;
 
   public ConvertImportedXml(String xml) {
     this.xml = xml;
@@ -37,11 +37,8 @@ public class ConvertImportedXml {
               new JSONObject(FileUtil.readFromAsset("widgetclasses.json", context));
 
           String widgetClass = classes.getString(widgetName);
-          if (widgetClass != null) {
-
-            convertedXml = convertedXml.replace("<" + fullTag, "<" + widgetClass);
-            convertedXml = convertedXml.replace("</" + fullTag, "</" + widgetClass);
-          }
+          convertedXml = convertedXml.replace("<" + fullTag, "<" + widgetClass);
+          convertedXml = convertedXml.replace("</" + fullTag, "</" + widgetClass);
         }
       } catch (Exception e) {
         e.printStackTrace();

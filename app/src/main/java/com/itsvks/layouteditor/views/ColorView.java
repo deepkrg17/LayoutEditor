@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.itsvks.layouteditor.R;
@@ -21,11 +22,11 @@ public class ColorView extends View {
   private int a = 255, r = 255, g = 255, b = 255;
 
   /** Drawable object to draw transparent background. */
-  private Drawable transparent;
+  private final Drawable transparent;
   /** Paint object to draw color bitmap. */
   private Paint bitmapPaint;
   /** Paint object to draw color. */
-  private Paint colorPaint;
+  private final Paint colorPaint;
 
   /**
    * Constructor for ColorView class.
@@ -161,6 +162,7 @@ public class ColorView extends View {
    * @param c The color, packed as ARGB in a 32-bit int.
    * @return The hex value of the given color.
    */
+  @NonNull
   private String getHex(int c) {
     return String.format(
             "%02x%02x%02x%02x", Color.alpha(c), Color.red(c), Color.green(c), Color.blue(c))

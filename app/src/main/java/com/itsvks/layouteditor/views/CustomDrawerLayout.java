@@ -30,7 +30,7 @@ public class CustomDrawerLayout extends DrawerLayout {
   }
 
   @Override
-  public boolean onInterceptTouchEvent(MotionEvent ev) {
+  public boolean onInterceptTouchEvent(@NonNull MotionEvent ev) {
     View scrollingChild = findScrollingChild(this, ev.getX(), ev.getY());
     if (scrollingChild != null) {
       return false;
@@ -46,7 +46,8 @@ public class CustomDrawerLayout extends DrawerLayout {
    * @param y The y point in the screen
    * @return The scrolling view, null if no view is found
    */
-  private View findScrollingChild(ViewGroup parent, float x, float y) {
+  @Nullable
+  private View findScrollingChild(@NonNull ViewGroup parent, float x, float y) {
     int n = parent.getChildCount();
     if (parent == this && n <= 1) {
       return null;

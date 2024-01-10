@@ -1,5 +1,6 @@
 package com.itsvks.layouteditor.fragments.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
@@ -44,6 +45,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
       }
   }
 
+  @SuppressLint("RestrictedApi")
   private fun setDynamicColorsChangeWarning(preference: SwitchPreferenceCompat?) {
     preference?.onPreferenceChangeListener =
       Preference.OnPreferenceChangeListener { _, _ ->
@@ -52,6 +54,8 @@ class PreferencesFragment : PreferenceFragmentCompat() {
           .setMessage(R.string.msg_dynamic_colors_dialog)
           .setCancelable(false)
           .setNegativeButton(R.string.cancel) { d, _ ->
+            preference?.sharedPreferences?.edit()?.putBoolean(preference.key, !PreferencesManager.isApplyDynamicColors)?.apply()
+            preference?.isChecked = PreferencesManager.isApplyDynamicColors
             d.cancel()
           }
           .setPositiveButton(R.string.okay) { _, _ ->

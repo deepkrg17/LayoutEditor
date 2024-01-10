@@ -235,8 +235,8 @@ class EditorActivity : BaseActivity() {
   private fun setupStructureView() {
     binding!!.editorLayout.setStructureView(binding!!.structureView)
 
-    binding!!.structureView.setOnItemClickListener { view: View ->
-      binding!!.editorLayout.showDefinedAttributes(view)
+    binding!!.structureView.onItemClickListener = {
+      binding!!.editorLayout.showDefinedAttributes(it)
       drawerLayout!!.closeDrawer(GravityCompat.END)
     }
   }
@@ -672,8 +672,12 @@ class EditorActivity : BaseActivity() {
     builder.setPositiveButton(
       string.yes
     ) { _, _ ->
-      if (layouts[pos] === project!!.currentLayout) openLayout(project!!.mainLayout)
+      if (layouts[pos].path == project!!.mainLayout.path) {
+        ToastUtils.showShort("You can't delete main layout.")
+        return@setPositiveButton
+      }
       FileUtil.deleteFile(layouts[pos].path)
+      if (layouts[pos] === project!!.currentLayout) openLayout(project!!.mainLayout)
       layouts.remove(layouts[pos])
       layoutAdapter?.notifyDataSetChanged()
     }
@@ -703,7 +707,7 @@ class EditorActivity : BaseActivity() {
     popupMenu.show()
   }
 
-  fun saveXml() {
+  private fun saveXml() {
     if (binding!!.editorLayout.childCount == 0) {
       project!!.currentLayout.saveLayout("")
       ToastUtils.showShort(getString(string.layout_saved))

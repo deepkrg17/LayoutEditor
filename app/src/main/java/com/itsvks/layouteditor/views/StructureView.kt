@@ -1,275 +1,236 @@
-package com.itsvks.layouteditor.views;
+package com.itsvks.layouteditor.views
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.SurfaceView;
-import android.view.TextureView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.webkit.WebView;
-import android.widget.*;
-import androidx.appcompat.widget.LinearLayoutCompat;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.SurfaceView
+import android.view.TextureView
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewStub
+import android.webkit.WebView
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.CheckBox
+import android.widget.CheckedTextView
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.GridLayout
+import android.widget.GridView
+import android.widget.HorizontalScrollView
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.MultiAutoCompleteTextView
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.RatingBar
+import android.widget.RelativeLayout
+import android.widget.ScrollView
+import android.widget.SearchView
+import android.widget.SeekBar
+import android.widget.Space
+import android.widget.Spinner
+import android.widget.Switch
+import android.widget.TabHost
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextClock
+import android.widget.TextView
+import android.widget.ToggleButton
+import android.widget.VideoView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.TooltipCompat
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.databinding.LayoutStructureViewItemBinding
+import com.itsvks.layouteditor.managers.IdManager.idMap
 
-import androidx.appcompat.widget.TooltipCompat;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.color.MaterialColors;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.itsvks.layouteditor.databinding.LayoutStructureViewItemBinding;
-import com.itsvks.layouteditor.managers.IdManager;
-import java.util.HashMap;
-import com.itsvks.layouteditor.R;
-import java.util.Map;
+class StructureView(context: Context?, attrs: AttributeSet?) : LinearLayoutCompat(
+  context!!, attrs
+), View.OnClickListener {
+  private val inflater: LayoutInflater = LayoutInflater.from(context)
+  private val paint = Paint()
+  private val pointRadius: Int
+  private val textViewMap: MutableMap<TextView, View> = HashMap()
+  private val viewTextMap: MutableMap<View, TextView> = HashMap()
 
-public class StructureView extends LinearLayoutCompat implements View.OnClickListener {
-  private LayoutInflater inflater;
-  private Paint paint;
-  private int pointRadius;
-  private Map<TextView, View> textViewMap = new HashMap<>();
-  private Map<View, TextView> viewTextMap = new HashMap<>();
-  private OnItemClickListener listener;
-  private int primaryColor;
-
-  public static Map<String, Integer> imgMap = new HashMap<>();
-
-  static {
-    imgMap.put("_unknown", R.mipmap.ic_palette_unknown_view);
-    imgMap.put(TextView.class.getSimpleName(), R.mipmap.ic_palette_text_view);
-    imgMap.put(EditText.class.getSimpleName(), R.mipmap.ic_palette_edit_text);
-    imgMap.put(Button.class.getSimpleName(), R.mipmap.ic_palette_button);
-    imgMap.put(ImageButton.class.getSimpleName(), R.mipmap.ic_palette_image_button);
-    imgMap.put(ImageView.class.getSimpleName(), R.mipmap.ic_palette_image_view);
-    imgMap.put(VideoView.class.getSimpleName(), R.mipmap.ic_palette_video_view);
-    imgMap.put(
-        AutoCompleteTextView.class.getSimpleName(), R.mipmap.ic_palette_auto_complete_text_view);
-    imgMap.put(
-        MultiAutoCompleteTextView.class.getSimpleName(),
-        R.mipmap.ic_palette_multi_auto_complete_text_view);
-    imgMap.put(CheckedTextView.class.getSimpleName(), R.mipmap.ic_palette_checked_text_view);
-    imgMap.put(CheckBox.class.getSimpleName(), R.mipmap.ic_palette_check_box);
-    imgMap.put(RadioButton.class.getSimpleName(), R.mipmap.ic_palette_radio_button);
-    imgMap.put(RadioGroup.class.getSimpleName(), R.mipmap.ic_palette_radio_group);
-    imgMap.put(ToggleButton.class.getSimpleName(), R.mipmap.ic_palette_toggle_button);
-    imgMap.put(Switch.class.getSimpleName(), R.mipmap.ic_palette_switch);
-    imgMap.put(View.class.getSimpleName(), R.mipmap.ic_palette_view);
-    imgMap.put(WebView.class.getSimpleName(), R.mipmap.ic_palette_web_view);
-    imgMap.put(CalendarView.class.getSimpleName(), R.mipmap.ic_palette_calendar_view);
-    imgMap.put(ProgressBar.class.getSimpleName(), R.mipmap.ic_palette_progress_bar);
-    imgMap.put(
-        ProgressBar.class.getSimpleName() + "horizontal",
-        R.mipmap.ic_palette_progress_bar_horizontal);
-    imgMap.put(SeekBar.class.getSimpleName(), R.mipmap.ic_palette_seek_bar);
-    imgMap.put(RatingBar.class.getSimpleName(), R.mipmap.ic_palette_rating_bar);
-    imgMap.put(TextureView.class.getSimpleName(), R.mipmap.ic_palette_texture_view);
-    imgMap.put(SurfaceView.class.getSimpleName(), R.mipmap.ic_palette_surface_view);
-    imgMap.put(SearchView.class.getSimpleName(), R.mipmap.ic_palette_search_view);
-    imgMap.put(
-        LinearLayout.class.getSimpleName() + "horizontal", R.mipmap.ic_palette_linear_layout_horz);
-    imgMap.put(
-        LinearLayout.class.getSimpleName() + "vertical", R.mipmap.ic_palette_linear_layout_vert);
-    imgMap.put(FrameLayout.class.getSimpleName(), R.mipmap.ic_palette_frame_layout);
-    imgMap.put(TableLayout.class.getSimpleName(), R.mipmap.ic_palette_table_layout);
-    imgMap.put(TableRow.class.getSimpleName(), R.mipmap.ic_palette_table_row);
-    imgMap.put(Space.class.getSimpleName(), R.mipmap.ic_palette_space);
-    imgMap.put(Spinner.class.getSimpleName(), R.mipmap.ic_palette_spinner);
-    imgMap.put(ScrollView.class.getSimpleName(), R.mipmap.ic_palette_scroll_view);
-    imgMap.put(
-        HorizontalScrollView.class.getSimpleName(), R.mipmap.ic_palette_horizontal_scroll_view);
-    imgMap.put(ViewStub.class.getSimpleName(), R.mipmap.ic_palette_view_stub);
-    imgMap.put("include", R.mipmap.ic_palette_include);
-    imgMap.put(GridLayout.class.getSimpleName(), R.mipmap.ic_palette_grid_layout);
-    imgMap.put(GridView.class.getSimpleName(), R.mipmap.ic_palette_grid_view);
-    imgMap.put(RecyclerView.class.getSimpleName(), R.mipmap.ic_palette_recycler_view);
-    imgMap.put(ListView.class.getSimpleName(), R.mipmap.ic_palette_list_view);
-    imgMap.put(TabHost.class.getSimpleName(), R.mipmap.ic_palette_tab_host);
-    imgMap.put(RelativeLayout.class.getSimpleName(), R.mipmap.ic_palette_relative_layout);
-    imgMap.put(Chip.class.getSimpleName(), R.mipmap.ic_palette_chip);
-    imgMap.put(ChipGroup.class.getSimpleName(), R.mipmap.ic_palette_chip_group);
-    imgMap.put(
-        FloatingActionButton.class.getSimpleName(), R.mipmap.ic_palette_floating_action_button);
-    imgMap.put(NestedScrollView.class.getSimpleName(), R.mipmap.ic_palette_nested_scroll_view);
-    imgMap.put(ViewPager.class.getSimpleName(), R.mipmap.ic_palette_view_pager);
-    imgMap.put(ViewPager2.class.getSimpleName(), R.mipmap.ic_palette_view_pager);
-    imgMap.put(CardView.class.getSimpleName(), R.mipmap.ic_palette_card_view);
-    imgMap.put(TextClock.class.getSimpleName(), R.mipmap.ic_palette_text_clock);
-    imgMap.put(AppBarLayout.class.getSimpleName(), R.mipmap.ic_palette_app_bar_layout);
-    imgMap.put(NavigationView.class.getSimpleName(), R.mipmap.ic_palette_navigation_view);
-    imgMap.put(ConstraintLayout.class.getSimpleName(), R.mipmap.ic_palette_constraint_layout);
-    imgMap.put(
-        BottomNavigationView.class.getSimpleName(), R.mipmap.ic_palette_bottom_navigation_view);
-  }
+  var onItemClickListener: ((View) -> Unit)? = null
 
   /**
    * This is the constructor of the StructureView class which takes context and attributeSet as
    * parameters. It creates a new Paint object, sets its color and anti-alias. It also sets the
    * orientation of this view to VERTICAL and sets the default OnItemClickListener.
    */
-  public StructureView(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    inflater = LayoutInflater.from(context);
+  init {
+    val primaryColor =
+      MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary)
+    paint.color = primaryColor
+    paint.isAntiAlias = true
+    paint.strokeWidth = getDip(1).toFloat()
 
-    paint = new Paint();
-    primaryColor = MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary);
-    paint.setColor(primaryColor);
-    paint.setAntiAlias(true);
-    paint.setStrokeWidth(getDip(1));
+    pointRadius = getDip(3)
 
-    pointRadius = getDip(3);
-
-    setOrientation(VERTICAL);
-    listener =
-        new OnItemClickListener() {
-          @Override
-          public void onItemClick(View view) {}
-        };
+    orientation = VERTICAL
   }
 
-  /** This method clears all Views and HashMaps stored in this view. */
-  public void clear() {
-    removeAllViews();
-    textViewMap.clear();
-    viewTextMap.clear();
+  /** This method clears all Views and HashMaps stored in this view.  */
+  fun clear() {
+    removeAllViews()
+    textViewMap.clear()
+    viewTextMap.clear()
   }
 
   /**
    * This method sets a View to this view. It clears all the stored views and hashmaps, and then
    * calls the peek() method to peek into the View.
    */
-  public void setView(View view) {
-    textViewMap.clear();
-    viewTextMap.clear();
-    removeAllViews();
-    peek(view, 1);
+  fun setView(view: View) {
+    textViewMap.clear()
+    viewTextMap.clear()
+    removeAllViews()
+    peek(view, 1)
   }
 
   /**
    * This method recursively calls itself to add TextViews for each View inside the ViewGroup. It
    * also stores the TextViews and Views in their respective hashmaps.
    */
-  private void peek(View view, int depth) {
-    int nextDepth = depth;
-    LayoutStructureViewItemBinding binding =
-        LayoutStructureViewItemBinding.inflate(inflater, null, false);
-    TextView viewName = binding.viewName;
-    TextView viewId = binding.viewId;
-    ImageView icon = binding.icon;
-    if (view.getId() == -1 || IdManager.getIdMap().get(view) == null) {
-      viewId.setVisibility(View.GONE);
-      viewName.setTranslationY(0);
-      viewId.setTranslationY(0);
+  private fun peek(view: View, depth: Int) {
+    var nextDepth = depth
+    val binding =
+      LayoutStructureViewItemBinding.inflate(inflater, null, false)
+    val viewName = binding.viewName
+    val viewId = binding.viewId
+    val icon = binding.icon
+    if (view.id == -1 || idMap[view] == null) {
+      viewId.visibility = GONE
+      viewName.translationY = 0f
+      viewId.translationY = 0f
       TooltipCompat.setTooltipText(
-          binding.mainView, view.getClass().getSuperclass().getSimpleName());
+        binding.mainView, view.javaClass.superclass.simpleName
+      )
     } else {
-      viewName.setTranslationY(getDip(-7));
-      viewId.setTranslationY(getDip(-3));
-      viewId.setVisibility(View.VISIBLE);
-      viewId.setText(IdManager.getIdMap().get(view));
-      TooltipCompat.setTooltipText(binding.mainView, IdManager.getIdMap().get(view));
+      viewName.translationY = getDip(-7).toFloat()
+      viewId.translationY = getDip(-3).toFloat()
+      viewId.visibility = VISIBLE
+      viewId.text = idMap[view]
+      TooltipCompat.setTooltipText(binding.mainView, idMap[view])
     }
-    if (view instanceof LinearLayout && !(view instanceof RadioGroup)) {
-      String orientation =
-          ((LinearLayout) view).getOrientation() == HORIZONTAL ? "horizontal" : "vertical";
-      int imgResId = imgMap.get(LinearLayout.class.getSimpleName() + orientation);
+    if (view is LinearLayout && view !is RadioGroup) {
+      val orientation =
+        if (view.orientation == LinearLayout.HORIZONTAL) "horizontal" else "vertical"
+      val imgResId = imgMap[LinearLayout::class.java.simpleName + orientation]!!
 
-      icon.setImageResource(imgResId);
-      viewName.setText(LinearLayout.class.getSimpleName() + " (" + orientation + ")");
+      icon.setImageResource(imgResId)
+      viewName.text = String.format("%s (%s)", LinearLayout::class.java.simpleName, orientation)
     } else {
-      String viewSimpleName = view.getClass().getSuperclass().getSimpleName();
-      Integer imageResource = imgMap.get(viewSimpleName);
+      val viewSimpleName = view.javaClass.superclass.simpleName
+      var imageResource = imgMap[viewSimpleName]
       if (imageResource == null) {
-        imageResource = imgMap.get("_unknown");
+        imageResource = imgMap["_unknown"]
       }
-      icon.setImageResource(imageResource);
-      viewName.setText(viewSimpleName);
+      icon.setImageResource(imageResource!!)
+      viewName.text = viewSimpleName
     }
 
-    binding.mainView.setOnClickListener(this);
+    binding.mainView.setOnClickListener(this)
 
-    addView(binding.getRoot());
+    addView(binding.root)
 
-    LinearLayoutCompat.LayoutParams params =
-        (LinearLayoutCompat.LayoutParams) binding.getRoot().getLayoutParams();
-    params.leftMargin = depth * getDip(15);
+    val params =
+      binding.root.layoutParams as LayoutParams
+    params.leftMargin = depth * getDip(15)
 
-    textViewMap.put(viewName, view);
-    viewTextMap.put(view, viewName);
+    textViewMap[viewName] = view
+    viewTextMap[view] = viewName
 
-    if (view instanceof ViewGroup) {
-      ViewGroup group = (ViewGroup) view;
-      if (!(group instanceof CalendarView)
-          && !(group instanceof SearchView)
-          && !(group instanceof NavigationView)
-          && !(group instanceof BottomNavigationView)
-          && !(group instanceof TabLayout)) {
-        nextDepth++;
+    if (view is ViewGroup) {
+      val group = view
+      if (group !is CalendarView
+        && group !is SearchView
+        && group !is NavigationView
+        && group !is BottomNavigationView
+        && group !is TabLayout
+      ) {
+        nextDepth++
 
-        for (int i = 0; i < group.getChildCount(); i++) {
-          View child = group.getChildAt(i);
-          peek(child, nextDepth);
+        for (i in 0 until group.childCount) {
+          val child = group.getChildAt(i)
+          peek(child, nextDepth)
         }
       }
     }
   }
 
-  /** This method is called to draw rectangles, lines, and circles for each TextView in the view. */
-  @Override
-  protected void dispatchDraw(Canvas canvas) {
-    super.dispatchDraw(canvas);
+  /** This method is called to draw rectangles, lines, and circles for each TextView in the view.  */
+  override fun dispatchDraw(canvas: Canvas) {
+    super.dispatchDraw(canvas)
 
-    for (TextView text : textViewMap.keySet()) {
-      View view = textViewMap.get(text);
-      ViewGroup parent = (ViewGroup) text.getParent().getParent();
+    for (text in textViewMap.keys) {
+      val view = textViewMap[text]
+      val parent = text.parent.parent as ViewGroup
 
-      if (view instanceof ViewGroup && ((ViewGroup) view).getChildCount() > 0) {
-        float x = parent.getX();
-        float y = parent.getY() + parent.getHeight() / 2;
+      if (view is ViewGroup && view.childCount > 0) {
+        val x = parent.x
+        val y = parent.y + parent.height.toFloat() / 2
 
-        ViewGroup group = (ViewGroup) view;
-        if (!(group instanceof CalendarView)
-            && !(group instanceof SearchView)
-            && !(group instanceof NavigationView)
-            && !(group instanceof BottomNavigationView)
-            && !(group instanceof TabLayout)) {
+        val group = view
+        if (group !is CalendarView
+          && group !is SearchView
+          && group !is NavigationView
+          && group !is BottomNavigationView
+          && group !is TabLayout
+        ) {
           canvas.drawRect(
-              x - pointRadius, y - pointRadius, x + pointRadius, y + pointRadius, paint);
-          for (int i = 0; i < group.getChildCount(); i++) {
-            TextView current = viewTextMap.get(group.getChildAt(i));
-            ViewGroup currentParent = (ViewGroup) current.getParent().getParent();
+            x - pointRadius, y - pointRadius, x + pointRadius, y + pointRadius, paint
+          )
+          for (i in 0 until group.childCount) {
+            val current = viewTextMap[group.getChildAt(i)]
+            val currentParent = current!!.parent.parent as ViewGroup
             canvas.drawLine(
-                parent.getX(),
-                parent.getY() + parent.getHeight() / 2,
-                parent.getX(),
-                currentParent.getY() + currentParent.getHeight() / 2,
-                paint);
+              parent.x,
+              parent.y + parent.height.toFloat() / 2,
+              parent.x,
+              currentParent.y + currentParent.height.toFloat() / 2,
+              paint
+            )
             canvas.drawLine(
-                parent.getX(),
-                currentParent.getY() + currentParent.getHeight() / 2,
-                currentParent.getX(),
-                currentParent.getY() + currentParent.getHeight() / 2,
-                paint);
+              parent.x,
+              currentParent.y + currentParent.height.toFloat() / 2,
+              currentParent.x,
+              currentParent.y + currentParent.height.toFloat() / 2,
+              paint
+            )
           }
         } else {
           canvas.drawCircle(
-              parent.getX(), parent.getY() + parent.getHeight() / 2, pointRadius, paint);
+            parent.x, parent.y + parent.height.toFloat() / 2, pointRadius.toFloat(), paint
+          )
         }
       } else {
         canvas.drawCircle(
-            parent.getX(), parent.getY() + parent.getHeight() / 2, pointRadius, paint);
+          parent.x, parent.y + parent.height.toFloat() / 2, pointRadius.toFloat(), paint
+        )
       }
     }
   }
@@ -278,30 +239,100 @@ public class StructureView extends LinearLayoutCompat implements View.OnClickLis
    * This method is called when a TextView is clicked, and it calls the OnItemClickListener's
    * onItemClick method.
    */
-  @Override
-  public void onClick(View v) {
-    if (listener != null && v instanceof ViewGroup) {
-      for (int i = 0; i < ((ViewGroup) v).getChildCount(); i++) {
-        View child = ((ViewGroup) v).getChildAt(i);
-        if (child.getId() == R.id.view_name)
-          listener.onItemClick(textViewMap.get((TextView) child));
+  override fun onClick(v: View) {
+    if (v is ViewGroup) {
+      for (i in 0 until v.childCount) {
+        val child = v.getChildAt(i)
+        if (child.id == R.id.view_name) textViewMap[child as TextView]?.let {
+          onItemClickListener?.invoke(
+            it
+          )
+        }
       }
     }
   }
 
-  /** This method is used to convert the input into the equivalent dip value. */
-  private int getDip(int input) {
-    return (int)
-        TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, input, getContext().getResources().getDisplayMetrics());
+  /** This method is used to convert the input into the equivalent dip value.  */
+  private fun getDip(input: Int): Int {
+    return TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_DIP, input.toFloat(), context.resources.displayMetrics
+    ).toInt()
   }
 
-  /** This method sets the OnItemClickListener for this view. */
-  public void setOnItemClickListener(OnItemClickListener listener) {
-    this.listener = listener;
-  }
+  companion object {
+    var imgMap: MutableMap<String, Int> = HashMap()
 
-  public interface OnItemClickListener {
-    public void onItemClick(View view);
+    init {
+      imgMap["_unknown"] = R.mipmap.ic_palette_unknown_view
+      imgMap[TextView::class.java.simpleName] = R.mipmap.ic_palette_text_view
+      imgMap[EditText::class.java.simpleName] = R.mipmap.ic_palette_edit_text
+      imgMap[Button::class.java.simpleName] =
+        R.mipmap.ic_palette_button
+      imgMap[ImageButton::class.java.simpleName] =
+        R.mipmap.ic_palette_image_button
+      imgMap[ImageView::class.java.simpleName] = R.mipmap.ic_palette_image_view
+      imgMap[VideoView::class.java.simpleName] = R.mipmap.ic_palette_video_view
+      imgMap[AutoCompleteTextView::class.java.simpleName] =
+        R.mipmap.ic_palette_auto_complete_text_view
+      imgMap[MultiAutoCompleteTextView::class.java.simpleName] =
+        R.mipmap.ic_palette_multi_auto_complete_text_view
+      imgMap[CheckedTextView::class.java.simpleName] =
+        R.mipmap.ic_palette_checked_text_view
+      imgMap[CheckBox::class.java.simpleName] = R.mipmap.ic_palette_check_box
+      imgMap[RadioButton::class.java.simpleName] = R.mipmap.ic_palette_radio_button
+      imgMap[RadioGroup::class.java.simpleName] =
+        R.mipmap.ic_palette_radio_group
+      imgMap[ToggleButton::class.java.simpleName] = R.mipmap.ic_palette_toggle_button
+      imgMap[Switch::class.java.simpleName] = R.mipmap.ic_palette_switch
+      imgMap[View::class.java.simpleName] = R.mipmap.ic_palette_view
+      imgMap[WebView::class.java.simpleName] = R.mipmap.ic_palette_web_view
+      imgMap[CalendarView::class.java.simpleName] = R.mipmap.ic_palette_calendar_view
+      imgMap[ProgressBar::class.java.simpleName] = R.mipmap.ic_palette_progress_bar
+      imgMap[ProgressBar::class.java.simpleName + "horizontal"] =
+        R.mipmap.ic_palette_progress_bar_horizontal
+      imgMap[SeekBar::class.java.simpleName] = R.mipmap.ic_palette_seek_bar
+      imgMap[RatingBar::class.java.simpleName] = R.mipmap.ic_palette_rating_bar
+      imgMap[TextureView::class.java.simpleName] =
+        R.mipmap.ic_palette_texture_view
+      imgMap[SurfaceView::class.java.simpleName] = R.mipmap.ic_palette_surface_view
+      imgMap[SearchView::class.java.simpleName] =
+        R.mipmap.ic_palette_search_view
+      imgMap[LinearLayout::class.java.simpleName + "horizontal"] =
+        R.mipmap.ic_palette_linear_layout_horz
+      imgMap[LinearLayout::class.java.simpleName + "vertical"] =
+        R.mipmap.ic_palette_linear_layout_vert
+      imgMap[FrameLayout::class.java.simpleName] = R.mipmap.ic_palette_frame_layout
+      imgMap[TableLayout::class.java.simpleName] = R.mipmap.ic_palette_table_layout
+      imgMap[TableRow::class.java.simpleName] = R.mipmap.ic_palette_table_row
+      imgMap[Space::class.java.simpleName] = R.mipmap.ic_palette_space
+      imgMap[Spinner::class.java.simpleName] = R.mipmap.ic_palette_spinner
+      imgMap[ScrollView::class.java.simpleName] = R.mipmap.ic_palette_scroll_view
+      imgMap[HorizontalScrollView::class.java.simpleName] =
+        R.mipmap.ic_palette_horizontal_scroll_view
+      imgMap[ViewStub::class.java.simpleName] = R.mipmap.ic_palette_view_stub
+      imgMap["include"] = R.mipmap.ic_palette_include
+      imgMap[GridLayout::class.java.simpleName] =
+        R.mipmap.ic_palette_grid_layout
+      imgMap[GridView::class.java.simpleName] = R.mipmap.ic_palette_grid_view
+      imgMap[RecyclerView::class.java.simpleName] = R.mipmap.ic_palette_recycler_view
+      imgMap[ListView::class.java.simpleName] = R.mipmap.ic_palette_list_view
+      imgMap[TabHost::class.java.simpleName] = R.mipmap.ic_palette_tab_host
+      imgMap[RelativeLayout::class.java.simpleName] = R.mipmap.ic_palette_relative_layout
+      imgMap[Chip::class.java.simpleName] = R.mipmap.ic_palette_chip
+      imgMap[ChipGroup::class.java.simpleName] = R.mipmap.ic_palette_chip_group
+      imgMap[FloatingActionButton::class.java.simpleName] =
+        R.mipmap.ic_palette_floating_action_button
+      imgMap[NestedScrollView::class.java.simpleName] = R.mipmap.ic_palette_nested_scroll_view
+      imgMap[ViewPager::class.java.simpleName] = R.mipmap.ic_palette_view_pager
+      imgMap[ViewPager2::class.java.simpleName] = R.mipmap.ic_palette_view_pager
+      imgMap[CardView::class.java.simpleName] = R.mipmap.ic_palette_card_view
+      imgMap[TextClock::class.java.simpleName] = R.mipmap.ic_palette_text_clock
+      imgMap[AppBarLayout::class.java.simpleName] = R.mipmap.ic_palette_app_bar_layout
+      imgMap[NavigationView::class.java.simpleName] = R.mipmap.ic_palette_navigation_view
+      imgMap[ConstraintLayout::class.java.simpleName] =
+        R.mipmap.ic_palette_constraint_layout
+      imgMap[BottomNavigationView::class.java.simpleName] =
+        R.mipmap.ic_palette_bottom_navigation_view
+    }
   }
 }

@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   app:cardCornerRadius="6dp"
@@ -11,8 +12,8 @@
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="16dp"
-    android:paddingRight="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="8dp"
     android:paddingTop="8dp"
     android:clickable="true"
     android:focusable="true"
@@ -25,31 +26,34 @@
       android:id="@+id/icon"
       android:layout_margin="5dp"
       android:layout_centerVertical="true"
-      app:tint="?attr/colorTertiary" />
+      app:tint="?attr/colorTertiary"
+      tools:ignore="ContentDescription" />
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="TextView"
-      android:layout_toRightOf="@id/icon"
+      android:layout_toEndOf="@id/icon"
       android:textSize="16sp"
       android:textColor="?attr/colorPrimary"
       android:layout_centerVertical="true"
-      android:paddingLeft="8dp"
+      android:paddingStart="8dp"
       android:id="@+id/view_name"
-      android:translationY="-7dp" />
+      android:translationY="-7dp"
+      tools:ignore="HardcodedText,RtlSymmetry" />
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="TextView"
       android:layout_below="@id/view_name"
-      android:layout_toRightOf="@id/icon"
-      android:paddingLeft="8dp"
+      android:layout_toEndOf="@id/icon"
+      android:paddingStart="8dp"
       android:textSize="12sp"
       android:textColor="?attr/colorOnSurfaceVariant"
       android:id="@+id/view_id"
-      android:translationY="-3dp" />
+      android:translationY="-3dp"
+      tools:ignore="HardcodedText,RtlSymmetry" />
 
   </RelativeLayout>
 </androidx.cardview.widget.CardView>
