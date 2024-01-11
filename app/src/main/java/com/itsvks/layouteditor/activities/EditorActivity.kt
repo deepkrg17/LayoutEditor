@@ -351,7 +351,7 @@ class EditorActivity : BaseActivity() {
           saveXml()
           startActivity(
             Intent(this, PreviewLayoutActivity::class.java)
-              .putExtra(Constants.EXTRA_KEY_PROJECT, project)
+              .putExtra(Constants.EXTRA_KEY_LAYOUT, project.currentLayout)
           )
         }
         return true

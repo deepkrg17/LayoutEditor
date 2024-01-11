@@ -24,16 +24,15 @@ class CrashActivity : BaseActivity() {
     setSupportActionBar(binding!!.topAppBar)
     supportActionBar!!.setTitle(R.string.app_crashed)
 
-    val error = """
-        Manufacturer: ${DeviceUtils.getManufacturer()}
-        Device: ${DeviceUtils.getModel()}
-        ${intent.getStringExtra("Software")}
-        App version: ${BuildConfig.VERSION_NAME}
+    val error = """Manufacturer: ${DeviceUtils.getManufacturer()}
+      Device: ${DeviceUtils.getModel()}
+      ${intent.getStringExtra("Software")}
+      App version: ${BuildConfig.VERSION_NAME}
         
-        ${intent.getStringExtra("Error")}
+      ${intent.getStringExtra("Error")}
         
-        ${intent.getStringExtra("Date")}
-        """.trimIndent()
+      ${intent.getStringExtra("Date")}
+      """.trimIndent()
 
     binding!!.result.text = error
 

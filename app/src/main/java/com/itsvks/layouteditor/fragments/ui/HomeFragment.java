@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
   private FragmentHomeBinding binding;
   private SharedPreferences projectTimes;
 
-  private ArrayList<ProjectFile> projects = new ArrayList<>();
+  private final ArrayList<ProjectFile> projects = new ArrayList<>();
   private ProjectListAdapter adapter;
 
   @Override
@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment {
     binding = null;
   }
 
-  @SuppressLint({"SimpleDateFormat", "RestrictedApi"})
+  @SuppressLint({"SimpleDateFormat", "RestrictedApi", "SetTextI18n"})
   @SuppressWarnings("deprecation")
   private void showCreateProjectDialog() {
     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
@@ -173,8 +173,8 @@ public class HomeFragment extends Fragment {
   }
 
   private void checkNameErrors(
-      String name, String currentName, TextInputLayout inputLayout, AlertDialog dialog) {
-    if (name.equals("")) {
+    @NonNull String name, String currentName, TextInputLayout inputLayout, AlertDialog dialog) {
+    if (name.isEmpty()) {
       inputLayout.setErrorEnabled(true);
       inputLayout.setError(getString(string.msg_cannnot_empty));
       dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -203,6 +203,7 @@ public class HomeFragment extends Fragment {
     loadProjects();
   }
 
+  @NonNull
   private String getCurrentTime() {
     return Calendar.getInstance().getTime().toString();
   }
