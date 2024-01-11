@@ -79,12 +79,12 @@ class ProjectManager private constructor() {
 
     @JvmStatic
     @get:Synchronized
-    val instance: ProjectManager?
+    val instance: ProjectManager
       get() {
         if (INSTANCE == null) {
           INSTANCE = ProjectManager()
         }
-        return INSTANCE
+        return INSTANCE as ProjectManager
       }
   }
 }

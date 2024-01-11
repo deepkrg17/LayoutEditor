@@ -12,8 +12,10 @@ import java.io.File
 class ProjectFile : Parcelable {
   var path: String
     private set
+
   @JvmField
   var name: String
+
   @JvmField
   var date: String? = null
 
@@ -78,11 +80,12 @@ class ProjectFile : Parcelable {
       return file.listFiles()
     }
 
-  val allLayouts: MutableList<LayoutFile> by lazy {
-    val list: MutableList<LayoutFile> = mutableListOf()
-    layouts?.forEach { list.add(LayoutFile(it.absolutePath)) }
-    list
-  }
+  val allLayouts: MutableList<LayoutFile>
+    get() {
+      val list: MutableList<LayoutFile> = mutableListOf()
+      layouts?.forEach { list.add(LayoutFile(it.absolutePath)) }
+      return list
+    }
 
   val mainLayout: LayoutFile
     get() = LayoutFile("$path/layout/layout_main.xml")

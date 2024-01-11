@@ -47,7 +47,6 @@ import com.itsvks.layouteditor.editor.convert.ConvertImportedXml
 import com.itsvks.layouteditor.managers.DrawableManager
 import com.itsvks.layouteditor.managers.IdManager.clear
 import com.itsvks.layouteditor.managers.ProjectManager
-import com.itsvks.layouteditor.managers.ProjectManager.Companion.instance
 import com.itsvks.layouteditor.managers.UndoRedoManager
 import com.itsvks.layouteditor.tools.XmlLayoutGenerator
 import com.itsvks.layouteditor.utils.BitmapUtil.createBitmapFromView
@@ -55,6 +54,7 @@ import com.itsvks.layouteditor.utils.Constants
 import com.itsvks.layouteditor.utils.FileCreator
 import com.itsvks.layouteditor.utils.FilePicker
 import com.itsvks.layouteditor.utils.FileUtil
+import com.itsvks.layouteditor.utils.NameErrorChecker
 import com.itsvks.layouteditor.utils.SBUtils
 import com.itsvks.layouteditor.utils.SBUtils.Companion.make
 import com.itsvks.layouteditor.utils.Utils
@@ -63,19 +63,19 @@ import java.io.File
 
 @SuppressLint("UnsafeOptInUsageError")
 class EditorActivity : BaseActivity() {
-  private var binding: ActivityEditorBinding? = null
+  private lateinit var binding: ActivityEditorBinding
 
   private var drawerLayout: DrawerLayout? = null
   private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
 
-  private var projectManager: ProjectManager? = null
-  private var project: ProjectFile? = null
+  private lateinit var projectManager: ProjectManager
+  private lateinit var project: ProjectFile
 
   private var undoRedo: UndoRedoManager? = null
   private var fileCreator: FileCreator? = null
   private var xmlPicker: FilePicker? = null
 
-  private var layoutAdapter: LayoutListAdapter? = null
+  private lateinit var layoutAdapter: LayoutListAdapter
 
   private val updateMenuIconsState: Runnable = Runnable { undoRedo!!.updateButtons() }
 
@@ -87,22 +87,22 @@ class EditorActivity : BaseActivity() {
   private fun init() {
     binding = ActivityEditorBinding.inflate(layoutInflater)
 
-    setContentView(binding!!.root)
-    setSupportActionBar(binding!!.topAppBar)
+    setContentView(binding.root)
+    setSupportActionBar(binding.topAppBar)
 
-    projectManager = instance
+    projectManager = ProjectManager.instance
 
     val extras = intent.extras
     if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
       @Suppress("DEPRECATION") val projectFile = extras.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
-      projectManager!!.openProject(projectFile)
+      projectManager.openProject(projectFile)
     }
-    project = projectManager!!.openedProject
+    project = projectManager.openedProject!!
 
-    supportActionBar?.title = project!!.name
-    layoutAdapter = LayoutListAdapter(project!!)
+    supportActionBar?.title = project.name
+    layoutAdapter = LayoutListAdapter(project)
 
-    binding!!.editorLayout.setBackgroundColor(
+    binding.editorLayout.setBackgroundColor(
       Utils.getSurfaceColor(
         this
       )
@@ -114,25 +114,16 @@ class EditorActivity : BaseActivity() {
     setupStructureView()
 
     setupDrawerNavigationRail()
-    setToolbarButtonOnClickListener(binding!!)
+    setToolbarButtonOnClickListener(binding)
 
     if (intent.action != null && intent.action == ACTION_OPEN) {
-      openLayout(project!!.mainLayout)
+      openLayout(project.mainLayout)
     }
 
-    layoutAdapter!!.onClickListener = {
-      openLayout(it)
-      if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
-        drawerLayout!!.closeDrawer(GravityCompat.START)
-      }
-      make(binding!!.root, "Loaded!")
-        .setFadeAnimation()
-        .setType(SBUtils.Type.INFO)
-        .show()
-    }
+    layoutAdapter.onClickListener = { openLayout(it) }
 
-    layoutAdapter!!.onLongClickListener = { view, position ->
-      if (project!!.allLayouts[position].path == project!!.mainLayout.path) {
+    layoutAdapter.onLongClickListener = { view, position ->
+      if (project.allLayouts[position].path == project.mainLayout.path) {
         ToastUtils.showShort("You can't modify main layout.")
       } else showLayoutListOptions(view, position)
       true
@@ -144,10 +135,10 @@ class EditorActivity : BaseActivity() {
       object : FilePicker(this) {
         override fun onPickFile(uri: Uri?) {
           if (uri == null) {
-            make(binding!!.root, "No xml selected").setFadeAnimation().show()
+            make(binding.root, "No xml selected").setFadeAnimation().show()
           } else {
             if (FileUtil.isDownloadsDocument(uri)) {
-              make(binding!!.root, string.select_from_storage).showAsError()
+              make(binding.root, string.select_from_storage).showAsError()
               return
             }
             val path = uri.path
@@ -156,14 +147,14 @@ class EditorActivity : BaseActivity() {
               val xmlConverted = ConvertImportedXml(xml).getXmlConverted(this@EditorActivity)
 
               if (xmlConverted != null) {
-                if (!File(project!!.layoutPath + FileUtil.getLastSegmentFromPath(path)).exists()) {
+                if (!File(project.layoutPath + FileUtil.getLastSegmentFromPath(path)).exists()) {
                   createNewLayout(FileUtil.getLastSegmentFromPath(path), xmlConverted)
-                  make(binding!!.root, "Imported!").setFadeAnimation().showAsSuccess()
+                  make(binding.root, "Imported!").setFadeAnimation().showAsSuccess()
                 } else {
-                  make(binding!!.root, "Layout Already Exists!").setFadeAnimation().showAsError()
+                  make(binding.root, "Layout Already Exists!").setFadeAnimation().showAsError()
                 }
               } else {
-                make(binding!!.root, "Failed to import!")
+                make(binding.root, "Failed to import!")
                   .setSlideAnimation()
                   .showAsError()
               }
@@ -183,18 +174,18 @@ class EditorActivity : BaseActivity() {
     fileCreator =
       object : FileCreator(this) {
         override fun onCreateFile(uri: Uri?) {
-          val result = XmlLayoutGenerator().generate(binding!!.editorLayout, true)
+          val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
 
           if (uri != null) {
-            if (FileUtil.saveFile(uri, result)) make(binding!!.root, "Success!").setSlideAnimation()
+            if (FileUtil.saveFile(uri, result)) make(binding.root, "Success!").setSlideAnimation()
               .showAsSuccess()
             else {
-              make(binding!!.root, "Failed to save!")
+              make(binding.root, "Failed to save!")
                 .setSlideAnimation()
                 .showAsError()
               FileUtil.deleteFile(FileUtil.convertUriToFilePath(uri))
             }
-          } else make(binding!!.root, "Failed to export!")
+          } else make(binding.root, "Failed to export!")
             .setSlideAnimation()
             .showAsError()
         }
@@ -202,10 +193,10 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun setupDrawerLayout() {
-    drawerLayout = binding!!.drawer
+    drawerLayout = binding.drawer
     actionBarDrawerToggle =
       ActionBarDrawerToggle(
-        this, drawerLayout, binding!!.topAppBar, string.palette, string.palette
+        this, drawerLayout, binding.topAppBar, string.palette, string.palette
       )
 
     (drawerLayout as CustomDrawerLayout).addDrawerListener(actionBarDrawerToggle!!)
@@ -235,18 +226,18 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun setupStructureView() {
-    binding!!.editorLayout.setStructureView(binding!!.structureView)
+    binding.editorLayout.setStructureView(binding.structureView)
 
-    binding!!.structureView.onItemClickListener = {
-      binding!!.editorLayout.showDefinedAttributes(it)
+    binding.structureView.onItemClickListener = {
+      binding.editorLayout.showDefinedAttributes(it)
       drawerLayout!!.closeDrawer(GravityCompat.END)
     }
   }
 
   private fun setupDrawerNavigationRail() {
-    val fab = binding!!.paletteNavigation.headerView?.findViewById<FloatingActionButton>(R.id.fab)
+    val fab = binding.paletteNavigation.headerView?.findViewById<FloatingActionButton>(R.id.fab)
 
-    val paletteMenu = binding!!.paletteNavigation.menu
+    val paletteMenu = binding.paletteNavigation.menu
     paletteMenu.add(Menu.NONE, 0, Menu.NONE, Constants.TAB_TITLE_COMMON).setIcon(R.drawable.android)
     paletteMenu.add(Menu.NONE, 1, Menu.NONE, Constants.TAB_TITLE_TEXT)
       .setIcon(R.mipmap.ic_palette_text_view)
@@ -261,14 +252,14 @@ class EditorActivity : BaseActivity() {
     paletteMenu.add(Menu.NONE, 6, Menu.NONE, Constants.TAB_TITLE_LEGACY)
       .setIcon(R.mipmap.ic_palette_grid_layout)
 
-    binding!!.listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    binding.listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-    val adapter = PaletteListAdapter(binding!!.drawer)
-    adapter.submitPaletteList(projectManager!!.getPalette(0))
+    val adapter = PaletteListAdapter(binding.drawer)
+    adapter.submitPaletteList(projectManager.getPalette(0))
 
-    binding!!.paletteNavigation.setOnItemSelectedListener { item: MenuItem ->
-      adapter.submitPaletteList(projectManager!!.getPalette(item.itemId))
-      binding!!.title.text = item.title
+    binding.paletteNavigation.setOnItemSelectedListener { item: MenuItem ->
+      adapter.submitPaletteList(projectManager.getPalette(item.itemId))
+      binding.title.text = item.title
       replaceListViewAdapter(adapter)
       fab?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.folder_outline))
       if (fab != null) {
@@ -279,11 +270,11 @@ class EditorActivity : BaseActivity() {
     replaceListViewAdapter(adapter)
 
     fab?.setOnClickListener {
-      if (binding!!.listView.adapter is LayoutListAdapter) {
+      if (binding.listView.adapter is LayoutListAdapter) {
         createLayout()
       } else {
-        replaceListViewAdapter(layoutAdapter!!)
-        binding!!.title.setText(string.layouts)
+        replaceListViewAdapter(layoutAdapter)
+        binding.title.setText(string.layouts)
         // binding.paletteNavigation.getMenu().getItem(binding.paletteNavigation.getSelectedItemId()).setChecked(false);
         fab.setImageResource(R.drawable.plus)
         TooltipCompat.setTooltipText(fab, "Create new layout")
@@ -293,7 +284,7 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun replaceListViewAdapter(adapter: RecyclerView.Adapter<*>) {
-    binding!!.listView.adapter = adapter
+    binding.listView.adapter = adapter
   }
 
   @Suppress("DEPRECATION")
@@ -303,7 +294,7 @@ class EditorActivity : BaseActivity() {
       || drawerLayout!!.isDrawerVisible(GravityCompat.END)
     ) drawerLayout!!.closeDrawers()
     else {
-      val result = XmlLayoutGenerator().generate(binding!!.editorLayout, true)
+      val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
       if (result.isNotEmpty()) {
         super.onBackPressed()
       } else super.onBackPressed()
@@ -321,12 +312,12 @@ class EditorActivity : BaseActivity() {
       }
 
       R.id.undo -> {
-        binding!!.editorLayout.undo()
+        binding.editorLayout.undo()
         return true
       }
 
       R.id.redo -> {
-        binding!!.editorLayout.redo()
+        binding.editorLayout.redo()
         return true
       }
 
@@ -354,7 +345,7 @@ class EditorActivity : BaseActivity() {
       }
 
       R.id.preview -> {
-        val result = XmlLayoutGenerator().generate(binding!!.editorLayout, true)
+        val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
         if (result.isEmpty()) showNothingDialog()
         else {
           saveXml()
@@ -367,17 +358,17 @@ class EditorActivity : BaseActivity() {
       }
 
       R.id.export_xml -> {
-        fileCreator!!.create(projectManager!!.formattedProjectName, "text/xml")
+        fileCreator!!.create(projectManager.formattedProjectName, "text/xml")
         return true
       }
 
       R.id.export_as_image -> {
-        if (binding!!.editorLayout.getChildAt(0) != null) showSaveMessage(
+        if (binding.editorLayout.getChildAt(0) != null) showSaveMessage(
           Utils.saveBitmapAsImageToGallery(
-            this, createBitmapFromView(binding!!.editorLayout), project!!.name
+            this, createBitmapFromView(binding.editorLayout), project.name
           )
         )
-        else make(binding!!.root, "Add some views...")
+        else make(binding.root, "Add some views...")
           .setFadeAnimation()
           .setType(SBUtils.Type.INFO)
           .show()
@@ -413,7 +404,7 @@ class EditorActivity : BaseActivity() {
 
   override fun onResume() {
     super.onResume()
-    project!!.drawables?.let {
+    project.drawables?.let {
       DrawableManager.loadFromFiles(
         it
       )
@@ -423,12 +414,12 @@ class EditorActivity : BaseActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
-    binding = null
-    instance?.closeProject()
+//    binding = null
+    projectManager.closeProject()
   }
 
   private fun showXml() {
-    val result = XmlLayoutGenerator().generate(binding!!.editorLayout, true)
+    val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
     if (result.isEmpty()) {
       showNothingDialog()
     } else {
@@ -454,8 +445,8 @@ class EditorActivity : BaseActivity() {
     val undo = menu.findItem(R.id.undo)
     val redo = menu.findItem(R.id.redo)
     undoRedo = UndoRedoManager(undo, redo)
-    binding!!.editorLayout.bindUndoRedoManager(undoRedo)
-    binding!!.editorLayout.updateUndoRedoHistory()
+    binding.editorLayout.bindUndoRedoManager(undoRedo)
+    binding.editorLayout.updateUndoRedoHistory()
     updateUndoRedoBtnState()
     return super.onCreateOptionsMenu(menu)
   }
@@ -465,11 +456,11 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun showSaveMessage(success: Boolean) {
-    if (success) make(binding!!.root, "Saved to gallery.")
+    if (success) make(binding.root, "Saved to gallery.")
       .setFadeAnimation()
       .setType(SBUtils.Type.INFO)
       .show()
-    else make(binding!!.root, "Failed to save...")
+    else make(binding.root, "Failed to save...")
       .setFadeAnimation()
       .setType(SBUtils.Type.ERROR)
       .show()
@@ -517,14 +508,22 @@ class EditorActivity : BaseActivity() {
   }
 
   fun createNewLayout(name: String, layoutContent: String?) {
-    val layoutFile = LayoutFile(project!!.layoutPath + name)
+    val layoutFile = LayoutFile(project.layoutPath + name)
     layoutFile.saveLayout(layoutContent)
+    openLayout(layoutFile)
   }
 
   private fun openLayout(layoutFile: LayoutFile) {
-    binding!!.editorLayout.loadLayoutFromParser(layoutFile.read())
-    project!!.currentLayout = layoutFile
+    binding.editorLayout.loadLayoutFromParser(layoutFile.read())
+    project.currentLayout = layoutFile
     supportActionBar!!.subtitle = layoutFile.name
+    if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
+      drawerLayout!!.closeDrawer(GravityCompat.START)
+    }
+    make(binding.root, "Loaded!")
+      .setFadeAnimation()
+      .setType(SBUtils.Type.INFO)
+      .show()
   }
 
   @SuppressLint("RestrictedApi", "SetTextI18n")
@@ -537,6 +536,8 @@ class EditorActivity : BaseActivity() {
     val editText: TextInputEditText = bind.textinputEdittext
     val inputLayout: TextInputLayout = bind.textinputLayout
 
+    inputLayout.suffixText = ".xml"
+
     @Suppress("DEPRECATION")
     builder.setView(bind.getRoot(), 10, 10, 10, 10)
     builder.setNegativeButton(
@@ -544,7 +545,7 @@ class EditorActivity : BaseActivity() {
     ) { _, _ -> }
     builder.setPositiveButton(string.create) { _, _ ->
       createNewLayout(
-        bind.textinputEdittext.getText().toString(), ""
+        "${editText.getText().toString()}.xml", ""
       )
     }
 
@@ -553,19 +554,19 @@ class EditorActivity : BaseActivity() {
     dialog.show()
 
     inputLayout.setHint(string.msg_new_layout_name)
-    editText.setText("layout_new.xml")
+    editText.setText("layout_new")
     editText.addTextChangedListener(
       object : TextWatcher {
         override fun beforeTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {}
 
         override fun onTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {
-//          NameErrorChecker.checkForLayouts(
-//            editText.text.toString(),
-//            inputLayout,
-//            dialog,
-//            project?.allLayouts,
-//            -1
-//          )
+          NameErrorChecker.checkForLayouts(
+            editText.text.toString(),
+            inputLayout,
+            dialog,
+            project.allLayouts,
+            -1
+          )
         }
 
         override fun afterTextChanged(p1: Editable) {}
@@ -581,18 +582,18 @@ class EditorActivity : BaseActivity() {
       editText.setSelection(0, editText.text.toString().length)
     }
 
-//    NameErrorChecker.checkForLayouts(
-//      editText.text.toString(),
-//      inputLayout,
-//      dialog,
-//      project?.allLayouts,
-//      -1
-//    )
+    NameErrorChecker.checkForLayouts(
+      editText.text.toString(),
+      inputLayout,
+      dialog,
+      project.allLayouts,
+      -1
+    )
   }
 
   @SuppressLint("RestrictedApi")
   private fun renameLayout(pos: Int) {
-    val layouts = project!!.allLayouts
+    val layouts = project.allLayouts
     val builder = MaterialAlertDialogBuilder(this)
     builder.setTitle(string.rename_layout)
     val bind: TextinputlayoutBinding =
@@ -600,7 +601,9 @@ class EditorActivity : BaseActivity() {
     val editText: TextInputEditText = bind.textinputEdittext
     val inputLayout: TextInputLayout = bind.textinputLayout
 
-    editText.setText(layouts[pos].getName())
+    inputLayout.suffixText = ".xml"
+
+    editText.setText(layouts[pos].name.substring(0, layouts[pos].name.lastIndexOf(".")))
     inputLayout.setHint(string.msg_new_layout_name)
 
     val padding = TypedValue.applyDimension(
@@ -608,6 +611,7 @@ class EditorActivity : BaseActivity() {
       10f,
       resources.displayMetrics
     ).toInt()
+
     @Suppress("DEPRECATION")
     builder.setView(bind.getRoot(), padding, padding, padding, padding)
     builder.setNegativeButton(
@@ -617,11 +621,10 @@ class EditorActivity : BaseActivity() {
       string.rename
     ) { _, _ ->
       val path: String = layouts[pos].path
-      val newPath =
-        path.substring(0, path.lastIndexOf("/")) + "/" + editText.text.toString()
+      val newPath = "${path.substring(0, path.lastIndexOf("/"))}/${editText.text.toString()}.xml"
       layouts[pos].rename(newPath)
-      if (layouts[pos] === project!!.currentLayout) openLayout(layouts[pos])
-      layoutAdapter?.notifyItemChanged(pos)
+      if (layouts[pos] === project.currentLayout) openLayout(layouts[pos])
+      layoutAdapter.notifyItemChanged(pos)
     }
 
     val dialog: AlertDialog = builder.create()
@@ -633,25 +636,25 @@ class EditorActivity : BaseActivity() {
         override fun beforeTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {}
 
         override fun onTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {
-//          NameErrorChecker.checkForLayouts(
-//            editText.text.toString(),
-//            inputLayout,
-//            dialog,
-//            project?.allLayouts,
-//            pos
-//          )
+          NameErrorChecker.checkForLayouts(
+            editText.text.toString(),
+            inputLayout,
+            dialog,
+            project.allLayouts,
+            pos
+          )
         }
 
         override fun afterTextChanged(p1: Editable) {}
       })
 
-//    NameErrorChecker.checkForLayouts(
-//      editText.text.toString(),
-//      inputLayout,
-//      dialog,
-//      project?.allLayouts,
-//      pos
-//    )
+    NameErrorChecker.checkForLayouts(
+      editText.text.toString(),
+      inputLayout,
+      dialog,
+      project.allLayouts,
+      pos
+    )
 
     editText.requestFocus()
     val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -664,7 +667,7 @@ class EditorActivity : BaseActivity() {
 
   @SuppressLint("NotifyDataSetChanged")
   fun deleteLayout(pos: Int) {
-    val layouts = project!!.allLayouts
+    val layouts = project.allLayouts
     val builder = MaterialAlertDialogBuilder(this)
     builder.setTitle(string.delete_layout)
     builder.setMessage(string.msg_delete_layout)
@@ -674,14 +677,14 @@ class EditorActivity : BaseActivity() {
     builder.setPositiveButton(
       string.yes
     ) { _, _ ->
-      if (layouts[pos].path == project!!.mainLayout.path) {
+      if (layouts[pos].path == project.mainLayout.path) {
         ToastUtils.showShort("You can't delete main layout.")
         return@setPositiveButton
       }
       FileUtil.deleteFile(layouts[pos].path)
-      if (layouts[pos] === project!!.currentLayout) openLayout(project!!.mainLayout)
+      if (layouts[pos] === project.currentLayout) openLayout(project.mainLayout)
       layouts.remove(layouts[pos])
-      layoutAdapter?.notifyDataSetChanged()
+      layoutAdapter.notifyItemRemoved(pos)
     }
 
     builder.create().show()
@@ -710,14 +713,14 @@ class EditorActivity : BaseActivity() {
   }
 
   private fun saveXml() {
-    if (binding!!.editorLayout.childCount == 0) {
-      project!!.currentLayout.saveLayout("")
+    if (binding.editorLayout.childCount == 0) {
+      project.currentLayout.saveLayout("")
       ToastUtils.showShort(getString(string.layout_saved))
       return
     }
 
-    val result = XmlLayoutGenerator().generate(binding!!.editorLayout, false)
-    project!!.currentLayout.saveLayout(result)
+    val result = XmlLayoutGenerator().generate(binding.editorLayout, false)
+    project.currentLayout.saveLayout(result)
     ToastUtils.showShort(getString(string.layout_saved))
   }
 

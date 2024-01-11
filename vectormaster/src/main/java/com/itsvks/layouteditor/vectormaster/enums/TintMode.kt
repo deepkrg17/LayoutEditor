@@ -1,6 +1,6 @@
-package com.itsvks.layouteditor.vectormaster.enums;
+package com.itsvks.layouteditor.vectormaster.enums
 
-public enum TintMode {
+enum class TintMode {
   ADD,
   MULTIPLY,
   SCREEN,

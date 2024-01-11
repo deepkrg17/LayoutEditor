@@ -45,7 +45,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
       }
   }
 
-  @SuppressLint("RestrictedApi")
   private fun setDynamicColorsChangeWarning(preference: SwitchPreferenceCompat?) {
     preference?.onPreferenceChangeListener =
       Preference.OnPreferenceChangeListener { _, _ ->
@@ -58,9 +57,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             preference?.isChecked = PreferencesManager.isApplyDynamicColors
             d.cancel()
           }
-          .setPositiveButton(R.string.okay) { _, _ ->
-            requireActivity().finishAffinity()
-          }
+          .setPositiveButton(R.string.okay) { _, _ -> requireActivity().finishAffinity() }
           .show()
         true
       }

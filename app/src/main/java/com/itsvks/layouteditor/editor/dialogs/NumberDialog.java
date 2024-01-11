@@ -84,7 +84,7 @@ public class NumberDialog extends AttributeDialog {
   private void checkError() {
     String text = textInputEditText.getText().toString();
 
-    if (text.equals("")) {
+    if (text.isEmpty()) {
       setEnabled(false);
       textInputLayout.setErrorEnabled(true);
       textInputLayout.setError("Field cannot be empty!");

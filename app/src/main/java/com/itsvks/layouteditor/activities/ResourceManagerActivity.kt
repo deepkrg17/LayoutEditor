@@ -30,7 +30,7 @@ import com.itsvks.layouteditor.fragments.resources.ColorFragment
 import com.itsvks.layouteditor.fragments.resources.DrawableFragment
 import com.itsvks.layouteditor.fragments.resources.FontFragment
 import com.itsvks.layouteditor.fragments.resources.StringFragment
-import com.itsvks.layouteditor.managers.ProjectManager.Companion.instance
+import com.itsvks.layouteditor.managers.ProjectManager
 import com.itsvks.layouteditor.utils.Constants
 import com.itsvks.layouteditor.utils.FilePicker
 import com.itsvks.layouteditor.utils.FileUtil
@@ -57,10 +57,10 @@ class ResourceManagerActivity : BaseActivity() {
     setSupportActionBar(binding!!.topAppBar)
     supportActionBar!!.setTitle(R.string.res_manager)
     binding!!.topAppBar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-    if (instance!!.openedProject == null) {
+    if (ProjectManager.instance.openedProject == null) {
       val extras = intent.extras
       if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
-        instance!!
+        ProjectManager.instance
           .openProject(extras.getParcelable(Constants.EXTRA_KEY_PROJECT))
       }
     }
@@ -165,14 +165,14 @@ class ResourceManagerActivity : BaseActivity() {
         when (fragment) {
           is ColorFragment -> {
             val it = Intent().setClass(this, ShowXMLActivity::class.java)
-            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, instance!!.colorsXml)
+            it.putExtra(ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.instance.colorsXml)
             startActivity(it)
           }
 
           is StringFragment -> {
             val it = Intent().setClass(this, ShowXMLActivity::class.java)
             it.putExtra(
-              ShowXMLActivity.EXTRA_KEY_XML, instance!!.stringsXml
+              ShowXMLActivity.EXTRA_KEY_XML, ProjectManager.instance.stringsXml
             )
             startActivity(it)
           }

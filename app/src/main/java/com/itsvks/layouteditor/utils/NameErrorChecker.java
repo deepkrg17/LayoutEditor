@@ -208,26 +208,41 @@ public class NameErrorChecker {
     AlertDialog dialog,
     List<LayoutFile> layoutFiles,
     int position) {
-    if (name.isEmpty()) {
+    if (!name.isEmpty()) {
+      if (Character.isDigit(name.charAt(0))) {
+        inputLayout.setErrorEnabled(true);
+        inputLayout.setError(dialog.getContext().getString(R.string.msg_first_letter_not_number));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        return;
+      }
+      if (name.contains(" ")) {
+        inputLayout.setErrorEnabled(true);
+        inputLayout.setError(dialog.getContext().getString(R.string.msg_space_not_allowed));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        return;
+      }
+      if (!Pattern.matches("[a-z][a-z0-9_]*", name)) {
+        inputLayout.setErrorEnabled(true);
+        inputLayout.setError(dialog.getContext().getString(R.string.msg_only_letters_and_numbers));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        return;
+      }
+    } else {
       inputLayout.setErrorEnabled(true);
       inputLayout.setError(dialog.getContext().getString(R.string.msg_cannnot_empty));
       dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
       return;
     }
-    if (!Pattern.matches("^[a-z]+(_[a-z]+)*.xml$", name)) {
-      inputLayout.setErrorEnabled(true);
-      inputLayout.setError(dialog.getContext().getString(R.string.invalid_name));
-      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-      return;
-    }
 
-    for (LayoutFile layoutFile : layoutFiles) {
-      if (layoutFile.getName().substring(0, layoutFile.name.lastIndexOf(".")).equals(name)
-        && layoutFiles.indexOf(layoutFile) != position) {
-        inputLayout.setErrorEnabled(true);
-        inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        return;
+    for (LayoutFile item : layoutFiles) {
+      if (item.getName().contains(".")) {
+        if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)
+          && layoutFiles.indexOf(item) != position) {
+          inputLayout.setErrorEnabled(true);
+          inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));
+          dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+          return;
+        }
       }
     }
 
