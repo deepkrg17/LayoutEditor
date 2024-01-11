@@ -1,0 +1,91 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="ArraysAsListWithZeroOrOneArgument" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="BigDecimalLegacyMethod" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="BooleanConstructor" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="BooleanExpressionMayBeConditional" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="BoxingBoxedValue" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CStyleArrayDeclaration" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CachedNumberConstructorCall" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CharsetObjectCanBeUsed" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ConditionalExpressionWithIdenticalBranches" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ConfusingElse" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="reportWhenNoStatementFollow" value="true" />
+    </inspection_tool>
+    <inspection_tool class="ConstantConditionalExpression" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ControlFlowStatementWithoutBraces" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="DoubleNegation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="EqualsReplaceableByObjectsCall" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="EscapedSpace" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ExtendsObject" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="FieldMayBeFinal" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ForEachWithRecordPatternCanBeUsed" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ForLoopReplaceableByWhile" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="m_ignoreLoopsWithoutConditions" value="true" />
+    </inspection_tool>
+    <inspection_tool class="IfStatementMissingBreakInLoop" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="IntegerMultiplicationImplicitCastToLong" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoreNonOverflowingCompileTimeConstants" value="true" />
+    </inspection_tool>
+    <inspection_tool class="KotlinDeprecation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="LengthOneStringsInConcatenation" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="ListIndexOfReplaceableByContains" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="LongLiteralsEndingWithLowercaseL" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ManualArrayCopy" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ManualArrayToCollectionCopy" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MissingOverrideAnnotation" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="ignoreObjectMethods" value="true" />
+      <option name="ignoreAnonymousClassMethods" value="false" />
+    </inspection_tool>
+    <inspection_tool class="MissortedModifiers" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="m_requireAnnotationsFirst" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PatternVariableCanBeUsed" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PointlessArithmeticExpression" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="m_ignoreExpressionsContainingConstants" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PointlessBooleanExpression" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="m_ignoreExpressionsContainingConstants" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PointlessNullCheck" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantStringFormatCall" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ReplaceAssignmentWithOperatorAssignment" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="ignoreLazyOperators" value="true" />
+      <option name="ignoreObscureOperators" value="false" />
+    </inspection_tool>
+    <inspection_tool class="SimplifiableBooleanExpression" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SimplifiableConditionalExpression" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SimplifiableIfStatement" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="SingleStatementInBlock" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="TailRecursion" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="TrivialIf" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnclearBinaryExpression" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="UnnecessarilyQualifiedInnerClassAccess" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="ignoreReferencesNeedingImport" value="false" />
+    </inspection_tool>
+    <inspection_tool class="UnnecessaryBlockStatement" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="ignoreSwitchBranches" value="false" />
+    </inspection_tool>
+    <inspection_tool class="UnnecessaryCallToStringValueOf" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryFullyQualifiedName" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="m_ignoreJavadoc" value="false" />
+      <option name="ignoreInModuleStatements" value="true" />
+    </inspection_tool>
+    <inspection_tool class="UnnecessaryModifier" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryParentheses" enabled="false" level="INFORMATION" enabled_by_default="false">
+      <option name="ignoreClarifyingParentheses" value="false" />
+      <option name="ignoreParenthesesOnConditionals" value="false" />
+      <option name="ignoreParenthesesOnLambdaParameter" value="false" />
+    </inspection_tool>
+    <inspection_tool class="UnnecessarySemicolon" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryTemporaryOnConversionFromString" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryTemporaryOnConversionToString" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryToStringCall" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnpredictableBigDecimalConstructorCall" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoreReferences" value="true" />
+      <option name="ignoreComplexLiterals" value="false" />
+    </inspection_tool>
+    <inspection_tool class="VariableTypeCanBeExplicit" enabled="false" level="INFORMATION" enabled_by_default="false" />
+  </profile>
+</component>

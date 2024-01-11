@@ -50,6 +50,5 @@
         android:layout_width="300dp"
         app:headerLayout="@layout/menu_header"
         app:menu="@menu/menu_home"/>
-    
 
 </androidx.drawerlayout.widget.DrawerLayout>

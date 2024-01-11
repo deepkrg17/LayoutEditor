@@ -1,287 +1,269 @@
-package com.itsvks.layouteditor.adapters;
+package com.itsvks.layouteditor.adapters
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.TooltipCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
+import com.itsvks.layouteditor.LayoutEditor.Companion.instance
+import com.itsvks.layouteditor.LayoutFile
+import com.itsvks.layouteditor.ProjectFile
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.R.string
+import com.itsvks.layouteditor.activities.EditorActivity
+import com.itsvks.layouteditor.activities.PreviewLayoutActivity
+import com.itsvks.layouteditor.databinding.ListProjectFileBinding
+import com.itsvks.layouteditor.databinding.TextinputlayoutBinding
+import com.itsvks.layouteditor.managers.PreferencesManager
+import com.itsvks.layouteditor.utils.Constants
+import com.itsvks.layouteditor.utils.FileUtil
+import com.itsvks.layouteditor.utils.SBUtils.Companion.make
+import java.io.File
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.TooltipCompat;
-import androidx.recyclerview.widget.RecyclerView;
+class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
+  RecyclerView.Adapter<ProjectListAdapter.ViewHolder>() {
+  private val prefs = PreferencesManager.prefs
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.itsvks.layouteditor.LayoutEditor;
-import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.R.string;
-import com.itsvks.layouteditor.activities.EditorActivity;
-import com.itsvks.layouteditor.activities.PreviewLayoutActivity;
-import com.itsvks.layouteditor.databinding.ListProjectFileBinding;
-import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
-import com.itsvks.layouteditor.managers.PreferencesManager;
-import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.FileUtil;
-import com.itsvks.layouteditor.utils.SBUtils;
+  var onDeleteCallback: ((Int) -> Unit)? = null
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ViewHolder> {
-
-  private final List<ProjectFile> projects;
-  private final SharedPreferences prefs;
-
-  public ProjectListAdapter(List<ProjectFile> projects) {
-    this.projects = projects;
-    prefs = PreferencesManager.getPrefs();
+  class ViewHolder(var binding: ListProjectFileBinding) : RecyclerView.ViewHolder(
+    binding.root
+  ) {
+    var projectName: AppCompatTextView = binding.projectName
+    var projectDate: AppCompatTextView = binding.projectDate
+    var projectIcon: AppCompatTextView = binding.icon
+    var menu: AppCompatImageButton = binding.menu
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder {
-    ListProjectFileBinding binding;
-    AppCompatTextView projectName;
-    AppCompatTextView projectDate;
-    AppCompatTextView projectIcon;
-    AppCompatImageButton menu;
-
-    public ViewHolder(@NonNull ListProjectFileBinding binding) {
-      super(binding.getRoot());
-      this.binding = binding;
-
-      projectName = binding.projectName;
-      projectDate = binding.projectDate;
-      projectIcon = binding.icon;
-      menu = binding.menu;
-    }
-  }
-
-  @NonNull
-  @Override
-  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new ViewHolder(
-      ListProjectFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    return ViewHolder(
+      ListProjectFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
   }
 
   @SuppressLint("RecyclerView")
-  @Override
-  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    var context = holder.binding.getRoot().getContext();
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val context = holder.binding.root.context
     holder
       .binding
-      .getRoot()
-      .setAnimation(
-        AnimationUtils.loadAnimation(
-          holder.itemView.getContext(), R.anim.project_list_animation));
-    holder.projectName.setText(projects.get(position).name);
-    holder.projectDate.setText(projects.get(position).date);
-    TooltipCompat.setTooltipText(holder.menu, context.getString(string.options));
-    holder.binding.getRoot().setOnClickListener(v -> openProject(v, position));
-    holder.projectIcon.setText(
-      projects.get(position).name.substring(0, 1).toUpperCase(Locale.US));
-    holder.menu.setOnClickListener(v -> showOptions(v, position));
+      .root.animation = AnimationUtils.loadAnimation(
+      holder.itemView.context, R.anim.project_list_animation
+    )
+    holder.projectName.text = projects[position].name
+    holder.projectDate.text = projects[position].date
+    TooltipCompat.setTooltipText(holder.menu, context.getString(string.options))
+    holder.binding.root.setOnClickListener { openProject(it, position) }
+    holder.projectIcon.text = projects[position].name.substring(0, 1).uppercase()
+    holder.menu.setOnClickListener { showOptions(it, position) }
   }
 
-  @Override
-  public int getItemCount() {
-    return projects.size();
+  override fun getItemCount(): Int {
+    return projects.size
   }
 
-  private void checkNameErrors(
-    List<ProjectFile> projects,
-    @NonNull String name,
-    String currentName,
-    TextInputLayout inputLayout,
-    AlertDialog dialog) {
+  private fun checkNameErrors(
+    projects: List<ProjectFile>,
+    name: String,
+    currentName: String,
+    inputLayout: TextInputLayout,
+    dialog: AlertDialog
+  ) {
     if (name.isEmpty()) {
-      inputLayout.setErrorEnabled(true);
-      inputLayout.setError(dialog.getContext().getString(string.msg_cannnot_empty));
-      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-      return;
+      inputLayout.isErrorEnabled = true
+      inputLayout.error = dialog.context.getString(string.msg_cannnot_empty)
+      dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+      return
     }
 
-    for (ProjectFile file : projects) {
-      if (name.equals(currentName)) break;
+    for (file in projects) {
+      if (name == currentName) break
 
-      if (file.name.equals(name)) {
-        inputLayout.setErrorEnabled(true);
-        inputLayout.setError(
-          LayoutEditor.Companion.getInstance().getContext().getString(string.msg_current_name_unavailable));
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        return;
+      if (file.name == name) {
+        inputLayout.isErrorEnabled = true
+        inputLayout.error = instance!!.context.getString(string.msg_current_name_unavailable)
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        return
       }
     }
 
-    inputLayout.setErrorEnabled(false);
-    inputLayout.setError("");
-    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+    inputLayout.isErrorEnabled = false
+    inputLayout.error = ""
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
   }
 
-  @SuppressWarnings("deprecation")
+  @Suppress("deprecation")
   @SuppressLint("RestrictedApi")
-  private void renameProject(@NonNull View v, int position) {
-    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    builder.setTitle(string.rename_project);
-    final TextinputlayoutBinding bind =
-      TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
-    final TextInputEditText editText = bind.textinputEdittext;
-    final TextInputLayout inputLayout = bind.textinputLayout;
+  private fun renameProject(v: View, position: Int) {
+    val builder = MaterialAlertDialogBuilder(v.context)
+    builder.setTitle(string.rename_project)
+    val bind =
+      TextinputlayoutBinding.inflate(builder.create().layoutInflater)
+    val editText = bind.textinputEdittext
+    val inputLayout = bind.textinputLayout
 
-    editText.setText(projects.get(position).name);
-    inputLayout.setHint(string.msg_new_project_name);
+    editText.setText(projects[position].name)
+    inputLayout.setHint(string.msg_new_project_name)
 
-    final int padding =
-      (int)
-        TypedValue.applyDimension(
-          TypedValue.COMPLEX_UNIT_DIP, 10, v.getContext().getResources().getDisplayMetrics());
-    builder.setView(bind.getRoot(), padding, padding, padding, padding);
-    builder.setNegativeButton(string.cancel, (di, which) -> {
-    });
+    val padding = TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_DIP, 10f, v.context.resources.displayMetrics
+    ).toInt()
+
+    builder.setView(bind.root, padding, padding, padding, padding)
+    builder.setNegativeButton(string.cancel) { _, _ -> }
     builder.setPositiveButton(
-      string.rename,
-      (di, which) -> {
-        String path = projects.get(position).getPath();
-        String newPath =
-          path.substring(0, path.lastIndexOf("/")) + "/" + editText.getText().toString();
-        projects.get(position).rename(newPath);
-        notifyItemChanged(position);
-      });
+      string.rename
+    ) { _, _ ->
+      val path = projects[position].path
+      val newPath =
+        "${path.substring(0, path.lastIndexOf("/"))}/${editText.text.toString()}"
+      projects[position].rename(newPath)
+      notifyItemChanged(position)
+    }
 
-    final AlertDialog dialog = builder.create();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    dialog.show();
+    val dialog = builder.create()
+    dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    dialog.show()
 
     editText.addTextChangedListener(
-      new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {
+      object : TextWatcher {
+        override fun beforeTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {
         }
 
-        @Override
-        public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {
+        override fun onTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {
         }
 
-        @Override
-        public void afterTextChanged(Editable p1) {
+        override fun afterTextChanged(p1: Editable) {
           checkNameErrors(
             projects,
-            editText.getText().toString(),
-            projects.get(position).name,
+            editText.text.toString(),
+            projects[position].name,
             inputLayout,
-            dialog);
+            dialog
+          )
         }
-      });
+      })
 
     checkNameErrors(
       projects,
-      editText.getText().toString(),
-      projects.get(position).name,
+      editText.text.toString(),
+      projects[position].name,
       inputLayout,
-      dialog);
+      dialog
+    )
 
-    editText.requestFocus();
-    InputMethodManager inputMethodManager =
-      (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    editText.requestFocus()
+    val inputMethodManager =
+      v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
-    if (!editText.getText().toString().isEmpty()) {
-      editText.setSelection(0, editText.getText().toString().length());
+    if (editText.text.toString().isNotEmpty()) {
+      editText.setSelection(0, editText.text.toString().length)
     }
   }
 
-  private void deleteProject(@NonNull View v, int position) {
-    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    builder.setTitle(string.delete_project);
-    builder.setMessage(string.msg_delete_project);
-    builder.setNegativeButton(string.no, (d, w) -> d.dismiss());
+  private fun deleteProject(v: View, position: Int) {
+    val builder = MaterialAlertDialogBuilder(v.context)
+    builder.setTitle(string.delete_project)
+    builder.setMessage(string.msg_delete_project)
+    builder.setNegativeButton(string.no) { d, _ -> d.dismiss() }
     builder.setPositiveButton(
-      string.yes,
-      (d, w) -> {
-        FileUtil.deleteFile(projects.get(position).getPath());
-        projects.remove(projects.get(position));
-        notifyItemRemoved(position);
-      });
+      string.yes
+    ) { _, _ ->
+      FileUtil.deleteFile(projects[position].path)
+      projects.remove(projects[position])
+      notifyItemRemoved(position)
+      onDeleteCallback?.invoke(position)
+    }
 
-    builder.create().show();
+    builder.create().show()
   }
 
-  private void showOptions(View v, int position) {
-    final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-    popupMenu.inflate(R.menu.menu_project_file_options);
-    popupMenu.setOnMenuItemClickListener(
-      item -> {
-        var id = item.getItemId();
-
-        if (id == R.id.menu_delete) {
-          deleteProject(v, position);
-          return true;
-        } else if (id == R.id.menu_preview) {
-          previewLayout(v, position);
-          return true;
-        } else if (id == R.id.menu_rename) {
-          renameProject(v, position);
-          return true;
+  private fun showOptions(v: View, position: Int) {
+    val popupMenu = PopupMenu(v.context, v)
+    popupMenu.inflate(R.menu.menu_project_file_options)
+    popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+      val id = item.itemId
+      when (id) {
+        R.id.menu_delete -> {
+          deleteProject(v, position)
+          true
         }
-        return false;
-      });
+        R.id.menu_preview -> {
+          previewLayout(v, position)
+          true
+        }
+        R.id.menu_rename -> {
+          renameProject(v, position)
+          true
+        }
+        else -> false
+      }
+    }
 
-    popupMenu.show();
+    popupMenu.show()
   }
 
-  private void openProject(@NonNull View v, int position) {
-    Intent intent = new Intent(v.getContext(), EditorActivity.class);
+  private fun openProject(v: View, position: Int) {
+    val intent = Intent(v.context, EditorActivity::class.java)
 
-    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects.get(position));
-    intent.setAction(EditorActivity.ACTION_OPEN);
+    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects[position])
+    intent.setAction(EditorActivity.ACTION_OPEN)
 
-    final String projectDir =
-      FileUtil.getPackageDataDir(LayoutEditor.Companion.getInstance().getContext())
-        + "/projects/"
-        + projects.get(position).name;
+    val projectDir =
+      "${FileUtil.getPackageDataDir(instance!!.context)}/projects/${projects[position].name}"
+
     if (!prefs.getBoolean("copyAssets", false)
-      && !(new File(projectDir + "/values/colors.xml").exists())) {
-      FileUtil.makeDir(projectDir + "/values/");
+      && !(File("$projectDir/values/colors.xml").exists())
+    ) {
+      FileUtil.makeDir("$projectDir/values/")
       // FileUtil.makeDir(projectDir + "/drawable/");
       // FileUtil.copyFileFromAsset("default_image.png", projectDir + "/drawable");
-      FileUtil.copyFileFromAsset("colors.xml", projectDir + "/values");
-      prefs.edit().putBoolean("copyAssets", true).apply();
+      FileUtil.copyFileFromAsset("colors.xml", "$projectDir/values")
+      prefs.edit().putBoolean("copyAssets", true).apply()
     }
-    v.getContext().startActivity(intent);
+    v.context.startActivity(intent)
   }
 
-  private void previewLayout(@NonNull View v, int position) {
-    ArrayList<String> layouts = new ArrayList<>();
-    var allLayouts = projects.get(position).getAllLayouts();
-    allLayouts.forEach(layoutFile -> layouts.add(layoutFile.name));
+  private fun previewLayout(v: View, position: Int) {
+    val layouts = ArrayList<String>()
+    val allLayouts = projects[position].allLayouts
+    allLayouts.forEach { layouts.add(it.name) }
 
-    new MaterialAlertDialogBuilder(v.getContext())
+    MaterialAlertDialogBuilder(v.context)
       .setTitle("Choose layout")
-      .setAdapter(new ArrayAdapter<>(v.getContext(), android.R.layout.simple_list_item_1, layouts), (d, w) -> {
-        Intent intent = new Intent(v.getContext(), PreviewLayoutActivity.class);
-        intent.putExtra(Constants.EXTRA_KEY_LAYOUT, allLayouts.get(w));
-        if (allLayouts.get(w).read().isEmpty()) {
-          SBUtils.make(v, layouts.get(w) + " is empty...").setFadeAnimation().showAsError();
-        } else v.getContext().startActivity(intent);
-        d.dismiss();
-      })
+      .setAdapter(
+        ArrayAdapter(
+          v.context,
+          android.R.layout.simple_list_item_1,
+          layouts
+        )
+      ) { d, w ->
+        val intent = Intent(v.context, PreviewLayoutActivity::class.java)
+        intent.putExtra(Constants.EXTRA_KEY_LAYOUT, allLayouts[w])
+        if (allLayouts[w].read().isEmpty()) {
+          make(v, layouts[w] + " is empty...").setFadeAnimation().showAsError()
+        } else v.context.startActivity(intent)
+        d.dismiss()
+      }
       .setPositiveButton(string.cancel, null)
-      .show();
+      .show()
   }
 }
