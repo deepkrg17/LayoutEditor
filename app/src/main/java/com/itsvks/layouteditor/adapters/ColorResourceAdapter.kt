@@ -19,13 +19,15 @@ import com.itsvks.layouteditor.R
 import com.itsvks.layouteditor.adapters.models.ValuesItem
 import com.itsvks.layouteditor.databinding.LayoutValuesItemBinding
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding
-import com.itsvks.layouteditor.editor.dialogs.ColorDialog
+import com.itsvks.layouteditor.tools.ColorPickerDialogFlag
 import com.itsvks.layouteditor.utils.BitmapUtil.getLuminance
 import com.itsvks.layouteditor.utils.BitmapUtil.setImageTintAccordingToBackground
 import com.itsvks.layouteditor.utils.BitmapUtil.setTextColorAccordingToBackground
 import com.itsvks.layouteditor.utils.FileUtil
 import com.itsvks.layouteditor.utils.NameErrorChecker
 import com.itsvks.layouteditor.utils.SBUtils
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 
 class ColorResourceAdapter(
   private val project: ProjectFile,
@@ -139,7 +141,7 @@ class ColorResourceAdapter(
     popupMenu.show()
   }
 
-  @SuppressLint("NotifyDataSetChanged")
+  @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
   private fun editColor(v: View, pos: Int) {
     val builder = MaterialAlertDialogBuilder(v.context)
     builder.setTitle("Edit Color")
@@ -152,9 +154,21 @@ class ColorResourceAdapter(
     etValue.isFocusable = false
     builder.setView(bind.getRoot())
     etValue.setOnClickListener {
-      // ColorPicker
-      val dialog = ColorDialog(v.context, etValue.getText().toString())
-      dialog.setOnSaveValueListener { text: String? -> etValue.setText(text) }
+      val dialog: ColorPickerDialog.Builder = ColorPickerDialog.Builder(v.context)
+        .setTitle("Choose Color")
+        .setPositiveButton(v.context.getString(R.string.confirm),
+          ColorEnvelopeListener { envelope, _ ->
+            etValue.setText("#${envelope.hexCode}")
+          }
+        )
+        .setNegativeButton(v.context.getString(R.string.cancel)) { d, _ -> d.dismiss() }
+        .attachAlphaSlideBar(true)
+        .attachBrightnessSlideBar(true)
+        .setBottomSpace(12)
+
+      val colorView = dialog.colorPickerView
+      colorView.setFlagView(ColorPickerDialogFlag(v.context))
+      colorView.setInitialColor(Color.parseColor(colorList[pos].value))
       dialog.show()
     }
     builder.setPositiveButton(
