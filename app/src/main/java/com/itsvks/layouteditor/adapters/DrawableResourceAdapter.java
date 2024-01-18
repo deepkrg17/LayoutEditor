@@ -144,46 +144,45 @@ public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResour
           public boolean onMenuItemClick(MenuItem item) {
 
             var id = item.getItemId();
-            switch (id) {
-              case R.id.menu_copy_name:
-                ClipboardUtils.copyText(
-                    drawableList
-                        .get(position)
-                        .getName()
-                        .substring(0, drawableList.get(position).getName().lastIndexOf(".")));
-                SBUtils.make(holder.binding.getRoot(), v.getContext().getString(R.string.copied))
-                    .setSlideAnimation()
-                    .showAsSuccess();
-                return true;
-              case R.id.menu_delete:
-                new MaterialAlertDialogBuilder(v.getContext())
-                    .setTitle(R.string.remove_drawable)
-                    .setMessage(R.string.msg_remove_drawable)
-                    .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
-                    .setPositiveButton(
-                        R.string.yes,
-                        (d, w) -> {
-                          var name = drawableList.get(position).getName();
-                          if (name.substring(0, name.lastIndexOf(".")).equals("default_image")) {
-                            SBUtils.make(
-                                    v,
-                                    v.getContext()
-                                        .getString(
-                                            R.string.msg_cannot_delete_default, "image"))
-                                .setFadeAnimation()
-                                .setType(SBUtils.Type.INFO)
-                                .show();
-                          } else {
-                            FileUtil.deleteFile(drawableList.get(position).getPath());
-                            drawableList.remove(position);
-                            notifyDataSetChanged();
-                          }
-                        })
-                    .show();
-                return true;
-              case R.id.menu_rename:
-                rename(v, position, holder);
-                return true;
+            if (id == R.id.menu_copy_name) {
+              ClipboardUtils.copyText(
+                drawableList
+                  .get(position)
+                  .getName()
+                  .substring(0, drawableList.get(position).getName().lastIndexOf(".")));
+              SBUtils.make(holder.binding.getRoot(), v.getContext().getString(R.string.copied))
+                .setSlideAnimation()
+                .showAsSuccess();
+              return true;
+            } else if (id == R.id.menu_delete) {
+              new MaterialAlertDialogBuilder(v.getContext())
+                .setTitle(R.string.remove_drawable)
+                .setMessage(R.string.msg_remove_drawable)
+                .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
+                .setPositiveButton(
+                  R.string.yes,
+                  (d, w) -> {
+                    var name = drawableList.get(position).getName();
+                    if (name.substring(0, name.lastIndexOf(".")).equals("default_image")) {
+                      SBUtils.make(
+                          v,
+                          v.getContext()
+                            .getString(
+                              R.string.msg_cannot_delete_default, "image"))
+                        .setFadeAnimation()
+                        .setType(SBUtils.Type.INFO)
+                        .show();
+                    } else {
+                      FileUtil.deleteFile(drawableList.get(position).getPath());
+                      drawableList.remove(position);
+                      notifyDataSetChanged();
+                    }
+                  })
+                .show();
+              return true;
+            } else if (id == R.id.menu_rename) {
+              rename(v, position, holder);
+              return true;
             }
             return false;
           }

@@ -1,18 +1,14 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
 }
 
-group = 'com.itsvks.layouteditor'
-version = project.versionName
-
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
     }
     buildTypes {
         release {
@@ -21,31 +17,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.itsvks.layouteditor.vectormaster'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.jetbrains:annotations:24.0.0'
+    implementation 'org.jetbrains:annotations:24.1.0'
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.core:core:1.9.0'
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.itsvks.layouteditor'
-                artifactId = 'vectormaster'
-                version = project.versionName
-            }
-        }
-    }
+    implementation 'androidx.core:core-ktx:1.12.0'
 }

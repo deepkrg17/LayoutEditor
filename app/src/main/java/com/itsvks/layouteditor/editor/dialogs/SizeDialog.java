@@ -126,18 +126,13 @@ public class SizeDialog extends AttributeDialog {
     String value = "";
 
     // Get the value of the attribute based on the checked radio button
-    switch (group.getCheckedRadioButtonId()) {
-      case R.id.rb_match_parent:
-        value = "match_parent";
-        break;
-
-      case R.id.rb_wrap_content:
-        value = "wrap_content";
-        break;
-
-      case R.id.rb_fixed_value:
-        value = textInputEditText.getText().toString() + DimensionUtil.DP;
-        break;
+    int checkedRadioButtonId = group.getCheckedRadioButtonId();
+    if (checkedRadioButtonId == R.id.rb_match_parent) {
+      value = "match_parent";
+    } else if (checkedRadioButtonId == R.id.rb_wrap_content) {
+      value = "wrap_content";
+    } else if (checkedRadioButtonId == R.id.rb_fixed_value) {
+      value = textInputEditText.getText().toString() + DimensionUtil.DP;
     }
 
     listener.onSave(value);

@@ -80,38 +80,36 @@ public class HomeActivity extends BaseActivity {
       item -> {
         var id = item.getItemId();
 
-        switch (id) {
-          case R.id.nav_home:
-            drawerLayout.closeDrawer(GravityCompat.START);
-            goToHome();
-            navigationView.setCheckedItem(R.id.nav_home);
-            return true;
-          case R.id.nav_preference:
-            drawerLayout.closeDrawer(GravityCompat.START);
-            goToPreference();
-            navigationView.setCheckedItem(R.id.nav_preference);
-            return true;
-          case R.id.nav_about:
-            drawerLayout.closeDrawer(GravityCompat.START);
-            goToAbout();
-            navigationView.setCheckedItem(R.id.nav_about);
-            return true;
-          case R.id.nav_licence:
-            startActivity(new Intent(this, OssLicensesMenuActivity.class));
-            return true;
-          case R.id.nav_github:
-            openUrl(Constants.GITHUB_URL);
-            return true;
-          case R.id.nav_share:
-            var shareIntent = new ShareCompat.IntentBuilder(this);
-            shareIntent.setType("text/plain");
-            shareIntent.setChooserTitle(getString(R.string.app_name));
-            shareIntent.setText(getString(R.string.share_description, Constants.GITHUB_URL));
-            shareIntent.startChooser();
-            return true;
-          default:
-            return false;
+        if (id == R.id.nav_home) {
+          drawerLayout.closeDrawer(GravityCompat.START);
+          goToHome();
+          navigationView.setCheckedItem(R.id.nav_home);
+          return true;
+        } else if (id == R.id.nav_preference) {
+          drawerLayout.closeDrawer(GravityCompat.START);
+          goToPreference();
+          navigationView.setCheckedItem(R.id.nav_preference);
+          return true;
+        } else if (id == R.id.nav_about) {
+          drawerLayout.closeDrawer(GravityCompat.START);
+          goToAbout();
+          navigationView.setCheckedItem(R.id.nav_about);
+          return true;
+        } else if (id == R.id.nav_licence) {
+          startActivity(new Intent(this, OssLicensesMenuActivity.class));
+          return true;
+        } else if (id == R.id.nav_github) {
+          openUrl(Constants.GITHUB_URL);
+          return true;
+        } else if (id == R.id.nav_share) {
+          var shareIntent = new ShareCompat.IntentBuilder(this);
+          shareIntent.setType("text/plain");
+          shareIntent.setChooserTitle(getString(R.string.app_name));
+          shareIntent.setText(getString(R.string.share_description, Constants.GITHUB_URL));
+          shareIntent.startChooser();
+          return true;
         }
+        return false;
       });
     navigationView.setCheckedItem(R.id.nav_home);
 

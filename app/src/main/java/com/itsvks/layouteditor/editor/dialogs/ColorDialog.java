@@ -374,30 +374,23 @@ public class ColorDialog extends AttributeDialog
   @Override
   public void onProgressChanged(SeekBar seek, int progress, boolean fromUser) {
     if (fromUser) {
-      switch (seek.getId()) {
-        case R.id.seek_alpha:
-          colorPreview.setAlpha(progress);
-          updateARGB(colorPreview.getColor());
-          updateEditText();
-          break;
-
-        case R.id.seek_red:
-          colorPreview.setRed(progress);
-          updateARGB(colorPreview.getColor());
-          updateEditText();
-          break;
-
-        case R.id.seek_green:
-          colorPreview.setGreen(progress);
-          updateARGB(colorPreview.getColor());
-          updateEditText();
-          break;
-
-        case R.id.seek_blue:
-          colorPreview.setBlue(progress);
-          updateARGB(colorPreview.getColor());
-          updateEditText();
-          break;
+      int id = seek.getId();
+      if (id == R.id.seek_alpha) {
+        colorPreview.setAlpha(progress);
+        updateARGB(colorPreview.getColor());
+        updateEditText();
+      } else if (id == R.id.seek_red) {
+        colorPreview.setRed(progress);
+        updateARGB(colorPreview.getColor());
+        updateEditText();
+      } else if (id == R.id.seek_green) {
+        colorPreview.setGreen(progress);
+        updateARGB(colorPreview.getColor());
+        updateEditText();
+      } else if (id == R.id.seek_blue) {
+        colorPreview.setBlue(progress);
+        updateARGB(colorPreview.getColor());
+        updateEditText();
       }
     }
   }

@@ -105,36 +105,35 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
           public boolean onMenuItemClick(MenuItem item) {
 
             var id = item.getItemId();
-            switch (id) {
-              case R.id.menu_delete:
-                new MaterialAlertDialogBuilder(v.getContext())
-                    .setTitle(R.string.remove_font)
-                    .setMessage(R.string.msg_remove_font)
-                    .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
-                    .setPositiveButton(
-                        R.string.yes,
-                        (d, w) -> {
-                          var name = fontList.get(position).getName();
-                          if (name.substring(0, name.lastIndexOf(".")).equals("default_font")) {
-                            SBUtils.make(
-                                    v,
-                                    v.getContext()
-                                        .getString(
-                                            R.string.msg_cannot_delete_default, "font"))
-                                .setFadeAnimation()
-                                .setType(SBUtils.Type.INFO)
-                                .show();
-                          } else {
-                            FileUtil.deleteFile(fontList.get(position).getPath());
-                            fontList.remove(position);
-                            notifyDataSetChanged();
-                          }
-                        })
-                    .show();
-                return true;
-              case R.id.menu_rename:
-                rename(v, position, holder);
-                return true;
+            if (id == R.id.menu_delete) {
+              new MaterialAlertDialogBuilder(v.getContext())
+                .setTitle(R.string.remove_font)
+                .setMessage(R.string.msg_remove_font)
+                .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
+                .setPositiveButton(
+                  R.string.yes,
+                  (d, w) -> {
+                    var name = fontList.get(position).getName();
+                    if (name.substring(0, name.lastIndexOf(".")).equals("default_font")) {
+                      SBUtils.make(
+                          v,
+                          v.getContext()
+                            .getString(
+                              R.string.msg_cannot_delete_default, "font"))
+                        .setFadeAnimation()
+                        .setType(SBUtils.Type.INFO)
+                        .show();
+                    } else {
+                      FileUtil.deleteFile(fontList.get(position).getPath());
+                      fontList.remove(position);
+                      notifyDataSetChanged();
+                    }
+                  })
+                .show();
+              return true;
+            } else if (id == R.id.menu_rename) {
+              rename(v, position, holder);
+              return true;
             }
             return false;
           }
