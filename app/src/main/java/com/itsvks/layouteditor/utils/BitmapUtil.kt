@@ -85,8 +85,7 @@ object BitmapUtil {
    */
   @JvmStatic
   fun setTextColorAccordingToBackground(background: View, textView: TextView) {
-    var backgroundColor = Color.WHITE
-    backgroundColor = if (background is CardView) {
+    var backgroundColor: Int = if (background is CardView) {
       // Get the color from the CardView
       background.cardBackgroundColor.defaultColor
     } else if (background.background is ColorDrawable) {
@@ -108,8 +107,7 @@ object BitmapUtil {
 
   @JvmStatic
   fun getLuminance(view: View): Double {
-    var backgroundColor = Color.WHITE
-    backgroundColor = if (view is CardView) {
+    val backgroundColor: Int = if (view is CardView) {
       // Get the color from the CardView
       view.cardBackgroundColor.defaultColor
     } else if (view.background is ColorDrawable) {

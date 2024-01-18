@@ -28,6 +28,9 @@
     <inspection_tool class="IntegerMultiplicationImplicitCastToLong" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoreNonOverflowingCompileTimeConstants" value="true" />
     </inspection_tool>
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="authors:" />
+    </inspection_tool>
     <inspection_tool class="KotlinDeprecation" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LengthOneStringsInConcatenation" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="ListIndexOfReplaceableByContains" enabled="false" level="WARNING" enabled_by_default="false" />

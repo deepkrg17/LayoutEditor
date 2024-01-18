@@ -2,6 +2,8 @@ package com.itsvks.layouteditor.adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -10,19 +12,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.TooltipCompat
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ClipboardUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.itsvks.layouteditor.ProjectFile
 import com.itsvks.layouteditor.R
 import com.itsvks.layouteditor.adapters.models.ValuesItem
-import com.itsvks.layouteditor.databinding.LayoutValuesItemBinding
+import com.itsvks.layouteditor.databinding.LayoutColorItemBinding
 import com.itsvks.layouteditor.databinding.LayoutValuesItemDialogBinding
 import com.itsvks.layouteditor.tools.ColorPickerDialogFlag
-import com.itsvks.layouteditor.utils.BitmapUtil.getLuminance
-import com.itsvks.layouteditor.utils.BitmapUtil.setImageTintAccordingToBackground
-import com.itsvks.layouteditor.utils.BitmapUtil.setTextColorAccordingToBackground
 import com.itsvks.layouteditor.utils.FileUtil
 import com.itsvks.layouteditor.utils.NameErrorChecker
 import com.itsvks.layouteditor.utils.SBUtils
@@ -33,41 +35,40 @@ class ColorResourceAdapter(
   private val project: ProjectFile,
   private val colorList: MutableList<ValuesItem>
 ) : RecyclerView.Adapter<ColorResourceAdapter.VH>() {
-  class VH(var binding: LayoutValuesItemBinding) : RecyclerView.ViewHolder(
+
+  class VH(var binding: LayoutColorItemBinding) : RecyclerView.ViewHolder(
     binding.getRoot()
   ) {
-    val colorName: TextView = binding.name
-    val colorValue: TextView = binding.value
+    val colorName: TextView = binding.colorName
+    val colorValue: TextView = binding.colorValue
+    val colorPreview = binding.colorPreview
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
     return VH(
-      LayoutValuesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+      LayoutColorItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
   }
 
   override fun onBindViewHolder(holder: VH, position: Int) {
-    holder.colorName.text = colorList[position].name
-    holder.colorValue.text = colorList[position].value
-    holder.binding.root.animation = AnimationUtils.loadAnimation(
+    holder.itemView.animation = AnimationUtils.loadAnimation(
       holder.itemView.context, R.anim.project_list_animation
     )
-    holder.binding
-      .root
-      .setBackgroundColor(Color.parseColor(colorList[position].value))
-    setTextColorAccordingToBackground(holder.binding.getRoot(), holder.colorName)
-    setImageTintAccordingToBackground(holder.binding.menu, holder.binding.getRoot())
-    if (getLuminance(holder.binding.getRoot()) >= 0.5) {
-      holder.colorValue.setTextColor(Color.parseColor("#FF313131"))
-      holder.binding.versions.setTextColor(Color.parseColor("#FF313131"))
-    } else {
-      holder.colorValue.setTextColor(Color.parseColor("#FFD9D9D9"))
-      holder.binding.versions.setTextColor(Color.parseColor("#FFD9D9D9"))
-    }
+
+    holder.colorName.text = colorList[position].name
+    holder.colorValue.text = colorList[position].value
+
+    holder.colorPreview.setImageDrawable(
+      drawCircle(
+        Color.parseColor(colorList[position].value)
+      )
+    )
+
+    TooltipCompat.setTooltipText(holder.itemView, colorList[position].name)
+    TooltipCompat.setTooltipText(holder.binding.menu, "Options")
+
     holder.binding.menu.setOnClickListener { showOptions(it, position) }
-    holder.binding
-      .getRoot()
-      .setOnClickListener { editColor(it, position) }
+    holder.itemView.setOnClickListener { editColor(it, position) }
   }
 
   override fun getItemCount(): Int {
@@ -205,5 +206,18 @@ class ColorResourceAdapter(
         }
       })
     NameErrorChecker.checkForValues(etName.getText().toString(), ilName, dialog, colorList, pos)
+  }
+
+  private fun drawCircle(@ColorInt backgroundColor: Int): Drawable {
+    return GradientDrawable().apply {
+      shape = GradientDrawable.OVAL
+      cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+      setColor(backgroundColor)
+      setStroke(2, if (ColorUtils.calculateLuminance(backgroundColor) >= 0.5) {
+        Color.parseColor("#FF313131")
+      } else {
+        Color.parseColor("#FFD9D9D9")
+      })
+    }
   }
 }
