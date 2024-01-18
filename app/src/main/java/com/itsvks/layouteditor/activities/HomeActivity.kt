@@ -1,206 +1,197 @@
-package com.itsvks.layouteditor.activities;
+package com.itsvks.layouteditor.activities
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.FitWindowsFrameLayout
+import androidx.core.app.ShareCompat.IntentBuilder
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.preference.PreferenceManager
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.material.navigation.NavigationView
+import com.itsvks.layouteditor.BaseActivity
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.databinding.ActivityHomeBinding
+import com.itsvks.layouteditor.fragments.ui.AboutFragment
+import com.itsvks.layouteditor.fragments.ui.HomeFragment
+import com.itsvks.layouteditor.fragments.ui.PreferencesFragment
+import com.itsvks.layouteditor.utils.Constants
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.FitWindowsFrameLayout;
-import androidx.core.app.ShareCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
+class HomeActivity : BaseActivity() {
+  private lateinit var binding: ActivityHomeBinding
 
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
-import com.google.android.material.navigation.NavigationView;
-import com.itsvks.layouteditor.BaseActivity;
-import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.databinding.ActivityHomeBinding;
-import com.itsvks.layouteditor.fragments.ui.AboutFragment;
-import com.itsvks.layouteditor.fragments.ui.HomeFragment;
-import com.itsvks.layouteditor.fragments.ui.PreferencesFragment;
-import com.itsvks.layouteditor.utils.Constants;
+  private lateinit var drawerLayout: DrawerLayout
+  private lateinit var navigationView: NavigationView
 
-public class HomeActivity extends BaseActivity {
-
-  private static final float END_SCALE = 0.7f;
-
-  private ActivityHomeBinding binding;
-
-  private DrawerLayout drawerLayout;
-  private NavigationView navigationView;
   @SuppressLint("RestrictedApi")
-  private FitWindowsFrameLayout contentView;
+  private var contentView: FitWindowsFrameLayout? = null
 
-  private ActionBarDrawerToggle actionBarDrawerToggle;
-  private SharedPreferences prefs;
+  private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+  private var prefs: SharedPreferences? = null
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+      if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (prefs!!.getString("fragment", "home") == "home") {
+          finishAffinity()
+        } else {
+          goToHome()
+          navigationView.setCheckedItem(R.id.nav_home)
+        }
+      } else drawerLayout.closeDrawer(GravityCompat.START)
+    }
+  }
 
-    binding = ActivityHomeBinding.inflate(getLayoutInflater());
-    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-    setContentView(binding.getRoot());
-    setSupportActionBar(binding.topAppBar);
+    binding = ActivityHomeBinding.inflate(layoutInflater)
+    prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-    drawerLayout = binding.drawer;
-    navigationView = binding.navigationView;
+    setContentView(binding.root)
+    setSupportActionBar(binding.topAppBar)
+    onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-    contentView = binding.content;
-    goToHome();
-    navigationView.setCheckedItem(R.id.nav_home);
+    drawerLayout = binding.drawer
+    navigationView = binding.navigationView
 
-    navigationDrawer();
+    contentView = binding.content
+    goToHome()
+    navigationView.setCheckedItem(R.id.nav_home)
+
+    navigationDrawer()
 
     actionBarDrawerToggle =
-      new ActionBarDrawerToggle(
+      ActionBarDrawerToggle(
         this,
         drawerLayout,
         binding.topAppBar,
         R.string.navigation_drawer_open,
-        R.string.navigation_drawer_close);
+        R.string.navigation_drawer_close
+      )
 
-    drawerLayout.addDrawerListener(actionBarDrawerToggle);
-    actionBarDrawerToggle.syncState();
+    drawerLayout.addDrawerListener(actionBarDrawerToggle)
+    actionBarDrawerToggle.syncState()
   }
 
   @SuppressLint("NonConstantResourceId")
-  private void navigationDrawer() {
-    navigationView.bringToFront();
-    navigationView.setNavigationItemSelectedListener(
-      item -> {
-        var id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-          drawerLayout.closeDrawer(GravityCompat.START);
-          goToHome();
-          navigationView.setCheckedItem(R.id.nav_home);
-          return true;
-        } else if (id == R.id.nav_preference) {
-          drawerLayout.closeDrawer(GravityCompat.START);
-          goToPreference();
-          navigationView.setCheckedItem(R.id.nav_preference);
-          return true;
-        } else if (id == R.id.nav_about) {
-          drawerLayout.closeDrawer(GravityCompat.START);
-          goToAbout();
-          navigationView.setCheckedItem(R.id.nav_about);
-          return true;
-        } else if (id == R.id.nav_licence) {
-          startActivity(new Intent(this, OssLicensesMenuActivity.class));
-          return true;
-        } else if (id == R.id.nav_github) {
-          openUrl(Constants.GITHUB_URL);
-          return true;
-        } else if (id == R.id.nav_share) {
-          var shareIntent = new ShareCompat.IntentBuilder(this);
-          shareIntent.setType("text/plain");
-          shareIntent.setChooserTitle(getString(R.string.app_name));
-          shareIntent.setText(getString(R.string.share_description, Constants.GITHUB_URL));
-          shareIntent.startChooser();
-          return true;
+  private fun navigationDrawer() {
+    navigationView.bringToFront()
+    navigationView.setNavigationItemSelectedListener {
+      val id = it.itemId
+      when (id) {
+        R.id.nav_home -> {
+          drawerLayout.closeDrawer(GravityCompat.START)
+          goToHome()
+          navigationView.setCheckedItem(R.id.nav_home)
+          true
         }
-        return false;
-      });
-    navigationView.setCheckedItem(R.id.nav_home);
-
-    animateNavigationDrawer();
-  }
-
-  private void animateNavigationDrawer() {
-    drawerLayout.addDrawerListener(
-      new DrawerLayout.SimpleDrawerListener() {
-
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-
-          final float diffScaledOffset = slideOffset * (1 - END_SCALE);
-          final float offsetScale = 1 - diffScaledOffset;
-          contentView.setScaleX(offsetScale);
-          contentView.setScaleY(offsetScale);
-
-          final float xOffset = drawerView.getWidth() * slideOffset;
-          final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
-          final float xTranslation = xOffset - xOffsetDiff;
-          contentView.setTranslationX(xTranslation);
+        R.id.nav_preference -> {
+          drawerLayout.closeDrawer(GravityCompat.START)
+          goToPreference()
+          navigationView.setCheckedItem(R.id.nav_preference)
+          true
         }
-      });
-  }
-
-  @Override
-  public void onBackPressed() {
-    if (!drawerLayout.isDrawerVisible(GravityCompat.START)) {
-
-      if (prefs.getString("fragment", "home").equals("home")) {
-        finishAffinity();
-      } else {
-        goToHome();
-        navigationView.setCheckedItem(R.id.nav_home);
+        R.id.nav_about -> {
+          drawerLayout.closeDrawer(GravityCompat.START)
+          goToAbout()
+          navigationView.setCheckedItem(R.id.nav_about)
+          true
+        }
+        R.id.nav_licence -> {
+          startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+          true
+        }
+        R.id.nav_github -> {
+          openUrl(Constants.GITHUB_URL)
+          true
+        }
+        R.id.nav_share -> {
+          val shareIntent = IntentBuilder(this)
+          shareIntent.setType("text/plain")
+          shareIntent.setChooserTitle(getString(R.string.app_name))
+          shareIntent.setText(getString(R.string.share_description, Constants.GITHUB_URL))
+          shareIntent.startChooser()
+          true
+        }
+        else -> false
       }
-
-    } else if (drawerLayout.isDrawerVisible(GravityCompat.START))
-      drawerLayout.closeDrawer(GravityCompat.START);
-    else super.onBackPressed();
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    var id = item.getItemId();
-    if (id == android.R.id.home) {
-      drawerLayout.openDrawer(GravityCompat.START);
-      return true;
     }
-    return actionBarDrawerToggle.onOptionsItemSelected(item);
+    navigationView.setCheckedItem(R.id.nav_home)
+
+    animateNavigationDrawer()
   }
 
-  @Override
-  public void onConfigurationChanged(@NonNull Configuration config) {
-    super.onConfigurationChanged(config);
-    goToHome();
-    actionBarDrawerToggle.onConfigurationChanged(config);
+  private fun animateNavigationDrawer() {
+    drawerLayout.addDrawerListener(
+      object : DrawerLayout.SimpleDrawerListener() {
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+          val diffScaledOffset = slideOffset * (1 - END_SCALE)
+          val offsetScale = 1 - diffScaledOffset
+          contentView!!.scaleX = offsetScale
+          contentView!!.scaleY = offsetScale
+
+          val xOffset = drawerView.width * slideOffset
+          val xOffsetDiff = contentView!!.width * diffScaledOffset / 2
+          val xTranslation = xOffset - xOffsetDiff
+          contentView!!.translationX = xTranslation
+        }
+      })
   }
 
-  @Override
-  protected void onPostCreate(Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    actionBarDrawerToggle.syncState();
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val id = item.itemId
+    if (id == android.R.id.home) {
+      drawerLayout.openDrawer(GravityCompat.START)
+      return true
+    }
+    return actionBarDrawerToggle.onOptionsItemSelected(item)
   }
 
-  private void replaceFragment(Fragment fragment) {
-    getSupportFragmentManager()
+  override fun onConfigurationChanged(config: Configuration) {
+    super.onConfigurationChanged(config)
+    goToHome()
+    actionBarDrawerToggle.onConfigurationChanged(config)
+  }
+
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    actionBarDrawerToggle.syncState()
+  }
+
+  private fun replaceFragment(fragment: Fragment) {
+    supportFragmentManager
       .beginTransaction()
       .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
       .replace(R.id.main_fragment, fragment)
-      .commit();
+      .commit()
   }
 
-  private void goToHome() {
-    replaceFragment((Fragment) new HomeFragment());
-    getSupportActionBar().setTitle(R.string.projects);
+  private fun goToHome() {
+    replaceFragment(HomeFragment() as Fragment)
+    supportActionBar?.title = getString(R.string.projects)
   }
 
-  private void goToPreference() {
-    replaceFragment((Fragment) new PreferencesFragment());
-    getSupportActionBar().setTitle(R.string.title_preference);
+  private fun goToPreference() {
+    replaceFragment(PreferencesFragment() as Fragment)
+    supportActionBar?.title = getString(R.string.preference)
   }
 
-  private void goToAbout() {
-    replaceFragment((Fragment) new AboutFragment());
-    getSupportActionBar().setTitle(R.string.title_about);
+  private fun goToAbout() {
+    replaceFragment(AboutFragment() as Fragment)
+    supportActionBar?.title = getString(R.string.about)
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    binding = null;
+  companion object {
+    private const val END_SCALE = 0.7f
   }
 }

@@ -1,7 +1,7 @@
 package com.itsvks.layouteditor.fragments.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Process
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -10,6 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.itsvks.layouteditor.R
 import com.itsvks.layouteditor.managers.PreferencesManager
 import com.itsvks.layouteditor.managers.SharedPreferencesKeys
+import kotlin.system.exitProcess
 
 class PreferencesFragment : PreferenceFragmentCompat() {
 
@@ -53,11 +54,16 @@ class PreferencesFragment : PreferenceFragmentCompat() {
           .setMessage(R.string.msg_dynamic_colors_dialog)
           .setCancelable(false)
           .setNegativeButton(R.string.cancel) { d, _ ->
-            preference?.sharedPreferences?.edit()?.putBoolean(preference.key, !PreferencesManager.isApplyDynamicColors)?.apply()
+            preference?.sharedPreferences?.edit()
+              ?.putBoolean(preference.key, !PreferencesManager.isApplyDynamicColors)?.apply()
             preference?.isChecked = PreferencesManager.isApplyDynamicColors
             d.cancel()
           }
-          .setPositiveButton(R.string.okay) { _, _ -> requireActivity().finishAffinity() }
+          .setPositiveButton(R.string.okay) { _, _ ->
+            requireActivity().finishAffinity()
+            Process.killProcess(Process.myPid())
+            exitProcess(0)
+          }
           .show()
         true
       }

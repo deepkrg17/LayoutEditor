@@ -2,7 +2,6 @@ package com.itsvks.layouteditor.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,15 +15,12 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.itsvks.layouteditor.LayoutEditor.Companion.instance
-import com.itsvks.layouteditor.LayoutFile
 import com.itsvks.layouteditor.ProjectFile
 import com.itsvks.layouteditor.R
 import com.itsvks.layouteditor.R.string
@@ -47,10 +43,10 @@ class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
   class ViewHolder(var binding: ListProjectFileBinding) : RecyclerView.ViewHolder(
     binding.root
   ) {
-    var projectName: AppCompatTextView = binding.projectName
-    var projectDate: AppCompatTextView = binding.projectDate
-    var projectIcon: AppCompatTextView = binding.icon
-    var menu: AppCompatImageButton = binding.menu
+    var projectName = binding.projectName
+    var projectDate = binding.projectDate
+    var projectIcon = binding.icon
+    var menu = binding.menu
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -62,14 +58,13 @@ class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
   @SuppressLint("RecyclerView")
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val context = holder.binding.root.context
-    holder
-      .binding
-      .root.animation = AnimationUtils.loadAnimation(
+    holder.itemView.animation = AnimationUtils.loadAnimation(
       holder.itemView.context, R.anim.project_list_animation
     )
     holder.projectName.text = projects[position].name
     holder.projectDate.text = projects[position].date
     TooltipCompat.setTooltipText(holder.menu, context.getString(string.options))
+    TooltipCompat.setTooltipText(holder.binding.root, projects[position].name)
     holder.binding.root.setOnClickListener { openProject(it, position) }
     holder.projectIcon.text = projects[position].name.substring(0, 1).uppercase()
     holder.menu.setOnClickListener { showOptions(it, position) }
@@ -206,14 +201,17 @@ class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
           deleteProject(v, position)
           true
         }
+
         R.id.menu_preview -> {
           previewLayout(v, position)
           true
         }
+
         R.id.menu_rename -> {
           renameProject(v, position)
           true
         }
+
         else -> false
       }
     }

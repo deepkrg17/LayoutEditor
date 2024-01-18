@@ -16,6 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.menu.MenuBuilder
@@ -65,7 +66,7 @@ import java.io.File
 class EditorActivity : BaseActivity() {
   private lateinit var binding: ActivityEditorBinding
 
-  private var drawerLayout: DrawerLayout? = null
+  private lateinit var drawerLayout: DrawerLayout
   private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
 
   private lateinit var projectManager: ProjectManager
@@ -79,6 +80,21 @@ class EditorActivity : BaseActivity() {
 
   private val updateMenuIconsState: Runnable = Runnable { undoRedo!!.updateButtons() }
 
+  private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+    override fun handleOnBackPressed() {
+      if (drawerLayout.isDrawerOpen(GravityCompat.START) || drawerLayout.isDrawerOpen(GravityCompat.END)) {
+        drawerLayout.closeDrawers()
+      } else {
+        val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
+        if (result.isNotEmpty()) {
+          finishAfterTransition()
+        } else {
+          finishAfterTransition()
+        }
+      }
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     init()
@@ -89,12 +105,14 @@ class EditorActivity : BaseActivity() {
 
     setContentView(binding.root)
     setSupportActionBar(binding.topAppBar)
+    onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
     projectManager = ProjectManager.instance
 
     val extras = intent.extras
     if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
-      @Suppress("DEPRECATION") val projectFile = extras.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
+      @Suppress("DEPRECATION")
+      val projectFile = extras.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
       projectManager.openProject(projectFile)
     }
     project = projectManager.openedProject!!
@@ -230,7 +248,7 @@ class EditorActivity : BaseActivity() {
 
     binding.structureView.onItemClickListener = {
       binding.editorLayout.showDefinedAttributes(it)
-      drawerLayout!!.closeDrawer(GravityCompat.END)
+      drawerLayout.closeDrawer(GravityCompat.END)
     }
   }
 
@@ -259,10 +277,11 @@ class EditorActivity : BaseActivity() {
 
     binding.paletteNavigation.setOnItemSelectedListener { item: MenuItem ->
       adapter.submitPaletteList(projectManager.getPalette(item.itemId))
+      binding.paletteText.text = "Palette"
       binding.title.text = item.title
       replaceListViewAdapter(adapter)
-      fab?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.folder_outline))
       if (fab != null) {
+        fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.folder_outline))
         TooltipCompat.setTooltipText(fab, "Layouts")
       }
       true
@@ -274,7 +293,8 @@ class EditorActivity : BaseActivity() {
         createLayout()
       } else {
         replaceListViewAdapter(layoutAdapter)
-        binding.title.setText(string.layouts)
+        binding.title.text = ""
+        binding.paletteText.text = getString(string.layouts)
         // binding.paletteNavigation.getMenu().getItem(binding.paletteNavigation.getSelectedItemId()).setChecked(false);
         fab.setImageResource(R.drawable.plus)
         TooltipCompat.setTooltipText(fab, "Create new layout")
@@ -287,27 +307,13 @@ class EditorActivity : BaseActivity() {
     binding.listView.adapter = adapter
   }
 
-  @Suppress("DEPRECATION")
-  @Deprecated("Deprecated in Java")
-  override fun onBackPressed() {
-    if (drawerLayout!!.isDrawerVisible(GravityCompat.START)
-      || drawerLayout!!.isDrawerVisible(GravityCompat.END)
-    ) drawerLayout!!.closeDrawers()
-    else {
-      val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
-      if (result.isNotEmpty()) {
-        super.onBackPressed()
-      } else super.onBackPressed()
-    }
-  }
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     val id = item.itemId
     undoRedo!!.updateButtons()
     if (actionBarDrawerToggle!!.onOptionsItemSelected(item)) return true
     when (id) {
       android.R.id.home -> {
-        drawerLayout!!.openDrawer(GravityCompat.START)
+        drawerLayout.openDrawer(GravityCompat.START)
         return true
       }
 
@@ -322,7 +328,7 @@ class EditorActivity : BaseActivity() {
       }
 
       R.id.show_structure -> {
-        drawerLayout!!.openDrawer(GravityCompat.END)
+        drawerLayout.openDrawer(GravityCompat.END)
         return true
       }
 
@@ -517,8 +523,8 @@ class EditorActivity : BaseActivity() {
     binding.editorLayout.loadLayoutFromParser(layoutFile.read())
     project.currentLayout = layoutFile
     supportActionBar!!.subtitle = layoutFile.name
-    if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
-      drawerLayout!!.closeDrawer(GravityCompat.START)
+    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+      drawerLayout.closeDrawer(GravityCompat.START)
     }
     make(binding.root, "Loaded!")
       .setFadeAnimation()
@@ -698,15 +704,15 @@ class EditorActivity : BaseActivity() {
       when (id) {
         R.id.menu_delete_layout -> {
           deleteLayout(pos)
-          return@setOnMenuItemClickListener true
+          true
         }
 
         R.id.menu_rename_layout -> {
           renameLayout(pos)
-          return@setOnMenuItemClickListener true
+          true
         }
+        else -> false
       }
-      false
     }
 
     popupMenu.show()

@@ -1,50 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="4dp"
+  app:cardBackgroundColor="?attr/colorSurfaceContainer"
+  app:cardCornerRadius="12dp"
+  app:cardElevation="0dp">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:padding="15dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:background="@drawable/rounded_rect"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:text="L"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnPrimary"
-        android:typeface="sans"
-        android:gravity="center"
-        android:id="@+id/icon"
-        android:layout_centerVertical="true" />
+    <TextView
+      android:id="@+id/icon"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:background="@drawable/circle_shape"
+      android:gravity="center"
+      android:text="L"
+      android:textColor="?attr/colorOnPrimary"
+      android:textSize="16sp"
+      android:typeface="sans"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:ignore="HardcodedText" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Project name"
-        android:layout_toRightOf="@id/icon"
-        android:textSize="16sp"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_marginLeft="15dp"
-        android:id="@+id/project_name" />
+    <TextView
+      android:id="@+id/project_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="15dp"
+      android:ellipsize="marquee"
+      android:singleLine="true"
+      android:text="Project name"
+      android:textColor="?attr/colorPrimary"
+      android:textSize="16sp"
+      app:layout_constraintLeft_toRightOf="@id/icon"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:ignore="HardcodedText" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:src="@drawable/dots_vertical"
-        android:layout_alignParentRight="true"
-        style="@style/ToolbarButtonStyle"
-        android:id="@+id/menu" />
+    <ImageButton
+      android:id="@+id/menu"
+      style="@style/ToolbarButtonStyle"
+      android:src="@drawable/dots_vertical"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:tint="?attr/colorOnSurface"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/projectDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date"
-        android:layout_toRightOf="@id/icon"
-        android:layout_marginLeft="15dp"
-        android:textSize="13sp"
-        android:layout_below="@id/project_name" />
+    <TextView
+      android:id="@+id/projectDate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="15dp"
+      android:text="Date"
+      android:textColor="?colorTertiary"
+      android:textSize="13sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toRightOf="@id/icon"
+      app:layout_constraintTop_toBottomOf="@id/project_name"
+      tools:ignore="HardcodedText" />
 
-</RelativeLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
