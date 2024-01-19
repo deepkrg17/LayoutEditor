@@ -5,13 +5,13 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
 
 public class NumberDialog extends AttributeDialog {
-
-  private TextinputlayoutBinding binding;
 
   private TextInputLayout textInputLayout;
   private TextInputEditText textInputEditText;
@@ -23,10 +23,10 @@ public class NumberDialog extends AttributeDialog {
    * @param savedValue the saved value
    * @param type the type of number input
    */
-  public NumberDialog(Context context, String savedValue, String type) {
+  public NumberDialog(Context context, String savedValue, @NonNull String type) {
     super(context);
 
-    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+    TextinputlayoutBinding binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
     textInputLayout = binding.getRoot();
     textInputLayout.setHint("Enter " + type + " value");
@@ -46,7 +46,7 @@ public class NumberDialog extends AttributeDialog {
     }
 
     // If no saved value, set to 0
-    textInputEditText.setText(savedValue.equals("") ? "0" : savedValue);
+    textInputEditText.setText(savedValue.isEmpty() ? "0" : savedValue);
     textInputEditText.addTextChangedListener(
         new TextWatcher() {
           @Override

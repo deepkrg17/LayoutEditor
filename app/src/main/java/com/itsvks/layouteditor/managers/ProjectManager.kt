@@ -70,21 +70,14 @@ class ProjectManager private constructor() {
     gson: Gson, type: Type, filePath: String
   ): ArrayList<HashMap<String, Any>> {
     return gson.fromJson(
-      FileUtil.readFromAsset(filePath, LayoutEditor.instance?.context), type
+      FileUtil.readFromAsset(filePath, LayoutEditor.instance!!.context), type
     )
   }
 
   companion object {
-    private var INSTANCE: ProjectManager? = null
 
     @JvmStatic
     @get:Synchronized
-    val instance: ProjectManager
-      get() {
-        if (INSTANCE == null) {
-          INSTANCE = ProjectManager()
-        }
-        return INSTANCE as ProjectManager
-      }
+    val instance: ProjectManager by lazy { ProjectManager() }
   }
 }

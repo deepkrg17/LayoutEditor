@@ -43,7 +43,7 @@ public class ViewDialog extends AttributeDialog {
     listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     listview.setDivider(null);
 
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       listview.setItemChecked(ids.indexOf(savedValue.replace("@id/", "")), true);
     }
 

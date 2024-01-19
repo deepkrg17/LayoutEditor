@@ -5,6 +5,8 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
@@ -12,21 +14,19 @@ import com.itsvks.layouteditor.utils.DimensionUtil;
 
 public class DimensionDialog extends AttributeDialog {
 
-  private TextinputlayoutBinding binding;
-
   private TextInputLayout textInputLayout;
   private TextInputEditText textInputEditText;
 
   private String unit;
 
   // Constructor to create a new instance of DimensionDialog
-  public DimensionDialog(Context context, String savedValue, String unit) {
+  public DimensionDialog(Context context, @NonNull String savedValue, String unit) {
     super(context);
 
     this.unit = unit;
 
     // Inflate the textinputlayout layout
-    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+    TextinputlayoutBinding binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
     // Get the root view of the textinputlayout
     textInputLayout = binding.getRoot();
@@ -45,7 +45,7 @@ public class DimensionDialog extends AttributeDialog {
 
     // Set the saved value or default value 0
     textInputEditText.setText(
-        savedValue.equals("") ? "0" : DimensionUtil.getDimenWithoutSuffix(savedValue));
+      savedValue.isEmpty() ? "0" : DimensionUtil.getDimenWithoutSuffix(savedValue));
 
     // Add TextWatcher to the textInputEditText to check the error
     textInputEditText.addTextChangedListener(
@@ -92,7 +92,7 @@ public class DimensionDialog extends AttributeDialog {
     String text = textInputEditText.getText().toString();
 
     // If the text is empty set the error and disable the save button
-    if (text.equals("")) {
+    if (text.isEmpty()) {
       setEnabled(false);
       textInputLayout.setErrorEnabled(true);
       textInputLayout.setError("Field cannot be empty!");

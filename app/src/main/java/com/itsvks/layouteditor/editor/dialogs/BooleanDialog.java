@@ -1,8 +1,8 @@
 package com.itsvks.layouteditor.editor.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
 import com.itsvks.layouteditor.R;
@@ -12,30 +12,27 @@ public class BooleanDialog extends AttributeDialog {
 
   private LayoutBooleanDialogBinding binding;
 
-  private AppCompatRadioButton rbTrue;
-  private AppCompatRadioButton rbFalse;
-
   /**
    * Constructor for BooleanDialog
    *
-   * @param context current context
+   * @param context    current context
    * @param savedValue previously saved value
    */
-  public BooleanDialog(Context context, String savedValue) {
+  public BooleanDialog(Context context, @NonNull String savedValue) {
     super(context);
 
     // Inflate the layout for this dialog
     binding = LayoutBooleanDialogBinding.inflate(getDialog().getLayoutInflater());
 
     // Initialize radio buttons
-    rbTrue = binding.rbTrue;
-    rbFalse = binding.rbFalse;
+    AppCompatRadioButton rbTrue = binding.rbTrue;
+    AppCompatRadioButton rbFalse = binding.rbFalse;
 
     // Set view padding
     setView(binding.getRoot(), 10, 20, 10, 0);
 
     // Check radio button for previously saved value
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       if (savedValue.equals("true")) {
         rbTrue.setChecked(true);
       } else {
@@ -44,7 +41,9 @@ public class BooleanDialog extends AttributeDialog {
     }
   }
 
-  /** Method called when save button is clicked */
+  /**
+   * Method called when save button is clicked
+   */
   @Override
   protected void onClickSave() {
     super.onClickSave();

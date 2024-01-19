@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+
 import com.itsvks.layouteditor.utils.Constants;
 import com.itsvks.layouteditor.utils.Utils;
 
@@ -18,7 +21,7 @@ public class ButtonDesign extends Button {
   }
 
   @Override
-  protected void dispatchDraw(Canvas canvas) {
+  protected void dispatchDraw(@NonNull Canvas canvas) {
     super.dispatchDraw(canvas);
     if (drawStrokeEnabled)
       Utils.drawDashPathStroke(
@@ -31,7 +34,7 @@ public class ButtonDesign extends Button {
   }
 
   @Override
-  public void draw(Canvas canvas) {
+  public void draw(@NonNull Canvas canvas) {
     if (isBlueprint) Utils.drawDashPathStroke(this, canvas, Constants.BLUEPRINT_DASH_COLOR);
     else super.draw(canvas);
   }

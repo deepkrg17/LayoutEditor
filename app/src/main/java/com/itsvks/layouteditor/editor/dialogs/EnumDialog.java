@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class EnumDialog extends AttributeDialog {
    * @param savedValue the saved value of the parameter
    * @param arguments the list of arguments in the parameter
    */
-  public EnumDialog(Context context, String savedValue, ArrayList<String> arguments) {
+  public EnumDialog(Context context, @NonNull String savedValue, ArrayList<String> arguments) {
     super(context);
 
     this.arguments = arguments;
@@ -40,7 +42,7 @@ public class EnumDialog extends AttributeDialog {
     // Remove divider
     listview.setDivider(null);
 
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       listview.setItemChecked(arguments.indexOf(savedValue), true);
     }
 

@@ -85,7 +85,7 @@ object BitmapUtil {
    */
   @JvmStatic
   fun setTextColorAccordingToBackground(background: View, textView: TextView) {
-    var backgroundColor: Int = if (background is CardView) {
+    val backgroundColor: Int = if (background is CardView) {
       // Get the color from the CardView
       background.cardBackgroundColor.defaultColor
     } else if (background.background is ColorDrawable) {

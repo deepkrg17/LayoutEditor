@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -58,7 +59,7 @@ public class AttributeDialog {
    * @param view View of the dialog
    * @param padding Padding for the view
    */
-  public void setView(View view, int padding) {
+  public void setView(@NonNull View view, int padding) {
     int pad = getDip(view.getContext(), padding);
     dialog.setView(view, pad, pad, pad, pad);
   }
@@ -105,11 +106,11 @@ public class AttributeDialog {
    *
    * @param editText TextInputEditText for focus
    */
-  protected void requestEditText(TextInputEditText editText) {
+  protected void requestEditText(@NonNull TextInputEditText editText) {
     editText.requestFocus();
     inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
-    if (!editText.getText().toString().equals("")) {
+    if (!editText.getText().toString().isEmpty()) {
       editText.setSelection(0, editText.getText().toString().length());
     }
   }
@@ -121,7 +122,7 @@ public class AttributeDialog {
    * @param value Value for which dip is required
    * @return Dip value
    */
-  private int getDip(Context context, int value) {
+  private int getDip(@NonNull Context context, int value) {
     return (int)
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
@@ -134,7 +135,7 @@ public class AttributeDialog {
    * @param id Resource id
    * @return String value
    */
-  protected String getString(Context context, int id) {
+  protected String getString(@NonNull Context context, int id) {
     return context.getString(id);
   }
 

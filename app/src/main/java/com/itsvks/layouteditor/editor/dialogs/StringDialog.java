@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
@@ -16,9 +18,6 @@ import com.itsvks.layouteditor.utils.Constants;
 import java.util.regex.Pattern;
 
 public class StringDialog extends AttributeDialog {
-
-  /** Binding object for textInputLayout layout */
-  private TextinputlayoutBinding binding;
 
   /** TextInputLayout object */
   private TextInputLayout textInputLayout;
@@ -34,12 +33,11 @@ public class StringDialog extends AttributeDialog {
    *
    * @param context     The Activity context
    * @param savedValue  The saved value
-   * @param isDrawable  Boolean flag to check for drawable
    */
-  public StringDialog(Context context, String savedValue, String argumentType) {
+  public StringDialog(Context context, String savedValue, @NonNull String argumentType) {
     super(context);
     this.argumentType = argumentType;
-    binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
+    TextinputlayoutBinding binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
     textInputLayout = binding.getRoot();
     textInputLayout.setHint("Enter string value");
@@ -96,7 +94,7 @@ public class StringDialog extends AttributeDialog {
     String text = textInputEditText.getText().toString();
     if (!argumentType.equals(Constants.ARGUMENT_TYPE_TEXT)) {
 
-      if (text.equals("")) {
+      if (text.isEmpty()) {
         textInputLayout.setErrorEnabled(true);
         textInputLayout.setError("Field cannot be empty!");
         setEnabled(false);

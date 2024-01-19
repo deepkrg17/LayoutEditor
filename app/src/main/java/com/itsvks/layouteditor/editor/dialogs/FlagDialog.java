@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+
 import com.itsvks.layouteditor.editor.dialogs.AttributeDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class FlagDialog extends AttributeDialog {
    * @param savedValue The savedValue of the calling activity
    * @param arguments The list of arguments
    */
-  public FlagDialog(Context context, String savedValue, ArrayList<String> arguments) {
+  public FlagDialog(Context context, @NonNull String savedValue, ArrayList<String> arguments) {
     super(context);
 
     // Assigning arguments to the List object
@@ -52,7 +54,7 @@ public class FlagDialog extends AttributeDialog {
     listview.setDivider(null);
 
     // Checking if the savedValue is not empty
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       // Splitting the savedValue using | as the delimiter
       String[] flags = savedValue.split("\\|");
 
@@ -99,7 +101,7 @@ public class FlagDialog extends AttributeDialog {
       // Checking if the item is checked
       if (array.get(checkedItem)) {
         // Appending the checked item's argument in the arguments list to the StringBuilder object
-        builder.append(arguments.get(checkedItem) + "|");
+        builder.append(arguments.get(checkedItem)).append("|");
       }
     }
 

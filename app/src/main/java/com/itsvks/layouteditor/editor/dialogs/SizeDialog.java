@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRadioButton;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,8 +20,6 @@ import com.itsvks.layouteditor.databinding.LayoutSizeDialogBinding;
 import com.itsvks.layouteditor.utils.DimensionUtil;
 
 public class SizeDialog extends AttributeDialog {
-
-  private LayoutSizeDialogBinding binding;
 
   private TextInputLayout textInputLayout;
   private TextInputEditText textInputEditText;
@@ -33,12 +32,12 @@ public class SizeDialog extends AttributeDialog {
    * @param context The context of the activity
    * @param savedValue The saved value of the attribute
    */
-  public SizeDialog(Context context, String savedValue) {
+  public SizeDialog(Context context, @NonNull String savedValue) {
     super(context);
 
-    binding = LayoutSizeDialogBinding.inflate(getDialog().getLayoutInflater());
+    LayoutSizeDialogBinding binding = LayoutSizeDialogBinding.inflate(getDialog().getLayoutInflater());
 
-    final View dialogView = binding.getRoot();
+    final ViewGroup dialogView = binding.getRoot();
     group = binding.radiogroup;
 
     final AppCompatRadioButton rbMatchParent = binding.rbMatchParent;
@@ -54,7 +53,7 @@ public class SizeDialog extends AttributeDialog {
     textInputLayout.setVisibility(View.GONE);
 
     // Check if savedValue is "match_parent", "wrap_content", or a fixed value
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       if (savedValue.equals("match_parent")) {
         rbMatchParent.setChecked(true);
       } else if (savedValue.equals("wrap_content")) {
@@ -84,21 +83,17 @@ public class SizeDialog extends AttributeDialog {
 
     // Set onCheckedChangeListener to the RadioGroup
     group.setOnCheckedChangeListener(
-        new RadioGroup.OnCheckedChangeListener() {
-
-          @Override
-          public void onCheckedChanged(RadioGroup p1, int id) {
-            if (id == R.id.rb_fixed_value) {
-              ((ViewGroup) dialogView).setLayoutTransition(new LayoutTransition());
-              textInputLayout.setVisibility(View.VISIBLE);
-              checkError();
-            } else {
-              ((ViewGroup) dialogView).setLayoutTransition(new LayoutTransition());
-              textInputLayout.setVisibility(View.GONE);
-              setEnabled(true);
-            }
-          }
-        });
+      (p1, id) -> {
+        if (id == R.id.rb_fixed_value) {
+          dialogView.setLayoutTransition(new LayoutTransition());
+          textInputLayout.setVisibility(View.VISIBLE);
+          checkError();
+        } else {
+          dialogView.setLayoutTransition(new LayoutTransition());
+          textInputLayout.setVisibility(View.GONE);
+          setEnabled(true);
+        }
+      });
 
     setView(dialogView, 10);
   }
@@ -108,7 +103,7 @@ public class SizeDialog extends AttributeDialog {
     String text = textInputEditText.getText().toString();
 
     // Check if the field is empty, and set the appropriate error messages
-    if (text.equals("")) {
+    if (text.isEmpty()) {
       setEnabled(false);
       textInputLayout.setErrorEnabled(true);
       textInputLayout.setError("Field cannot be empty!");

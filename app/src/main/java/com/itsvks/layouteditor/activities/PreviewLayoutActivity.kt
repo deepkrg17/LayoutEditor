@@ -18,6 +18,6 @@ class PreviewLayoutActivity : BaseActivity() {
     @Suppress("DEPRECATION") val layoutFile = intent.extras!!.getParcelable<LayoutFile>(Constants.EXTRA_KEY_LAYOUT)
     val parser = XmlLayoutParser(this)
     parser.parseFromXml(layoutFile!!.read(), this)
-    binding.getRoot().addView(parser.getRoot())
+    binding.getRoot().addView(parser.root)
   }
 }

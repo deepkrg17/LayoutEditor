@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
@@ -15,13 +17,10 @@ import java.util.List;
 
 public class IdDialog extends AttributeDialog {
 
-  private TextinputlayoutBinding binding;
-
   private TextInputLayout textInputLayout;
   private TextInputEditText textInputEditText;
 
   private List<String> ids;
-  private String savedValue;
 
   /**
    * Constructor of IdDialog
@@ -29,12 +28,11 @@ public class IdDialog extends AttributeDialog {
    * @param context The context of the application
    * @param savedValue The saved value of the ID
    */
-  public IdDialog(Context context, String savedValue) {
+  public IdDialog(Context context, @NonNull String savedValue) {
     super(context);
 
     // Initialize the binding and savedValue variables
-    this.binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
-    this.savedValue = savedValue;
+    TextinputlayoutBinding binding = TextinputlayoutBinding.inflate(getDialog().getLayoutInflater());
 
     // Get all the IDs from the IdManager
     ids = IdManager.getIds();
@@ -46,7 +44,7 @@ public class IdDialog extends AttributeDialog {
 
     // Initialize the TextInputEditText and set the text from the savedValue
     textInputEditText = binding.textinputEdittext;
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       ids.remove(savedValue.replace("@+id/", ""));
       textInputEditText.setText(savedValue.replace("@+id/", ""));
     }
@@ -79,7 +77,7 @@ public class IdDialog extends AttributeDialog {
     String text = textInputEditText.getText().toString();
 
     // Check if the TextInputEditText is empty
-    if (text.equals("")) {
+    if (text.isEmpty()) {
       textInputLayout.setErrorEnabled(true);
       textInputLayout.setError("Field cannot be empty!");
       setEnabled(false);

@@ -9,7 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.SeekBar;
 
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatSeekBar;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,7 +25,6 @@ public class ColorDialog extends AttributeDialog
 
   // Declaring Views
   private ColorView colorPreview;
-  private LayoutColorDialogBinding binding;
   private AppCompatSeekBar seekAlpha;
   private AppCompatSeekBar seekRed;
   private AppCompatSeekBar seekGreen;
@@ -43,7 +42,7 @@ public class ColorDialog extends AttributeDialog
     super(context);
 
     // Inflate Layout Binding
-    binding = LayoutColorDialogBinding.inflate(getDialog().getLayoutInflater());
+    com.itsvks.layouteditor.databinding.LayoutColorDialogBinding binding = LayoutColorDialogBinding.inflate(getDialog().getLayoutInflater());
 
     // Getting View from binding
     final View dialogView = binding.getRoot();
@@ -66,10 +65,10 @@ public class ColorDialog extends AttributeDialog
     bEdittext = binding.binputEdittext;
 
     // Setting Seekbar Progress and Listener
-    setSeekbarProgressAndListener(seekAlpha, 255);
-    setSeekbarProgressAndListener(seekRed, 255);
-    setSeekbarProgressAndListener(seekGreen, 255);
-    setSeekbarProgressAndListener(seekBlue, 255);
+    setSeekbarProgressAndListener(seekAlpha);
+    setSeekbarProgressAndListener(seekRed);
+    setSeekbarProgressAndListener(seekGreen);
+    setSeekbarProgressAndListener(seekBlue);
 
     // Setting UI Values
     setUIValues(savedValue);
@@ -84,12 +83,11 @@ public class ColorDialog extends AttributeDialog
    * Sets Seekbar Progress and Listener
    *
    * @param seekBar SeekBar to set
-   * @param progress Initial Progress
    */
-  private void setSeekbarProgressAndListener(AppCompatSeekBar seekBar, int progress) {
+  private void setSeekbarProgressAndListener(@NonNull AppCompatSeekBar seekBar) {
     seekBar.setOnSeekBarChangeListener(this);
     seekBar.setMax(255);
-    seekBar.setProgress(progress);
+    seekBar.setProgress(255);
   }
 
   /**
@@ -97,7 +95,7 @@ public class ColorDialog extends AttributeDialog
    *
    * @param savedValue Saved Color Value
    */
-  private void setUIValues(String savedValue) {
+  private void setUIValues(@NonNull String savedValue) {
     inputLayout.setHint("Enter custom HEX code");
     inputLayout.setPrefixText("#");
     editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(8)});
@@ -105,7 +103,7 @@ public class ColorDialog extends AttributeDialog
     rEdittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
     gEdittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
     bEdittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
-    if (!savedValue.equals("")) {
+    if (!savedValue.isEmpty()) {
       colorPreview.setColor(Color.parseColor(savedValue));
       aEdittext.setText(String.valueOf(Color.alpha(colorPreview.getColor())));
       aEdittext.setTextColor(colorPreview.getInvertedRGB());
@@ -134,7 +132,7 @@ public class ColorDialog extends AttributeDialog
 
           @Override
           public void afterTextChanged(Editable p1) {
-            if (!editText.getText().toString().equals("")) checkHexErrors(editText.getText().toString());
+            if (!editText.getText().toString().isEmpty()) checkHexErrors(editText.getText().toString());
           }
         });
     aEdittext.addTextChangedListener(
@@ -206,8 +204,8 @@ public class ColorDialog extends AttributeDialog
    *
    * @param alpha user entered Alpha value
    */
-  private void checkAlphaErrors(String alpha) {
-    if (!alpha.equals("") && Pattern.matches("[0-9]*", alpha)) {
+  private void checkAlphaErrors(@NonNull String alpha) {
+    if (!alpha.isEmpty() && Pattern.matches("[0-9]*", alpha)) {
       aInputLayout.setErrorEnabled(false);
       aInputLayout.setError("");
       setEnabled(true);
@@ -228,8 +226,8 @@ public class ColorDialog extends AttributeDialog
    *
    * @param red user entered RED value
    */
-  private void checkRedErrors(String red) {
-    if (!red.equals("") && Pattern.matches("[0-9]*", red)) {
+  private void checkRedErrors(@NonNull String red) {
+    if (!red.isEmpty() && Pattern.matches("[0-9]*", red)) {
       rInputLayout.setErrorEnabled(false);
       rInputLayout.setError("");
       setEnabled(true);
@@ -250,8 +248,8 @@ public class ColorDialog extends AttributeDialog
    *
    * @param green user entered GREEN value
    */
-  private void checkGreenErrors(String green) {
-    if (!green.equals("") && Pattern.matches("[0-9]*", green)) {
+  private void checkGreenErrors(@NonNull String green) {
+    if (!green.isEmpty() && Pattern.matches("[0-9]*", green)) {
       gInputLayout.setErrorEnabled(false);
       gInputLayout.setError("");
       setEnabled(true);
@@ -272,8 +270,8 @@ public class ColorDialog extends AttributeDialog
    *
    * @param blue user entered BLUE value
    */
-  private void checkBlueErrors(String blue) {
-    if (!blue.equals("") && Pattern.matches("[0-9]*", blue)) {
+  private void checkBlueErrors(@NonNull String blue) {
+    if (!blue.isEmpty() && Pattern.matches("[0-9]*", blue)) {
       bInputLayout.setErrorEnabled(false);
       bInputLayout.setError("");
       setEnabled(true);
@@ -320,19 +318,19 @@ public class ColorDialog extends AttributeDialog
     int g = Color.green(color);
     int b = Color.blue(color);
         
-    if (a != (aEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(aEdittext.getText().toString()))) {
+    if (a != (aEdittext.getText().toString().isEmpty() ? 0 : Integer.parseInt(aEdittext.getText().toString()))) {
       aEdittext.setText(String.valueOf(a));
     }
 
-    if (r != (rEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(rEdittext.getText().toString()))) {
+    if (r != (rEdittext.getText().toString().isEmpty() ? 0 : Integer.parseInt(rEdittext.getText().toString()))) {
       rEdittext.setText(String.valueOf(r));
     }
 
-    if (g != (gEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(gEdittext.getText().toString()))) {
+    if (g != (gEdittext.getText().toString().isEmpty() ? 0 : Integer.parseInt(gEdittext.getText().toString()))) {
       gEdittext.setText(String.valueOf(g));
     }
 
-    if (b != (bEdittext.getText().toString().equals("") ? 0 : Integer.parseInt(bEdittext.getText().toString()))) {
+    if (b != (bEdittext.getText().toString().isEmpty() ? 0 : Integer.parseInt(bEdittext.getText().toString()))) {
       bEdittext.setText(String.valueOf(b));
     }
         

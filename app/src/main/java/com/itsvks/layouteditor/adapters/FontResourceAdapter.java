@@ -64,7 +64,7 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
 
   @Override
   public void onBindViewHolder(VH holder, int position) {
-    var fontName = fontList.get(position).getName();
+    var fontName = fontList.get(position).name;
     holder
         .binding
         .getRoot()
@@ -73,7 +73,7 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
                 holder.itemView.getContext(), R.anim.project_list_animation));
     holder.fontName.setText(fontName.substring(0, fontName.lastIndexOf(".")));
     holder.fontLook.setTypeface(
-        Typeface.createFromFile(new File(fontList.get(position).getPath())));
+        Typeface.createFromFile(new File(fontList.get(position).path)));
 
     holder
         .binding
@@ -113,7 +113,7 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
                 .setPositiveButton(
                   R.string.yes,
                   (d, w) -> {
-                    var name = fontList.get(position).getName();
+                    var name = fontList.get(position).name;
                     if (name.substring(0, name.lastIndexOf(".")).equals("default_font")) {
                       SBUtils.make(
                           v,
@@ -124,7 +124,7 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
                         .setType(SBUtils.Type.INFO)
                         .show();
                     } else {
-                      FileUtil.deleteFile(fontList.get(position).getPath());
+                      FileUtil.deleteFile(fontList.get(position).path);
                       fontList.remove(position);
                       notifyDataSetChanged();
                     }
@@ -143,7 +143,7 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
   }
 
   private void rename(View v, int position, VH holder) {
-    final String lastSegment = FileUtil.getLastSegmentFromPath(fontList.get(position).getPath());
+    final String lastSegment = FileUtil.getLastSegmentFromPath(fontList.get(position).path);
     final String fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."));
     final String extension =
         lastSegment.substring(lastSegment.lastIndexOf("."), lastSegment.length());
@@ -161,9 +161,8 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
         R.string.rename,
         (di, which) -> {
           if (fontList
-              .get(position)
-              .getName()
-              .substring(0, fontList.get(position).getName().lastIndexOf("."))
+              .get(position).name
+              .substring(0, fontList.get(position).name.lastIndexOf("."))
               .equals("default_font")) {
             SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "font"))
                 .setFadeAnimation()
@@ -174,15 +173,15 @@ public class FontResourceAdapter extends RecyclerView.Adapter<FontResourceAdapte
 
             String toPath = fontPath + editText.getText().toString() + extension;
             File newFile = new File(toPath);
-            File oldFile = new File(fontList.get(position).getPath());
+            File oldFile = new File(fontList.get(position).path);
             oldFile.renameTo(newFile);
 
             String name = editText.getText().toString();
-            fontList.get(position).setPath(toPath);
-            fontList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
+            fontList.get(position).path = toPath;
+            fontList.get(position).name = FileUtil.getLastSegmentFromPath(toPath);
             holder.fontName.setText(name);
             holder.fontLook.setTypeface(
-                Typeface.createFromFile(new File(fontList.get(position).getPath())));
+                Typeface.createFromFile(new File(fontList.get(position).path)));
             notifyItemChanged(position);
           }
         });

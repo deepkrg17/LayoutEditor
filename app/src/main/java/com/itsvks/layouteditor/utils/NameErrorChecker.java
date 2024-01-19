@@ -187,7 +187,7 @@ public class NameErrorChecker {
 
     // Check if the name already exists in the fontList
     for (FontItem item : fontList) {
-      if (item.getName().substring(0, item.getName().lastIndexOf(".")).equals(name)
+      if (item.name.substring(0, item.name.lastIndexOf(".")).equals(name)
         && fontList.indexOf(item) != position) {
         inputLayout.setErrorEnabled(true);
         inputLayout.setError(dialog.getContext().getString(R.string.msg_current_name_unavailable));

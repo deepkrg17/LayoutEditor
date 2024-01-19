@@ -23,6 +23,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -109,12 +110,6 @@ class EditorActivity : BaseActivity() {
 
     projectManager = ProjectManager.instance
 
-    val extras = intent.extras
-    if (extras != null && extras.containsKey(Constants.EXTRA_KEY_PROJECT)) {
-      @Suppress("DEPRECATION")
-      val projectFile = extras.getParcelable<ProjectFile>(Constants.EXTRA_KEY_PROJECT)
-      projectManager.openProject(projectFile)
-    }
     project = projectManager.openedProject!!
 
     supportActionBar?.title = project.name
@@ -134,9 +129,7 @@ class EditorActivity : BaseActivity() {
     setupDrawerNavigationRail()
     setToolbarButtonOnClickListener(binding)
 
-    if (intent.action != null && intent.action == ACTION_OPEN) {
-      openLayout(project.mainLayout)
-    }
+    openLayout(project.mainLayout)
 
     layoutAdapter.onClickListener = { openLayout(it) }
 
@@ -151,38 +144,34 @@ class EditorActivity : BaseActivity() {
   private fun defineXmlPicker() {
     xmlPicker =
       object : FilePicker(this) {
-        override fun onPickFile(uri: Uri?) {
-          if (uri == null) {
-            make(binding.root, "No xml selected").setFadeAnimation().show()
-          } else {
-            if (FileUtil.isDownloadsDocument(uri)) {
-              make(binding.root, string.select_from_storage).showAsError()
-              return
-            }
-            val path = uri.path
-            if (path != null && path.endsWith(".xml")) {
-              val xml = FileUtil.readFromUri(uri, this@EditorActivity)
-              val xmlConverted = ConvertImportedXml(xml).getXmlConverted(this@EditorActivity)
+        override fun onPickFile(uri: Uri) {
+          if (FileUtil.isDownloadsDocument(uri)) {
+            make(binding.root, string.select_from_storage).showAsError()
+            return
+          }
+          val path = uri.path
+          if (path != null && path.endsWith(".xml")) {
+            val xml = FileUtil.readFromUri(uri, this@EditorActivity)
+            val xmlConverted = ConvertImportedXml(xml).getXmlConverted(this@EditorActivity)
 
-              if (xmlConverted != null) {
-                if (!File(project.layoutPath + FileUtil.getLastSegmentFromPath(path)).exists()) {
-                  createNewLayout(FileUtil.getLastSegmentFromPath(path), xmlConverted)
-                  make(binding.root, "Imported!").setFadeAnimation().showAsSuccess()
-                } else {
-                  make(binding.root, "Layout Already Exists!").setFadeAnimation().showAsError()
-                }
+            if (xmlConverted != null) {
+              if (!File(project.layoutPath + FileUtil.getLastSegmentFromPath(path)).exists()) {
+                createNewLayout(FileUtil.getLastSegmentFromPath(path), xmlConverted)
+                make(binding.root, "Imported!").setFadeAnimation().showAsSuccess()
               } else {
-                make(binding.root, "Failed to import!")
-                  .setSlideAnimation()
-                  .showAsError()
+                make(binding.root, "Layout Already Exists!").setFadeAnimation().showAsError()
               }
             } else {
-              Toast.makeText(
-                this@EditorActivity,
-                "Selected file is not an Android XML layout file",
-                Toast.LENGTH_SHORT
-              ).show()
+              make(binding.root, "Failed to import!")
+                .setSlideAnimation()
+                .showAsError()
             }
+          } else {
+            Toast.makeText(
+              this@EditorActivity,
+              "Selected file is not an Android XML layout file",
+              Toast.LENGTH_SHORT
+            ).show()
           }
         }
       }
@@ -191,21 +180,17 @@ class EditorActivity : BaseActivity() {
   private fun defineFileCreator() {
     fileCreator =
       object : FileCreator(this) {
-        override fun onCreateFile(uri: Uri?) {
+        override fun onCreateFile(uri: Uri) {
           val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
 
-          if (uri != null) {
-            if (FileUtil.saveFile(uri, result)) make(binding.root, "Success!").setSlideAnimation()
-              .showAsSuccess()
-            else {
-              make(binding.root, "Failed to save!")
-                .setSlideAnimation()
-                .showAsError()
-              FileUtil.deleteFile(FileUtil.convertUriToFilePath(uri))
-            }
-          } else make(binding.root, "Failed to export!")
-            .setSlideAnimation()
-            .showAsError()
+          if (FileUtil.saveFile(uri, result)) make(binding.root, "Success!").setSlideAnimation()
+            .showAsSuccess()
+          else {
+            make(binding.root, "Failed to save!")
+              .setSlideAnimation()
+              .showAsError()
+            FileUtil.deleteFile(FileUtil.convertUriToFilePath(uri))
+          }
         }
       }
   }
@@ -711,6 +696,7 @@ class EditorActivity : BaseActivity() {
           renameLayout(pos)
           true
         }
+
         else -> false
       }
     }

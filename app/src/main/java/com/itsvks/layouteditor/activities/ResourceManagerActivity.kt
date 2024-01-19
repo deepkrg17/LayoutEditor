@@ -93,17 +93,17 @@ class ResourceManagerActivity : BaseActivity() {
       ActivityResultContracts.RequestPermission()
     ) { onRequestPermission(it) }
     photoPicker = object : FilePicker(this) {
-      override fun onPickFile(uri: Uri?) {
+      override fun onPickFile(uri: Uri) {
         onPickPhoto(uri)
       }
     }
     fontPicker = object : FilePicker(this) {
-      override fun onPickFile(uri: Uri?) {
+      override fun onPickFile(uri: Uri) {
         onPickFont(uri)
       }
     }
     xmlPicker = object : FilePicker(this) {
-      override fun onPickFile(uri: Uri?) {
+      override fun onPickFile(uri: Uri) {
         onPickXml(uri)
       }
     }

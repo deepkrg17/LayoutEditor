@@ -2,7 +2,7 @@
 <android.widget.FrameLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/root"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_height="match_parent"
   android:layout_width="match_parent"
   android:fitsSystemWindows="true">
@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         app:navigationIcon="@drawable/arrow_left" />
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -41,7 +40,6 @@
 
     </LinearLayout>
 
-
   </androidx.appcompat.widget.LinearLayoutCompat>
 
   <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -49,9 +47,10 @@
     android:layout_gravity="end|bottom"
     android:layout_height="wrap_content"
     android:layout_marginRight="20dp"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="20dp"
     android:layout_width="wrap_content"
     app:icon="@drawable/content_copy"
-    android:text="@string/copy" />
+    android:text="@string/copy"
+    tools:ignore="PrivateResource" />
 
 </android.widget.FrameLayout>

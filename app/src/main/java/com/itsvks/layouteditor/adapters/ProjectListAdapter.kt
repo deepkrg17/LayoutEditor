@@ -29,6 +29,7 @@ import com.itsvks.layouteditor.activities.PreviewLayoutActivity
 import com.itsvks.layouteditor.databinding.ListProjectFileBinding
 import com.itsvks.layouteditor.databinding.TextinputlayoutBinding
 import com.itsvks.layouteditor.managers.PreferencesManager
+import com.itsvks.layouteditor.managers.ProjectManager
 import com.itsvks.layouteditor.utils.Constants
 import com.itsvks.layouteditor.utils.FileUtil
 import com.itsvks.layouteditor.utils.SBUtils.Companion.make
@@ -63,11 +64,13 @@ class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
     )
     holder.projectName.text = projects[position].name
     holder.projectDate.text = projects[position].date
+
     TooltipCompat.setTooltipText(holder.menu, context.getString(string.options))
     TooltipCompat.setTooltipText(holder.binding.root, projects[position].name)
-    holder.binding.root.setOnClickListener { openProject(it, position) }
+
+    holder.binding.root.setOnClickListener { openProject(it, holder.absoluteAdapterPosition) }
     holder.projectIcon.text = projects[position].name.substring(0, 1).uppercase()
-    holder.menu.setOnClickListener { showOptions(it, position) }
+    holder.menu.setOnClickListener { showOptions(it, holder.absoluteAdapterPosition) }
   }
 
   override fun getItemCount(): Int {
@@ -222,8 +225,7 @@ class ProjectListAdapter(private val projects: MutableList<ProjectFile>) :
   private fun openProject(v: View, position: Int) {
     val intent = Intent(v.context, EditorActivity::class.java)
 
-    intent.putExtra(Constants.EXTRA_KEY_PROJECT, projects[position])
-    intent.setAction(EditorActivity.ACTION_OPEN)
+    ProjectManager.instance.openProject(projects[position])
 
     val projectDir =
       "${FileUtil.getPackageDataDir(instance!!.context)}/projects/${projects[position].name}"

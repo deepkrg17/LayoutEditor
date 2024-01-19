@@ -40,7 +40,6 @@ import com.itsvks.layouteditor.editor.dialogs.NumberDialog
 import com.itsvks.layouteditor.editor.dialogs.SizeDialog
 import com.itsvks.layouteditor.editor.dialogs.StringDialog
 import com.itsvks.layouteditor.editor.dialogs.ViewDialog
-import com.itsvks.layouteditor.editor.dialogs.interfaces.OnSaveValueListener
 import com.itsvks.layouteditor.editor.initializer.AttributeInitializer
 import com.itsvks.layouteditor.editor.initializer.AttributeMap
 import com.itsvks.layouteditor.interfaces.AppliedAttributeClickListener
@@ -70,14 +69,18 @@ class DesignEditor : LinearLayout {
     }
   var deviceConfiguration: DeviceConfiguration? = null
   var apiLevel: APILevel? = null
-  private var paint: Paint? = null
-  var viewAttributeMap: HashMap<View, AttributeMap?>? = null
+
+  lateinit var viewAttributeMap: HashMap<View, AttributeMap>
     private set
-  private var ATTRIBUTES: HashMap<String, List<HashMap<String, Any>>>? = null
-  private var PARENT_ATTRIBUTES: HashMap<String, List<HashMap<String, Any>>>? = null
-  private var INITIALIZER: AttributeInitializer? = null
-  private var isBlueprint = false
+
+  private lateinit var paint: Paint
   private lateinit var shadow: View
+
+  private lateinit var attributes: HashMap<String, List<HashMap<String, Any>>>
+  private lateinit var parentAttributes: HashMap<String, List<HashMap<String, Any>>>
+  private lateinit var initializer: AttributeInitializer
+
+  private var isBlueprint = false
   private var structureView: StructureView? = null
   private var undoRedoManager: UndoRedoManager? = null
 
@@ -105,14 +108,14 @@ class DesignEditor : LinearLayout {
     shadow = View(context)
     paint = Paint()
 
-    shadow!!.setBackgroundColor(
+    shadow.setBackgroundColor(
       MaterialColors.getColor(this, com.google.android.material.R.attr.colorOutline)
     )
-    shadow!!.layoutParams = ViewGroup.LayoutParams(
+    shadow.layoutParams = ViewGroup.LayoutParams(
       Utils.pxToDp(context, 50),
       Utils.pxToDp(context, 35)
     )
-    paint!!.strokeWidth = Utils.pxToDp(context, 3).toFloat()
+    paint.strokeWidth = Utils.pxToDp(context, 3).toFloat()
 
     orientation = VERTICAL
     setTransition(this)
@@ -144,26 +147,21 @@ class DesignEditor : LinearLayout {
         scaleX = 0.95f
         scaleY = 0.95f
       }
-
-      else -> {
-        scaleX = 0.95f
-        scaleY = 0.95f
-      }
     }
   }
 
   private fun drawBlueprint(canvas: Canvas) {
-    paint!!.color = Constants.BLUEPRINT_DASH_COLOR
+    paint.color = Constants.BLUEPRINT_DASH_COLOR
     setBackgroundColor(Constants.BLUEPRINT_BACKGROUND_COLOR)
-    Utils.drawDashPathStroke(this, canvas, (paint)!!)
+    Utils.drawDashPathStroke(this, canvas, (paint))
   }
 
   private fun drawDesign(canvas: Canvas) {
-    paint!!.color = Constants.DESIGN_DASH_COLOR
+    paint.color = Constants.DESIGN_DASH_COLOR
     setBackgroundColor(
       MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface)
     )
-    Utils.drawDashPathStroke(this, canvas, (paint)!!)
+    Utils.drawDashPathStroke(this, canvas, (paint))
   }
 
   fun previewLayout(deviceConfiguration: DeviceConfiguration?, apiLevel: APILevel?) {
@@ -191,7 +189,7 @@ class DesignEditor : LinearLayout {
 
   private fun toggleStrokeWidgets() {
     try {
-      for (view: View in viewAttributeMap!!.keys) {
+      for (view: View in viewAttributeMap.keys) {
         val cls: Class<*> = view.javaClass
         val method = cls.getMethod("setStrokeEnabled", Boolean::class.javaPrimitiveType)
         method.invoke(view, isShowStroke)
@@ -203,7 +201,7 @@ class DesignEditor : LinearLayout {
 
   private fun setBlueprintOnChilds() {
     try {
-      for (view: View in viewAttributeMap!!.keys) {
+      for (view: View in viewAttributeMap.keys) {
         val cls: Class<*> = view.javaClass
         val method = cls.getMethod("setBlueprint", Boolean::class.javaPrimitiveType)
         method.invoke(view, isBlueprint)
@@ -236,11 +234,11 @@ class DesignEditor : LinearLayout {
           DragEvent.ACTION_DRAG_ENDED -> if (!event.result && draggedView != null) {
             removeId(draggedView, draggedView is ViewGroup)
             removeViewAttributes(draggedView)
-            viewAttributeMap!!.remove(draggedView)
+            viewAttributeMap.remove(draggedView)
             updateStructure()
           }
 
-          DragEvent.ACTION_DRAG_LOCATION, DragEvent.ACTION_DRAG_ENTERED -> if (shadow!!.parent == null) addWidget(
+          DragEvent.ACTION_DRAG_LOCATION, DragEvent.ACTION_DRAG_ENTERED -> if (shadow.parent == null) addWidget(
             shadow,
             parent,
             event
@@ -258,7 +256,7 @@ class DesignEditor : LinearLayout {
                 }
               }
             } else {
-              if (shadow!!.parent !== parent) addWidget(shadow, parent, event)
+              if (shadow.parent !== parent) addWidget(shadow, parent, event)
             }
           }
 
@@ -299,7 +297,7 @@ class DesignEditor : LinearLayout {
               val map = AttributeMap()
               map.putValue("android:layout_width", "wrap_content")
               map.putValue("android:layout_height", "wrap_content")
-              viewAttributeMap!![newView] = map
+              viewAttributeMap[newView] = map
 
               addWidget(newView, parent, event)
 
@@ -316,8 +314,8 @@ class DesignEditor : LinearLayout {
 
               if (data.containsKey(Constants.KEY_DEFAULT_ATTRS)) {
                 @Suppress("UNCHECKED_CAST")
-                INITIALIZER!!.applyDefaultAttributes(
-                  newView, data[Constants.KEY_DEFAULT_ATTRS] as MutableMap<String, String>?
+                initializer.applyDefaultAttributes(
+                  newView, data[Constants.KEY_DEFAULT_ATTRS] as MutableMap<String, String>
                 )
               }
             } else addWidget(draggedView, parent, event)
@@ -354,8 +352,8 @@ class DesignEditor : LinearLayout {
     updateStructure()
     toggleStrokeWidgets()
 
-    INITIALIZER =
-      AttributeInitializer(context, viewAttributeMap, ATTRIBUTES, PARENT_ATTRIBUTES)
+    initializer =
+      AttributeInitializer(context, viewAttributeMap, attributes, parentAttributes)
   }
 
   fun undo() {
@@ -371,7 +369,7 @@ class DesignEditor : LinearLayout {
   private fun clearAll() {
     removeAllViews()
     structureView!!.clear()
-    viewAttributeMap!!.clear()
+    viewAttributeMap.clear()
   }
 
   fun setStructureView(view: StructureView?) {
@@ -481,11 +479,11 @@ class DesignEditor : LinearLayout {
   }
 
   fun showDefinedAttributes(target: View) {
-    val keys = viewAttributeMap!![target]!!.keySet()
-    val values = viewAttributeMap!![target]!!.values()
+    val keys = viewAttributeMap[target]!!.keySet()
+    val values = viewAttributeMap[target]!!.values()
 
     val attrs: MutableList<HashMap<String, Any>> = ArrayList()
-    val allAttrs = INITIALIZER!!.getAllAttributesForView(target)
+    val allAttrs = initializer.getAllAttributesForView(target)
 
     val dialog = BottomSheetDialog(context)
     val binding =
@@ -559,7 +557,7 @@ class DesignEditor : LinearLayout {
 
   private fun showAvailableAttributes(target: View) {
     val availableAttrs =
-      INITIALIZER!!.getAvailableAttributesForView(target)
+      initializer.getAvailableAttributesForView(target)
     val names: MutableList<String> = ArrayList()
 
     for (attr: HashMap<String, Any> in availableAttrs) {
@@ -570,7 +568,7 @@ class DesignEditor : LinearLayout {
       .setTitle("Available attributes")
       .setAdapter(
         ArrayAdapter(context, android.R.layout.simple_list_item_1, names)
-      ) { d, w ->
+      ) { _, w ->
         /*
                   if (getChildAt(0) instanceof ConstraintLayout) {
                     final List<String> keys = VIEW_ATTRIBUTE_MAP.get(target).keySet();
@@ -601,55 +599,58 @@ class DesignEditor : LinearLayout {
   }
 
   private fun showAttributeEdit(target: View, attributeKey: String) {
-    val allAttrs = INITIALIZER!!.getAllAttributesForView(target)
+    val allAttrs = initializer.getAllAttributesForView(target)
     val currentAttr =
-      INITIALIZER!!.getAttributeFromKey(attributeKey, allAttrs)
-    val attributeMap = viewAttributeMap!![target]
+      initializer.getAttributeFromKey(attributeKey, allAttrs)
+    val attributeMap = viewAttributeMap[target]
 
     val argumentTypes =
-      currentAttr[Constants.KEY_ARGUMENT_TYPE].toString().split("\\|".toRegex())
-        .dropLastWhile { it.isEmpty() }
-        .toTypedArray()
+      currentAttr?.get(Constants.KEY_ARGUMENT_TYPE)?.toString()?.split("\\|".toRegex())
+        ?.dropLastWhile { it.isEmpty() }
+        ?.toTypedArray()
 
-    if (argumentTypes.size > 1) {
-      if (attributeMap!!.contains(attributeKey)) {
-        val argumentType =
-          parseType(attributeMap.getValue(attributeKey), argumentTypes)
-        showAttributeEdit(target, attributeKey, argumentType)
+    if (argumentTypes != null) {
+      if (argumentTypes.size > 1) {
+        if (attributeMap!!.contains(attributeKey)) {
+          val argumentType =
+            parseType(attributeMap.getValue(attributeKey), argumentTypes)
+          showAttributeEdit(target, attributeKey, argumentType)
+          return
+        }
+        MaterialAlertDialogBuilder(context)
+          .setTitle(R.string.select_arg_type)
+          .setAdapter(
+            ArrayAdapter(
+              context, android.R.layout.simple_list_item_1, argumentTypes
+            )
+          ) { _, w ->
+            showAttributeEdit(target, attributeKey, argumentTypes[w])
+          }
+          .show()
+
         return
       }
-      MaterialAlertDialogBuilder(context)
-        .setTitle(R.string.select_arg_type)
-        .setAdapter(
-          ArrayAdapter(
-            context, android.R.layout.simple_list_item_1, argumentTypes
-          )
-        ) { _, w ->
-          showAttributeEdit(target, attributeKey, argumentTypes[w])
-        }
-        .show()
-
-      return
     }
-    showAttributeEdit(target, attributeKey, argumentTypes[0])
+    showAttributeEdit(target, attributeKey, argumentTypes?.get(0))
   }
 
+  @Suppress("UNCHECKED_CAST")
   private fun showAttributeEdit(
-    target: View, attributeKey: String, argumentType: String
+    target: View, attributeKey: String, argumentType: String?
   ) {
-    val allAttrs = INITIALIZER!!.getAllAttributesForView(target)
+    val allAttrs = initializer.getAllAttributesForView(target)
     val currentAttr =
-      INITIALIZER!!.getAttributeFromKey(attributeKey, allAttrs)
-    val attributeMap = viewAttributeMap!![target]
+      initializer.getAttributeFromKey(attributeKey, allAttrs)
+    val attributeMap = viewAttributeMap[target]
 
     var savedValue =
       if (attributeMap!!.contains(attributeKey)) attributeMap.getValue(attributeKey) else ""
     val defaultValue =
-      if (currentAttr.containsKey(Constants.KEY_DEFAULT_VALUE)
-      ) currentAttr[Constants.KEY_DEFAULT_VALUE].toString()
+      if (currentAttr?.containsKey(Constants.KEY_DEFAULT_VALUE) == true)
+        currentAttr[Constants.KEY_DEFAULT_VALUE].toString()
       else null
     val constant =
-      if (currentAttr.containsKey(Constants.KEY_CONSTANT)
+      if (currentAttr?.containsKey(Constants.KEY_CONSTANT) == true
       ) currentAttr[Constants.KEY_CONSTANT].toString()
       else null
 
@@ -660,20 +661,20 @@ class DesignEditor : LinearLayout {
     when (argumentType) {
       Constants.ARGUMENT_TYPE_SIZE -> dialog = SizeDialog(context, savedValue)
       Constants.ARGUMENT_TYPE_DIMENSION -> dialog =
-        DimensionDialog(context, savedValue, currentAttr["dimensionUnit"].toString())
+        DimensionDialog(context, savedValue, currentAttr?.get("dimensionUnit")?.toString())
 
       Constants.ARGUMENT_TYPE_ID -> dialog = IdDialog(context, savedValue)
       Constants.ARGUMENT_TYPE_VIEW -> dialog = ViewDialog(context, savedValue, constant)
       Constants.ARGUMENT_TYPE_BOOLEAN -> dialog = BooleanDialog(context, savedValue)
       Constants.ARGUMENT_TYPE_DRAWABLE -> {
-        if (savedValue.toString().startsWith("@drawable/")) {
+        if (savedValue.startsWith("@drawable/")) {
           savedValue = savedValue.replace("@drawable/", "")
         }
         dialog = StringDialog(context, savedValue, Constants.ARGUMENT_TYPE_DRAWABLE)
       }
 
       Constants.ARGUMENT_TYPE_STRING -> {
-        if (savedValue.toString().startsWith("@string/")) {
+        if (savedValue.startsWith("@string/")) {
           savedValue = savedValue.replace("@string/", "")
         }
         dialog = StringDialog(context, savedValue, Constants.ARGUMENT_TYPE_STRING)
@@ -689,33 +690,34 @@ class DesignEditor : LinearLayout {
         NumberDialog(context, savedValue, Constants.ARGUMENT_TYPE_FLOAT)
 
       Constants.ARGUMENT_TYPE_FLAG -> dialog =
-        FlagDialog(context, savedValue, currentAttr["arguments"] as ArrayList<String>?)
+        FlagDialog(context, savedValue, currentAttr?.get("arguments") as ArrayList<String>?)
 
       Constants.ARGUMENT_TYPE_ENUM -> dialog =
-        EnumDialog(context, savedValue, currentAttr["arguments"] as ArrayList<String>?)
+        EnumDialog(context, savedValue, currentAttr?.get("arguments") as ArrayList<String>?)
 
       Constants.ARGUMENT_TYPE_COLOR -> dialog = ColorDialog(context, savedValue)
     }
     if (dialog == null) return
 
-    dialog.setTitle(currentAttr["name"].toString())
-    dialog.setOnSaveValueListener(
-      OnSaveValueListener { value: String ->
-        if (defaultValue != null && (defaultValue == value)) {
-          if (attributeMap.contains(attributeKey)) removeAttribute(target, attributeKey)
-        } else {
-          INITIALIZER!!.applyAttribute(target, value, currentAttr)
-          showDefinedAttributes(target)
-          updateUndoRedoHistory()
-          updateStructure()
+    dialog.setTitle(currentAttr?.get("name")?.toString())
+    dialog.setOnSaveValueListener {
+      if (defaultValue != null && (defaultValue == it)) {
+        if (attributeMap.contains(attributeKey)) removeAttribute(target, attributeKey)
+      } else {
+        if (currentAttr != null) {
+          initializer.applyAttribute(target, it!!, currentAttr)
         }
-      })
+        showDefinedAttributes(target)
+        updateUndoRedoHistory()
+        updateStructure()
+      }
+    }
 
     dialog.show()
   }
 
   private fun removeViewAttributes(view: View) {
-    viewAttributeMap!!.remove(view)
+    viewAttributeMap.remove(view)
     if (view is ViewGroup) {
       for (i in 0 until view.childCount) {
         removeViewAttributes(view.getChildAt(i))
@@ -724,14 +726,17 @@ class DesignEditor : LinearLayout {
   }
 
   private fun removeAttribute(target: View, attributeKey: String): View {
+    @Suppress("NAME_SHADOWING")
     var target = target
-    val allAttrs = INITIALIZER!!.getAllAttributesForView(target)
+    val allAttrs = initializer.getAllAttributesForView(target)
     val currentAttr =
-      INITIALIZER!!.getAttributeFromKey(attributeKey, allAttrs)
+      initializer.getAttributeFromKey(attributeKey, allAttrs)
 
-    val attributeMap = viewAttributeMap!![target]
+    val attributeMap = viewAttributeMap[target]
 
-    if (currentAttr.containsKey(Constants.KEY_CAN_DELETE)) return target
+    if (currentAttr != null) {
+      if (currentAttr.containsKey(Constants.KEY_CAN_DELETE)) return target
+    }
 
     val name =
       if (attributeMap!!.contains("android:id")) attributeMap.getValue("android:id") else null
@@ -744,8 +749,8 @@ class DesignEditor : LinearLayout {
       target.requestLayout()
 
       // delete all id attributes for views
-      for (view: View in viewAttributeMap!!.keys) {
-        val map = viewAttributeMap!![view]
+      for (view: View in viewAttributeMap.keys) {
+        val map = viewAttributeMap[view]
 
         for (key: String in map!!.keySet()) {
           val value = map.getValue(key)
@@ -757,7 +762,7 @@ class DesignEditor : LinearLayout {
       return target
     }
 
-    viewAttributeMap!!.remove(target)
+    viewAttributeMap.remove(target)
 
     val parent = target.parent as ViewGroup
     val indexOfView = parent.indexOfChild(target)
@@ -796,7 +801,7 @@ class DesignEditor : LinearLayout {
     }
 
     parent.addView(target, indexOfView)
-    viewAttributeMap!![target] = attributeMap
+    viewAttributeMap[target] = attributeMap
 
     if (name != null) {
       addId(target, name, id)
@@ -819,7 +824,7 @@ class DesignEditor : LinearLayout {
     for (i in keys.indices) {
       val key = keys[i]
       if ((key == "android:id")) continue
-      INITIALIZER!!.applyAttribute(target, values[i], attrs[i])
+      initializer.applyAttribute(target, values[i], attrs[i])
     }
 
     try {
@@ -835,11 +840,11 @@ class DesignEditor : LinearLayout {
   }
 
   private fun initAttributes() {
-    ATTRIBUTES = convertJsonToJavaObject(Constants.ATTRIBUTES_FILE)
-    PARENT_ATTRIBUTES = convertJsonToJavaObject(Constants.PARENT_ATTRIBUTES_FILE)
+    attributes = convertJsonToJavaObject(Constants.ATTRIBUTES_FILE)
+    parentAttributes = convertJsonToJavaObject(Constants.PARENT_ATTRIBUTES_FILE)
     viewAttributeMap = HashMap()
-    INITIALIZER =
-      AttributeInitializer(context, viewAttributeMap, ATTRIBUTES, PARENT_ATTRIBUTES)
+    initializer =
+      AttributeInitializer(context, viewAttributeMap, attributes, parentAttributes)
   }
 
   private fun convertJsonToJavaObject(filePath: String): HashMap<String, List<HashMap<String, Any>>> {

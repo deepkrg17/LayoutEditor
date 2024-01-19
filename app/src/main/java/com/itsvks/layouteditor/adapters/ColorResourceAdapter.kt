@@ -7,7 +7,6 @@ import android.graphics.drawable.GradientDrawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -37,7 +36,7 @@ class ColorResourceAdapter(
 ) : RecyclerView.Adapter<ColorResourceAdapter.VH>() {
 
   class VH(var binding: LayoutColorItemBinding) : RecyclerView.ViewHolder(
-    binding.getRoot()
+    binding.root
   ) {
     val colorName: TextView = binding.colorName
     val colorValue: TextView = binding.colorValue
@@ -91,58 +90,54 @@ class ColorResourceAdapter(
     FileUtil.writeFile(colorsPath, sb.toString().trim { it <= ' ' })
   }
 
-  @SuppressLint("NotifyDataSetChanged")
   private fun showOptions(v: View, position: Int) {
     val popupMenu = PopupMenu(v.context, v)
     popupMenu.inflate(R.menu.menu_values)
-    popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-      val id = item.itemId
-      if (id == R.id.menu_copy_name) {
-        ClipboardUtils.copyText(colorList[position].name)
-        SBUtils.make(
-          v,
-          v.context.getString(R.string.copied)
-            + " "
-            + colorList[position].name
-        )
-          .setSlideAnimation()
-          .showAsSuccess()
-        return@setOnMenuItemClickListener true
-      } else if (id == R.id.menu_delete) {
-        MaterialAlertDialogBuilder(v.context)
-          .setTitle("Remove Color")
-          .setMessage("Do you want to remove " + colorList[position].name + "?")
-          .setNegativeButton(R.string.no, null)
-          .setPositiveButton(
-            R.string.yes
-          ) { _, _ ->
-            val name = colorList[position].name
-            if (name == "default_color") {
-              SBUtils.make(
-                v,
-                v.context
-                  .getString(
-                    R.string.msg_cannot_delete_default, "color"
-                  )
-              )
-                .setFadeAnimation()
-                .setType(SBUtils.Type.INFO)
-                .show()
-            } else {
-              colorList.removeAt(position)
-              notifyDataSetChanged()
-              generateColorsXml()
+    popupMenu.setOnMenuItemClickListener {
+      val id = it.itemId
+      when (id) {
+        R.id.menu_copy_name -> {
+          ClipboardUtils.copyText(colorList[position].name)
+          SBUtils.make(
+            v, "${v.context.getString(R.string.copied)} ${colorList[position].name}"
+          ).setSlideAnimation().showAsSuccess()
+          true
+        }
+
+        R.id.menu_delete -> {
+          MaterialAlertDialogBuilder(v.context)
+            .setTitle("Remove Color")
+            .setMessage("Do you want to remove ${colorList[position].name}?")
+            .setNegativeButton(R.string.no, null)
+            .setPositiveButton(
+              R.string.yes
+            ) { _, _ ->
+              val name = colorList[position].name
+              if (name == "default_color") {
+                SBUtils.make(
+                  v,
+                  v.context
+                    .getString(
+                      R.string.msg_cannot_delete_default, "color"
+                    )
+                ).setFadeAnimation().setType(SBUtils.Type.INFO).show()
+              } else {
+                colorList.removeAt(position)
+                notifyItemRemoved(position)
+                generateColorsXml()
+              }
             }
-          }
-          .show()
-        return@setOnMenuItemClickListener true
+            .show()
+          true
+        }
+
+        else -> false
       }
-      false
     }
     popupMenu.show()
   }
 
-  @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+  @SuppressLint("SetTextI18n")
   private fun editColor(v: View, pos: Int) {
     val builder = MaterialAlertDialogBuilder(v.context)
     builder.setTitle("Edit Color")
@@ -188,7 +183,7 @@ class ColorResourceAdapter(
       }
       // Update position
       colorList[pos].value = etValue.getText().toString()
-      notifyDataSetChanged()
+      notifyItemChanged(pos)
       // Generate code from all colors in list
       generateColorsXml()
     }
@@ -213,11 +208,13 @@ class ColorResourceAdapter(
       shape = GradientDrawable.OVAL
       cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
       setColor(backgroundColor)
-      setStroke(2, if (ColorUtils.calculateLuminance(backgroundColor) >= 0.5) {
-        Color.parseColor("#FF313131")
-      } else {
-        Color.parseColor("#FFD9D9D9")
-      })
+      setStroke(
+        2, if (ColorUtils.calculateLuminance(backgroundColor) >= 0.5) {
+          Color.parseColor("#FF313131")
+        } else {
+          Color.parseColor("#FFD9D9D9")
+        }
+      )
     }
   }
 }
