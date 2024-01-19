@@ -1,97 +1,86 @@
-package com.itsvks.layouteditor.utils;
+package com.itsvks.layouteditor.utils
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.itsvks.layouteditor.LayoutEditor;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URLDecoder;
-import java.util.ArrayList;
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
+import android.text.TextUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.itsvks.layouteditor.LayoutEditor.Companion.instance
+import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.net.URLDecoder
 
-public class FileUtil {
-
-  public static String readFromUri(Uri uri, Context context) {
+object FileUtil {
+  fun readFromUri(uri: Uri, context: Context): String? {
     try {
-      InputStream inputStream = context.getContentResolver().openInputStream(uri);
+      val inputStream = context.contentResolver.openInputStream(uri)
 
       // Creates a BufferedReader to read the contents of the InputStream
-      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+      val reader = BufferedReader(InputStreamReader(inputStream))
 
       // Creates a StringBuilder to store the file's contents
-      StringBuilder sb = new StringBuilder();
-      String line;
+      val sb = StringBuilder()
+      var line: String?
 
       // Reads each line from the file and adds it to StringBuilder
-      while ((line = reader.readLine()) != null) {
-        sb.append(line);
+      while ((reader.readLine().also { line = it }) != null) {
+        sb.append(line)
       }
 
       // Closes the InputStream and the BufferedReader
-      inputStream.close();
-      reader.close();
+      inputStream!!.close()
+      reader.close()
 
       // Returns the string containing the content of the XML file
-      return sb.toString();
-
-    } catch (Exception e) {
-      e.printStackTrace();
+      return sb.toString()
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
 
-    return null;
+    return null
   }
 
-  public static boolean copyFile(Uri uri, String destinationPath) {
-    InputStream inputStream = null;
-    OutputStream outputStream = null;
+  @JvmStatic
+  fun copyFile(uri: Uri, destinationPath: String): Boolean {
+    var inputStream: InputStream? = null
+    var outputStream: OutputStream? = null
 
     try {
-      inputStream = LayoutEditor.Companion.getInstance().getContext().getContentResolver().openInputStream(uri);
-      outputStream = new FileOutputStream(new File(destinationPath));
+      inputStream = instance!!.context.contentResolver.openInputStream(uri)
+      outputStream = FileOutputStream(File(destinationPath))
 
-      byte[] buffer = new byte[1024];
-      int length;
+      val buffer = ByteArray(1024)
+      var length: Int
 
-      while ((length = inputStream.read(buffer)) > 0) {
-        outputStream.write(buffer, 0, length);
+      while ((inputStream!!.read(buffer).also { length = it }) > 0) {
+        outputStream.write(buffer, 0, length)
       }
 
-      return true;
-    } catch (IOException e) {
-      e.printStackTrace();
-      ToastUtils.showLong(e.toString());
-      return false;
+      return true
+    } catch (e: IOException) {
+      e.printStackTrace()
+      ToastUtils.showLong(e.toString())
+      return false
     } finally {
       try {
-        if (inputStream != null) {
-          inputStream.close();
-        }
-        if (outputStream != null) {
-          outputStream.close();
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
-        ToastUtils.showLong(e.toString());
+        inputStream?.close()
+        outputStream?.close()
+      } catch (e: IOException) {
+        e.printStackTrace()
+        ToastUtils.showLong(e.toString())
       }
     }
   }
@@ -103,33 +92,33 @@ public class FileUtil {
    * @param ctx The context from which the asset should be read
    * @return The content of the asset file as a String
    */
-  public static String readFromAsset(String path, Context ctx) {
+  fun readFromAsset(path: String?, ctx: Context): String {
     try {
       // Get the input stream from the asset
-      InputStream inputStream = ctx.getAssets().open(path);
+      val inputStream = ctx.assets.open(path!!)
 
       // Create a byte array output stream to store the read bytes
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+      val outputStream = ByteArrayOutputStream()
 
       // Create a buffer of 1024 bytes
-      byte[] _buf = new byte[1024];
-      int i;
+      val _buf = ByteArray(1024)
+      var i: Int
 
       // Read the bytes from the input stream, write them to the output stream and close the streams
-      while ((i = inputStream.read(_buf)) != -1) {
-        outputStream.write(_buf, 0, i);
+      while ((inputStream.read(_buf).also { i = it }) != -1) {
+        outputStream.write(_buf, 0, i)
       }
-      outputStream.close();
-      inputStream.close();
+      outputStream.close()
+      inputStream.close()
 
       // Return the content of the output stream as a String
-      return outputStream.toString();
-    } catch (Exception e) {
-      e.printStackTrace();
+      return outputStream.toString()
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
 
     // If an exception occurred, return an empty String
-    return "";
+    return ""
   }
 
   /**
@@ -138,37 +127,37 @@ public class FileUtil {
    * @param filename - File name with extension to copy from assets folder.
    * @param outPath - Target path where you want to copy the file.
    */
-  public static void copyFileFromAsset(String filename, String outPath) {
+  fun copyFileFromAsset(filename: String, outPath: String) {
     // Get asset manager instance from application context
-    AssetManager assetManager = LayoutEditor.Companion.getInstance().getContext().getAssets();
+    val assetManager = instance!!.context.assets
 
     // Create streams for read and write
-    InputStream in;
-    OutputStream out;
+    val `in`: InputStream
+    val out: OutputStream
 
     try {
       // Create InputStream from assets folder
-      in = assetManager.open(filename);
+      `in` = assetManager.open(filename)
       // Create OutputStream to target path
-      String newFileName = outPath + "/" + filename;
-      out = new FileOutputStream(newFileName);
+      val newFileName = "$outPath/$filename"
+      out = FileOutputStream(newFileName)
 
       // Buffer for read and write
-      byte[] buffer = new byte[1024];
-      int read;
+      val buffer = ByteArray(1024)
+      var read: Int
 
       // Read from InputStream and write to OutputStream
-      while ((read = in.read(buffer)) != -1) {
-        out.write(buffer, 0, read);
+      while ((`in`.read(buffer).also { read = it }) != -1) {
+        out.write(buffer, 0, read)
       }
 
       // Close input and output streams
-      in.close();
-      out.flush();
-      out.close();
-    } catch (IOException e) {
+      `in`.close()
+      out.flush()
+      out.close()
+    } catch (e: IOException) {
       // Print exception stack trace
-      e.printStackTrace();
+      e.printStackTrace()
     }
   }
 
@@ -177,23 +166,23 @@ public class FileUtil {
    *
    * @param path the directory path in which to create the new file
    */
-  private static void createNewFile(String path) {
+  private fun createNewFile(path: String) {
     // Get the last index of the file separator
-    int lastSep = path.lastIndexOf(File.separator);
+    val lastSep = path.lastIndexOf(File.separator)
     // If there is a path, call makeDir to create the directory
     if (lastSep > 0) {
-      String dirPath = path.substring(0, lastSep);
-      makeDir(dirPath);
+      val dirPath = path.substring(0, lastSep)
+      makeDir(dirPath)
     }
 
     // Create a new file in the specified path
-    File file = new File(path);
+    val file = File(path)
 
     try {
       // Only create the file if it does not already exist
-      if (!file.exists()) file.createNewFile();
-    } catch (IOException e) {
-      e.printStackTrace();
+      if (!file.exists()) file.createNewFile()
+    } catch (e: IOException) {
+      e.printStackTrace()
     }
   }
 
@@ -203,36 +192,37 @@ public class FileUtil {
    * @param path the directory path of the file to read
    * @return the contents of the file as a string
    */
-  public static String readFile(String path) {
+  @JvmStatic
+  fun readFile(path: String): String {
     // Create the file if it does not exist
-    createNewFile(path);
+    createNewFile(path)
 
-    StringBuilder sb = new StringBuilder();
-    FileReader fr = null;
+    val sb = StringBuilder()
+    var fr: FileReader? = null
     try {
-      fr = new FileReader(new File(path));
+      fr = FileReader(File(path))
 
-      char[] buff = new char[1024];
-      int length = 0;
+      val buff = CharArray(1024)
+      var length = 0
 
       // Read the contents of the file and append them to the StringBuilder
-      while ((length = fr.read(buff)) > 0) {
-        sb.append(new String(buff, 0, length));
+      while ((fr.read(buff).also { length = it }) > 0) {
+        sb.append(String(buff, 0, length))
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (e: IOException) {
+      e.printStackTrace()
     } finally {
       if (fr != null) {
         try {
-          fr.close();
-        } catch (Exception e) {
-          e.printStackTrace();
+          fr.close()
+        } catch (e: Exception) {
+          e.printStackTrace()
         }
       }
     }
 
     // Return the contents of the file
-    return sb.toString();
+    return sb.toString()
   }
 
   /**
@@ -241,27 +231,28 @@ public class FileUtil {
    * @param path Path of the file to write.
    * @param str String to write in the file.
    */
-  public static void writeFile(String path, String str) {
+  @JvmStatic
+  fun writeFile(path: String, str: String?) {
     // Create a new file.
-    createNewFile(path);
-    FileWriter fileWriter = null;
+    createNewFile(path)
+    var fileWriter: FileWriter? = null
 
     try {
       // Create a filewriter object with given path
       // and false to overwrite the existing file.
-      fileWriter = new FileWriter(new File(path), false);
+      fileWriter = FileWriter(File(path), false)
       // Write the given string in file.
-      fileWriter.write(str);
+      fileWriter.write(str)
       // Flush the filewriter object.
-      fileWriter.flush();
-    } catch (IOException e) {
-      e.printStackTrace();
+      fileWriter.flush()
+    } catch (e: IOException) {
+      e.printStackTrace()
     } finally {
       try {
         // Close the filewriter object.
-        if (fileWriter != null) fileWriter.close();
-      } catch (IOException e) {
-        e.printStackTrace();
+        fileWriter?.close()
+      } catch (e: IOException) {
+        e.printStackTrace()
       }
     }
   }
@@ -272,53 +263,54 @@ public class FileUtil {
    * @param sourcePath Path of the file to copy from.
    * @param destPath Path of the file to copy to.
    */
-  public static void copyFile(String sourcePath, String destPath) {
+  fun copyFile(sourcePath: String, destPath: String) {
     // Check if file exist in source path.
-    if (!isExistFile(sourcePath)) return;
+    if (isNotExistFile(sourcePath)) return
     // Create a new file in destination path.
-    createNewFile(destPath);
+    createNewFile(destPath)
 
-    FileInputStream fis = null;
-    FileOutputStream fos = null;
+    var fis: FileInputStream? = null
+    var fos: FileOutputStream? = null
 
     try {
       // Create input and output stream objects.
-      fis = new FileInputStream(sourcePath);
-      fos = new FileOutputStream(destPath, false);
+      fis = FileInputStream(sourcePath)
+      fos = FileOutputStream(destPath, false)
 
-      byte[] buff = new byte[1024];
-      int length = 0;
+      val buff = ByteArray(1024)
+      var length = 0
 
       // Read and write the bytes from source path to destination path.
-      while ((length = fis.read(buff)) > 0) {
-        fos.write(buff, 0, length);
+      while ((fis.read(buff).also { length = it }) > 0) {
+        fos.write(buff, 0, length)
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (e: IOException) {
+      e.printStackTrace()
     } finally {
       // Close the input and output stream objects.
       if (fis != null) {
         try {
-          fis.close();
-        } catch (IOException e) {
-          e.printStackTrace();
+          fis.close()
+        } catch (e: IOException) {
+          e.printStackTrace()
         }
       }
       if (fos != null) {
         try {
-          fos.close();
-        } catch (IOException e) {
-          e.printStackTrace();
+          fos.close()
+        } catch (e: IOException) {
+          e.printStackTrace()
         }
       }
     }
   }
 
-  public static void copyFile(InputStream in, OutputStream out) throws IOException {
-    byte[] buffer = new byte[1024];
-    int read;
-    while ((read = in.read(buffer)) != -1) {
-      out.write(buffer, 0, read);
+  @Throws(IOException::class)
+  fun copyFile(`in`: InputStream, out: OutputStream) {
+    val buffer = ByteArray(1024)
+    var read: Int
+    while ((`in`.read(buffer).also { read = it }) != -1) {
+      out.write(buffer, 0, read)
     }
   }
 
@@ -328,18 +320,18 @@ public class FileUtil {
    * @param oldPath the path of the directory to be copied
    * @param newPath the path of the directory to be created
    */
-  public static void copyDir(String oldPath, String newPath) {
-    File oldFile = new File(oldPath);
-    File[] files = oldFile.listFiles();
-    File newFile = new File(newPath);
+  fun copyDir(oldPath: String, newPath: String) {
+    val oldFile = File(oldPath)
+    val files = oldFile.listFiles()
+    val newFile = File(newPath)
     if (!newFile.exists()) {
-      newFile.mkdirs();
+      newFile.mkdirs()
     }
-    for (File file : files) {
-      if (file.isFile()) {
-        copyFile(file.getPath(), newPath + "/" + file.getName());
-      } else if (file.isDirectory()) {
-        copyDir(file.getPath(), newPath + "/" + file.getName());
+    for (file in files!!) {
+      if (file.isFile) {
+        copyFile(file.path, newPath + "/" + file.name)
+      } else if (file.isDirectory) {
+        copyDir(file.path, newPath + "/" + file.name)
       }
     }
   }
@@ -350,9 +342,9 @@ public class FileUtil {
    * @param sourcePath the path of the file to be moved
    * @param destPath the path of the destination
    */
-  public static void moveFile(String sourcePath, String destPath) {
-    copyFile(sourcePath, destPath);
-    deleteFile(sourcePath);
+  fun moveFile(sourcePath: String, destPath: String) {
+    copyFile(sourcePath, destPath)
+    deleteFile(sourcePath)
   }
 
   /**
@@ -360,31 +352,32 @@ public class FileUtil {
    *
    * @param path the path of the file to be deleted
    */
-  public static void deleteFile(String path) {
-    File file = new File(path);
+  @JvmStatic
+  fun deleteFile(path: String) {
+    val file = File(path)
 
-    if (!file.exists()) return;
+    if (!file.exists()) return
 
-    if (file.isFile()) {
-      file.delete();
-      return;
+    if (file.isFile) {
+      file.delete()
+      return
     }
 
-    File[] fileArr = file.listFiles();
+    val fileArr = file.listFiles()
 
     if (fileArr != null) {
-      for (File subFile : fileArr) {
-        if (subFile.isDirectory()) {
-          deleteFile(subFile.getAbsolutePath());
+      for (subFile in fileArr) {
+        if (subFile.isDirectory) {
+          deleteFile(subFile.absolutePath)
         }
 
-        if (subFile.isFile()) {
-          subFile.delete();
+        if (subFile.isFile) {
+          subFile.delete()
         }
       }
     }
 
-    file.delete();
+    file.delete()
   }
 
   /**
@@ -393,9 +386,9 @@ public class FileUtil {
    * @param path the path to check
    * @return true if the file exists, false otherwise
    */
-  public static boolean isExistFile(String path) {
-    File file = new File(path);
-    return file.exists();
+  fun isNotExistFile(path: String): Boolean {
+    val file = File(path)
+    return !file.exists()
   }
 
   /**
@@ -403,10 +396,10 @@ public class FileUtil {
    *
    * @param path the path at which the directory should be created
    */
-  public static void makeDir(String path) {
-    if (!isExistFile(path)) {
-      File file = new File(path);
-      file.mkdirs();
+  fun makeDir(path: String) {
+    if (isNotExistFile(path)) {
+      val file = File(path)
+      file.mkdirs()
     }
   }
 
@@ -416,17 +409,17 @@ public class FileUtil {
    * @param path the directory to list the files from
    * @param list the list to which the files should be added
    */
-  public static void listDir(String path, ArrayList<String> list) {
-    File dir = new File(path);
-    if (!dir.exists() || dir.isFile()) return;
+  fun listDir(path: String, list: ArrayList<String?>?) {
+    val dir = File(path)
+    if (!dir.exists() || dir.isFile) return
 
-    File[] listFiles = dir.listFiles();
-    if (listFiles == null || listFiles.length <= 0) return;
+    val listFiles = dir.listFiles()
+    if (listFiles == null || listFiles.isEmpty()) return
 
-    if (list == null) return;
-    list.clear();
-    for (File file : listFiles) {
-      list.add(file.getAbsolutePath());
+    if (list == null) return
+    list.clear()
+    for (file in listFiles) {
+      list.add(file.absolutePath)
     }
   }
 
@@ -436,72 +429,73 @@ public class FileUtil {
    * @param uri Uri of the file
    * @return Returns the File Path of Uri
    */
-  public static String convertUriToFilePath(final Uri uri) {
-    String path = null;
+  @JvmStatic
+  fun convertUriToFilePath(uri: Uri): String {
+    var path = ""
     // Check if the Uri is provided by documents contract
-    if (DocumentsContract.isDocumentUri(LayoutEditor.Companion.getInstance().getContext(), uri)) {
+    if (DocumentsContract.isDocumentUri(instance!!.context, uri)) {
       // Check if Uri is External Storage Document
       if (isExternalStorageDocument(uri)) {
-        final String docId = DocumentsContract.getDocumentId(uri);
+        val docId = DocumentsContract.getDocumentId(uri)
         // Split the document Id into two parts
-        final String[] split = docId.split(":");
-        final String type = split[0];
+        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val type = split[0]
 
         // Check if it is primary storage
-        if ("primary".equalsIgnoreCase(type)) {
+        if ("primary".equals(type, ignoreCase = true)) {
           // Append the split[1] to Environment.getExternalStorageDirectory() to get File Path
-          path = Environment.getExternalStorageDirectory() + "/" + split[1];
+          path = Environment.getExternalStorageDirectory().toString() + "/" + split[1]
         }
       } else if (isDownloadsDocument(uri)) {
-        final String id = DocumentsContract.getDocumentId(uri);
+        val id = DocumentsContract.getDocumentId(uri)
 
         // Check if the Id is empty
         if (!TextUtils.isEmpty(id)) {
           // Replace 'raw:' from Id to get File Path
           if (id.startsWith("raw:")) {
-            return id.replaceFirst("raw:", "");
+            return id.replaceFirst("raw:".toRegex(), "")
+          }
+        }
+      } else if (isMediaDocument(uri)) {
+        val docId = DocumentsContract.getDocumentId(uri)
+        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val type = split[0]
+
+        var contentUri: Uri? = null
+        // Check the type of Media
+        when (type) {
+          "image" -> {
+            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+          }
+          "video" -> {
+            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+          }
+          "audio" -> {
+            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
           }
         }
 
-      } else if (isMediaDocument(uri)) {
-        final String docId = DocumentsContract.getDocumentId(uri);
-        final String[] split = docId.split(":");
-        final String type = split[0];
-
-        Uri contentUri = null;
-        // Check the type of Media
-        if ("image".equals(type)) {
-          contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        } else if ("video".equals(type)) {
-          contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        } else if ("audio".equals(type)) {
-          contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        }
-
-        final String selection = "_id=?";
-        final String[] selectionArgs = new String[] {split[1]};
+        val selection = "_id=?"
+        val selectionArgs = arrayOf(split[1])
 
         // Get Data Column from content Uri
-        path = getDataColumn(contentUri, selection, selectionArgs);
+        path = getDataColumn(contentUri, selection, selectionArgs).toString()
       }
-    } else if (ContentResolver.SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
+    } else if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme, ignoreCase = true)) {
       // Get Data Column from content Uri
-      path = getDataColumn(uri, null, null);
-    } else if (ContentResolver.SCHEME_FILE.equalsIgnoreCase(uri.getScheme())) {
+      path = getDataColumn(uri, null, null).toString()
+    } else if (ContentResolver.SCHEME_FILE.equals(uri.scheme, ignoreCase = true)) {
       // Get File Path from Uri
-      path = uri.getPath();
+      path = uri.path.toString()
     }
 
     // Check if path is not empty
-    if (path != null) {
-      try {
-        // Decode the File Path using 'UTF-8'
-        return URLDecoder.decode(path, "UTF-8");
-      } catch (Exception e) {
-        return null;
-      }
-    }
-    return null;
+    return try {
+      // Decode the File Path using 'UTF-8'
+      URLDecoder.decode(path, "UTF-8")
+    } catch (e: Exception) {
+      null
+    }.toString()
   }
 
   /**
@@ -513,25 +507,24 @@ public class FileUtil {
    * @return The data column retrieved from the specified URI.
    */
   @SuppressLint("Recycle")
-  private static String getDataColumn(Uri uri, String selection, String[] selectionArgs) {
-    final String column =
-        MediaStore.Images.Media.DATA; // Column name of the data column to be retrieved
-    final String[] projection = {column}; // Projection of the data column to be retrieved
+  private fun getDataColumn(uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+    val column =
+      MediaStore.Images.Media.DATA // Column name of the data column to be retrieved
+    val projection = arrayOf(column) // Projection of the data column to be retrieved
 
     try {
-      Cursor cursor =
-          LayoutEditor.Companion.getInstance().getContext() // Get the application context
-              .getContentResolver() // Get the content resolver
-              .query(uri, projection, selection, selectionArgs, null); // Query the content resolver
+      val cursor =
+        instance!!.context // Get the application context
+          .contentResolver // Get the content resolver
+          .query(uri!!, projection, selection, selectionArgs, null) // Query the content resolver
       if (cursor != null && cursor.moveToFirst()) {
-        final int column_index =
-            cursor.getColumnIndexOrThrow(column); // Get the index of the data column
-        return cursor.getString(column_index); // Return the data column
+        val column_index =
+          cursor.getColumnIndexOrThrow(column) // Get the index of the data column
+        return cursor.getString(column_index) // Return the data column
       }
-    } catch (Exception e) {
-
+    } catch (ignored: Exception) {
     }
-    return null;
+    return null
   }
 
   /**
@@ -540,8 +533,8 @@ public class FileUtil {
    * @param uri The Uri to check.
    * @return Whether the Uri authority is ExternalStorageProvider.
    */
-  public static boolean isExternalStorageDocument(Uri uri) {
-    return "com.android.externalstorage.documents".equals(uri.getAuthority());
+  fun isExternalStorageDocument(uri: Uri): Boolean {
+    return "com.android.externalstorage.documents" == uri.authority
   }
 
   /**
@@ -550,8 +543,8 @@ public class FileUtil {
    * @param uri The Uri to check.
    * @return Whether the Uri authority is DownloadsProvider.
    */
-  public static boolean isDownloadsDocument(Uri uri) {
-    return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+  fun isDownloadsDocument(uri: Uri): Boolean {
+    return "com.android.providers.downloads.documents" == uri.authority
   }
 
   /**
@@ -560,8 +553,8 @@ public class FileUtil {
    * @param uri The Uri to check.
    * @return Whether the Uri authority is MediaProvider.
    */
-  public static boolean isMediaDocument(Uri uri) {
-    return "com.android.providers.media.documents".equals(uri.getAuthority());
+  fun isMediaDocument(uri: Uri): Boolean {
+    return "com.android.providers.media.documents" == uri.authority
   }
 
   /**
@@ -570,9 +563,9 @@ public class FileUtil {
    * @param path The path of the file.
    * @return Whether the file is a directory.
    */
-  public static boolean isDirectory(String path) {
-    if (!isExistFile(path)) return false;
-    return new File(path).isDirectory();
+  fun isDirectory(path: String): Boolean {
+    if (isNotExistFile(path)) return false
+    return File(path).isDirectory
   }
 
   /**
@@ -581,9 +574,9 @@ public class FileUtil {
    * @param path The path of the file.
    * @return Whether the file is a file.
    */
-  public static boolean isFile(String path) {
-    if (!isExistFile(path)) return false;
-    return new File(path).isFile();
+  fun isFile(path: String): Boolean {
+    if (isNotExistFile(path)) return false
+    return File(path).isFile
   }
 
   /**
@@ -592,19 +585,18 @@ public class FileUtil {
    * @param path The path of the file.
    * @return The file length.
    */
-  public static long getFileLength(String path) {
-    if (!isExistFile(path)) return 0;
-    return new File(path).length();
+  fun getFileLength(path: String): Long {
+    if (isNotExistFile(path)) return 0
+    return File(path).length()
   }
 
-  /**
-   * Gets the absolute path of the external storage directory.
-   *
-   * @return The absolute path of the external storage directory.
-   */
-  public static String getExternalStorageDir() {
-    return Environment.getExternalStorageDirectory().getAbsolutePath();
-  }
+  val externalStorageDir: String
+    /**
+     * Gets the absolute path of the external storage directory.
+     *
+     * @return The absolute path of the external storage directory.
+     */
+    get() = Environment.getExternalStorageDirectory().absolutePath
 
   /**
    * Gets the absolute path of the application-specific directory.
@@ -612,8 +604,8 @@ public class FileUtil {
    * @param ctx The application context.
    * @return The absolute path of the application-specific directory.
    */
-  public static String getPackageDataDir(Context ctx) {
-    return ctx.getExternalFilesDir("").getAbsolutePath();
+  fun getPackageDataDir(ctx: Context): String {
+    return ctx.getExternalFilesDir("")!!.absolutePath
   }
 
   /**
@@ -622,8 +614,8 @@ public class FileUtil {
    * @param type The type of the public directory.
    * @return The absolute path of the public directory.
    */
-  public static String getPublicDir(String type) {
-    return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
+  fun getPublicDir(type: String): String {
+    return Environment.getExternalStoragePublicDirectory(type).absolutePath
   }
 
   /**
@@ -632,9 +624,9 @@ public class FileUtil {
    * @param path The path to get the last segment.
    * @return The last segment from the path.
    */
-  public static String getLastSegmentFromPath(String path) {
-    if (path == null) return "";
-    return path.substring(path.lastIndexOf("/") + 1, path.length());
+  @JvmStatic
+  fun getLastSegmentFromPath(path: String): String {
+    return path.substring(path.lastIndexOf("/") + 1)
   }
 
   /**
@@ -644,24 +636,24 @@ public class FileUtil {
    * @param data Data to be written in the file
    * @return boolean True if file is saved successfully, else false
    */
-  public static boolean saveFile(Uri uri, String data) {
+  fun saveFile(uri: Uri, data: String): Boolean {
     try {
       // Open the file descriptor in read-write-truncate mode
-      ParcelFileDescriptor pfd =
-          LayoutEditor.Companion.getInstance().getContext().getContentResolver().openFileDescriptor(uri, "rwt");
+      val pfd =
+        instance!!.context.contentResolver.openFileDescriptor(uri, "rwt")
       // Initialize file output stream with the file descriptor
-      FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+      val fos = FileOutputStream(pfd!!.fileDescriptor)
       // Write the data in the file
-      fos.write(data.getBytes());
+      fos.write(data.toByteArray())
       // Close the output stream
-      fos.close();
+      fos.close()
       // Close the file descriptor
-      pfd.close();
-      return true;
-    } catch (IOException e) {
+      pfd.close()
+      return true
+    } catch (e: IOException) {
       // Print the stacktrace for the exception
-      e.printStackTrace();
-      return false;
+      e.printStackTrace()
+      return false
     }
   }
 }

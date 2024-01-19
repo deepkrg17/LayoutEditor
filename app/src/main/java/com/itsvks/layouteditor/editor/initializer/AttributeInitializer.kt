@@ -1,131 +1,135 @@
-package com.itsvks.layouteditor.editor.initializer;
+package com.itsvks.layouteditor.editor.initializer
 
-import android.content.Context;
-import android.view.View;
+import android.content.Context
+import android.view.View
+import com.itsvks.layouteditor.editor.DesignEditor
+import com.itsvks.layouteditor.utils.Constants
+import com.itsvks.layouteditor.utils.InvokeUtil.invokeMethod
 
-import com.itsvks.layouteditor.editor.DesignEditor;
-import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.InvokeUtil;
+class AttributeInitializer {
+  private var context: Context
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+  private var viewAttributeMap = HashMap<View, AttributeMap>()
+  private var attributes: HashMap<String, List<HashMap<String, Any>>>
+  private var parentAttributes: HashMap<String, List<HashMap<String, Any>>>
 
-public class AttributeInitializer {
-  private Context context;
-
-  private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
-  private HashMap<String, List<HashMap<String, Object>>> attributes;
-  private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
-
-  public AttributeInitializer(
-      Context context,
-      HashMap<String, List<HashMap<String, Object>>> attributes,
-      HashMap<String, List<HashMap<String, Object>>> parentAttributes) {
-    this.context = context;
-    this.attributes = attributes;
-    this.parentAttributes = parentAttributes;
+  constructor(
+    context: Context,
+    attributes: HashMap<String, List<HashMap<String, Any>>>,
+    parentAttributes: HashMap<String, List<HashMap<String, Any>>>
+  ) {
+    this.context = context
+    this.attributes = attributes
+    this.parentAttributes = parentAttributes
   }
 
-  public AttributeInitializer(
-      Context context,
-      HashMap<View, AttributeMap> viewAttributeMap,
-      HashMap<String, List<HashMap<String, Object>>> attributes,
-      HashMap<String, List<HashMap<String, Object>>> parentAttributes) {
-    this.viewAttributeMap = viewAttributeMap;
-    this.context = context;
-    this.attributes = attributes;
-    this.parentAttributes = parentAttributes;
+  constructor(
+    context: Context,
+    viewAttributeMap: HashMap<View, AttributeMap>,
+    attributes: HashMap<String, List<HashMap<String, Any>>>,
+    parentAttributes: HashMap<String, List<HashMap<String, Any>>>
+  ) {
+    this.viewAttributeMap = viewAttributeMap
+    this.context = context
+    this.attributes = attributes
+    this.parentAttributes = parentAttributes
   }
 
-  public void applyDefaultAttributes(final View target, final Map<String, String> defaultAttrs) {
-    List<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
+  fun applyDefaultAttributes(target: View, defaultAttrs: Map<String, String?>) {
+    val allAttrs = getAllAttributesForView(target)
 
-    for (String key : defaultAttrs.keySet()) {
-      for (HashMap<String, Object> map : allAttrs) {
-        if (map.get(Constants.KEY_ATTRIBUTE_NAME).toString().equals(key)) {
-          applyAttribute(target, defaultAttrs.get(key).toString(), map);
-          break;
+    for (key in defaultAttrs.keys) {
+      for (map in allAttrs) {
+        if (map[Constants.KEY_ATTRIBUTE_NAME].toString() == key) {
+          applyAttribute(target, defaultAttrs[key]!!, map)
+          break
         }
       }
     }
   }
 
-  public void applyAttribute(
-      final View target, final String value, final HashMap<String, Object> attribute) {
-    String methodName = attribute.get(Constants.KEY_METHOD_NAME).toString();
-    String className = attribute.get(Constants.KEY_CLASS_NAME).toString();
-    String attributeName = attribute.get(Constants.KEY_ATTRIBUTE_NAME).toString();
+  fun applyAttribute(
+    target: View, value: String, attribute: HashMap<String, Any>
+  ) {
+    val methodName = attribute?.get(Constants.KEY_METHOD_NAME)?.toString()
+    val className = attribute?.get(Constants.KEY_CLASS_NAME)?.toString()
+    val attributeName = attribute?.get(Constants.KEY_ATTRIBUTE_NAME)?.toString()
 
     // update ids attributes for all views
-    if (value.startsWith("@+id/") && viewAttributeMap.get(target).contains("android:id")) {
-      for (View view : viewAttributeMap.keySet()) {
-        AttributeMap map = viewAttributeMap.get(view);
+    if (value.startsWith("@+id/") && viewAttributeMap[target]!!.contains("android:id")) {
+      for (view in viewAttributeMap.keys) {
+        val map = viewAttributeMap[view]
 
-        for (String key : map.keySet()) {
-          String val = map.getValue(key);
+        for (key in map!!.keySet()) {
+          val `val` = map.getValue(key)
 
-          if (val.startsWith("@id/")
-              && val.equals(viewAttributeMap.get(target).getValue("android:id").replace("+", ""))) {
-            map.putValue(key, value.replace("+", ""));
+          if (`val`.startsWith("@id/") && `val` == viewAttributeMap[target]!!
+              .getValue("android:id").replace("+", "")
+          ) {
+            map.putValue(key, value.replace("+", ""))
           }
         }
       }
     }
 
-    viewAttributeMap.get(target).putValue(attributeName, value);
-    InvokeUtil.invokeMethod(methodName, className, target, value, context);
+    if (attributeName != null) {
+      viewAttributeMap[target]!!.putValue(attributeName, value)
+    }
+    if (methodName != null) {
+      if (className != null) {
+        invokeMethod(methodName, className, target, value, context)
+      }
+    }
   }
 
-  public List<HashMap<String, Object>> getAvailableAttributesForView(final View target) {
-    final List<String> keys = viewAttributeMap.get(target).keySet();
-    final List<HashMap<String, Object>> allAttrs = getAllAttributesForView(target);
+  fun getAvailableAttributesForView(target: View): List<HashMap<String, Any>> {
+    val keys = viewAttributeMap[target]!!.keySet()
+    val allAttrs = getAllAttributesForView(target)
 
-    for (int i = allAttrs.size() - 1; i >= 0; i--) {
-      for (String key : keys) {
-        if (key.equals(allAttrs.get(i).get(Constants.KEY_ATTRIBUTE_NAME).toString())) {
-          allAttrs.remove(i);
-          break;
+    for (i in allAttrs.indices.reversed()) {
+      for (key in keys) {
+        if (key == allAttrs[i][Constants.KEY_ATTRIBUTE_NAME].toString()) {
+          allAttrs.removeAt(i)
+          break
         }
       }
     }
 
-    return allAttrs;
+    return allAttrs
   }
 
-  public List<HashMap<String, Object>> getAllAttributesForView(final View target) {
-    List<HashMap<String, Object>> allAttrs = new ArrayList<>();
+  @Suppress("UNCHECKED_CAST")
+  fun getAllAttributesForView(target: View): MutableList<HashMap<String, Any>> {
+    val allAttrs: MutableList<HashMap<String, Any>> = ArrayList()
 
-    Class cls = target.getClass();
-    Class viewParentCls = View.class.getSuperclass();
+    var cls = target.javaClass
+    val viewParentCls = View::class.java.superclass
 
     while (cls != viewParentCls) {
-      if (attributes.containsKey(cls.getName())) allAttrs.addAll(0, attributes.get(cls.getName()));
+      if (attributes.containsKey(cls.name)) allAttrs.addAll(0, attributes[cls.name]!!)
 
-      cls = cls.getSuperclass();
+      cls = cls.superclass as Class<View>
     }
 
-    if (target.getParent() != null && target.getParent().getClass() != DesignEditor.class) {
-      cls = target.getParent().getClass();
+    if (target.parent != null && target.parent.javaClass != DesignEditor::class.java) {
+      cls = target.parent.javaClass as Class<View>
 
       while (cls != viewParentCls) {
-        if (parentAttributes.containsKey(cls.getName()))
-          allAttrs.addAll(parentAttributes.get(cls.getName()));
+        if (parentAttributes.containsKey(cls.name)) allAttrs.addAll(parentAttributes[cls.name]!!)
 
-        cls = cls.getSuperclass();
+        cls = cls.superclass as Class<View>
       }
     }
 
-    return allAttrs;
+    return allAttrs
   }
 
-  public HashMap<String, Object> getAttributeFromKey(
-      String key, List<HashMap<String, Object>> list) {
-    for (HashMap<String, Object> map : list) {
-      if (map.get(Constants.KEY_ATTRIBUTE_NAME).equals(key)) return map;
+  fun getAttributeFromKey(
+    key: String, list: MutableList<HashMap<String, Any>>
+  ): HashMap<String, Any>? {
+    for (map in list) {
+      if (map[Constants.KEY_ATTRIBUTE_NAME] == key) return map
     }
-
-    return null;
+    return null
   }
 }

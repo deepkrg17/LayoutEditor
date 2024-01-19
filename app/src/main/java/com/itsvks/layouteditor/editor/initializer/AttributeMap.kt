@@ -1,10 +1,7 @@
-package com.itsvks.layouteditor.editor.initializer;
+package com.itsvks.layouteditor.editor.initializer
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class AttributeMap {
-  private List<Attribute> attrs = new ArrayList<>();
+class AttributeMap {
+  private val attrs: MutableList<Attribute> = ArrayList()
 
   /**
    * Puts a key-value pair into the AttributeMap
@@ -12,12 +9,12 @@ public class AttributeMap {
    * @param key the key of the attribute
    * @param value the value of the attribute
    */
-  public void putValue(String key, String value) {
+  fun putValue(key: String, value: String) {
     if (contains(key)) {
-      int index = getAttributeIndexFromKey(key);
-      attrs.get(index).value = value;
+      val index = getAttributeIndexFromKey(key)
+      attrs[index].value = value
     } else {
-      attrs.add(new Attribute(key, value));
+      attrs.add(Attribute(key, value))
     }
   }
 
@@ -26,9 +23,9 @@ public class AttributeMap {
    *
    * @param key the key of the attribute to be removed
    */
-  public void removeValue(String key) {
-    int index = getAttributeIndexFromKey(key);
-    attrs.remove(index);
+  fun removeValue(key: String) {
+    val index = getAttributeIndexFromKey(key)
+    attrs.removeAt(index)
   }
 
   /**
@@ -37,10 +34,10 @@ public class AttributeMap {
    * @param key the key of the attribute
    * @return the value of the attribute
    */
-  public String getValue(String key) {
-    int index = getAttributeIndexFromKey(key);
-    Attribute attr = attrs.get(index);
-    return attr.value;
+  fun getValue(key: String): String {
+    val index = getAttributeIndexFromKey(key)
+    val attr = attrs[index]
+    return attr.value
   }
 
   /**
@@ -48,14 +45,14 @@ public class AttributeMap {
    *
    * @return a list of all keys
    */
-  public List<String> keySet() {
-    List<String> keys = new ArrayList<>();
+  fun keySet(): List<String> {
+    val keys: MutableList<String> = ArrayList()
 
-    for (Attribute attr : attrs) {
-      keys.add(attr.key);
+    for (attr in attrs) {
+      keys.add(attr.key)
     }
 
-    return keys;
+    return keys
   }
 
   /**
@@ -63,14 +60,14 @@ public class AttributeMap {
    *
    * @return a list of all values
    */
-  public List<String> values() {
-    List<String> values = new ArrayList<>();
+  fun values(): List<String> {
+    val values: MutableList<String> = ArrayList()
 
-    for (Attribute attr : attrs) {
-      values.add(attr.value);
+    for (attr in attrs) {
+      values.add(attr.value)
     }
 
-    return values;
+    return values
   }
 
   /**
@@ -79,14 +76,14 @@ public class AttributeMap {
    * @param key the key to check for
    * @return true if the AttributeMap contains the key, false otherwise
    */
-  public boolean contains(String key) {
-    for (Attribute attr : attrs) {
-      if (attr.key.equals(key)) {
-        return true;
+  fun contains(key: String): Boolean {
+    for (attr in attrs) {
+      if (attr.key == key) {
+        return true
       }
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -95,32 +92,25 @@ public class AttributeMap {
    * @param key the key of the Attribute
    * @return the index of the Attribute
    */
-  private int getAttributeIndexFromKey(String key) {
-    int index = 0;
+  private fun getAttributeIndexFromKey(key: String): Int {
+    var index = 0
 
-    for (Attribute attr : attrs) {
-      if (attr.key.equals(key)) {
-        return index;
+    for (attr in attrs) {
+      if (attr.key == key) {
+        return index
       }
 
-      index++;
+      index++
     }
 
-    return index;
+    return index
   }
 
-  private class Attribute {
-    private String key, value;
-
-    /**
-     * Constructs an Attribute with the specified key-value pair
-     *
-     * @param key the key of the Attribute
-     * @param value the value of the Attribute
-     */
-    public Attribute(String key, String value) {
-      this.key = key;
-      this.value = value;
-    }
-  }
+  private class Attribute
+  /**
+   * Constructs an Attribute with the specified key-value pair
+   *
+   * @param key the key of the Attribute
+   * @param value the value of the Attribute
+   */(val key: String, var value: String)
 }

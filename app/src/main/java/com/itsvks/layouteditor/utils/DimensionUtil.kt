@@ -1,102 +1,103 @@
-package com.itsvks.layouteditor.utils;
+package com.itsvks.layouteditor.utils
 
-import android.content.Context;
-import android.util.TypedValue;
-import android.view.ViewGroup;
-
-import com.itsvks.layouteditor.LayoutEditor;
-
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import android.content.Context
+import android.util.TypedValue
+import android.view.ViewGroup
+import java.util.regex.Pattern
 
 /**
-* This class is used to perform Dimension Utility operations.
-*/
-public class DimensionUtil {
-  
+ * This class is used to perform Dimension Utility operations.
+ */
+object DimensionUtil {
   /**
-  * Constant variable for Dimension Unit type DP
-  */
-  public static final String DP = "dp";
+   * Constant variable for Dimension Unit type DP
+   */
+  const val DP: String = "dp"
 
   /**
-  * Constant variable for Dimension Unit type SP
-  */
-  public static final String SP = "sp";
+   * Constant variable for Dimension Unit type SP
+   */
+  const val SP: String = "sp"
 
   /**
-  * A map containing dimension unit type and its related integer value
-  */
-  private static final HashMap<String, Integer> dimensMap = new HashMap<>();
+   * A map containing dimension unit type and its related integer value
+   */
+  private val dimensMap = HashMap<String, Int>()
 
   // Initializing dimensMap with Dimension Unit type and its related integer value
-  static {
-    dimensMap.put(DP, TypedValue.COMPLEX_UNIT_DIP);
-    dimensMap.put(SP, TypedValue.COMPLEX_UNIT_SP);
+  init {
+    dimensMap[DP] = TypedValue.COMPLEX_UNIT_DIP
+    dimensMap[SP] = TypedValue.COMPLEX_UNIT_SP
   }
 
   /**
-  * Pattern for matching Dimension Unit type
-  */
-  private static final Pattern pattern = Pattern.compile("dp|sp");
+   * Pattern for matching Dimension Unit type
+   */
+  private val pattern: Pattern = Pattern.compile("dp|sp")
 
   /**
-  * Method to parse the input string and return the related dimension value
-  *
-  * @param input string for parsing
-  * @param contxt context
-  * @return dimension value
-  */
-  public static float parse(String input, Context contxt) {
-    if (input.equals("match_parent")) return ViewGroup.LayoutParams.MATCH_PARENT;
-    else if (input.equals("wrap_content")) return ViewGroup.LayoutParams.WRAP_CONTENT;
-    else {
-      Matcher matcher = pattern.matcher(input);
-      String dimen = DP;
+   * Method to parse the input string and return the related dimension value
+   *
+   * @param input string for parsing
+   * @param contxt context
+   * @return dimension value
+   */
+  @JvmStatic
+  fun parse(input: String, contxt: Context): Float {
+    when (input) {
+      "match_parent" -> return ViewGroup.LayoutParams.MATCH_PARENT.toFloat()
+      "wrap_content" -> return ViewGroup.LayoutParams.WRAP_CONTENT.toFloat()
+      else -> {
+        val matcher = pattern.matcher(input)
+        var dimen = DP
 
-      // Finding dimension unit type from input string
-      while (matcher.find()) {
-        dimen = input.substring(matcher.start(), matcher.end());
+        // Finding dimension unit type from input string
+        while (matcher.find()) {
+          dimen = input.substring(matcher.start(), matcher.end())
+        }
+
+        // Getting dimension number from input string
+        val number = input.substring(0, input.lastIndexOf(dimen)).toFloat()
+
+
+        // Returning calculated dimension value
+        return TypedValue.applyDimension(
+          dimensMap[dimen]!!, number, contxt.resources.displayMetrics
+        )
       }
-
-      // Getting dimension number from input string
-      float number = Float.valueOf(input.substring(0, input.lastIndexOf(dimen)));
-      
-      // Returning calculated dimension value
-      return TypedValue.applyDimension(
-          dimensMap.get(dimen), number, contxt.getResources().getDisplayMetrics());
     }
   }
 
   /**
-  * Method to get the dimension value without the suffix, i.e Dimension Unit type
-  *
-  * @param input string for parsing
-  * @return dimension value without suffix
-  */
-  public static String getDimenWithoutSuffix(String input) {
-    Matcher matcher = pattern.matcher(input);
-    String dimen = DP;
+   * Method to get the dimension value without the suffix, i.e Dimension Unit type
+   *
+   * @param input string for parsing
+   * @return dimension value without suffix
+   */
+  @JvmStatic
+  fun getDimenWithoutSuffix(input: String): String {
+    val matcher = pattern.matcher(input)
+    var dimen = DP
 
     // Finding dimension unit type from input string
     while (matcher.find()) {
-      dimen = input.substring(matcher.start(), matcher.end());
+      dimen = input.substring(matcher.start(), matcher.end())
     }
 
     // Getting dimension number from input string
-    return input.substring(0, input.lastIndexOf(dimen));
+    return input.substring(0, input.lastIndexOf(dimen))
   }
 
   /**
-  * Method to get the dimension value in DIP
-  *
-  * @param value dimension number
-  * @param ctx context
-  * @return dimension value in DIP
-  */
-  public static float getDip(float value, Context ctx) {
+   * Method to get the dimension value in DIP
+   *
+   * @param value dimension number
+   * @param ctx context
+   * @return dimension value in DIP
+   */
+  fun getDip(value: Float, ctx: Context): Float {
     return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, value, ctx.getResources().getDisplayMetrics());
+      TypedValue.COMPLEX_UNIT_DIP, value, ctx.resources.displayMetrics
+    )
   }
 }

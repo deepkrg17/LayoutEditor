@@ -1,41 +1,33 @@
-package com.itsvks.layouteditor.views;
+package com.itsvks.layouteditor.views
 
-import android.content.Context;
-import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context
+import android.graphics.Rect
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import androidx.drawerlayout.widget.DrawerLayout
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
+/** Allows horizontally scrolling child of drawer layouts to intercept the touch event.  */
+class CustomDrawerLayout : DrawerLayout {
+  private val rect = Rect()
 
-/** Allows horizontally scrolling child of drawer layouts to intercept the touch event. */
-public class CustomDrawerLayout extends DrawerLayout {
+  constructor(context: Context) : super(context)
 
-  private final Rect rect = new Rect();
+  constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-  public CustomDrawerLayout(@NonNull Context context) {
-    super(context);
-  }
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+    context,
+    attrs,
+    defStyleAttr
+  )
 
-  public CustomDrawerLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
-  }
-
-  public CustomDrawerLayout(
-      @NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-  }
-
-  @Override
-  public boolean onInterceptTouchEvent(@NonNull MotionEvent ev) {
-    View scrollingChild = findScrollingChild(this, ev.getX(), ev.getY());
+  override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+    val scrollingChild = findScrollingChild(this, ev.x, ev.y)
     if (scrollingChild != null) {
-      return false;
+      return false
     }
-    return super.onInterceptTouchEvent(ev);
+    return super.onInterceptTouchEvent(ev)
   }
 
   /**
@@ -46,35 +38,34 @@ public class CustomDrawerLayout extends DrawerLayout {
    * @param y The y point in the screen
    * @return The scrolling view, null if no view is found
    */
-  @Nullable
-  private View findScrollingChild(@NonNull ViewGroup parent, float x, float y) {
-    int n = parent.getChildCount();
-    if (parent == this && n <= 1) {
-      return null;
+  private fun findScrollingChild(parent: ViewGroup, x: Float, y: Float): View? {
+    val n = parent.childCount
+    if (parent === this && n <= 1) {
+      return null
     }
 
-    int start = 0;
-    if (parent == this) {
-      start = 1;
+    var start = 0
+    if (parent === this) {
+      start = 1
     }
 
-    for (int i = start; i < n; i++) {
-      View child = parent.getChildAt(i);
-      if (child.getVisibility() != View.VISIBLE) {
-        continue;
+    for (i in start until n) {
+      val child = parent.getChildAt(i)
+      if (child.visibility != VISIBLE) {
+        continue
       }
-      child.getHitRect(rect);
-      if (rect.contains((int) x, (int) y)) {
+      child.getHitRect(rect)
+      if (rect.contains(x.toInt(), y.toInt())) {
         if (child.canScrollHorizontally(1)) {
-          return child;
-        } else if (child instanceof ViewGroup) {
-          View v = findScrollingChild((ViewGroup) child, x - rect.left, y - rect.top);
+          return child
+        } else if (child is ViewGroup) {
+          val v = findScrollingChild(child, x - rect.left, y - rect.top)
           if (v != null) {
-            return v;
+            return v
           }
         }
       }
     }
-    return null;
+    return null
   }
 }

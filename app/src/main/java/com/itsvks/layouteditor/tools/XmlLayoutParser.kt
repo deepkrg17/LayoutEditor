@@ -1,154 +1,140 @@
-package com.itsvks.layouteditor.tools;
+package com.itsvks.layouteditor.tools
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.LinearLayoutCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.itsvks.layouteditor.editor.initializer.AttributeInitializer
+import com.itsvks.layouteditor.editor.initializer.AttributeMap
+import com.itsvks.layouteditor.managers.IdManager.addNewId
+import com.itsvks.layouteditor.managers.IdManager.clear
+import com.itsvks.layouteditor.utils.Constants
+import com.itsvks.layouteditor.utils.FileUtil
+import com.itsvks.layouteditor.utils.InvokeUtil.createView
+import com.itsvks.layouteditor.utils.InvokeUtil.invokeMethod
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.IOException
+import java.io.StringReader
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.LinearLayoutCompat;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.itsvks.layouteditor.editor.initializer.AttributeInitializer;
-import com.itsvks.layouteditor.editor.initializer.AttributeMap;
-import com.itsvks.layouteditor.managers.IdManager;
-import com.itsvks.layouteditor.utils.Constants;
-import com.itsvks.layouteditor.utils.FileUtil;
-import com.itsvks.layouteditor.utils.InvokeUtil;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
+class XmlLayoutParser(context: Context) {
 
-public class XmlLayoutParser {
+  val viewAttributeMap: HashMap<View, AttributeMap> = HashMap()
 
-  private HashMap<String, List<HashMap<String, Object>>> attributes;
-  private HashMap<String, List<HashMap<String, Object>>> parentAttributes;
+  private val initializer: AttributeInitializer
+  private val container: LinearLayoutCompat
 
-  private HashMap<View, AttributeMap> viewAttributeMap = new HashMap<>();
-  private AttributeInitializer initializer;
+  init {
+    val attributes = Gson()
+      .fromJson<HashMap<String, List<HashMap<String, Any>>>>(
+        FileUtil.readFromAsset(Constants.ATTRIBUTES_FILE, context),
+        object : TypeToken<HashMap<String, List<HashMap<String, Any>>>>() {
+        }.type
+      )
+    val parentAttributes = Gson()
+      .fromJson<HashMap<String, List<HashMap<String, Any>>>>(
+        FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES_FILE, context),
+        object : TypeToken<HashMap<String, List<HashMap<String, Any>>>>() {
+        }.type
+      )
 
-  private LinearLayoutCompat container;
+    initializer = AttributeInitializer(context, attributes, parentAttributes)
 
-  public XmlLayoutParser(Context context) {
-
-    attributes =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.ATTRIBUTES_FILE, context),
-                new TypeToken<HashMap<String, List<HashMap<String, Object>>>>() {}.getType());
-    parentAttributes =
-        new Gson()
-            .fromJson(
-                FileUtil.readFromAsset(Constants.PARENT_ATTRIBUTES_FILE, context),
-                new TypeToken<HashMap<String, List<HashMap<String, Object>>>>() {}.getType());
-
-    initializer = new AttributeInitializer(context, attributes, parentAttributes);
-
-    container = new LinearLayoutCompat(context);
-    container.setLayoutParams(
-        new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    container = LinearLayoutCompat(context)
+    container.layoutParams = ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+    )
   }
 
-  public View getRoot() {
-    View view = container.getChildAt(0);
-    container.removeView(view);
-    return view;
-  }
+  val root: View
+    get() {
+      val view = container.getChildAt(0)
+      container.removeView(view)
+      return view
+    }
 
-  public HashMap<View, AttributeMap> getViewAttributeMap() {
-    return viewAttributeMap;
-  }
-
-  public void parseFromXml(final String xml, Context context) {
-    List<View> listViews = new ArrayList<>();
-    listViews.add(container);
+  fun parseFromXml(xml: String, context: Context) {
+    val listViews: MutableList<View> = ArrayList()
+    listViews.add(container)
 
     try {
-      final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-      final XmlPullParser parser = factory.newPullParser();
-      parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-      parser.setInput(new StringReader(xml));
+      val factory = XmlPullParserFactory.newInstance()
+      val parser = factory.newPullParser()
+      parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+      parser.setInput(StringReader(xml))
 
-      while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
-        switch (parser.getEventType()) {
-          case XmlPullParser.START_TAG:
-            {
-              View view = (View) InvokeUtil.createView(parser.getName(), context);
-              listViews.add(view);
+      while (parser.eventType != XmlPullParser.END_DOCUMENT) {
+        when (parser.eventType) {
+          XmlPullParser.START_TAG -> {
+            val view = createView(parser.name, context) as View
+            listViews.add(view)
 
-              AttributeMap map = new AttributeMap();
+            val map = AttributeMap()
 
-              for (int i = 0; i < parser.getAttributeCount(); i++) {
-                if (!parser.getAttributeName(i).startsWith("xmlns")) {
-                  map.putValue(parser.getAttributeName(i), parser.getAttributeValue(i));
-                }
+            var i = 0
+            while (i < parser.attributeCount) {
+              if (!parser.getAttributeName(i).startsWith("xmlns")) {
+                map.putValue(parser.getAttributeName(i), parser.getAttributeValue(i))
               }
-
-              viewAttributeMap.put(view, map);
-              break;
+              i++
             }
 
-          case XmlPullParser.END_TAG:
-            {
-              int index = parser.getDepth();
-              ((ViewGroup) listViews.get(index - 1)).addView(listViews.get(index));
-              listViews.remove(index);
-              break;
-            }
+            viewAttributeMap[view] = map
+          }
+
+          XmlPullParser.END_TAG -> {
+            val index = parser.depth
+            (listViews[index - 1] as ViewGroup).addView(listViews[index])
+            listViews.removeAt(index)
+          }
         }
-
-        parser.next();
+        parser.next()
       }
-    } catch (XmlPullParserException | IOException e) {
-      //noinspection CallToPrintStackTrace
-      e.printStackTrace();
+    } catch (e: XmlPullParserException) {
+      e.printStackTrace()
+    } catch (e: IOException) {
+      e.printStackTrace()
     }
 
-    IdManager.clear();
+    clear()
 
-    for (View view : viewAttributeMap.keySet()) {
-      AttributeMap map = viewAttributeMap.get(view);
+    for (view in viewAttributeMap.keys) {
+      val map = viewAttributeMap[view]!!
 
-      assert map != null;
-      for (String key : map.keySet()) {
-        if (key.equals("android:id")) {
-          IdManager.addNewId(view, map.getValue("android:id"));
+      for (key in map.keySet()) {
+        if (key == "android:id") {
+          addNewId(view, map.getValue("android:id"))
         }
       }
     }
 
-    for (View view : viewAttributeMap.keySet()) {
-      AttributeMap map = viewAttributeMap.get(view);
-      assert map != null;
-      applyAttributes(view, map);
+    for (view in viewAttributeMap.keys) {
+      val map = viewAttributeMap[view]!!
+      applyAttributes(view, map)
     }
   }
 
-  private void applyAttributes(View target, @NonNull AttributeMap attributeMap) {
-    final List<HashMap<String, Object>> allAttrs = initializer.getAllAttributesForView(target);
+  private fun applyAttributes(target: View, attributeMap: AttributeMap) {
+    val allAttrs = initializer.getAllAttributesForView(target)
 
-    final List<String> keys = attributeMap.keySet();
-    final List<String> values = attributeMap.values();
+    val keys = attributeMap.keySet()
 
-    for (int i = keys.size() - 1; i >= 0; i--) {
-      String key = keys.get(i);
+    for (i in keys.indices.reversed()) {
+      val key = keys[i]
 
-      HashMap<String, Object> attr = initializer.getAttributeFromKey(key, allAttrs);
-      if (attr == null) return;
-      String methodName = attr.get(Constants.KEY_METHOD_NAME).toString();
-      String className = attr.get(Constants.KEY_CLASS_NAME).toString();
-      String value = attributeMap.getValue(key);
+      val attr = initializer.getAttributeFromKey(key, allAttrs) ?: return
+      val methodName = attr[Constants.KEY_METHOD_NAME].toString()
+      val className = attr[Constants.KEY_CLASS_NAME].toString()
+      val value = attributeMap.getValue(key)
 
-      if (key.equals("android:id")) {
-        continue;
+      if (key == "android:id") {
+        continue
       }
 
-      InvokeUtil.invokeMethod(methodName, className, target, value, target.getContext());
+      invokeMethod(methodName, className, target, value, target.context)
     }
   }
 }

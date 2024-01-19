@@ -1,285 +1,257 @@
-package com.itsvks.layouteditor.adapters;
+package com.itsvks.layouteditor.adapters
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.TooltipCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import com.blankj.utilcode.util.ClipboardUtils;
-import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.itsvks.layouteditor.ProjectFile;
-import com.itsvks.layouteditor.activities.PreviewDrawableActivity;
-import com.itsvks.layouteditor.adapters.models.DrawableFile;
-import com.itsvks.layouteditor.databinding.LayoutDrawableItemBinding;
-import com.itsvks.layouteditor.R;
-import com.itsvks.layouteditor.databinding.LayoutPreviewDrawableBinding;
-import com.itsvks.layouteditor.databinding.TextinputlayoutBinding;
-import com.itsvks.layouteditor.interfaces.PreviewDrawableListener;
-import com.itsvks.layouteditor.managers.ProjectManager;
-import com.itsvks.layouteditor.utils.BitmapUtil;
-import com.itsvks.layouteditor.utils.FileUtil;
-import com.itsvks.layouteditor.utils.NameErrorChecker;
-import com.itsvks.layouteditor.utils.SBUtils;
-import com.itsvks.layouteditor.utils.Utils;
-import com.itsvks.layouteditor.views.AlphaPatternDrawable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.TooltipCompat
+import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import com.blankj.utilcode.util.ClipboardUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.itsvks.layouteditor.ProjectFile
+import com.itsvks.layouteditor.R
+import com.itsvks.layouteditor.activities.PreviewDrawableActivity
+import com.itsvks.layouteditor.adapters.models.DrawableFile
+import com.itsvks.layouteditor.databinding.LayoutDrawableItemBinding
+import com.itsvks.layouteditor.databinding.TextinputlayoutBinding
+import com.itsvks.layouteditor.interfaces.PreviewDrawableListener
+import com.itsvks.layouteditor.managers.ProjectManager.Companion.instance
+import com.itsvks.layouteditor.utils.FileUtil.deleteFile
+import com.itsvks.layouteditor.utils.FileUtil.getLastSegmentFromPath
+import com.itsvks.layouteditor.utils.NameErrorChecker
+import com.itsvks.layouteditor.utils.SBUtils
+import com.itsvks.layouteditor.utils.SBUtils.Companion.make
+import com.itsvks.layouteditor.utils.Utils
+import com.itsvks.layouteditor.views.AlphaPatternDrawable
+import java.io.File
 
-public class DrawableResourceAdapter extends RecyclerView.Adapter<DrawableResourceAdapter.VH> {
+class DrawableResourceAdapter(private val drawableList: MutableList<DrawableFile>) :
+  RecyclerView.Adapter<DrawableResourceAdapter.VH>() {
 
-  private List<DrawableFile> drawableList = new ArrayList<>();
-  private ProjectFile project;
+  private val project: ProjectFile? = instance.openedProject
 
-  public DrawableResourceAdapter(List<DrawableFile> drawableList) {
-    this.drawableList = drawableList;
-    this.project = ProjectManager.getInstance().getOpenedProject();
+  inner class VH(var binding: LayoutDrawableItemBinding) : RecyclerView.ViewHolder(
+    binding.root
+  ) {
+    var drawableName = binding.drawableName
+    var imageType = binding.imageType
+    var versions = binding.versions
+    var drawable = binding.drawable
+    var drawableBackground = binding.background
   }
 
-  public class VH extends RecyclerView.ViewHolder {
-    LayoutDrawableItemBinding binding;
-    TextView drawableName;
-    TextView imageType;
-    TextView versions;
-    ImageView drawable;
-    ImageView drawableBackground;
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+    return VH(
+      LayoutDrawableItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
+  }
 
-    public VH(@NonNull LayoutDrawableItemBinding binding) {
-      super(binding.getRoot());
-      this.binding = binding;
+  @SuppressLint("SetTextI18n")
+  override fun onBindViewHolder(holder: VH, position: Int) {
+    val name = drawableList[position].name
+    holder.itemView.animation = AnimationUtils.loadAnimation(
+      holder.itemView.context, R.anim.project_list_animation
+    )
 
-      drawableName = binding.drawableName;
-      drawableBackground = binding.background;
-      drawable = binding.drawable;
-      imageType = binding.imageType;
-      versions = binding.versions;
+    holder.drawableName.text = name.substring(0, name.lastIndexOf("."))
+    holder.imageType.text = "Drawable"
+
+    val version = drawableList[position].versions
+    holder.versions.text = version.toString() + " version" + (if (version > 1) "s" else "")
+    holder.drawableBackground.setImageDrawable(AlphaPatternDrawable(16))
+
+    TooltipCompat.setTooltipText(
+      holder.binding.root, name.substring(0, name.lastIndexOf("."))
+    )
+    TooltipCompat.setTooltipText(holder.binding.menu, "Options")
+
+    holder.drawable.setImageDrawable(drawableList[position].drawable)
+    holder.binding.menu.setOnClickListener {
+      showOptions(
+        it,
+        holder.absoluteAdapterPosition,
+        holder
+      )
+    }
+
+    val listener: PreviewDrawableListener =
+      object : PreviewDrawableListener {
+        override fun showInImage(imageView: ImageView) {
+          imageView.setImageDrawable(drawableList[position].drawable)
+        }
+
+        override fun setSubtitle(actionBar: ActionBar) {
+          actionBar.subtitle = name
+        }
+      }
+    holder.itemView.setOnClickListener {
+      PreviewDrawableActivity.setListener(listener)
+      it.context.startActivity(Intent(it.context, PreviewDrawableActivity::class.java))
     }
   }
 
-  @Override
-  public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-    return new VH(
-        LayoutDrawableItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+  override fun getItemCount(): Int {
+    return drawableList.size
   }
 
-  @Override
-  public void onBindViewHolder(VH holder, int position) {
-    var name = drawableList.get(position).getName();
-    holder
-        .binding
-        .getRoot()
-        .setAnimation(
-            AnimationUtils.loadAnimation(
-                holder.itemView.getContext(), R.anim.project_list_animation));
-    holder.drawableName.setText(name.substring(0, name.lastIndexOf(".")));
-    holder.imageType.setText("Drawable");
-    var version = drawableList.get(position).getVersions();
-    holder.versions.setText(version + " version" + (version > 1 ? "s" : ""));
-    holder.drawableBackground.setImageDrawable(new AlphaPatternDrawable(16));
-    TooltipCompat.setTooltipText(
-        holder.binding.getRoot(), name.substring(0, name.lastIndexOf(".")));
-    TooltipCompat.setTooltipText(holder.binding.menu, "Options");
-    holder.drawable.setImageDrawable(drawableList.get(position).getDrawable());
-    holder.binding.menu.setOnClickListener(v -> showOptions(v, position, holder));
+  private fun showOptions(v: View, position: Int, holder: VH) {
+    val popupMenu = PopupMenu(v.context, v)
+    popupMenu.inflate(R.menu.menu_drawable)
+    popupMenu.setOnMenuItemClickListener {
+      val id = it.itemId
+      when (id) {
+        R.id.menu_copy_name -> {
+          ClipboardUtils.copyText(
+            drawableList[position].name
+              .substring(0, drawableList[position].name.lastIndexOf("."))
+          )
+          make(holder.binding.root, v.context.getString(R.string.copied))
+            .setSlideAnimation()
+            .showAsSuccess()
+          return@setOnMenuItemClickListener true
+        }
 
-    PreviewDrawableListener listener =
-        new PreviewDrawableListener() {
-
-          @Override
-          public void showInImage(ImageView imageView) {
-            imageView.setImageDrawable(drawableList.get(position).getDrawable());
-          }
-
-          @Override
-          public void setSubtitle(ActionBar actionBar) {
-            actionBar.setSubtitle(name);
-          }
-        };
-    holder
-        .binding
-        .getRoot()
-        .setOnClickListener(
-            v -> {
-              PreviewDrawableActivity.setListener(listener);
-              v.getContext()
-                  .startActivity(new Intent(v.getContext(), PreviewDrawableActivity.class));
-            });
-  }
-
-  @Override
-  public int getItemCount() {
-    return drawableList.size();
-  }
-
-  private void showOptions(View v, int position, VH holder) {
-    final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-    popupMenu.inflate(R.menu.menu_drawable);
-    popupMenu.setOnMenuItemClickListener(
-        new PopupMenu.OnMenuItemClickListener() {
-
-          @Override
-          public boolean onMenuItemClick(MenuItem item) {
-
-            var id = item.getItemId();
-            if (id == R.id.menu_copy_name) {
-              ClipboardUtils.copyText(
-                drawableList
-                  .get(position)
-                  .getName()
-                  .substring(0, drawableList.get(position).getName().lastIndexOf(".")));
-              SBUtils.make(holder.binding.getRoot(), v.getContext().getString(R.string.copied))
-                .setSlideAnimation()
-                .showAsSuccess();
-              return true;
-            } else if (id == R.id.menu_delete) {
-              new MaterialAlertDialogBuilder(v.getContext())
-                .setTitle(R.string.remove_drawable)
-                .setMessage(R.string.msg_remove_drawable)
-                .setNegativeButton(R.string.no, (d, w) -> d.dismiss())
-                .setPositiveButton(
-                  R.string.yes,
-                  (d, w) -> {
-                    var name = drawableList.get(position).getName();
-                    if (name.substring(0, name.lastIndexOf(".")).equals("default_image")) {
-                      SBUtils.make(
-                          v,
-                          v.getContext()
-                            .getString(
-                              R.string.msg_cannot_delete_default, "image"))
-                        .setFadeAnimation()
-                        .setType(SBUtils.Type.INFO)
-                        .show();
-                    } else {
-                      FileUtil.deleteFile(drawableList.get(position).getPath());
-                      drawableList.remove(position);
-                      notifyDataSetChanged();
-                    }
-                  })
-                .show();
-              return true;
-            } else if (id == R.id.menu_rename) {
-              rename(v, position, holder);
-              return true;
+        R.id.menu_delete -> {
+          MaterialAlertDialogBuilder(v.context)
+            .setTitle(R.string.remove_drawable)
+            .setMessage(R.string.msg_remove_drawable)
+            .setNegativeButton(R.string.no) { d, _ -> d.dismiss() }
+            .setPositiveButton(
+              R.string.yes
+            ) { _, _ ->
+              val name = drawableList[position].name
+              if (name.substring(0, name.lastIndexOf(".")) == "default_image") {
+                make(
+                  v,
+                  v.context
+                    .getString(
+                      R.string.msg_cannot_delete_default, "image"
+                    )
+                )
+                  .setFadeAnimation()
+                  .setType(SBUtils.Type.INFO)
+                  .show()
+              } else {
+                deleteFile(drawableList[position].path)
+                drawableList.removeAt(position)
+                notifyItemRemoved(position)
+              }
             }
-            return false;
-          }
-        });
+            .show()
+          return@setOnMenuItemClickListener true
+        }
 
-    popupMenu.show();
+        R.id.menu_rename -> {
+          rename(v, position, holder)
+          return@setOnMenuItemClickListener true
+        }
+
+        else -> false
+      }
+    }
+
+    popupMenu.show()
   }
 
-  @SuppressWarnings("deprecation")
+  @Suppress("deprecation")
   @SuppressLint("RestrictedApi")
-  private void rename(View v, int position, VH holder) {
+  private fun rename(v: View, position: Int, holder: VH) {
     // File name with extension
-    final String lastSegment =
-        FileUtil.getLastSegmentFromPath(drawableList.get(position).getPath());
+    val lastSegment =
+      getLastSegmentFromPath(drawableList[position].path)
 
     // File name without extension
-    final String fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."));
+    val fileName = lastSegment.substring(0, lastSegment.lastIndexOf("."))
 
     // Extension
-    final String extension =
-        lastSegment.substring(lastSegment.lastIndexOf("."), lastSegment.length());
+    val extension =
+      lastSegment.substring(lastSegment.lastIndexOf("."))
 
-    final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(v.getContext());
-    final TextinputlayoutBinding bind =
-        TextinputlayoutBinding.inflate(builder.create().getLayoutInflater());
-    final TextInputEditText editText = bind.textinputEdittext;
-    final TextInputLayout inputLayout = bind.textinputLayout;
-    editText.setText(fileName);
-    var padding = Utils.pxToDp(builder.getContext(), 10);
-    builder.setView(bind.getRoot(), padding, padding, padding, padding);
-    builder.setTitle(R.string.rename_drawable);
-    builder.setNegativeButton(R.string.cancel, (di, which) -> {});
+    val builder = MaterialAlertDialogBuilder(v.context)
+    val bind =
+      TextinputlayoutBinding.inflate(builder.create().layoutInflater)
+    val editText = bind.textinputEdittext
+    val inputLayout = bind.textinputLayout
+    editText.setText(fileName)
+    val padding = Utils.pxToDp(builder.context, 10)
+    builder.setView(bind.root, padding, padding, padding, padding)
+    builder.setTitle(R.string.rename_drawable)
+    builder.setNegativeButton(R.string.cancel) { _, _ -> }
     builder.setPositiveButton(
-        R.string.rename,
-        (di, which) -> {
-          if (drawableList
-              .get(position)
-              .getName()
-              .substring(0, drawableList.get(position).getName().lastIndexOf("."))
-              .equals("default_image")) {
-            SBUtils.make(v, v.getContext().getString(R.string.msg_cannot_rename_default, "image"))
-                .setFadeAnimation()
-                .setType(SBUtils.Type.INFO)
-                .show();
-          } else {
-            String drawablePath = project.getDrawablePath();
+      R.string.rename
+    ) { _, _ ->
+      if (drawableList[position].name
+          .substring(0, drawableList[position].name.lastIndexOf("."))
+        == "default_image"
+      ) {
+        make(v, v.context.getString(R.string.msg_cannot_rename_default, "image"))
+          .setFadeAnimation()
+          .setType(SBUtils.Type.INFO)
+          .show()
+      } else {
+        val drawablePath = project!!.drawablePath
 
-            String toPath = drawablePath + editText.getText().toString() + extension;
-            File newFile = new File(toPath);
-            File oldFile = new File(drawableList.get(position).getPath());
-            oldFile.renameTo(newFile);
+        val toPath = drawablePath + editText.text.toString() + extension
+        val newFile = File(toPath)
+        val oldFile = File(drawableList[position].path)
+        oldFile.renameTo(newFile)
 
-            Drawable drawable = Drawable.createFromPath(toPath);
-            String name = editText.getText().toString();
-            drawableList.get(position).setPath(toPath);
-            drawableList.get(position).setName(FileUtil.getLastSegmentFromPath(toPath));
-            if (drawableList.get(position).getName().endsWith(".xml")
-                || drawableList.get(position).getName().endsWith(".svg")) {
-              // TODO: Set vector drawable to ImageView
-              drawable = VectorDrawableCompat.createFromPath(toPath);
-              holder.drawable.setImageDrawable(drawable);
-            }
-            holder.drawableName.setText(name);
-            holder.drawable.setImageDrawable(drawable);
-            notifyItemChanged(position);
-          }
-        });
+        var drawable = Drawable.createFromPath(toPath)
+        val name = editText.text.toString()
+        drawableList[position].path = toPath
+        drawableList[position].name = getLastSegmentFromPath(toPath)
+        if (drawableList[position].name.endsWith(".xml")
+          || drawableList[position].name.endsWith(".svg")
+        ) {
+          drawable = VectorDrawableCompat.createFromPath(toPath)
+          holder.drawable.setImageDrawable(drawable)
+        }
+        holder.drawableName.text = name
+        holder.drawable.setImageDrawable(drawable)
+        notifyItemChanged(position)
+      }
+    }
 
-    final AlertDialog dialog = builder.create();
-    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    dialog.show();
+    val dialog = builder.create()
+    dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    dialog.show()
 
     editText.addTextChangedListener(
-        new TextWatcher() {
+      object : TextWatcher {
+        override fun beforeTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {}
 
-          @Override
-          public void beforeTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+        override fun onTextChanged(p1: CharSequence, p2: Int, p3: Int, p4: Int) {}
 
-          @Override
-          public void onTextChanged(CharSequence p1, int p2, int p3, int p4) {}
+        override fun afterTextChanged(p1: Editable) {
+          NameErrorChecker.checkForDrawable(
+            editText.text.toString(), inputLayout, dialog, drawableList, position
+          )
+        }
+      })
 
-          @Override
-          public void afterTextChanged(Editable p1) {
-            NameErrorChecker.checkForDrawable(
-                editText.getText().toString(), inputLayout, dialog, drawableList, position);
-          }
-        });
+    NameErrorChecker.checkForDrawable(fileName, inputLayout, dialog, drawableList, position)
 
-    NameErrorChecker.checkForDrawable(fileName, inputLayout, dialog, drawableList, position);
+    editText.requestFocus()
+    val inputMethodManager =
+      v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
-    editText.requestFocus();
-    InputMethodManager inputMethodManager =
-        (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-
-    if (!editText.getText().toString().equals("")) {
-      editText.setSelection(0, editText.getText().toString().length());
+    if (editText.text.toString() != "") {
+      editText.setSelection(0, editText.text.toString().length)
     }
   }
 }

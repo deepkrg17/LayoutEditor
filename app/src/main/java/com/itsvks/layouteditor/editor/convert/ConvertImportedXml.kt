@@ -1,74 +1,70 @@
-package com.itsvks.layouteditor.editor.convert;
+package com.itsvks.layouteditor.editor.convert
 
-import android.content.Context;
-import com.itsvks.layouteditor.utils.FileUtil;
-import java.io.File;
-import java.io.StringReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.json.JSONObject;
+import android.content.Context
+import com.itsvks.layouteditor.utils.FileUtil
+import org.json.JSONObject
+import org.xml.sax.InputSource
+import java.io.File
+import java.io.StringReader
+import java.util.regex.Pattern
+import javax.xml.parsers.DocumentBuilderFactory
 
-public class ConvertImportedXml {
-  private final String TAG = this.getClass().getSimpleName();
+class ConvertImportedXml(private val xml: String?) {
 
-  private final String xml;
-
-  public ConvertImportedXml(String xml) {
-    this.xml = xml;
-  }
-
-  public String getXmlConverted(Context context) {
-    String convertedXml = xml;
+  fun getXmlConverted(context: Context): String? {
+    var convertedXml = xml
 
     if (isWellFormed(xml)) {
-      String pattern = "<([a-zA-Z0-9]+\\.)*([a-zA-Z0-9]+)";
+      val pattern = "<([a-zA-Z0-9]+\\.)*([a-zA-Z0-9]+)"
 
-      Matcher matcher = Pattern.compile(pattern).matcher(xml);
+      val matcher = Pattern.compile(pattern).matcher(
+        xml.toString()
+      )
       try {
         while (matcher.find()) {
-          String fullTag = matcher.group(0).replace("<", "");
-          String widgetName = matcher.group(2);
+          val fullTag = matcher.group(0)?.replace("<", "")
+          val widgetName = matcher.group(2)
 
-          JSONObject classes =
-              new JSONObject(FileUtil.readFromAsset("widgetclasses.json", context));
+          val classes =
+            JSONObject(FileUtil.readFromAsset("widgetclasses.json", context))
 
-          String widgetClass = classes.getString(widgetName);
-          convertedXml = convertedXml.replace("<" + fullTag, "<" + widgetClass);
-          convertedXml = convertedXml.replace("</" + fullTag, "</" + widgetClass);
+          val widgetClass = widgetName?.let { classes.getString(it) }
+          if (convertedXml != null) {
+            convertedXml = convertedXml.replace("<$fullTag", "<$widgetClass")
+          }
+          if (convertedXml != null) {
+            convertedXml = convertedXml.replace("</$fullTag", "</$widgetClass")
+          }
         }
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
+      } catch (e: Exception) {
+        e.printStackTrace()
+        return null
       }
     } else {
-      return null;
+      return null
     }
-    return convertedXml;
+    return convertedXml
   }
 
-  private boolean isWellFormed(String xml) {
+  private fun isWellFormed(xml: String?): Boolean {
     try {
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder builder = factory.newDocumentBuilder();
-      InputSource source = new InputSource(new StringReader(xml));
-      builder.parse(source);
-      return true;
-    } catch (Exception e) {
-      return false;
+      val factory = DocumentBuilderFactory.newInstance()
+      val builder = factory.newDocumentBuilder()
+      val source = InputSource(StringReader(xml))
+      builder.parse(source)
+      return true
+    } catch (e: Exception) {
+      return false
     }
   }
 
-  public boolean isLayoutFile(String filePath) {
-    File file = new File(filePath);
-    if (!file.exists() || !file.isFile()) {
-      return false;
+  fun isLayoutFile(filePath: String): Boolean {
+    val file = File(filePath)
+    if (!file.exists() || !file.isFile) {
+      return false
     }
 
-    String[] layoutTags = {
+    val layoutTags = arrayOf(
       "Button",
       "ImageButton",
       "ChipGroup",
@@ -133,23 +129,23 @@ public class ConvertImportedXml {
       "AnalogClock",
       "DigitalClock",
       "ConstraintLayout"
-    };
+    )
 
     try {
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder builder = factory.newDocumentBuilder();
-      Document document = builder.parse(file);
-      String rootTag = document.getDocumentElement().getTagName();
-      if (rootTag.contains(".")) rootTag = rootTag.substring(rootTag.lastIndexOf(".") + 1);
+      val factory = DocumentBuilderFactory.newInstance()
+      val builder = factory.newDocumentBuilder()
+      val document = builder.parse(file)
+      var rootTag = document.documentElement.tagName
+      if (rootTag.contains(".")) rootTag = rootTag.substring(rootTag.lastIndexOf(".") + 1)
 
-      for (String layoutTag : layoutTags) {
-        if (rootTag.equals(layoutTag)) {
-          return true;
+      for (layoutTag in layoutTags) {
+        if (rootTag == layoutTag) {
+          return true
         }
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
-    return false;
+    return false
   }
 }

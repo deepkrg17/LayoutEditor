@@ -1,6 +1,6 @@
-package com.itsvks.layouteditor.editor;
+package com.itsvks.layouteditor.editor
 
-public enum DeviceSize {
+enum class DeviceSize {
   SMALL,
   MEDIUM,
   LARGE

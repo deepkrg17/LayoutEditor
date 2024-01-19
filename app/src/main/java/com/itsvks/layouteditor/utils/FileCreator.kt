@@ -1,47 +1,38 @@
-package com.itsvks.layouteditor.utils;
+package com.itsvks.layouteditor.utils
 
-import android.net.Uri;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * FileCreator Class is used to create a file with given name and MIME Type.
- *
- * @param actvty Instance of AppCompatActivity
  */
-public abstract class FileCreator {
+abstract class FileCreator(actvty: AppCompatActivity) {
+  /** To create a file  */
+  private val createFile: ActivityResultLauncher<String>
 
-  /** To create a file */
-  private ActivityResultLauncher<String> createFile;
-  /** Instance of AppCompatActivity */
-  private AppCompatActivity actvty;
-  /** MIME Type of file */
-  private String mimeType;
+  /** MIME Type of file  */
+  private var mimeType = "*/*"
 
   /**
    * Constructor of class
    *
    * @param actvty Instance of AppCompatActivity
    */
-  public FileCreator(AppCompatActivity actvty) {
-    this.actvty = actvty; // Set activity
-    this.mimeType = "*/*"; // Set MIME type
+  init {
+    // Set MIME type
     // Register activity result for CreateDocument
     this.createFile =
-        actvty.registerForActivityResult(
-            new ActivityResultContracts.CreateDocument(mimeType), this::onCreateFile);
+      actvty.registerForActivityResult<String, Uri>(
+        ActivityResultContracts.CreateDocument(mimeType)
+      ) { onCreateFile(it) }
   }
 
   /**
    * Abstract method onCreateFile to call on result
-   *
-   * @param uri
    */
-  public abstract void onCreateFile(@Nullable Uri uri);
+  abstract fun onCreateFile(uri: Uri)
 
   /**
    * Method to create file
@@ -49,8 +40,8 @@ public abstract class FileCreator {
    * @param fileName The name of the file
    * @param mimeType The MIME type of the file
    */
-  public void create(@NonNull String fileName, String mimeType) {
-    this.mimeType = mimeType; // Set MIME type
-    createFile.launch(fileName); // Launch file
+  fun create(fileName: String, mimeType: String) {
+    this.mimeType = mimeType // Set MIME type
+    createFile.launch(fileName) // Launch file
   }
 }

@@ -1,41 +1,32 @@
-package com.itsvks.layouteditor.fragments.ui;
+package com.itsvks.layouteditor.fragments.ui
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.itsvks.layouteditor.BuildConfig
+import com.itsvks.layouteditor.R.string
+import com.itsvks.layouteditor.databinding.FragmentAboutBinding
+import com.itsvks.layouteditor.utils.Constants
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+class AboutFragment : Fragment() {
+  private lateinit var binding: FragmentAboutBinding
 
-import com.itsvks.layouteditor.BuildConfig;
-import com.itsvks.layouteditor.R.string;
-import com.itsvks.layouteditor.databinding.FragmentAboutBinding;
-import com.itsvks.layouteditor.utils.Constants;
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+  ): View {
+    binding = FragmentAboutBinding.inflate(inflater, container, false)
+    return binding.root
+  }
 
-public class AboutFragment extends Fragment {
+  @SuppressLint("SetTextI18n")
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
-    private FragmentAboutBinding binding;
-
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAboutBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.details.setText(getString(string.share_description, Constants.GITHUB_URL));
-        binding.version.setText("v" + BuildConfig.VERSION_NAME);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    binding.details.text =
+      getString(string.share_description, Constants.GITHUB_URL)
+    binding.version.text = "v${BuildConfig.VERSION_NAME}"
+  }
 }

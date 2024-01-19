@@ -1,72 +1,62 @@
-package com.itsvks.layouteditor.views;
+package com.itsvks.layouteditor.views
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
 
 /**
  * This drawable will draw a simple white and gray chessboard pattern. It's the pattern you will
  * often see as a background behind a partly transparent image in many applications.
  */
-@SuppressWarnings("deprecation")
-public class AlphaPatternDrawable extends Drawable {
+class AlphaPatternDrawable(private val rectangleSize: Int) : Drawable() {
+  private val paint = Paint()
+  private val paintWhite = Paint()
+  private val paintGray = Paint()
 
-  private int rectangleSize;
-
-  private Paint paint = new Paint();
-  private Paint paintWhite = new Paint();
-  private Paint paintGray = new Paint();
-
-  private int numRectanglesHorizontal;
-  private int numRectanglesVertical;
+  private var numRectanglesHorizontal = 0
+  private var numRectanglesVertical = 0
 
   /**
    * Bitmap in which the pattern will be cached. This is so the pattern will not have to be
    * recreated each time draw() gets called. Because recreating the pattern i rather expensive. I
    * will only be recreated if the size changes.
    */
-  private Bitmap bitmap;
+  private var bitmap: Bitmap? = null
 
-  public AlphaPatternDrawable(int rectangleSize) {
-    this.rectangleSize = rectangleSize;
-    paintWhite.setColor(0xFF424242);
-    paintGray.setColor(0xFF212121);
+  init {
+    paintWhite.color = -0xbdbdbe
+    paintGray.color = -0xdededf
   }
 
-  @Override
-  public void draw(Canvas canvas) {
-    if (bitmap != null && !bitmap.isRecycled()) {
-      canvas.drawBitmap(bitmap, null, getBounds(), paint);
+  override fun draw(canvas: Canvas) {
+    if (bitmap != null && !bitmap!!.isRecycled) {
+      canvas.drawBitmap(bitmap!!, null, bounds, paint)
     }
   }
 
-  @Override
-  public int getOpacity() {
-    return PixelFormat.UNKNOWN;
+  override fun setAlpha(alpha: Int) {
+    throw UnsupportedOperationException("Alpha is not supported by this drawable.")
   }
 
-  @Override
-  public void setAlpha(int alpha) {
-    throw new UnsupportedOperationException("Alpha is not supported by this drawable.");
+  override fun setColorFilter(cf: ColorFilter?) {
+    throw UnsupportedOperationException("ColorFilter is not supported by this drawable.")
   }
 
-  @Override
-  public void setColorFilter(ColorFilter cf) {
-    throw new UnsupportedOperationException("ColorFilter is not supported by this drawable.");
+  override fun getOpacity(): Int {
+    return PixelFormat.UNKNOWN
   }
 
-  @Override
-  protected void onBoundsChange(Rect bounds) {
-    super.onBoundsChange(bounds);
-    int height = bounds.height();
-    int width = bounds.width();
-    numRectanglesHorizontal = (int) Math.ceil((width / rectangleSize));
-    numRectanglesVertical = (int) Math.ceil(height / rectangleSize);
-    generatePatternBitmap();
+  override fun onBoundsChange(bounds: Rect) {
+    super.onBoundsChange(bounds)
+    val height = bounds.height()
+    val width = bounds.width()
+    numRectanglesHorizontal = (width / rectangleSize).toDouble().toInt()
+    numRectanglesVertical = (height / rectangleSize).toDouble().toInt()
+    generatePatternBitmap()
   }
 
   /**
@@ -74,28 +64,28 @@ public class AlphaPatternDrawable extends Drawable {
    * We do this to chache the bitmap so we don't need to recreate it each time draw() is called
    * since it takes a few milliseconds
    */
-  private void generatePatternBitmap() {
-    if (getBounds().width() <= 0 || getBounds().height() <= 0) {
-      return;
+  private fun generatePatternBitmap() {
+    if (bounds.width() <= 0 || bounds.height() <= 0) {
+      return
     }
 
     bitmap =
-        Bitmap.createBitmap(getBounds().width(), getBounds().height(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(bitmap);
+      Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap!!)
 
-    Rect r = new Rect();
-    boolean verticalStartWhite = true;
-    for (int i = 0; i <= numRectanglesVertical; i++) {
-      boolean isWhite = verticalStartWhite;
-      for (int j = 0; j <= numRectanglesHorizontal; j++) {
-        r.top = i * rectangleSize;
-        r.left = j * rectangleSize;
-        r.bottom = r.top + rectangleSize;
-        r.right = r.left + rectangleSize;
-        canvas.drawRect(r, isWhite ? paintWhite : paintGray);
-        isWhite = !isWhite;
+    val r = Rect()
+    var verticalStartWhite = true
+    for (i in 0..numRectanglesVertical) {
+      var isWhite = verticalStartWhite
+      for (j in 0..numRectanglesHorizontal) {
+        r.top = i * rectangleSize
+        r.left = j * rectangleSize
+        r.bottom = r.top + rectangleSize
+        r.right = r.left + rectangleSize
+        canvas.drawRect(r, if (isWhite) paintWhite else paintGray)
+        isWhite = !isWhite
       }
-      verticalStartWhite = !verticalStartWhite;
+      verticalStartWhite = !verticalStartWhite
     }
   }
 }
